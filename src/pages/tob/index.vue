@@ -78,17 +78,15 @@
               <p class="text-gray-600 mb-4 leading-relaxed">{{ blogger.introduction }}</p>
               
               <!-- 社交账号 -->
-              <div class="flex space-x-3 mb-4">
-                <a
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span
                   v-for="account in blogger.socialAccounts"
                   :key="account.platform"
-                  :href="account.url"
-                  target="_blank"
-                  class="flex items-center px-3 py-1 bg-gray-100 hover:bg-indigo-100 rounded-full text-sm text-gray-700 hover:text-indigo-700 transition-colors"
+                  class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700 whitespace-nowrap"
                 >
                   <span class="mr-1">{{ account.icon }}</span>
                   {{ account.platform }}
-                </a>
+                </span>
               </div>
 
               <!-- 展开/收起按钮 -->
