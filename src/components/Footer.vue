@@ -8,7 +8,7 @@
             <div class="w-8 h-8 bg-gradient-to-r from-primary-600 to-primary-800 rounded-lg flex items-center justify-center">
               <span class="text-white font-bold text-lg">博</span>
             </div>
-            <span class="text-xl font-bold">博主联盟</span>
+            <span class="text-xl font-bold">开发者博主联盟</span>
           </div>
           <p class="text-gray-400 mb-4 max-w-md">
             连接优秀的技术博主，分享知识，共同成长。我们致力于为技术社区搭建一个展示和交流的平台。
@@ -56,7 +56,7 @@
 
       <div class="border-t border-gray-800 mt-8 pt-8 text-center">
         <p class="text-gray-400">
-          © 2025 博主联盟. All rights reserved. | 
+          © 2025 开发者博主联盟. All rights reserved. | 
           <a href="#" class="text-gray-400 hover:text-white transition-colors">隐私政策</a> | 
           <a href="#" class="text-gray-400 hover:text-white transition-colors">服务条款</a>
         </p>

@@ -3,7 +3,7 @@
     <!-- Hero 区域 -->
     <section class="flex-1 flex flex-col justify-center items-center py-20">
       <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">
-        博主联盟，连接产品与技术影响力
+        开发者博主联盟，连接产品与技术影响力
       </h1>
       <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-10 text-center">
         我们致力于帮助产品方精准推广程序员向产品，也为技术博主/开发者提供联盟成长与工具资源。<br>
@@ -14,7 +14,7 @@
         <router-link to="/tob" class="flex-1 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all p-8 flex flex-col items-center group border-2 border-transparent hover:border-indigo-400">
           <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🚀</div>
           <h2 class="text-2xl font-bold text-gray-900 mb-2">我要推广产品</h2>
-          <p class="text-gray-600 mb-4 text-center">技术博主联盟助力产品精准曝光，触达数万开发者用户</p>
+          <p class="text-gray-600 mb-4 text-center">技术开发者博主联盟助力产品精准曝光，触达数万开发者用户</p>
           <span class="inline-block mt-auto px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold shadow group-hover:from-indigo-700 group-hover:to-purple-700 transition-all">了解推广服务</span>
         </router-link>
         <!-- ToC 入口卡片 -->
@@ -43,7 +43,7 @@
           </div>
           <!-- ToC 亮点 -->
           <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8 shadow">
-            <h3 class="text-xl font-bold text-green-700 mb-4 flex items-center"><span class="mr-2">🤝</span>博主联盟权益</h3>
+            <h3 class="text-xl font-bold text-green-700 mb-4 flex items-center"><span class="mr-2">🤝</span>开发者博主联盟权益</h3>
             <ul class="space-y-3 text-gray-700">
               <li>• 联盟推广分成，提升收入</li>
               <li>• 资源共享，涨粉更快</li>
@@ -92,7 +92,7 @@
 
     <!-- 底部 CTA -->
     <section class="py-12 bg-gradient-to-r from-indigo-600 to-blue-600 text-white text-center">
-      <h2 class="text-2xl md:text-3xl font-bold mb-4">加入博主联盟，开启你的影响力之旅！</h2>
+      <h2 class="text-2xl md:text-3xl font-bold mb-4">加入开发者博主联盟，开启你的影响力之旅！</h2>
       <p class="text-lg mb-8">无论你是产品方还是技术博主，欢迎加入我们，共创技术新生态。</p>
       <div class="flex flex-col md:flex-row gap-4 justify-center">
         <router-link to="/tob" class="px-8 py-3 bg-white text-indigo-700 font-semibold rounded-lg shadow hover:bg-indigo-50 transition-all">产品推广合作</router-link>

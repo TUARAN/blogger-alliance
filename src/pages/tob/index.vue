@@ -6,7 +6,7 @@
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center">
             <router-link to="/" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
-              🚀 博主联盟
+              🚀 开发者博主联盟
             </router-link>
           </div>
           <div class="flex items-center space-x-4">
@@ -23,10 +23,10 @@
       <!-- 页面标题和简介 -->
       <div class="text-center mb-16">
         <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-          博主联盟，助你推广程序员向产品
+          开发者博主联盟，助你推广程序员向产品
         </h1>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          我们拥有一个专业的技术博主联盟，致力于帮助优秀的产品获得技术圈的精准曝光。
+          我们拥有一个专业的技术开发者博主联盟，致力于帮助优秀的产品获得技术圈的精准曝光。
           通过我们的推广服务，让你的产品快速触达目标用户群体。
         </p>
       </div>
