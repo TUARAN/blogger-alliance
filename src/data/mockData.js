@@ -412,7 +412,7 @@ export const partnerBenefits = [
     id: 1,
     icon: '💰',
     title: '增加收入',
-    description: '通过推广合作获得额外收入，月收入提升 30-50%'
+    description: '通过推广合作获得额外收入，写作兼职收入蹭蹭提升'
   },
   {
     id: 2,
