@@ -1,5 +1,7 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-blue-50 to-green-100 flex flex-col">
+    <!-- 简洁统计条 -->
+    <SimpleStatsBar />
     <!-- Hero 区域 -->
     <section class="flex-1 flex flex-col justify-center items-center py-20">
       <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">
@@ -11,9 +13,10 @@
       </p>
       
       <!-- 统计显示 -->
-      <div class="mb-8 w-full max-w-lg">
+      <!-- <div class="mb-8 w-full max-w-lg">
         <DetailedStats />
-      </div>
+      </div> -->
+      
       <div class="flex flex-col md:flex-row gap-6 w-full max-w-4xl justify-center md:grid md:grid-cols-3">
         <!-- 推广产品卡片 -->
         <router-link 
@@ -168,6 +171,7 @@
 </template>
 
 <script setup>
+import SimpleStatsBar from '../components/SimpleStatsBar.vue'
 import DetailedStats from '../components/DetailedStats.vue'
 import { trackButtonClick, trackLinkClick } from '../utils/hybridStats.js'
 
