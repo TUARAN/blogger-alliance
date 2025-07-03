@@ -9,23 +9,40 @@
         我们致力于帮助产品方精准推广程序员向产品，也为技术博主/开发者提供联盟成长与工具资源。<br>
         无论你是产品方，还是内容创作者，这里都能找到属于你的价值！
       </p>
+      
+      <!-- 统计显示 -->
+      <div class="mb-8 w-full max-w-lg">
+        <DetailedStats />
+      </div>
       <div class="flex flex-col md:flex-row gap-6 w-full max-w-4xl justify-center md:grid md:grid-cols-3">
         <!-- 推广产品卡片 -->
-        <router-link to="/tob" class="flex-1 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all p-8 flex flex-col items-center group border-2 border-transparent hover:border-indigo-400">
+        <router-link 
+          to="/tob" 
+          class="flex-1 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all p-8 flex flex-col items-center group border-2 border-transparent hover:border-indigo-400"
+          @click="handleButtonClick('推广产品卡片')"
+        >
           <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🚀</div>
           <h2 class="text-2xl font-bold text-gray-900 mb-2">我要推广程序员方向的产品</h2>
           <p class="text-gray-600 mb-4 text-center">精准触达开发者群体，提升产品曝光与转化</p>
           <span class="inline-block mt-auto px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold shadow group-hover:from-indigo-700 group-hover:to-purple-700 transition-all">了解推广服务</span>
         </router-link>
         <!-- 加入联盟卡片 -->
-        <router-link to="/toc" class="flex-1 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all p-8 flex flex-col items-center group border-2 border-transparent hover:border-green-400">
+        <router-link 
+          to="/toc" 
+          class="flex-1 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all p-8 flex flex-col items-center group border-2 border-transparent hover:border-green-400"
+          @click="handleButtonClick('加入联盟卡片')"
+        >
           <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🤝</div>
           <h2 class="text-2xl font-bold text-gray-900 mb-2">我想加入开发者博主联盟</h2>
           <p class="text-gray-600 mb-4 text-center">结识同行、获取推广资源、联盟收益与成长机会</p>
           <span class="inline-block mt-auto px-6 py-2 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-lg font-semibold shadow group-hover:from-green-600 group-hover:to-blue-600 transition-all">加入联盟</span>
         </router-link>
         <!-- 工具/项目卡片 -->
-        <router-link to="/tools" class="flex-1 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all p-8 flex flex-col items-center group border-2 border-transparent hover:border-blue-400">
+        <router-link 
+          to="/tools" 
+          class="flex-1 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all p-8 flex flex-col items-center group border-2 border-transparent hover:border-blue-400"
+          @click="handleButtonClick('工具项目卡片')"
+        >
           <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🛠️</div>
           <h2 class="text-2xl font-bold text-gray-900 mb-2">我想使用开源工具或看看项目</h2>
           <p class="text-gray-600 mb-4 text-center">发现精选开发工具，提升效率，探索优质项目</p>
@@ -130,14 +147,37 @@
       <h2 class="text-2xl md:text-3xl font-bold mb-4">加入开发者博主联盟，开启你的影响力之旅！</h2>
       <p class="text-lg mb-8">无论你是产品方还是技术博主，欢迎加入我们，共创技术新生态。</p>
       <div class="flex flex-col md:flex-row gap-4 justify-center">
-        <router-link to="/tob" class="px-8 py-3 bg-white text-indigo-700 font-semibold rounded-lg shadow hover:bg-indigo-50 transition-all">产品推广合作</router-link>
-        <router-link to="/toc" class="px-8 py-3 bg-white text-indigo-700 font-semibold rounded-lg shadow hover:bg-indigo-50 transition-all">加入联盟</router-link>
-        <router-link to="/tools" class="px-8 py-3 bg-white text-indigo-700 font-semibold rounded-lg shadow hover:bg-indigo-50 transition-all">浏览工具</router-link>
+        <router-link 
+          to="/tob" 
+          class="px-8 py-3 bg-white text-indigo-700 font-semibold rounded-lg shadow hover:bg-indigo-50 transition-all"
+          @click="handleButtonClick('底部产品推广合作')"
+        >产品推广合作</router-link>
+        <router-link 
+          to="/toc" 
+          class="px-8 py-3 bg-white text-indigo-700 font-semibold rounded-lg shadow hover:bg-indigo-50 transition-all"
+          @click="handleButtonClick('底部加入联盟')"
+        >加入联盟</router-link>
+        <router-link 
+          to="/tools" 
+          class="px-8 py-3 bg-white text-indigo-700 font-semibold rounded-lg shadow hover:bg-indigo-50 transition-all"
+          @click="handleButtonClick('底部浏览工具')"
+        >浏览工具</router-link>
       </div>
     </section>
   </div>
 </template>
 
 <script setup>
-// 首页无需复杂逻辑，全部为静态引导内容
+import DetailedStats from '../components/DetailedStats.vue'
+import { trackButtonClick, trackLinkClick } from '../utils/hybridStats.js'
+
+// 跟踪按钮点击
+const handleButtonClick = (buttonName) => {
+  trackButtonClick(buttonName)
+}
+
+// 跟踪链接点击
+const handleLinkClick = (linkText, linkUrl) => {
+  trackLinkClick(linkText, linkUrl)
+}
 </script>  
