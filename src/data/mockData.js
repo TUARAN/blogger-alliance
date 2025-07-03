@@ -38,17 +38,18 @@ export const bloggersData = [
     id: 3,
     name: '阿杆',
     avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=agan&backgroundColor=d1d4f9',
-    introduction: 'CSDN专家博主，专注于技术分享和知识传播',
-    followers: '40K+',
+    introduction: '多平台技术博主、掘金优秀创作者、CSDN新星创作者、文章数100+、阅读量100w+、GitHub 800+ star',
+    followers: '23K+',
     socialAccounts: [
-      { platform: 'CSDN', url: 'https://blog.csdn.net/agan', icon: '💻' },
-      { platform: 'GitHub', url: 'https://github.com/agan', icon: '🐙' },
-      { platform: '掘金', url: 'https://juejin.cn/user/agan', icon: '📝' }
+      { platform: 'CSDN', url: 'https://blog.csdn.net/little_stick_i', icon: '💻' },
+      { platform: 'GitHub', url: 'https://github.com/stick-i', icon: '🐙' },
+      { platform: '掘金', url: 'https://juejin.cn/user/4182956056773160', icon: '📝' },
+      { platform: '微信公众号', url: '', icon: '🌏' },
     ],
     expandedContent: {
-      specialties: ['技术分享', '知识传播', 'CSDN运营', '技术写作'],
-      achievements: ['CSDN专家博主', '粉丝40000+', '技术文章作者', '知识分享达人'],
-      recentPosts: ['CSDN运营经验分享', '技术写作技巧', '知识传播策略']
+      specialties: [ '后端开发', '技术写作', '多平台运营', '开源分享'],
+      achievements: ['专家博主', '技术文章作者', '知识分享达人'],
+      recentPosts: ['技术写作心得', '多平台运营策略', '知识传播策略']
     }
   },
   {
