@@ -12,9 +12,131 @@
 - **搭建 C 端博主的成长入口**（加入联盟、有内容、有收入）
 - **给普通开发者提供好用、有用、真实推荐的工具与应用**（资源库）
 
+## 🤝 加入开发者联盟
+
+### 🎯 如何加入？
+
+如果你想加入我们的开发者联盟，请按照以下规范流程操作：
+
+#### 1️⃣ Fork 项目
+首先 Fork 这个项目到你的 GitHub 账号下
+
+#### 2️⃣ 创建功能分支
+```bash
+# 克隆你的 Fork 仓库
+git clone https://github.com/你的用户名/blogger-alliance.git
+cd blogger-alliance
+
+# 创建新的功能分支（请使用有意义的分支名）
+git checkout -b feature/add-blogger-你的名字
+```
+
+#### 3️⃣ 修改数据文件
+编辑 `src/data/mockData.js` 文件，在 `bloggersData` 数组中添加你的信息：
+
+```javascript
+{
+  id: 下一个可用ID, // 请查看现有数据的最大ID，然后+1
+  name: '你的名字',
+  avatar: '你的头像URL', // 建议使用 DiceBear API 生成
+  introduction: '简短的个人介绍（50字以内）',
+  followers: '粉丝数量+K',
+  socialAccounts: [
+    { platform: '掘金', url: '你的掘金链接', icon: '📝' },
+    { platform: 'GitHub', url: '你的GitHub链接', icon: '🐙' },
+    { platform: 'CSDN', url: '你的CSDN链接', icon: '💻' }
+    // 可以添加更多平台
+  ],
+  expandedContent: {
+    specialties: ['你的专长领域1', '专长领域2', '专长领域3'],
+    achievements: ['你的成就1', '成就2', '成就3'],
+    recentPosts: ['最近文章1', '最近文章2', '最近文章3']
+  }
+}
+```
+
+#### 4️⃣ 提交你的更改
+```bash
+# 添加修改的文件
+git add src/data/mockData.js
+
+# 提交更改（请使用规范的提交信息）
+git commit -m "feat: add new blogger - 你的名字"
+
+# 推送到你的 Fork 仓库
+git push origin feature/add-blogger-你的名字
+```
+
+#### 5️⃣ 创建 Pull Request
+1. 访问你的 GitHub Fork 仓库
+2. 点击 "Compare & pull request" 按钮
+3. 填写 PR 标题：`feat: add new blogger - 你的名字`
+4. 在描述中说明：
+   - 你的技术背景
+   - 主要创作平台和粉丝数
+   - 加入联盟的动机
+   - 你能为联盟带来什么价值
+
+#### 6️⃣ 等待审核
+我们会审核你的申请，通常会在 3-5 个工作日内回复。
+
+### 📋 加入要求
+
+- ✅ 有稳定的技术内容创作（至少 50+ 篇技术文章）
+- ✅ 在主流技术平台有活跃账号（掘金、CSDN、GitHub 等）
+- ✅ 有一定的粉丝基础（建议 1000+ 粉丝）
+- ✅ 愿意分享真实的技术经验和产品使用心得
+- ✅ 认同我们的价值观：真实、专业、有温度
+
+### 🐛 提 Issue 指南
+
+如果你有其他建议或发现问题，欢迎提 Issue：
+
+#### Issue 类型
+- 🐛 **Bug 报告** - 网站功能问题
+- 💡 **功能建议** - 新功能或改进建议
+- 📝 **文档改进** - README 或文档相关
+- 🤝 **联盟相关** - 关于联盟运营的建议
+- ❓ **问题咨询** - 其他问题
+
+#### Issue 模板
+```markdown
+## 问题类型
+- [ ] Bug 报告
+- [ ] 功能建议
+- [ ] 文档改进
+- [ ] 联盟相关
+- [ ] 问题咨询
+
+## 详细描述
+请详细描述你的问题或建议...
+
+## 期望结果
+你希望看到什么样的结果？
+
+## 其他信息
+任何其他相关信息...
+```
+
+### 📞 联系我们
+
+- 📧 邮箱：your-email@example.com
+- 💬 微信群：扫描二维码加入
+- 🐦 微博：@BloggerAlliance
+
+---
+
 ## 🧩 页面设计思路
 
-网站主要分为两个部分：
+网站目前分为三个核心模块：
+
+### 🏠 首页 (Home) → 平台概览与导航
+
+作为整个平台的门户，提供：
+- 平台介绍和价值主张
+- 核心数据展示（博主数量、覆盖粉丝、合作案例等）
+- 快速导航到各个功能模块
+- 最新动态和重要公告
 
 ### 📁 toB/ 目录 → 面向产品推广方（企业用户）
 
@@ -36,7 +158,22 @@
 - 展示我们自己做的 MVP 产品，强调：我们做的工具，是我们愿意自己推荐的
 - 每个工具都有介绍、使用入口、可被收藏与反馈
 
-整个设计目标：交互友好、信息清晰、有温度有信任感。
+### 🛠️ 工具库 (Tools) → 独立工具展示页面
+
+专门展示联盟成员开发的优质工具：
+- 工具分类和筛选功能
+- 详细的使用说明和教程
+- 用户评价和反馈系统
+- 工具更新和维护状态
+
+### 📄 关于页面 (About) → 联盟详细介绍
+
+- 联盟的使命和愿景
+- 团队成员详细介绍
+- 合作案例展示
+- 联系方式和服务流程
+
+整个设计目标：交互友好、信息清晰、有温度有信任感，三个模块相互呼应，形成完整的生态闭环。
 
 ## 🤝 我们和其他 IT KOL 的区别？
 
@@ -81,24 +218,31 @@
 ```
 blogger-alliance/
 ├── src/
-│   ├── pages/
+│   ├── pages/                     # 页面模块
 │   │   ├── tob/                   # ToB 推广服务页面
 │   │   │   └── index.vue
 │   │   └── toc/                   # ToC 博主合伙人和工具库页面
 │   │       └── index.vue
+│   ├── views/                     # 视图组件
+│   │   ├── Home.vue               # 首页 - 平台概览
+│   │   ├── Tools.vue              # 工具库页面
+│   │   └── About.vue              # 关于页面
 │   ├── data/
 │   │   └── mockData.js            # Mock 数据
-│   ├── views/
-│   │   ├── Home.vue               # 首页
-│   │   └── About.vue              # 关于页面
-│   ├── components/                # 组件目录
+│   ├── components/                # 通用组件
+│   ├── utils/                     # 工具函数
+│   ├── config/                    # 配置文件
 │   ├── App.vue                    # 根组件
 │   ├── main.js                    # 入口文件
 │   └── style.css                  # 全局样式
+├── .github/                       # GitHub 配置文件
+│   ├── ISSUE_TEMPLATE/            # Issue 模板
+│   └── pull_request_template.md   # PR 模板
 ├── index.html
 ├── package.json
 ├── vite.config.js
 ├── tailwind.config.js
+├── CONTRIBUTING.md                # 贡献指南
 └── README.md
 ```
 
@@ -134,10 +278,14 @@ npm run preview
 
 ## 📱 页面路由
 
-- `/` - 首页
-- `/tob` - ToB 推广服务页面
-- `/toc` - ToC 博主合伙人和工具库页面
-- `/about` - 关于页面
+### 🏠 核心模块
+- `/` - 首页（平台概览与导航）
+- `/tob` - ToB 推广服务页面（面向企业用户）
+- `/toc` - ToC 博主合伙人和工具库页面（面向开发者）
+
+### 🛠️ 功能页面
+- `/tools` - 工具库页面（独立工具展示）
+- `/about` - 关于页面（联盟详细介绍）
 
 ## 🔧 自定义配置
 
@@ -173,6 +321,31 @@ MIT License
 ## 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request！
+
+### 📚 贡献指南
+
+我们提供了详细的贡献指南，请查看：
+
+- 📖 **[贡献指南](CONTRIBUTING.md)** - 详细的贡献流程和规范
+- 🐛 **[Issue 模板](.github/ISSUE_TEMPLATE/)** - 标准化的 Issue 模板
+- 🔄 **[PR 模板](.github/pull_request_template.md)** - Pull Request 模板
+
+### 🚀 快速贡献
+
+1. **Fork 项目** - 在 GitHub 上 Fork 这个项目
+2. **创建分支** - 创建功能分支
+3. **修改代码** - 进行你的修改
+4. **提交更改** - 使用规范的提交信息
+5. **创建 PR** - 提交 Pull Request
+
+### 🤝 加入开发者联盟
+
+如果你想加入我们的开发者联盟，请：
+
+1. 查看 [加入联盟流程](#-加入开发者联盟)
+2. 修改 `src/data/mockData.js` 添加你的信息
+3. 提交 Pull Request
+4. 等待审核（3-5 个工作日）
 
 ---
 
