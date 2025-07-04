@@ -1,11 +1,17 @@
 <template>
-  <div class="w-full bg-white bg-opacity-80 shadow-sm py-2 px-4 flex items-center justify-center text-sm text-gray-700 font-medium rounded-b-xl">
-    今日访问：
-    <span class="mx-1 text-blue-600 font-bold">{{ pv }}</span>（PV）/
-    <span class="mx-1 text-green-600 font-bold">{{ uv }}</span>（UV）
-    <span class="mx-4">累计访问：</span>
-    <span class="mx-1 text-blue-600 font-bold">{{ totalPv }}</span>（PV）/
-    <span class="mx-1 text-green-600 font-bold">{{ totalUv }}</span>（UV）
+  <div class="w-full bg-white bg-opacity-80 shadow-sm py-2 px-3 sm:px-4 flex items-center justify-center text-xs sm:text-sm text-gray-700 font-medium rounded-b-xl">
+    <div class="flex flex-col sm:flex-row items-center gap-1 sm:gap-4">
+      <div class="flex items-center">
+        今日访问：
+        <span class="mx-1 text-blue-600 font-bold">{{ pv }}</span>（PV）/
+        <span class="mx-1 text-green-600 font-bold">{{ uv }}</span>（UV）
+      </div>
+      <div class="flex items-center">
+        累计访问：
+        <span class="mx-1 text-blue-600 font-bold">{{ totalPv }}</span>（PV）/
+        <span class="mx-1 text-green-600 font-bold">{{ totalUv }}</span>（UV）
+      </div>
+    </div>
   </div>
 </template>
 

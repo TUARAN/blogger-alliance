@@ -6,8 +6,8 @@ import { initializeWithMockData } from './utils/statsService.js'
 
 // 路由配置
 const routes = [
-  { path: '/', component: () => import('./views/Home.vue') },
-  { path: '/about', component: () => import('./views/About.vue') },
+  { path: '/', component: () => import('./pages/tob/index.vue') },
+  { path: '/about', component: () => import('./views/Home.vue') },
   { path: '/tob', component: () => import('./pages/tob/index.vue') },
   { path: '/toc', component: () => import('./pages/toc/index.vue') },
   { path: '/tools', component: () => import('./views/Tools.vue') }
