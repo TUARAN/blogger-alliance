@@ -105,19 +105,20 @@ export const bloggersData = [
   },
   {
     id: 7,
-    name: '码农小胖',
+    name: 'MiyueFE',
     avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=techfat&backgroundColor=e8d5c4',
-    introduction: '全栈开发工程师，Node.js专家，掘金5级，文章200+篇',
-    followers: '8.5K+',
+    introduction: '前端开发工程师，多平台活跃博主，掘金5级，文章100+篇，GitHub 2k+ star',
+    followers: '3K+',
     socialAccounts: [
-      { platform: '掘金', url: 'https://juejin.cn/user/techfat', icon: '📝' },
-      { platform: 'GitHub', url: 'https://github.com/techfat', icon: '🐙' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/techfat', icon: '💻' }
+      { platform: '掘金', url: 'https://juejin.cn/user/747323639208391', icon: '📝' },
+      { platform: 'GitHub', url: 'https://github.com/miyuesc', icon: '🐙' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_43359503', icon: '💻' },
+      { platform: '微信公众号', url: '', icon: '🌏' },
     ],
     expandedContent: {
-      specialties: ['Node.js', '全栈开发', '后端架构', '数据库设计'],
-      achievements: ['掘金5级', '文章200+篇', 'Node.js专家', '技术书籍作者'],
-      recentPosts: ['Node.js性能调优指南', '微服务架构实践', '数据库设计模式']
+      specialties: ['技术分享', '多平台运营', '社区建设', '技术写作'],
+      achievements: ['专家博主', '文章100+篇', '技术文章作者', '开源爱好者'],
+      recentPosts: ['什么可以帮助你在前端面试中取得成功', '让我害怕的 TypeScript 类型', '深入浅出Babel插件开发']
     }
   },
   {
@@ -445,4 +446,4 @@ export const partnerBenefits = [
     title: '品牌背书',
           description: '获得开发者博主联盟认证，提升个人品牌价值'
   }
-] 
+]
