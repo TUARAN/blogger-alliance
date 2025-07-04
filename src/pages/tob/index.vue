@@ -148,7 +148,7 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700 whitespace-nowrap group-hover:bg-indigo-50 hover:bg-indigo-100 hover:text-indigo-700 transition-colors cursor-pointer"
-                v-if="account.url"
+                v-if="account && account.url && account.url.trim() !== ''"
               >
                 <span class="mr-1">{{ account.icon }}</span>
                 {{ account.platform }}
@@ -157,7 +157,7 @@
                 v-for="account in blogger.socialAccounts"
                 :key="account.platform"
                 class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700 whitespace-nowrap opacity-60"
-                v-if="!account.url"
+                v-if="!account || !account.url || account.url.trim() === ''"
               >
                 <span class="mr-1">{{ account.icon }}</span>
                 {{ account.platform }}
