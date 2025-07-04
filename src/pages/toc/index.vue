@@ -72,14 +72,6 @@
               </p>
             </div>
           </div>
-          
-          <div class="inline-flex items-center px-6 py-3 bg-green-100 text-green-800 rounded-full font-semibold">
-            <span class="mr-2">✨</span>
-            已有 20+ 博主加入，写作兼职收入蹭蹭提升
-            <svg class="ml-2 w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 3L3 10h4v7h6v-7h4l-7-7z"/>
-            </svg>
-          </div>
         </div>
 
         <!-- 好处清单 -->
