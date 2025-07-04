@@ -69,7 +69,7 @@
               <div class="text-gray-600">技术博主</div>
             </div>
             <div class="text-center">
-              <div class="text-3xl font-bold text-purple-600 mb-2">10W+</div>
+              <div class="text-3xl font-bold text-purple-600 mb-2">20W+</div>
               <div class="text-gray-600">覆盖用户</div>
             </div>
             <div class="text-center">
@@ -251,10 +251,10 @@
               <span class="text-indigo-500 mr-2 mt-1">•</span>
               <span>技术博主真实测评与内容分发</span>
             </li>
-            <li class="flex items-start">
-              <span class="text-indigo-500 mr-2 mt-1">•</span>
-              <span>覆盖 10W+ 程序员受众</span>
-            </li>
+                          <li class="flex items-start">
+                <span class="text-indigo-500 mr-2 mt-1">•</span>
+                <span>覆盖 20W+ 程序员受众</span>
+              </li>
             <li class="flex items-start">
               <span class="text-indigo-500 mr-2 mt-1">•</span>
               <span>多平台曝光（掘金、知乎、GitHub 等）</span>
@@ -457,7 +457,7 @@
                 <span class="text-2xl mr-3">📧</span>
                 <div class="text-left">
                   <p class="font-semibold text-gray-900">邮箱</p>
-                  <p class="text-indigo-600">contact@blogger-alliance.com</p>
+                  <p class="text-indigo-600">tuaran666@gmail.com</p>
                 </div>
               </div>
               
@@ -465,15 +465,7 @@
                 <span class="text-2xl mr-3">💬</span>
                 <div class="text-left">
                   <p class="font-semibold text-gray-900">微信</p>
-                  <p class="text-indigo-600">blogger_alliance</p>
-                </div>
-              </div>
-              
-              <div class="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
-                <span class="text-2xl mr-3">📱</span>
-                <div class="text-left">
-                  <p class="font-semibold text-gray-900">电话</p>
-                  <p class="text-indigo-600">400-123-4567</p>
+                  <p class="text-indigo-600">atar24 或 wx_k21vin</p>
                 </div>
               </div>
             </div>
