@@ -94,13 +94,41 @@
         <!-- CTA 按钮 -->
         <div class="text-center">
           <a
-            href="https://dxxbhlw7ws.feishu.cn/sheets/KlLBsxe7vhT2IYtajpJcfSJQnod?from=from_copylink"
+            href="https://github.com/TUARAN/blogger-alliance"
             target="_blank"
             class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
           >
             <span class="mr-2">🚀</span>
-            申请加入开发者博主联盟
+            Fork 项目加入开发者博主联盟
           </a>
+        </div>
+        
+        <!-- 加入流程说明 -->
+        <div class="bg-gray-50 rounded-xl p-8">
+          <h3 class="text-xl font-bold text-gray-900 mb-4 text-center">加入流程</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span class="text-2xl">1️⃣</span>
+              </div>
+              <h4 class="font-semibold text-gray-900 mb-2">Fork 项目</h4>
+              <p class="text-gray-600 text-sm">在 GitHub 上 Fork 我们的项目</p>
+            </div>
+            <div class="text-center">
+              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span class="text-2xl">2️⃣</span>
+              </div>
+              <h4 class="font-semibold text-gray-900 mb-2">添加信息</h4>
+              <p class="text-gray-600 text-sm">在 mockData.js 中添加你的博主信息</p>
+            </div>
+            <div class="text-center">
+              <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <span class="text-2xl">3️⃣</span>
+              </div>
+              <h4 class="font-semibold text-gray-900 mb-2">提交 PR</h4>
+              <p class="text-gray-600 text-sm">提交 Pull Request 等待审核</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

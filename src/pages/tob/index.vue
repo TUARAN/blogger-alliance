@@ -49,8 +49,9 @@
               <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
             
-            <router-link
-              to="/toc"
+            <a
+              href="https://github.com/TUARAN/blogger-alliance"
+              target="_blank"
               class="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
             >
               <span class="relative z-10 flex items-center">
@@ -58,7 +59,7 @@
                 加入开发者博主联盟
               </span>
               <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </router-link>
+            </a>
           </div>
 
           <!-- 统计信息 -->
@@ -334,15 +335,16 @@
               立即联系推广
             </span>
           </button>
-          <router-link
-            to="/toc"
+          <a
+            href="https://github.com/TUARAN/blogger-alliance"
+            target="_blank"
             class="px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-indigo-700 transform hover:-translate-y-1 transition-all duration-300"
           >
             <span class="flex items-center">
               <span class="mr-2">🤝</span>
               加入博主联盟
             </span>
-          </router-link>
+          </a>
         </div>
       </div>
     </section>
@@ -395,8 +397,9 @@
                 </div>
               </router-link>
               
-              <router-link
-                to="/about"
+              <a
+                href="https://github.com/TUARAN/blogger-alliance"
+                target="_blank"
                 class="flex items-center p-3 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg hover:from-green-100 hover:to-blue-100 transition-colors group"
               >
                 <span class="text-2xl mr-3">🌟</span>
@@ -404,7 +407,7 @@
                   <div class="font-semibold text-gray-900 group-hover:text-green-600">优质开源项目</div>
                   <div class="text-sm text-gray-600">发现和学习优秀项目</div>
                 </div>
-              </router-link>
+              </a>
               
               <div class="flex items-center p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg">
                 <span class="text-2xl mr-3">📊</span>
