@@ -3,8 +3,8 @@ export const bloggersData = [
   {
     id: 1,
     name: '掘金安东尼',
-    avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=anthony&backgroundColor=b6e3f4',
-    introduction: '多平台技术博主、掘金7级-社区共建者、签约作者、51CTO专家博主、文章400余篇、阅读量200余万',
+    avatar: 'https://p3-passport.byteacctimg.com/img/user-avatar/99b34a64642e38fd8e8b130e40956cd2~80x80.awebp',
+    introduction: '多平台技术博主、掘金7级作者、社区共建者、签约作者、51CTO专家博主、文章400余篇、阅读量200余万、机械工业《程序员成长手记》作者、《扣子指南小册》作者',
     followers: '15K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/1521379823340792', icon: '📝' },
