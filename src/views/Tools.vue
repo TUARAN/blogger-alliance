@@ -104,6 +104,7 @@
               :href="tool.url"
               target="_blank"
               class="block w-full py-2 sm:py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-center transition-colors text-mobile"
+              @click="handleToolClick(tool.name, tool.url)"
             >
               立即体验
             </a>
@@ -124,6 +125,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { toolsData } from '../data/mockData.js'
+import { trackLinkClick } from '../utils/hybridStats.js'
 
 // 响应式数据
 const toolsLoading = ref(true)
@@ -142,6 +144,11 @@ const filteredTools = computed(() => {
   }
   return tools.value.filter(tool => tool.category === selectedCategory.value)
 })
+
+// 处理工具点击
+const handleToolClick = (toolName, toolUrl) => {
+  trackLinkClick(toolName, toolUrl, '/tools')
+}
 
 // 模拟加载工具数据
 onMounted(() => {

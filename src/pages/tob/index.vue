@@ -97,6 +97,7 @@
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
           专业的技术博主团队，覆盖前端、后端、AI、移动开发等多个技术领域
         </p>
+
       </div>
       
       <!-- Loading 状态 -->
@@ -121,7 +122,7 @@
         <div
           v-for="blogger in bloggers"
           :key="blogger.id"
-          class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100"
+          class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
         >
           <!-- 博主基本信息 -->
           <div class="p-6">
@@ -141,27 +142,26 @@
             
             <!-- 社交账号 -->
             <div class="flex flex-wrap gap-2 mb-4">
-              <a
-                v-for="account in blogger.socialAccounts"
-                :key="account.platform"
-                :href="account.url"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700 whitespace-nowrap group-hover:bg-indigo-50 hover:bg-indigo-100 hover:text-indigo-700 transition-colors cursor-pointer"
-                v-if="account && account.url && account.url.trim() !== ''"
-              >
-                <span class="mr-1">{{ account.icon }}</span>
-                {{ account.platform }}
-              </a>
-              <span
-                v-for="account in blogger.socialAccounts"
-                :key="account.platform"
-                class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700 whitespace-nowrap opacity-60"
-                v-if="!account || !account.url || account.url.trim() === ''"
-              >
-                <span class="mr-1">{{ account.icon }}</span>
-                {{ account.platform }}
-              </span>
+              <template v-for="account in blogger.socialAccounts" :key="account.platform">
+                <a
+                  v-if="account && account.url && account.url.trim() !== ''"
+                  :href="account.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700 whitespace-nowrap hover:bg-indigo-100 hover:text-indigo-700 transition-colors cursor-pointer"
+                  @click="handleLinkClick(account.platform, account.url, blogger.name)"
+                >
+                  <span class="mr-1">{{ account.icon }}</span>
+                  {{ account.platform }}
+                </a>
+                <span
+                  v-else
+                  class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700 whitespace-nowrap opacity-60"
+                >
+                  <span class="mr-1">{{ account.icon }}</span>
+                  {{ account.platform }}
+                </span>
+              </template>
             </div>
 
             <!-- 展开/收起按钮 -->
@@ -499,6 +499,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { bloggersData } from '../../data/mockData.js'
+import { trackLinkClick } from '../../utils/hybridStats.js'
 
 // 响应式数据
 const loading = ref(true)
@@ -520,6 +521,12 @@ const toggleExpanded = (bloggerId) => {
 // 切换悬浮卡片
 const toggleFloatingCard = () => {
   showFloatingCard.value = !showFloatingCard.value
+}
+
+// 处理链接点击
+const handleLinkClick = (platform, url, bloggerName) => {
+  console.log('链接被点击:', platform, url, bloggerName)
+  trackLinkClick(`${bloggerName}-${platform}`, url, '/tob')
 }
 
 // 模拟加载数据

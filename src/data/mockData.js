@@ -7,9 +7,12 @@ export const bloggersData = [
     introduction: '多平台技术博主、掘金7级-社区共建者、签约作者、51CTO专家博主、文章400余篇、阅读量200余万',
     followers: '15K+',
     socialAccounts: [
-      { platform: '掘金', url: 'https://juejin.cn/user/123456', icon: '📝' },
-      { platform: '51CTO', url: 'https://blog.51cto.com/anthony', icon: '💻' },
-      { platform: 'GitHub', url: 'https://github.com/anthony', icon: '🐙' }
+      { platform: '掘金', url: 'https://juejin.cn/user/1521379823340792', icon: '📝' },
+      { platform: 'GitHub', url: 'https://github.com/TUARAN', icon: '🐙' },
+      { platform: '51CTO', url: 'https://blog.51cto.com/u_13961087', icon: '💻' },
+      { platform: '头条', url: 'https://www.toutiao.com/c/user/token/CiytHKMTSTLr9UjjPapQfQgP0Qtz-mo_r7SZ-9a-vjhHMpxe4Zf0NZ5nXMww0BpJCjwAAAAAAAAAAAAATzLFgylPHFsiAK3qyEAfRlTqWH9UNxHBykjYOQGlKESnc18eU1QTS8cwMB6HSurHYfYQvfn1DRjDxYPqBCIBA2ciM6E=/?source=list&log_from=d3cb457759bbb_1751732899254', icon: '📰' },
+      { platform: '微信公众号', url: 'https://mp.weixin.qq.com/s/anthony_wechat', icon: '🌏' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/Anthony1453?spm=1000.2115.3001.5343', icon: '💻' }
     ],
     expandedContent: {
       specialties: ['前端开发', '技术写作', '社区建设', '多平台运营'],
@@ -44,7 +47,7 @@ export const bloggersData = [
       { platform: 'CSDN', url: 'https://blog.csdn.net/little_stick_i', icon: '💻' },
       { platform: 'GitHub', url: 'https://github.com/stick-i', icon: '🐙' },
       { platform: '掘金', url: 'https://juejin.cn/user/4182956056773160', icon: '📝' },
-      { platform: '微信公众号', url: '', icon: '🌏' },
+      { platform: '微信公众号', url: 'https://mp.weixin.qq.com/s/agan_wechat', icon: '🌏' },
     ],
     expandedContent: {
       specialties: [ '后端开发', '技术写作', '多平台运营', '开源分享'],
@@ -113,7 +116,7 @@ export const bloggersData = [
       { platform: '掘金', url: 'https://juejin.cn/user/747323639208391', icon: '📝' },
       { platform: 'GitHub', url: 'https://github.com/miyuesc', icon: '🐙' },
       { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_43359503', icon: '💻' },
-      { platform: '微信公众号', url: '', icon: '🌏' },
+      { platform: '微信公众号', url: 'https://mp.weixin.qq.com/s/miyuefe_wechat', icon: '🌏' },
     ],
     expandedContent: {
       specialties: ['技术分享', '多平台运营', '社区建设', '技术写作'],
