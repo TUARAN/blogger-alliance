@@ -23,18 +23,20 @@ export const bloggersData = [
   {
     id: 2,
     name: '德育处主任',
-    avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=deyuchuzhuren&backgroundColor=ffdfbf',
-    introduction: '多平台技术博主、掘金6级、文章300余篇、阅读量200余万',
+    avatar: 'https://p3-passport.byteacctimg.com/img/user-avatar/6c49bd0b908f5b1601050a168d0283b2~80x80.awebp',
+    introduction: '多平台技术博主、掘金6级、文章300余篇、阅读量200余万。🧑‍💻写技术专栏｜聊商业故事。',
     followers: '15K+',
     socialAccounts: [
-      { platform: '掘金', url: 'https://juejin.cn/user/789012', icon: '📝' },
-      { platform: 'GitHub', url: 'https://github.com/deyuchuzhuren', icon: '🐙' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/deyuchuzhuren', icon: '💻' }
+      { platform: '掘金', url: 'https://juejin.cn/user/2673620576140030', icon: '📝' },
+      { platform: 'GitHub', url: 'https://github.com/Quick-Z', icon: '🐙' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_39415598', icon: '💻' },
+      { platform: '微信公众号：德育处主任', url: 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzAwMjU3ODU5Ng==#wechat_redirect', icon: '🌏' },
+      { platform: '知乎', url: 'https://www.zhihu.com/people/rabbit-svip/posts', icon: '📚' },
     ],
     expandedContent: {
-      specialties: ['技术写作', '多平台运营', '内容创作', '技术分享'],
+      specialties: ['前端可视化', 'Python', '商业故事', '工具分享'],
       achievements: ['掘金6级', '文章300余篇', '阅读量200余万', '多平台技术博主'],
-      recentPosts: ['技术写作心得', '多平台运营策略', '技术内容创作技巧']
+      recentPosts: ['OpenCV专栏', 'Python后端开发专栏', '商业故事']
     }
   },
   {
