@@ -351,8 +351,8 @@ export const bloggersData = [
     id: 21,
     name: 'XiaomingX',
     avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=cloud&backgroundColor=00ced1',
-    introduction: '多平台技术博主、掘金4级、文章130+篇、阅读量150万+、云原生架构师',
-    followers: '15.3K+',
+    introduction: '多平台技术博主、掘金5级、文章800+篇、阅读量580万+、云原生架构师',
+    followers: '23.3K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/2875978147692910', icon: '📝' },
       { platform: 'GitHub', url: 'https://github.com/XiaomingX', icon: '🐙' },
