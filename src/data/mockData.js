@@ -346,6 +346,23 @@ export const bloggersData = [
       achievements: ['掘金4级', '文章130+篇', 'AWS/阿里云专家', '云原生架构师'],
       recentPosts: ['云原生架构设计', 'AWS服务最佳实践', '微服务部署策略']
     }
+  },
+  {
+    id: 21,
+    name: 'XiaomingX',
+    avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=cloud&backgroundColor=00ced1',
+    introduction: '多平台技术博主、掘金4级、文章130+篇、阅读量150万+、云原生架构师',
+    followers: '15.3K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/2875978147692910', icon: '📝' },
+      { platform: 'GitHub', url: 'https://github.com/XiaomingX', icon: '🐙' },
+      { platform: 'X', url: 'https://x.com/seclink ', icon: '💻' },
+    ],
+    expandedContent: {
+      specialties: ['Python', '大模型应用开发', 'Next.js', '系统架构设计'],
+      achievements: ['掘金4级', '文章130+篇', '大模型应用专家', '资深架构师'],
+      recentPosts: ['基于Python的大模型实践', 'Next.js全栈开发最佳实践', '现代系统架构设计思路']
+    }
   }
 ]
 
