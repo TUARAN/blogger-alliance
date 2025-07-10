@@ -240,6 +240,31 @@
             </div>
           </transition>
         </div>
+        
+        <!-- 还有更多博主卡片 -->
+        <div class="group bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-dashed border-indigo-200 hover:border-indigo-400 cursor-pointer">
+          <div class="p-6 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-full flex items-center justify-center text-white text-2xl">
+              <span>✨</span>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">还有更多博主</h3>
+            <p class="text-gray-600 mb-4">我们正在持续招募优秀的技术博主加入联盟</p>
+            <div class="flex flex-wrap gap-2 justify-center mb-4">
+              <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">前端开发</span>
+              <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">后端架构</span>
+              <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">AI/ML</span>
+              <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">移动开发</span>
+            </div>
+            <a
+              href="https://github.com/TUARAN/blogger-alliance"
+              target="_blank"
+              class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+            >
+              <span class="mr-2">🤝</span>
+              加入我们
+            </a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -498,7 +523,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { bloggersData } from '../../data/mockData.js'
+import { bloggersData } from '../../data/bloggerInfo.js'
 import { trackLinkClick } from '../../utils/hybridStats.js'
 
 // 响应式数据

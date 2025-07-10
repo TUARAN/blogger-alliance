@@ -32,7 +32,7 @@ git checkout -b feature/add-blogger-你的名字
 ```
 
 #### 3️⃣ 修改数据文件
-编辑 `src/data/mockData.js` 文件，在 `bloggersData` 数组中添加你的信息：
+编辑 `src/data/bloggerInfo.js` 文件，在 `bloggersData` 数组中添加你的信息：
 
 ```javascript
 {
@@ -58,7 +58,7 @@ git checkout -b feature/add-blogger-你的名字
 #### 4️⃣ 提交你的更改
 ```bash
 # 添加修改的文件
-git add src/data/mockData.js
+git add src/data/bloggerInfo.js
 
 # 提交更改（请使用规范的提交信息）
 git commit -m "feat: add new blogger - 你的名字"
@@ -82,9 +82,9 @@ git push origin feature/add-blogger-你的名字
 
 ### 📋 加入要求
 
-- ✅ 有稳定的技术内容创作（至少 50+ 篇技术文章）
+- ✅ 有稳定的技术内容创作（建议 50+ 篇技术文章）
 - ✅ 在主流技术平台有活跃账号（掘金、CSDN、GitHub 等）
-- ✅ 有一定的粉丝基础（建议 1000+ 粉丝）
+- ✅ 有一定的粉丝基础（建议 3k+ 左右粉丝）
 - ✅ 愿意分享真实的技术经验和产品使用心得
 - ✅ 认同我们的价值观：真实、专业、有温度
 
@@ -126,55 +126,6 @@ git push origin feature/add-blogger-你的名字
 
 ---
 
-## 🧩 页面设计思路
-
-网站目前分为三个核心模块：
-
-### 🏠 首页 (Home) → 平台概览与导航
-
-作为整个平台的门户，提供：
-- 平台介绍和价值主张
-- 核心数据展示（博主数量、覆盖粉丝、合作案例等）
-- 快速导航到各个功能模块
-- 最新动态和重要公告
-
-### 📁 toB/ 目录 → 面向产品推广方（企业用户）
-
-我们通过页面介绍：我们不是普通广告博主，而是技术实操出身的内容创作者，懂代码、懂痛点、懂圈子。
-
-- 展示当前的开发者博主联盟阵容（如掘金安东尼、德育处主任、阿杆），每人配头像、账号链接、擅长领域与粉丝量
-- CTA 引导合作方联系我们推广产品
-- 设计语言偏专业、信任感强，突出"真实、精准、落地"
-
-### 📁 toc/ 目录 → 面向 C 端博主 & 程序员用户
-
-分为两个 Tab 页：
-
-**Tab1：「成为我们的博主合伙人」**
-- 邀请愿意做内容的程序员博主加入联盟，一起玩流量、分资源、赚推广收益
-- 讲清楚好处（曝光机会、收入分成、资源支持）
-
-**Tab2：「我们精选的 MVP 工具」**
-- 展示我们自己做的 MVP 产品，强调：我们做的工具，是我们愿意自己推荐的
-- 每个工具都有介绍、使用入口、可被收藏与反馈
-
-### 🛠️ 工具库 (Tools) → 独立工具展示页面
-
-专门展示联盟成员开发的优质工具：
-- 工具分类和筛选功能
-- 详细的使用说明和教程
-- 用户评价和反馈系统
-- 工具更新和维护状态
-
-### 📄 关于页面 (About) → 联盟详细介绍
-
-- 联盟的使命和愿景
-- 团队成员详细介绍
-- 合作案例展示
-- 联系方式和服务流程
-
-整个设计目标：交互友好、信息清晰、有温度有信任感，三个模块相互呼应，形成完整的生态闭环。
-
 ## 🤝 我们和其他 IT KOL 的区别？
 
 | 传统 IT KOL | Blogger Alliance |
@@ -186,34 +137,7 @@ git push origin feature/add-blogger-你的名字
 
 我们强调的是「创作力」+「信任力」+「转化力」。
 
-## 🌄 我们的远景
-
-我们不是单纯的"接广告"，我们是想打造一个：
-
-**开发者影响开发者的新通路，构建一个"内容 + 技术 + 产品推荐"的价值闭环。**
-
-未来可能会扩展方向包括：
-
-- 真实可查的推广数据看板
-- 工具/内容投票系统（开发者真正认可什么）
-- 联盟成员成长路径支持
-- 商业化匹配（产品→博主，双向推荐）
-
-## 📌 总结一句话
-
-这是一个「技术人影响力平台」的起点，我们不做流量 KOL，我们做开发者里的"头部意见节点"
-
----
-
-## 🛠️ 技术栈
-
-- **Vue 3** - 渐进式 JavaScript 框架
-- **Vite** - 快速的前端构建工具
-- **Vue Router** - 官方路由管理器
-- **Tailwind CSS** - 实用优先的 CSS 框架
-- **@vueuse/core** - Vue 组合式 API 工具集
-
-## 📁 项目结构
+## 📁 目录结构
 
 ```
 blogger-alliance/
@@ -228,124 +152,23 @@ blogger-alliance/
 │   │   ├── Tools.vue              # 工具库页面
 │   │   └── About.vue              # 关于页面
 │   ├── data/
-│   │   └── mockData.js            # Mock 数据
+│   │   └── bloggerInfo.js         # 博主信息数据
 │   ├── components/                # 通用组件
 │   ├── utils/                     # 工具函数
-│   ├── config/                    # 配置文件
 │   ├── App.vue                    # 根组件
 │   ├── main.js                    # 入口文件
 │   └── style.css                  # 全局样式
 ├── .github/                       # GitHub 配置文件
-│   ├── ISSUE_TEMPLATE/            # Issue 模板
-│   └── pull_request_template.md   # PR 模板
 ├── index.html
 ├── package.json
 ├── vite.config.js
 ├── tailwind.config.js
-├── CONTRIBUTING.md                # 贡献指南
 └── README.md
 ```
-
-## 🚀 安装和运行
-
-### 安装依赖
-```bash
-npm install
-```
-
-### 开发模式
-```bash
-npm run dev
-```
-
-### 构建生产版本
-```bash
-npm run build
-```
-
-### 预览生产版本
-```bash
-npm run preview
-```
-
-## 🎨 设计特色
-
-- **现代化 UI** - 使用 Tailwind CSS 构建清新现代的界面
-- **响应式设计** - 完美适配桌面端和移动端
-- **流畅动画** - Vue Transition 组件实现的页面切换动画
-- **交互体验** - 卡片悬停效果、按钮渐变、Modal 弹窗等
-- **Loading 状态** - 骨架屏加载动画
-
-## 📱 页面路由
-
-### 🏠 核心模块
-- `/` - 首页（平台概览与导航）
-- `/tob` - ToB 推广服务页面（面向企业用户）
-- `/toc` - ToC 博主合伙人和工具库页面（面向开发者）
-
-### 🛠️ 功能页面
-- `/tools` - 工具库页面（独立工具展示）
-- `/about` - 关于页面（联盟详细介绍）
-
-## 🔧 自定义配置
-
-### 修改 Mock 数据
-编辑 `src/data/mockData.js` 文件来修改：
-- 博主团队信息
-- 工具库产品
-- 合伙人好处列表
-
-### 样式定制
-- 全局样式：`src/style.css`
-- Tailwind 配置：`tailwind.config.js`
-
-## 🚀 部署
-
-项目使用 Vite 构建，可以部署到任何静态文件托管服务：
-
-```bash
-npm run build
-```
-
-构建完成后，`dist` 目录包含所有静态文件，可直接部署到：
-- Vercel
-- Netlify
-- GitHub Pages
-- 阿里云 OSS
-- 腾讯云 COS
-
-## 📄 许可证
-
-MIT License
 
 ## 🤝 贡献
 
 欢迎提交 Issue 和 Pull Request！
-
-### 📚 贡献指南
-
-我们提供了详细的贡献指南，请查看：
-
-- 📖 **[贡献指南](CONTRIBUTING.md)** - 详细的贡献流程和规范
-- 🐛 **[Issue 模板](.github/ISSUE_TEMPLATE/)** - 标准化的 Issue 模板
-- 🔄 **[PR 模板](.github/pull_request_template.md)** - Pull Request 模板
-
-### 🚀 快速贡献
-
-1. **Fork 项目** - 在 GitHub 上 Fork 这个项目
-2. **创建分支** - 创建功能分支
-3. **修改代码** - 进行你的修改
-4. **提交更改** - 使用规范的提交信息
-5. **创建 PR** - 提交 Pull Request
-
-### 🤝 加入开发者联盟
-
-如果你想加入我们的开发者联盟，请：
-
-1. 查看 [加入联盟流程](#-加入开发者联盟)
-2. 修改 `src/data/mockData.js` 添加你的信息
-3. 提交 Pull Request
-4. 等待审核（3-5 个工作日）
 
 ---
 

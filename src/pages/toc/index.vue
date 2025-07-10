@@ -119,7 +119,7 @@
                 <span class="text-2xl">2️⃣</span>
               </div>
               <h4 class="font-semibold text-gray-900 mb-2">添加信息</h4>
-              <p class="text-gray-600 text-sm">在 mockData.js 中添加你的博主信息</p>
+              <p class="text-gray-600 text-sm">在 bloggerInfo.js 中添加你的博主信息</p>
             </div>
             <div class="text-center">
               <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -137,7 +137,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { partnerBenefits } from '../../data/mockData.js'
+import { partnerBenefits } from '../../data/bloggerInfo.js'
 
 // 页面数据
 // 所有表单处理逻辑已移除，现在直接跳转到飞书文档

@@ -140,7 +140,7 @@
               <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-indigo-200" alt="博主1">
               <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-indigo-200" alt="博主2">
               <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=60&h=60&fit=crop&crop=face" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-indigo-200" alt="博主3">
-              <span class="ml-2 text-gray-500 text-mobile">等 50+ 技术博主</span>
+              <span class="ml-2 text-gray-500 text-mobile">等 20+ 技术博主</span>
             </div>
           </div>
           <div class="bg-white rounded-xl p-6 sm:p-8 shadow-sm">

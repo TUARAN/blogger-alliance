@@ -124,7 +124,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { toolsData } from '../data/mockData.js'
+import { toolsData } from '../data/bloggerInfo.js'
 import { trackLinkClick } from '../utils/hybridStats.js'
 
 // 响应式数据
