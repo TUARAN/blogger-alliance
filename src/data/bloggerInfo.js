@@ -142,7 +142,26 @@ export const bloggersData = [
       achievements: ['掘金5级', '文章800+篇', '阅读量580万+', '云原生架构师'],
       recentPosts: ['基于Python的大模型实践', 'Next.js全栈开发最佳实践', '现代系统架构设计思路']
     }
-  }
+  },
+  {
+    id: 9,
+    name: '嚣张农民',
+    avatar: 'https://avatars.githubusercontent.com/u/35765876?v=4&size=64',
+    introduction: '多平台技术博主、掘金优秀创作者、CSDN前端领域优质创作者、51CTO专家博主、文章200余篇、阅读量100余万',
+    followers: '20K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/3131035352311646', icon: '📝' },
+      { platform: 'GitHub', url: 'https://github.com/linweiqian', icon: '🐙' },
+      { platform: '知乎', url: 'https://www.zhihu.com/people/rrskeo', icon: '💻' },
+      { platform: '微信公众号', url: '-', icon: '🌏' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_40808668?spm=1000.2115.3001.5343', icon: '💻' }
+    ],
+    expandedContent: {
+      specialties: ['前端开发', '技术写作', '社区建设', '多平台运营'],
+      achievements: ['掘金优秀创作者', 'CSDN前端领域优质创作者', '技术文章作者', '文章200余篇'],
+      recentPosts: ['前端技术发展趋势', '掘金社区建设经验分享', '技术写作技巧分享']
+    }
+  },
 ]
 
 // 产品工具数据
