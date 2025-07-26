@@ -162,6 +162,26 @@ export const bloggersData = [
       recentPosts: ['前端技术发展趋势', '掘金社区建设经验分享', '技术写作技巧分享']
     }
   },
+    {
+    id: 10,
+    name: '中杯可乐多加冰',
+    avatar: 'https://avatars.githubusercontent.com/u/35050697?s=400&u=87690c4cb71974e60295a713986cc0393212169a&v=4',
+    introduction: '武汉开发者社区主理人、CSDN博客专家、年度博客之星、人工智能领域TOP2、中国开发者影响力榜单博主、文章300余篇、全网粉丝量100k+、阅读量800余万',
+    followers: '100K+',
+    socialAccounts: [
+      { platform: 'CSDN', url: 'https://blog.csdn.net/air__Heaven?type=blog', icon: '💻' },
+      { platform: '掘金', url: 'https://juejin.cn/user/3435306702347432', icon: '📝' },
+      { platform: '微信公众号:采苓AI研习社', url: 'https://mp.weixin.qq.com/s/NJgBjKLIvjblsUjDa2yxmQ', icon: '🌏' },
+      { platform: 'GitHub', url: 'https://github.com/Heavenhjs', icon: '🐙' },
+      { platform: '知乎', url: 'https://www.zhihu.com/people/ling-sheng-87', icon: '🎯' },
+      { platform: '腾讯云开发者社区', url: 'https://cloud.tencent.com/developer/user/10172274', icon: '📚' },
+    ],
+    expandedContent: {
+      specialties: ['技术写作', '社群推广', '产品推介', '社区建设', '多平台运营',  '技术咨询', '研学辅导'],
+      achievements: ['CSDN专家博主','掘金优秀创作者', '中国开发者影响力榜单博主', '亚马逊云官方博主','腾讯云创作之星', '武汉开发者社区主理人'],
+      recentPosts: ['AI落地应用实战专栏', 'RAG应用解决方案', '百度文心一言开源ERNIE-4.5深度测评报告']
+    }
+  },
 ]
 
 // 产品工具数据
