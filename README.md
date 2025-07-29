@@ -1,10 +1,14 @@
 # 🧭 Blogger Alliance - 技术影响力平台
 
+🌐 **网站地址：** https://blogger-alliance.pages.dev/
+
+![网站预览](./website-preview.png)
+
 > **项目介绍：Blogger Alliance 网站构建说明（对内版）**
 
 ## 🔍 这是个什么项目？
 
-我们正在搭建一个网站，代号 **Blogger Alliance（开发者博主联盟）**，这是一个面向开发者生态的"技术影响力平台"。
+我们正在搭建一个网站，代号 **Blogger Alliance（开发者博主联盟）**，这是一个面向一线程序员博主的"影响力平台"。
 
 简单来说，我们有一批做内容的技术博主，未来会越来越多，我们希望通过这个平台，把"人"作为核心资源，用技术人的方式影响技术人，从而：
 
@@ -120,8 +124,9 @@ git push origin feature/add-blogger-你的名字
 
 ### 📞 联系我们
 
-- 📧 邮箱：your-email@example.com
-- 💬 微信群：扫描二维码加入
+- 📧 邮箱：tuaran666@gmail.com
+- 💬 微信群：添加微信 atar24 邀请进入
+
 - 🐦 微博：@BloggerAlliance
 
 ---
@@ -172,4 +177,4 @@ blogger-alliance/
 
 ---
 
-**Blogger Alliance** - 技术人影响力平台 🚀 
+**Blogger Alliance** - 技术人影响力平台 🚀
