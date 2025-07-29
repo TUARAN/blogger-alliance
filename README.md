@@ -2,7 +2,8 @@
 
 🌐 **网站地址：** https://blogger-alliance.pages.dev/
 
-![网站预览](./website-preview.png)
+<img src="./dist/img/website-preview.png" alt="网站预览" width="600">
+
 
 > **项目介绍：Blogger Alliance 网站构建说明（对内版）**
 
@@ -15,6 +16,10 @@
 - **帮助程序员相关产品进行精准推广**（对 B 端）
 - **搭建 C 端博主的成长入口**（加入联盟、有内容、有收入）
 - **给普通开发者提供好用、有用、真实推荐的工具与应用**（资源库）
+
+## 📊 数据分析
+
+![数据分析](./dist/img/data_analyse.png)
 
 ## 🤝 加入开发者联盟
 
@@ -141,6 +146,7 @@ git push origin feature/add-blogger-你的名字
 | 重视粉丝数 | 我们更重视"转化率"与"推荐真实感" |
 
 我们强调的是「创作力」+「信任力」+「转化力」。
+
 
 ## 📁 目录结构
 
