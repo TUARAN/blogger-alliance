@@ -76,14 +76,14 @@ export const bloggersData = [
   },
   {
     id: 5,
-    name: '南方',
-    avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=nanfang&backgroundColor=c0f0c0',
+    name: '南方者',
+    avatar: 'https://p6-passport.byteacctimg.com/img/user-avatar/db3b09f9ca107d8843cee3fe8f4f0cd4~130x130.awebp',
     introduction: 'CSDN专家博主，专注于技术分享和知识传播',
     followers: '40K+',
     socialAccounts: [
-      { platform: 'CSDN', url: 'https://blog.csdn.net/nanfang', icon: '💻' },
-      { platform: 'GitHub', url: 'https://github.com/nanfang', icon: '🐙' },
-      { platform: '掘金', url: 'https://juejin.cn/user/nanfang', icon: '📝' }
+      { platform: 'CSDN', url: 'https://anpai.blog.csdn.net', icon: '💻' },
+      { platform: '掘金', url: 'https://juejin.cn/user/2840793779295133/posts', icon: '📝' },
+      { platform: 'GitHub', url: 'https://github.com/NanFangZhe404', icon: '🐙' },
     ],
     expandedContent: {
       specialties: ['技术分享', '知识传播', 'CSDN运营', '技术写作'],
