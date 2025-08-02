@@ -60,7 +60,7 @@ export const bloggersData = [
   {
     id: 4,
     name: '前端之虎陈随易',
-    avatar: 'https://static.yicode.tech/chensuiyi-128x128.jpg',
+    avatar: 'https://p9-passport.byteacctimg.com/img/user-avatar/1e53615038b0e9a227c4627ee0bb0a65~180x180.awebp',
     introduction: '农村程序员、独立开发者、10多个500人微信群、技术文章200+、全网粉丝40000+',
     followers: '40K+',
     socialAccounts: [
