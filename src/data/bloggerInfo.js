@@ -60,13 +60,15 @@ export const bloggersData = [
   {
     id: 4,
     name: '前端之虎陈随易',
-    avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=chensuiyi&backgroundColor=ffd5dc',
-    introduction: '农村程序员、独立开发者、行业观察员、独立产品100+、技术文章200+、全网粉丝40000+',
+    avatar: 'https://static.yicode.tech/chensuiyi-128x128.jpg',
+    introduction: '农村程序员、独立开发者、10多个500人微信群、技术文章200+、全网粉丝40000+',
     followers: '40K+',
     socialAccounts: [
-      { platform: '掘金', url: 'https://juejin.cn/user/chensuiyi', icon: '📝' },
-      { platform: 'GitHub', url: 'https://github.com/chensuiyi', icon: '🐙' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/chensuiyi', icon: '💻' }
+      { platform: '掘金', url: 'https://juejin.cn/user/1239904846873326', icon: '📝' },
+      { platform: 'GitHub', url: 'https://github.com/chenbimo', icon: '🐙' },
+      { platform: '知乎', url: 'https://www.zhihu.com/people/chensuiyi', icon: '💻' },
+      { platform: '微信公众号', url: 'https://mp.weixin.qq.com/s/T_RW_gc0qiX6SwMM2SAbiw', icon: '💻' },
+      { platform: '个人网站', url: 'https://chensuiyi.me', icon: '💻' }
     ],
     expandedContent: {
       specialties: ['前端开发', '独立开发', '产品设计', '行业观察', '技术写作'],
