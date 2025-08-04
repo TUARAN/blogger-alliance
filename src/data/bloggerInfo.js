@@ -97,17 +97,17 @@ export const bloggersData = [
     id: 6,
     name: '战场小包',
     avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=zhanchangxiaobao&backgroundColor=f4e4bc',
-    introduction: '多平台活跃博主，专注于技术分享和社区建设',
+    introduction: '前端开发工程师，多平台活跃博主，专注于技术分享和社区建设',
     followers: '10K+',
     socialAccounts: [
-      { platform: '掘金', url: 'https://juejin.cn/user/zhanchangxiaobao', icon: '📝' },
-      { platform: 'GitHub', url: 'https://github.com/zhanchangxiaobao', icon: '🐙' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/zhanchangxiaobao', icon: '💻' }
+      { platform: '掘金', url: 'https://juejin.cn/user/4424090519078430', icon: '📝' },
+      { platform: 'GitHub', url: 'https://github.com/zcxiaobao', icon: '🐙' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/qq_32036091?spm=1000.2115.3001.5343', icon: '💻' }
     ],
     expandedContent: {
       specialties: ['技术分享', '多平台运营', '社区建设', '技术写作'],
-      achievements: ['多平台活跃博主', '粉丝10000+', '技术文章作者', '社区贡献者'],
-      recentPosts: ['多平台运营经验', '技术分享心得', '社区建设实践']
+      achievements: ['AGI 社区共建者', '掘金签约作者', '粉丝10000+', '阿里云签约作者', '掘金优秀创作者', '社区贡献者'],
+      recentPosts: ['多平台运营经验', '技术分享心得', '社区建设实践', '与掘金社区合作多次']
     },
   },
   {
