@@ -115,7 +115,7 @@ export const bloggersData = [
     name: 'MiyueFE',
     avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=techfat&backgroundColor=e8d5c4',
     introduction: '前端开发工程师，多平台活跃博主，掘金5级，文章100+篇，GitHub 2k+ star',
-    followers: '3K+',
+    followers: '4K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/747323639208391', icon: '📝' },
       { platform: 'GitHub', url: 'https://github.com/miyuesc', icon: '🐙' },
