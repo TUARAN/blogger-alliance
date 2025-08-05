@@ -187,8 +187,8 @@ export const bloggersData = [
   {
     id: 11,
     name: 'Alex',
-    avatar: 'https://profile-avatar.csdnimg.cn/596c073dab984a1da2bd0defe3271c8f_g310773517.jpg'
-    introduction: '某大厂AIOT技术专家，CSDN优质创作者，51cto专家博主，全网粉丝量33W+，提供产品测评、学习辅导、简历定制优化、面试辅导、毕设辅导、项目开发、C/C++/Java/Python/Linux/AI/云平台等方面的服务'
+    avatar: 'https://profile-avatar.csdnimg.cn/596c073dab984a1da2bd0defe3271c8f_g310773517.jpg',
+    introduction: '某大厂AIOT技术专家，CSDN优质创作者，51cto专家博主，全网粉丝量33W+，提供产品测评、学习辅导、简历定制优化、面试辅导、毕设辅导、项目开发、C/C++/Java/Python/Linux/AI/云平台等方面的服务',
     followers: '330K+',
     socialAccounts: [
       { platform: 'CSDN', url: 'https://blog.csdn.net/g310773517?type=lately', icon: '💻' },
