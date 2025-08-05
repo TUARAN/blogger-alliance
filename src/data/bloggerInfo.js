@@ -164,7 +164,7 @@ export const bloggersData = [
       recentPosts: ['前端技术发展趋势', '掘金社区建设经验分享', '技术写作技巧分享']
     }
   },
-    {
+  {
     id: 10,
     name: '中杯可乐多加冰',
     avatar: 'https://avatars.githubusercontent.com/u/35050697?s=400&u=87690c4cb71974e60295a713986cc0393212169a&v=4',
@@ -187,7 +187,7 @@ export const bloggersData = [
   {
     id: 11,
     name: 'Alex',
-    avatar: 'https://profile-avatar.csdnimg.cn/596c073dab984a1da2bd0defe3271c8f_g310773517.jpg',
+    avatar: 'https://p6-passport.byteacctimg.com/img/user-avatar/95be01169a8d7826404bf5e0dfb38e45~180x180.awebp',
     introduction: '某大厂AIOT技术专家，CSDN优质创作者，51cto专家博主，全网粉丝量33W+，提供产品测评、学习辅导、简历定制优化、面试辅导、毕设辅导、项目开发、C/C++/Java/Python/Linux/AI/云平台等方面的服务',
     followers: '330K+',
     socialAccounts: [
@@ -204,7 +204,23 @@ export const bloggersData = [
       recentPosts: ['通义灵码IDE使用mcp', '产品推介', '华为开发者空间xDeepSeek的应用']
     }
   },
-
+  {
+    id: 12,
+    name: '田八',
+    avatar: 'https://p26-passport.byteacctimg.com/img/user-avatar/6a646066de6c1376525669efb70295e9~130x130.awebp',
+    introduction: '技术爱好者、掘金优秀创作者、专注全栈开发（前端方向）、技术写作、文章150+、阅读量50万+',
+    followers: '3K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/950446655026551', icon: '📝' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/qq_33733799', icon: '💻' },
+      { platform: 'GitHub', url: 'https://github.com/zeng-hang', icon: '🐙' },
+    ],
+    expandedContent: {
+      specialties: ['前端全栈', '技术写作', '社区建设', '技术咨询'],
+      achievements: ['掘金优秀创作者', '阿里云专家博主', '技术爱好者', '技术文章150+'],
+      recentPosts: ['学会Grid之后，我觉得再也没有我搞不定的布局了', '告别屎山！！！WebSocket 的极致封装， 写好代码竟如此简单', '一个永远不会完成的 Promise 是否会造成存储泄漏']
+    }
+  }
 ]
 
 // 产品工具数据
