@@ -2,7 +2,7 @@
 
 🌐 **网站地址：** https://blogger-alliance.pages.dev/
 
-<img src="./dist/img/website-preview.png" alt="网站预览" width="600">
+<img src="./src/img/info1.png" alt="网站预览" width="600">
 
 
 > **项目介绍：Blogger Alliance 网站构建说明（对内版）**
@@ -19,7 +19,7 @@
 
 ## 📊 数据分析
 
-![数据分析](./dist/img/data_analyse.png)
+![数据分析](./src/img/info2.png)
 
 ## 🤝 加入开发者联盟
 

@@ -113,7 +113,7 @@ export const bloggersData = [
   {
     id: 7,
     name: 'MiyueFE',
-    avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=techfat&backgroundColor=e8d5c4',
+    avatar: 'https://p26-passport.byteacctimg.com/img/user-avatar/afcc0b5364cba06f7814368d1f44fc11~180x180.awebp',
     introduction: '前端开发工程师，多平台活跃博主，掘金5级，文章100+篇，GitHub 2k+ star',
     followers: '4K+',
     socialAccounts: [
