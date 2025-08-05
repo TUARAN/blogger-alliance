@@ -184,6 +184,27 @@ export const bloggersData = [
       recentPosts: ['AI落地应用实战专栏', 'RAG应用解决方案', '百度文心一言开源ERNIE-4.5深度测评报告']
     }
   },
+  {
+    id: 11,
+    name: 'Alex',
+    avatar: 'https://profile-avatar.csdnimg.cn/596c073dab984a1da2bd0defe3271c8f_g310773517.jpg'
+    introduction: '某大厂AIOT技术专家，CSDN优质创作者，51cto专家博主，全网粉丝量33W+，提供产品测评、学习辅导、简历定制优化、面试辅导、毕设辅导、项目开发、C/C++/Java/Python/Linux/AI/云平台等方面的服务'
+    followers: '330K+',
+    socialAccounts: [
+      { platform: 'CSDN', url: 'https://blog.csdn.net/g310773517?type=lately', icon: '💻' },
+      { platform: '51CTO', url: 'https://blog.51cto.com/u_1150085', icon: '💻' },
+      { platform: '掘金', url: 'https://juejin.cn/user/2505125286925081', icon: '📝' },
+      { platform: '微信公众号:Alex技术圈', url: 'https://mp.weixin.qq.com/s/AwruowQ6fRu1tabXPZxyFw', icon: '🌏' },
+      { platform: 'Gitee', url: 'https://gitee.com/ylguo', icon: '🐙' },
+      { platform: '知乎', url: 'https://www.zhihu.com/people/alex-30-57', icon: '🎯' },
+    ],
+    expandedContent: {
+      specialties: ['嵌入式开发', '技术写作', '私域推广', '测评软文', '技术分享',  '技术自媒体写作指导', '研学辅导'],
+      achievements: ['CSDN优质创作者','51cto博客专家', '文章1600+篇', '全网阅读量≈1000W', '多平台技术博主'],
+      recentPosts: ['通义灵码IDE使用mcp', '产品推介', '华为开发者空间xDeepSeek的应用']
+    }
+  },
+
 ]
 
 // 产品工具数据
