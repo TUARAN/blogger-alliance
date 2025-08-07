@@ -42,14 +42,15 @@ export const bloggersData = [
   {
     id: 3,
     name: '阿杆',
-    avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=agan&backgroundColor=d1d4f9',
-    introduction: '多平台技术博主、掘金优秀创作者、CSDN新星创作者、文章数100+、阅读量100w+、GitHub 800+ star',
-    followers: '23K+',
+    avatar: 'https://p3-passport.byteacctimg.com/img/user-avatar/de3dfdc0012f9090816782278813f241~180x180.awebp',
+    introduction: '多平台技术博主、掘金优秀创作者、CSDN博客专家、文章数100+、阅读量100w+、GitHub 800+ star',
+    followers: '24K+',
     socialAccounts: [
       { platform: 'CSDN', url: 'https://blog.csdn.net/little_stick_i', icon: '💻' },
       { platform: 'GitHub', url: 'https://github.com/stick-i', icon: '🐙' },
       { platform: '掘金', url: 'https://juejin.cn/user/4182956056773160', icon: '📝' },
-      { platform: '微信公众号', url: 'https://mp.weixin.qq.com/s/agan_wechat', icon: '🌏' },
+      { platform: '微信公众号：程序员阿杆', url: 'https://mp.weixin.qq.com/s/-9AJukj2GTE6Im7x4mW4lw', icon: '🌏' },
+      { platform: '知乎', url: 'https://www.zhihu.com/people/stick-i', icon: '📚' },
     ],
     expandedContent: {
       specialties: [ '后端开发', '技术写作', '多平台运营', '开源分享'],
