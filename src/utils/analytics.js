@@ -1,31 +1,67 @@
-// Google Analytics 4 配置
-const GA_MEASUREMENT_ID = 'G-MF2CNPVS7M'
+import { bloggersData } from '../data/bloggerInfo.js'
 
-// 初始化 GA4
-export function initGA() {
-  if (typeof window !== 'undefined' && window.gtag) {
-    return
+// 解析粉丝数量字符串，转换为数字
+function parseFollowers(followersStr) {
+  if (!followersStr) return 0
+  
+  // 移除所有空格和加号
+  const cleanStr = followersStr.replace(/\s+/g, '').replace(/\+/g, '')
+  
+  // 检查是否包含K（千）
+  if (cleanStr.includes('K') || cleanStr.includes('k')) {
+    const num = parseFloat(cleanStr.replace(/[Kk]/g, ''))
+    return Math.floor(num * 1000)
   }
-
-  // 添加 GA4 脚本
-  const script = document.createElement('script')
-  script.async = true
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`
-  document.head.appendChild(script)
-
-  // 初始化 gtag
-  window.dataLayer = window.dataLayer || []
-  window.gtag = function() {
-    window.dataLayer.push(arguments)
+  
+  // 检查是否包含W（万）
+  if (cleanStr.includes('W') || cleanStr.includes('w')) {
+    const num = parseFloat(cleanStr.replace(/[Ww]/g, ''))
+    return Math.floor(num * 10000)
   }
-  window.gtag('js', new Date())
-  window.gtag('config', GA_MEASUREMENT_ID, {
-    page_title: document.title,
-    page_location: window.location.href
-  })
+  
+  // 检查是否包含M（百万）
+  if (cleanStr.includes('M') || cleanStr.includes('m')) {
+    const num = parseFloat(cleanStr.replace(/[Mm]/g, ''))
+    return Math.floor(num * 1000000)
+  }
+  
+  // 纯数字
+  return parseInt(cleanStr) || 0
 }
 
-// 页面浏览事件
+// 计算所有博主的粉丝总数
+export function calculateTotalFollowers() {
+  return bloggersData.reduce((total, blogger) => {
+    return total + parseFollowers(blogger.followers)
+  }, 0)
+}
+
+// 格式化粉丝数量显示
+export function formatFollowersCount(count) {
+  if (count >= 1000000) {
+    return (count / 1000000).toFixed(1) + 'M'
+  } else if (count >= 10000) {
+    return (count / 10000).toFixed(1) + 'W'
+  } else if (count >= 1000) {
+    return (count / 1000).toFixed(1) + 'K'
+  }
+  return count.toString()
+}
+
+// 获取博主统计信息
+export function getBloggerStats() {
+  const totalFollowers = calculateTotalFollowers()
+  const bloggerCount = bloggersData.length
+  
+  return {
+    totalFollowers,
+    formattedFollowers: formatFollowersCount(totalFollowers),
+    bloggerCount,
+    averageFollowers: Math.floor(totalFollowers / bloggerCount)
+  }
+}
+
+// Google Analytics 相关函数
 export function trackPageView(pageTitle, pagePath) {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', 'page_view', {

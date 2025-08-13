@@ -70,7 +70,7 @@
               </li>
               <li class="flex items-start">
                 <span class="text-indigo-500 mr-2 mt-1">•</span>
-                <span>覆盖 10W+ 程序员受众</span>
+                <span>覆盖 {{ bloggerStats.formattedFollowers }}+ 程序员受众</span>
               </li>
               <li class="flex items-start">
                 <span class="text-indigo-500 mr-2 mt-1">•</span>
@@ -140,7 +140,7 @@
               <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-indigo-200" alt="博主1">
               <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-indigo-200" alt="博主2">
               <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=60&h=60&fit=crop&crop=face" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-indigo-200" alt="博主3">
-              <span class="ml-2 text-gray-500 text-mobile">等 20+ 技术博主</span>
+              <span class="ml-2 text-gray-500 text-mobile">等 {{ bloggerStats.bloggerCount }}+ 技术博主</span>
             </div>
           </div>
           <div class="bg-white rounded-xl p-6 sm:p-8 shadow-sm">
@@ -164,19 +164,25 @@
           <div class="bg-white rounded-xl p-6 sm:p-8 shadow-sm">
             <h4 class="text-lg font-bold text-gray-900 mb-4">优质开源项目/合作品牌</h4>
             <div class="flex items-center gap-3 sm:gap-4">
-              <span class="inline-flex flex-col items-center">
-                <span class="text-xl sm:text-2xl">🌟</span>
-                <span class="text-xs text-gray-600">项目A</span>
-              </span>
-              <span class="inline-flex flex-col items-center">
-                <span class="text-xl sm:text-2xl">🚩</span>
-                <span class="text-xs text-gray-600">项目B</span>
-              </span>
-              <span class="inline-flex flex-col items-center">
-                <span class="text-xl sm:text-2xl">💡</span>
-                <span class="text-xs text-gray-600">项目C</span>
-              </span>
-              <span class="ml-2 text-gray-500 text-mobile">等 5+ 项目/品牌</span>
+              <div class="inline-flex flex-col items-center">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
+                  <img src="/src/img/brand/aws.png" alt="亚马逊科技" class="w-6 h-6 sm:w-8 sm:h-8 object-contain">
+                </div>
+                <span class="text-xs text-gray-600 mt-1">亚马逊</span>
+              </div>
+              <div class="inline-flex flex-col items-center">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
+                  <img src="/src/img/brand/baidu.png" alt="百度" class="w-6 h-6 sm:w-8 sm:h-8 object-contain">
+                </div>
+                <span class="text-xs text-gray-600 mt-1">百度</span>
+              </div>
+              <div class="inline-flex flex-col items-center">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
+                  <img src="/src/img/brand/bytedance.png" alt="字节" class="w-6 h-6 sm:w-8 sm:h-8 object-contain">
+                </div>
+                <span class="text-xs text-gray-600 mt-1">字节</span>
+              </div>
+              <span class="ml-2 text-gray-500 text-mobile">等 6+ 项目/品牌</span>
             </div>
           </div>
         </div>
@@ -211,9 +217,14 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import SimpleStatsBar from '../components/SimpleStatsBar.vue'
 import DetailedStats from '../components/DetailedStats.vue'
 import { trackButtonClick, trackLinkClick } from '../utils/hybridStats.js'
+import { getBloggerStats } from '../utils/analytics.js'
+
+// 博主统计信息
+const bloggerStats = ref(getBloggerStats())
 
 // 跟踪按钮点击
 const handleButtonClick = (buttonName) => {

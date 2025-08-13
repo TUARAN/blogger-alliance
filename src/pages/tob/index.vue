@@ -39,14 +39,14 @@
           <!-- CTA 按钮组 -->
           <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <button
-              @click="showContactModal = true"
-              class="group relative px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+              @click="scrollToBloggerTeam"
+              class="group relative px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
             >
               <span class="relative z-10 flex items-center">
-                <span class="mr-2">💬</span>
-                联系推广
+                <span class="mr-2">👥</span>
+                我们的博主团队名单
               </span>
-              <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div class="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
             
             <a
@@ -63,18 +63,111 @@
           </div>
 
           <!-- 统计信息 -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             <div class="text-center">
-              <div class="text-3xl font-bold text-indigo-600 mb-2">20+</div>
+              <div class="text-3xl font-bold text-indigo-600 mb-2">{{ bloggerStats.bloggerCount }} 位+</div>
               <div class="text-gray-600">技术博主</div>
             </div>
             <div class="text-center">
-              <div class="text-3xl font-bold text-purple-600 mb-2">20W+</div>
-              <div class="text-gray-600">覆盖用户</div>
+              <div class="text-3xl font-bold text-purple-600 mb-2">{{ bloggerStats.formattedFollowers }}+</div>
+              <div class="text-gray-600">覆盖程序员粉丝</div>
             </div>
             <div class="text-center">
-              <div class="text-3xl font-bold text-green-600 mb-2">100+</div>
-              <div class="text-gray-600">成功案例</div>
+              <div class="text-3xl font-bold text-green-600 mb-2">196 篇+</div>
+              <div class="text-gray-600">累计投放推文</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-orange-600 mb-2">20 个+</div>
+              <div class="text-gray-600">辐射社群</div>
+            </div>
+          </div>
+          
+          <!-- 合作品牌轮播 -->
+          <div class="mt-12 max-w-4xl mx-auto">
+            <h3 class="text-center text-lg font-semibold text-gray-700 mb-6">合作品牌</h3>
+            <div class="relative overflow-hidden">
+              <div class="flex animate-scroll">
+                <div class="flex space-x-12 whitespace-nowrap">
+                  <!-- 第一组品牌 -->
+                  <div class="flex items-center space-x-8">
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/aws.png" alt="亚马逊科技" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">亚马逊科技</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/baidu.png" alt="百度文心大模型" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">百度文心大模型</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/bytedance.png" alt="字节火山引擎" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">字节火山引擎</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/finclip.png" alt="Finclip小程序" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">Finclip小程序</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/benq.png" alt="明基显示器" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">明基显示器</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/qintopia.png" alt="秦托邦社区" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">秦托邦社区</span>
+                    </div>
+                  </div>
+                  <!-- 第二组品牌（重复，用于无缝轮播） -->
+                  <div class="flex items-center space-x-8">
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/aws.png" alt="亚马逊科技" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">亚马逊科技</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/baidu.png" alt="百度文心大模型" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">百度文心大模型</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/bytedance.png" alt="字节火山引擎" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">字节火山引擎</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/finclip.png" alt="Finclip小程序" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">Finclip小程序</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/benq.png" alt="明基显示器" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">明基显示器</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/qintopia.png" alt="秦托邦社区" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">秦托邦社区</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -89,10 +182,10 @@
     </section>
 
     <!-- 博主团队展示 -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <section id="blogger-team" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="text-center mb-16">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-          我们的博主团队
+          我们的博主团队名单
         </h2>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
           专业的技术博主团队，覆盖前端、后端、AI、移动开发等多个技术领域
@@ -291,7 +384,7 @@
             </li>
                           <li class="flex items-start">
                 <span class="text-indigo-500 mr-2 mt-1">•</span>
-                <span>覆盖 20W+ 程序员受众</span>
+                <span>覆盖 {{ bloggerStats.formattedFollowers }}+ 程序员受众</span>
               </li>
             <li class="flex items-start">
               <span class="text-indigo-500 mr-2 mt-1">•</span>
@@ -361,18 +454,9 @@
           想要获得技术圈推广？
         </h2>
         <p class="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-          我们的博主团队可以帮助你的产品快速触达技术人群，提升品牌知名度和用户转化率
+          我们的博主团队名单可以帮助你的产品快速触达技术人群，提升品牌知名度和用户转化率
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            @click="showContactModal = true"
-            class="px-8 py-4 bg-white text-indigo-700 font-semibold rounded-xl shadow-lg hover:bg-gray-50 transform hover:-translate-y-1 transition-all duration-300"
-          >
-            <span class="flex items-center">
-              <span class="mr-2">💬</span>
-              立即联系推广
-            </span>
-          </button>
           <a
             href="https://github.com/TUARAN/blogger-alliance"
             target="_blank"
@@ -387,137 +471,87 @@
       </div>
     </section>
 
-    <!-- 悬浮引导卡片 -->
+    <!-- 右下角浮窗二维码 -->
     <div class="fixed bottom-6 right-6 z-50">
-      <div class="relative">
-        <!-- 主悬浮按钮 -->
-        <button
-          @click="toggleFloatingCard"
-          class="w-16 h-16 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 flex items-center justify-center"
+      <div class="relative group">
+        <!-- 主悬浮区域 -->
+        <div
+          @click="toggleQRCode"
+          class="relative cursor-pointer transition-all duration-300 hover:scale-105"
         >
-          <span class="text-2xl">🛠️</span>
-        </button>
+          <!-- 背景装饰 -->
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-3xl blur-xl"></div>
+          
+          <!-- 主要内容 -->
+          <div class="relative bg-white/90 backdrop-blur-md rounded-3xl p-4 shadow-2xl border border-white/50 hover:shadow-3xl transition-all duration-300">
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <span class="text-2xl">💬</span>
+              </div>
+              <div class="text-left">
+                <div class="text-sm font-bold text-gray-800">联系我们</div>
+                <div class="text-xs text-gray-600">推广合作咨询</div>
+              </div>
+              <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+        </div>
         
-        <!-- 悬浮卡片 -->
+        <!-- 二维码卡片 -->
         <transition
           enter-active-class="transition-all duration-300 ease-out"
-          enter-from-class="opacity-0 scale-95 translate-y-2"
-          enter-to-class="opacity-100 scale-100 translate-y-0"
+          enter-from-class="opacity-0 scale-95 translate-x-2"
+          enter-to-class="opacity-100 scale-100 translate-x-0"
           leave-active-class="transition-all duration-300 ease-in"
-          leave-from-class="opacity-100 scale-100 translate-y-0"
-          leave-to-class="opacity-0 scale-95 translate-y-2"
+          leave-from-class="opacity-100 scale-100 translate-x-0"
+          leave-to-class="opacity-0 scale-95 translate-x-2"
         >
           <div
-            v-if="showFloatingCard"
-            class="absolute bottom-20 right-0 w-80 bg-white rounded-xl shadow-2xl border border-gray-100 p-6"
+            v-if="showQRCode"
+            class="absolute bottom-20 right-0 w-72 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-white/50 p-6"
           >
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-semibold text-gray-900">发现更多精彩</h3>
+            <div class="flex items-center justify-end mb-4">
               <button
-                @click="toggleFloatingCard"
-                class="text-gray-400 hover:text-gray-600 transition-colors"
+                @click="toggleQRCode"
+                class="w-6 h-6 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors"
               >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
             
-            <div class="space-y-4">
-              <router-link
-                to="/tools"
-                class="flex items-center p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg hover:from-blue-100 hover:to-indigo-100 transition-colors group"
-              >
-                <span class="text-2xl mr-3">🛠️</span>
-                <div>
-                  <div class="font-semibold text-gray-900 group-hover:text-indigo-600">精选开发工具</div>
-                  <div class="text-sm text-gray-600">提升开发效率的实用工具</div>
-                </div>
-              </router-link>
-              
-              <a
-                href="https://github.com/TUARAN/blogger-alliance"
-                target="_blank"
-                class="flex items-center p-3 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg hover:from-green-100 hover:to-blue-100 transition-colors group"
-              >
-                <span class="text-2xl mr-3">🌟</span>
-                <div>
-                  <div class="font-semibold text-gray-900 group-hover:text-green-600">优质开源项目</div>
-                  <div class="text-sm text-gray-600">发现和学习优秀项目</div>
-                </div>
-              </a>
-              
-              <div class="flex items-center p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg">
-                <span class="text-2xl mr-3">📊</span>
-                <div>
-                  <div class="font-semibold text-gray-900">推广数据分析</div>
-                  <div class="text-sm text-gray-600">实时监控推广效果</div>
+            <div class="text-center">
+              <div class="bg-gray-50 p-4 rounded-2xl mb-4">
+                <img 
+                  src="/src/img/qrcode.jpg" 
+                  alt="微信二维码" 
+                  class="w-full h-auto rounded-xl object-contain"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                />
+                <!-- 备用显示，如果图片加载失败 -->
+                <div class="w-full h-64 bg-gray-100 rounded-xl flex items-center justify-center hidden">
+                  <div class="text-center">
+                    <div class="text-2xl mb-1">📱</div>
+                    <div class="text-xs text-gray-500">二维码图片</div>
+                  </div>
                 </div>
               </div>
-            </div>
-            
-            <div class="mt-4 pt-4 border-t border-gray-100">
-              <p class="text-sm text-gray-500 text-center">
-                更多功能正在开发中...
-              </p>
+              
+              <div class="space-y-2">
+                <p class="text-base font-bold text-gray-800">扫码添加微信：atar24</p>
+              </div>
             </div>
           </div>
         </transition>
       </div>
     </div>
 
-    <!-- 联系方式 Modal -->
-    <transition
-      enter-active-class="transition-opacity duration-300"
-      enter-from-class="opacity-0"
-      enter-to-class="opacity-100"
-      leave-active-class="transition-opacity duration-300"
-      leave-from-class="opacity-100"
-      leave-to-class="opacity-0"
-    >
-      <div
-        v-if="showContactModal"
-        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-        @click="showContactModal = false"
-      >
-        <div
-          class="bg-white rounded-2xl p-8 max-w-md w-full transform transition-all"
-          @click.stop
-        >
-          <div class="text-center">
-            <h3 class="text-2xl font-bold text-gray-900 mb-4">联系我们</h3>
-            <p class="text-gray-600 mb-6">
-              请通过以下方式联系我们，我们会尽快回复您的推广需求
-            </p>
-            
-            <div class="space-y-4">
-              <div class="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
-                <span class="text-2xl mr-3">📧</span>
-                <div class="text-left">
-                  <p class="font-semibold text-gray-900">邮箱</p>
-                  <p class="text-indigo-600">tuaran666@gmail.com</p>
-                </div>
-              </div>
-              
-              <div class="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
-                <span class="text-2xl mr-3">💬</span>
-                <div class="text-left">
-                  <p class="font-semibold text-gray-900">微信</p>
-                  <p class="text-indigo-600">atar24 或 wx_k21vin</p>
-                </div>
-              </div>
-            </div>
-            
-            <button
-              @click="showContactModal = false"
-              class="mt-6 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors"
-            >
-              关闭
-            </button>
-          </div>
-        </div>
-      </div>
-    </transition>
+
+
+
+
+
   </div>
 </template>
 
@@ -525,13 +559,14 @@
 import { ref, onMounted } from 'vue'
 import { bloggersData } from '../../data/bloggerInfo.js'
 import { trackLinkClick } from '../../utils/hybridStats.js'
+import { getBloggerStats } from '../../utils/analytics.js'
 
 // 响应式数据
 const loading = ref(true)
 const bloggers = ref([])
 const expandedBloggers = ref([])
-const showContactModal = ref(false)
-const showFloatingCard = ref(false)
+const showQRCode = ref(false)
+const bloggerStats = ref(getBloggerStats())
 
 // 切换展开状态
 const toggleExpanded = (bloggerId) => {
@@ -543,15 +578,26 @@ const toggleExpanded = (bloggerId) => {
   }
 }
 
-// 切换悬浮卡片
-const toggleFloatingCard = () => {
-  showFloatingCard.value = !showFloatingCard.value
+// 切换二维码显示
+const toggleQRCode = () => {
+  showQRCode.value = !showQRCode.value
 }
 
 // 处理链接点击
 const handleLinkClick = (platform, url, bloggerName) => {
   console.log('链接被点击:', platform, url, bloggerName)
   trackLinkClick(`${bloggerName}-${platform}`, url, '/tob')
+}
+
+// 滚动到博主团队部分
+const scrollToBloggerTeam = () => {
+  const element = document.getElementById('blogger-team')
+  if (element) {
+    element.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    })
+  }
 }
 
 // 模拟加载数据
@@ -561,4 +607,6 @@ onMounted(() => {
     loading.value = false
   }, 1000)
 })
-</script> 
+</script>
+
+ 
