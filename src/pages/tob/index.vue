@@ -33,7 +33,25 @@
           </h1>
           <p class="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
             我们拥有一个专业的技术开发者博主联盟，致力于帮助优秀的产品获得技术圈的精准曝光。
-            通过我们的推广服务，让你的产品快速触达目标用户群体。
+            通过我们的推广服务，让你的产品快速触达程序员群体
+            <span class="relative inline-block">
+              <span 
+                @mouseenter="showTip = true" 
+                @mouseleave="showTip = false"
+                class="inline-flex items-center justify-center w-6 h-6 bg-blue-100 text-blue-600 rounded-full text-sm font-bold cursor-help ml-1 hover:bg-blue-200 transition-colors"
+              >i</span>
+              <!-- Tip 内容 -->
+              <div 
+                v-if="showTip"
+                class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-80 bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg z-50"
+              >
+                <div>
+                  <p>2024年12月20日，工信部数据显示，我国软件开发者数量已突破<span class="font-bold text-blue-300">940万</span></p>
+                </div>
+                <!-- 小三角 -->
+                <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+              </div>
+            </span>。
           </p>
           
           <!-- CTA 按钮组 -->
@@ -81,6 +99,8 @@
               <div class="text-gray-600">辐射社群</div>
             </div>
           </div>
+          
+
           
           <!-- 合作品牌轮播 -->
           <div class="mt-12 max-w-4xl mx-auto">
@@ -178,6 +198,8 @@
         <div class="absolute top-20 left-10 w-20 h-20 bg-indigo-200 rounded-full opacity-20 animate-pulse"></div>
         <div class="absolute top-40 right-20 w-16 h-16 bg-purple-200 rounded-full opacity-20 animate-pulse delay-1000"></div>
         <div class="absolute bottom-20 left-20 w-12 h-12 bg-blue-200 rounded-full opacity-20 animate-pulse delay-2000"></div>
+        
+
       </div>
     </section>
 
@@ -566,6 +588,7 @@ const loading = ref(true)
 const bloggers = ref([])
 const expandedBloggers = ref([])
 const showQRCode = ref(false)
+const showTip = ref(false)
 const bloggerStats = ref(getBloggerStats())
 
 // 切换展开状态
