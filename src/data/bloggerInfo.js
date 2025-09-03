@@ -53,7 +53,7 @@ export const bloggersData = [
       { platform: '知乎', url: 'https://www.zhihu.com/people/stick-i', icon: '📚' },
     ],
     expandedContent: {
-      specialties: [ '后端开发', '技术写作', '多平台运营', '开源分享'],
+      specialties: ['后端开发', '技术写作', '多平台运营', '开源分享'],
       achievements: ['专家博主', '技术文章作者', '知识分享达人'],
       recentPosts: ['技术写作心得', '多平台运营策略', '知识传播策略']
     }
@@ -180,8 +180,8 @@ export const bloggersData = [
       { platform: '腾讯云开发者社区', url: 'https://cloud.tencent.com/developer/user/10172274', icon: '📚' },
     ],
     expandedContent: {
-      specialties: ['技术写作', '社群推广', '产品推介', '社区建设', '多平台运营',  '技术咨询', '研学辅导'],
-      achievements: ['CSDN专家博主','掘金优秀创作者', '中国开发者影响力榜单博主', '亚马逊云官方博主','腾讯云创作之星', '武汉开发者社区主理人'],
+      specialties: ['技术写作', '社群推广', '产品推介', '社区建设', '多平台运营', '技术咨询', '研学辅导'],
+      achievements: ['CSDN专家博主', '掘金优秀创作者', '中国开发者影响力榜单博主', '亚马逊云官方博主', '腾讯云创作之星', '武汉开发者社区主理人'],
       recentPosts: ['AI落地应用实战专栏', 'RAG应用解决方案', '百度文心一言开源ERNIE-4.5深度测评报告']
     }
   },
@@ -200,8 +200,8 @@ export const bloggersData = [
       { platform: '知乎', url: 'https://www.zhihu.com/people/alex-30-57', icon: '🎯' },
     ],
     expandedContent: {
-      specialties: ['嵌入式开发', '技术写作', '私域推广', '测评软文', '技术分享',  '技术自媒体写作指导', '研学辅导'],
-      achievements: ['CSDN优质创作者','51cto博客专家', '文章1600+篇', '全网阅读量≈1000W', '多平台技术博主'],
+      specialties: ['嵌入式开发', '技术写作', '私域推广', '测评软文', '技术分享', '技术自媒体写作指导', '研学辅导'],
+      achievements: ['CSDN优质创作者', '51cto博客专家', '文章1600+篇', '全网阅读量≈1000W', '多平台技术博主'],
       recentPosts: ['通义灵码IDE使用mcp', '产品推介', '华为开发者空间xDeepSeek的应用']
     }
   },
@@ -220,6 +220,23 @@ export const bloggersData = [
       specialties: ['前端全栈', '技术写作', '社区建设', '技术咨询'],
       achievements: ['掘金优秀创作者', '阿里云专家博主', '技术爱好者', '技术文章150+'],
       recentPosts: ['学会Grid之后，我觉得再也没有我搞不定的布局了', '告别屎山！！！WebSocket 的极致封装， 写好代码竟如此简单', '一个永远不会完成的 Promise 是否会造成存储泄漏']
+    }
+  },
+  {
+    id: 13,
+    name: '万少',
+    avatar: 'https://p26-passport.byteacctimg.com/img/user-avatar/3559b8826a8e632112e62195b3a1c745~180x180.awebp',
+    introduction: '华为HDE 华为云 HCDE 华为鸿蒙社区问答专家、HarmonyOS学习资源创作专家、阿里云专家博主、掘金优秀作者、51CTO社区明星',
+    followers: '5K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/4441682708283191', icon: '📝' },
+      { platform: '微信公众号:程序员漫谈', url: 'https://mp.weixin.qq.com/s/kX-9EpoZAe2FrEvvRXShhQ', icon: '🌏' },
+      { platform: '个人博客', url: 'https://itcastwsy.github.io/pub-blog/', icon: '🐙' },
+    ],
+    expandedContent: {
+      specialties: ['前端全栈', '技术博主', 'HarmonyOS 鸿蒙应用开发专家', '技术布道师'],
+      achievements: ['掘金优秀创作者', '阿里云专家博主', '技术爱好者', '技术文章150+'],
+      recentPosts: ['HarmonyOS 鸿蒙应用开发  AI 的bug AI来修复', '2025年 华为鸿蒙创新赛比赛流程 全攻略', '可可图片编辑 HarmonyOS（4）图片裁剪-canvas']
     }
   }
 ]
@@ -324,6 +341,6 @@ export const partnerBenefits = [
     id: 6,
     icon: '🏆',
     title: '品牌背书',
-          description: '获得开发者博主联盟认证，提升个人品牌价值'
+    description: '获得开发者博主联盟认证，提升个人品牌价值'
   }
 ]
