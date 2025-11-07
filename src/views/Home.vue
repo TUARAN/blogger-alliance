@@ -182,6 +182,18 @@
                 </div>
                 <span class="text-xs text-gray-600 mt-1">字节</span>
               </div>
+              <div class="inline-flex flex-col items-center">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
+                  <img src="/src/img/brand/paddleocr.png" alt="PaddleOCR" class="w-6 h-6 sm:w-8 sm:h-8 object-contain">
+                </div>
+                <span class="text-xs text-gray-600 mt-1">PaddleOCR</span>
+              </div>
+              <div class="inline-flex flex-col items-center">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
+                  <img src="/src/img/brand/miao.png" alt="秒哒" class="w-6 h-6 sm:w-8 sm:h-8 object-contain">
+                </div>
+                <span class="text-xs text-gray-600 mt-1">秒哒</span>
+              </div>
               <span class="ml-2 text-gray-500 text-mobile">等 6+ 项目/品牌</span>
             </div>
           </div>

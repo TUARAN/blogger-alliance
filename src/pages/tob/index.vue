@@ -91,7 +91,7 @@
               <div class="text-gray-600">覆盖程序员粉丝</div>
             </div>
             <div class="text-center">
-              <div class="text-3xl font-bold text-green-600 mb-2">196 篇+</div>
+              <div class="text-3xl font-bold text-green-600 mb-2">{{ bloggerStats.totalPosts }} 篇+</div>
               <div class="text-gray-600">累计投放推文</div>
             </div>
             <div class="text-center">
@@ -146,6 +146,18 @@
                       </div>
                       <span class="text-sm text-gray-600">秦托邦社区</span>
                     </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/paddleocr.png" alt="PaddleOCR" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">PaddleOCR</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/miao.png" alt="秒哒" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">秒哒</span>
+                    </div>
                   </div>
                   <!-- 第二组品牌（重复，用于无缝轮播） -->
                   <div class="flex items-center space-x-8">
@@ -184,6 +196,18 @@
                         <img src="/src/img/brand/qintopia.png" alt="秦托邦社区" class="w-12 h-12 object-contain">
                       </div>
                       <span class="text-sm text-gray-600">秦托邦社区</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/paddleocr.png" alt="PaddleOCR" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">PaddleOCR</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                      <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mb-2 shadow-sm border border-gray-200">
+                        <img src="/src/img/brand/miao.png" alt="秒哒" class="w-12 h-12 object-contain">
+                      </div>
+                      <span class="text-sm text-gray-600">秒哒</span>
                     </div>
                   </div>
                 </div>

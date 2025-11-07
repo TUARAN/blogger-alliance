@@ -53,11 +53,24 @@ export function getBloggerStats() {
   const totalFollowers = calculateTotalFollowers()
   const bloggerCount = bloggersData.length
   
-  return {
+  const computedStats = {
     totalFollowers,
     formattedFollowers: formatFollowersCount(totalFollowers),
     bloggerCount,
-    averageFollowers: Math.floor(totalFollowers / bloggerCount)
+    averageFollowers: Math.floor(totalFollowers / Math.max(bloggerCount, 1))
+  }
+
+  const manualOverrides = {
+    bloggerCount: 32,
+    formattedFollowers: '220w',
+    totalFollowers: 2200000,
+    averageFollowers: Math.floor(2200000 / 32),
+    totalPosts: 300
+  }
+
+  return {
+    ...computedStats,
+    ...manualOverrides
   }
 }
 
