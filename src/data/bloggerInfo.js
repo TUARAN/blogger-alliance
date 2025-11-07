@@ -238,6 +238,355 @@ export const bloggersData = [
       achievements: ['掘金优秀创作者', '阿里云专家博主', '技术爱好者', '技术文章150+'],
       recentPosts: ['HarmonyOS 鸿蒙应用开发  AI 的bug AI来修复', '2025年 华为鸿蒙创新赛比赛流程 全攻略', '可可图片编辑 HarmonyOS（4）图片裁剪-canvas']
     }
+  },
+  {
+    id: 14,
+    name: '摸鱼的春哥',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=chunge&backgroundColor=F2F5F9',
+    introduction: '掘金签约作者，分享实用编程技巧与职场成长故事，致力于陪伴开发者稳步进阶。',
+    followers: '8.2K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/1714893870865303', icon: '📝' },
+      { platform: '微信公众号', url: '-', icon: '🌏' }
+    ],
+    expandedContent: {
+      specialties: ['编程技术', '职场成长', '效率工具'],
+      achievements: ['掘金优质创作者', '多平台内容输出', '粉丝8K+'],
+      recentPosts: ['程序员的进阶路径思考', '职场沟通的三个实战技巧', '面向自动化的开发工具清单']
+    }
+  },
+  {
+    id: 15,
+    name: '法医',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=fayi&backgroundColor=E8F7FF',
+    introduction: '聚焦后端与安全方向的技术作者，擅长将复杂知识拆解为通俗易懂的教程。',
+    followers: '10K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/1574156383557255', icon: '📝' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' },
+      { platform: '微信公众号', url: '-', icon: '🌏' }
+    ],
+    expandedContent: {
+      specialties: ['后端开发', '安全实践', '技术写作'],
+      achievements: ['多平台技术博主', '技术教程系列化', '粉丝10K+'],
+      recentPosts: ['高并发接口设计要点', '服务安全防护清单', '代码审计入门指北']
+    }
+  },
+  {
+    id: 16,
+    name: '六月暴雪飞梨花',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=liuhua&backgroundColor=FFF2F8',
+    introduction: '云原生方向创作者，专注分享工程实践与架构经验，用真实案例帮助开发者成长。',
+    followers: '7K+',
+    socialAccounts: [
+      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' },
+      { platform: '腾讯云', url: 'https://cloud.tencent.com/developer/user', icon: '☁️' }
+    ],
+    expandedContent: {
+      specialties: ['云原生', '服务治理', 'DevOps'],
+      achievements: ['CSDN优质创作者', '腾讯云社区达人', '实战经验输出'],
+      recentPosts: ['云原生迁移实战笔记', '微服务链路追踪方案', 'K8s 资源管理实践']
+    }
+  },
+  {
+    id: 17,
+    name: '是小刘',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=shixiaoliu&backgroundColor=E9F0FF',
+    introduction: '全栈方向自媒体人，从真实项目提炼经验，关注开发效率与工程质量。',
+    followers: '3.1K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/787689310784280', icon: '📝' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' },
+      { platform: '微信公众号', url: '-', icon: '🌏' }
+    ],
+    expandedContent: {
+      specialties: ['全栈开发', '前端工程化', '技术写作'],
+      achievements: ['多平台同步更新', '企业项目经验', '粉丝3K+'],
+      recentPosts: ['企业级前端错误监控实践', 'React 项目性能调优 checklist', '服务端渲染入门总结']
+    }
+  },
+  {
+    id: 18,
+    name: '百里落云',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=baililuoyun&backgroundColor=F1F7ED',
+    introduction: '全栈工程师，活跃于掘金、InfoQ 与视频平台，输出工程实践与职业成长思考。',
+    followers: '3K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/3843548383296686', icon: '📝' },
+      { platform: 'InfoQ', url: 'https://www.infoq.cn/', icon: '📚' },
+      { platform: 'B站', url: 'https://space.bilibili.com/', icon: '📺' }
+    ],
+    expandedContent: {
+      specialties: ['全栈开发', '架构设计', '团队协作'],
+      achievements: ['InfoQ 作者', '多平台视频创作者', '粉丝3K+'],
+      recentPosts: ['全栈项目交付流程拆解', '技术Leader的沟通技巧', '个人品牌搭建指南']
+    }
+  },
+  {
+    id: 19,
+    name: '黑心萝卜三条杠',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=luobu&backgroundColor=FFF5E9',
+    introduction: '持续输出前端实践与项目复盘，擅长用图表和案例讲解复杂问题。',
+    followers: '12K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/4394083322176301', icon: '📝' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' }
+    ],
+    expandedContent: {
+      specialties: ['前端开发', '工程化', '可视化'],
+      achievements: ['掘金优秀创作者', '技术活动分享嘉宾', '粉丝12K+'],
+      recentPosts: ['前端可观测性最佳实践', 'ECharts 高级应用心得', '复杂前端项目的质量保障']
+    }
+  },
+  {
+    id: 20,
+    name: 'J',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=authorJ&backgroundColor=EEF2FF',
+    introduction: '专注现代 Web 技术的创作者，关注效率工具与开发者成长。',
+    followers: '3.1K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/1468603264933742', icon: '📝' },
+      { platform: '微信公众号', url: '-', icon: '🌏' }
+    ],
+    expandedContent: {
+      specialties: ['前端开发', '效率工具', '技术写作'],
+      achievements: ['多平台内容更新', '社区活动活跃', '粉丝3K+'],
+      recentPosts: ['前端脚手架最佳实践', 'Chrome 插件效率提升技巧', '从 0 到 1 搭建知识库']
+    }
+  },
+  {
+    id: 21,
+    name: '图图',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=tutu&backgroundColor=F8F5FF',
+    introduction: '偏爱云开发与小程序生态的工程师，分享最新实战案例与思路。',
+    followers: '3K+',
+    socialAccounts: [
+      { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_57909172', icon: '💻' },
+      { platform: '腾讯云', url: 'https://cloud.tencent.com/developer/user', icon: '☁️' }
+    ],
+    expandedContent: {
+      specialties: ['小程序开发', '云开发', '全栈实践'],
+      achievements: ['腾讯云云开发布道者', '技术社区活跃', '粉丝3K+'],
+      recentPosts: ['小程序云函数性能调优', 'Serverless 入门手册', '多端统一项目落地经验']
+    }
+  },
+  {
+    id: 22,
+    name: '周帅帅',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=zhoushuaishuai&backgroundColor=EAFBF3',
+    introduction: '记录职场和编程的双重成长，分享真实经验与高效学习方式。',
+    followers: '2.6K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/1011206428562957', icon: '📝' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' },
+      { platform: '微信公众号', url: '-', icon: '🌏' }
+    ],
+    expandedContent: {
+      specialties: ['编程技术', '职场成长', '学习方法'],
+      achievements: ['多平台内容输出', '技术成长系列作者', '粉丝2.6K+'],
+      recentPosts: ['程序员学习路线规划', '一年精读 12 本技术书体验', '技术人如何做知识管理']
+    }
+  },
+  {
+    id: 23,
+    name: '奶糖(肥晨)',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=naitang&backgroundColor=FFF3F0',
+    introduction: '偏爱分享前端与职场话题的技术自媒体，拥有多篇高赞掘金文章。',
+    followers: '44K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/1688472903498189', icon: '📝' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' },
+      { platform: '微信公众号', url: '-', icon: '🌏' }
+    ],
+    expandedContent: {
+      specialties: ['前端开发', '职场故事', '效率工具'],
+      achievements: ['掘金高赞作者', '粉丝44K+', '多平台同步分享'],
+      recentPosts: ['职场沟通的避坑指南', '前端工程师面试复盘', '高效输出的写作框架']
+    }
+  },
+  {
+    id: 24,
+    name: '程序员海军',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=haijun&backgroundColor=F7FBFF',
+    introduction: '新锐技术博主，坚持每日学习打卡，记录真实的编程成长轨迹。',
+    followers: '538+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/1239904848713592', icon: '📝' }
+    ],
+    expandedContent: {
+      specialties: ['前端基础', '学习笔记', '算法刷题'],
+      achievements: ['掘金日更计划成员', '学习社群活跃', '粉丝快速增长'],
+      recentPosts: ['每日算法一题总结', 'Vue3 核心知识点笔记', '程序员成长日常 Vlog']
+    }
+  },
+  {
+    id: 25,
+    name: '前端图形(Fly)',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=fly&backgroundColor=EEF8FF',
+    introduction: '专注前端可视化与 WebGL 的工程师，分享复杂图形的实现心得。',
+    followers: '6.0K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/2805609406402798', icon: '📝' },
+      { platform: '知乎', url: 'https://www.zhihu.com/', icon: '📚' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' }
+    ],
+    expandedContent: {
+      specialties: ['前端可视化', 'WebGL', '三维图形'],
+      achievements: ['多平台可视化专栏作者', '分享真实项目经验', '粉丝6K+'],
+      recentPosts: ['WebGL 粒子动画实现', 'Three.js 进阶技巧', '数据可视化主题设计']
+    }
+  },
+  {
+    id: 26,
+    name: '浪里行舟',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=langli&backgroundColor=F1F1FF',
+    introduction: '深耕后端与架构的资深工程师，输出高质量的技术沉淀与行业洞察。',
+    followers: '47K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/4283353031252967', icon: '📝' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' },
+      { platform: '微信公众号', url: '-', icon: '🌏' }
+    ],
+    expandedContent: {
+      specialties: ['后端架构', '职业规划', '技术写作'],
+      achievements: ['掘金年度作者', '后端社群讲师', '粉丝47K+'],
+      recentPosts: ['分布式事务设计模式', '中年程序员的逆袭指南', '技术人的认知升级模型']
+    }
+  },
+  {
+    id: 27,
+    name: '林三心',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=linsanxin&backgroundColor=FFEFF7',
+    introduction: '知名前端创作者，擅长以浅显易懂的方式讲解底层原理。',
+    followers: '64K+',
+    socialAccounts: [
+      { platform: '微信公众号:前端之神', url: 'https://mp.weixin.qq.com/', icon: '🌏' },
+      { platform: '掘金', url: 'https://juejin.cn/user/129268140737766', icon: '📝' }
+    ],
+    expandedContent: {
+      specialties: ['前端底层原理', '知识体系', '职业成长'],
+      achievements: ['公众号前端之神主理人', '掘金头部创作者', '粉丝64K+'],
+      recentPosts: ['JavaScript 执行机制全览', 'Vue3 源码阅读笔记', '技术人个人品牌打造']
+    }
+  },
+  {
+    id: 28,
+    name: '小虚竹',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=zhuxiao&backgroundColor=EFFFF7',
+    introduction: '多平台高能作者，聚焦后端与云原生，输出深入浅出的实践文章。',
+    followers: '160K+',
+    socialAccounts: [
+      { platform: 'CSDN', url: 'https://xiaoxuzhu.blog.csdn.net/', icon: '💻' },
+      { platform: '掘金', url: 'https://juejin.cn/user/3747529825315230', icon: '📝' },
+      { platform: '知乎', url: 'https://www.zhihu.com/', icon: '📚' },
+      { platform: '微信公众号', url: '-', icon: '🌏' }
+    ],
+    expandedContent: {
+      specialties: ['云原生', '后端架构', '开源分享'],
+      achievements: ['CSDN 星荐作者', '企业内训讲师', '粉丝160K+'],
+      recentPosts: ['云原生可观测性体系', '高可用架构设计详解', '工程效能提升实战']
+    }
+  },
+  {
+    id: 29,
+    name: 'xiaoming',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=xiaoming&backgroundColor=E8F6FF',
+    introduction: '关注 AI 与前端交叉领域的创作者，分享实战案例与开源工具体验。',
+    followers: '34K+',
+    socialAccounts: [
+      { platform: 'X(Twitter)', url: 'https://twitter.com/', icon: '🐦' },
+      { platform: '掘金', url: 'https://juejin.cn/user/2875978147692910', icon: '📝' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' }
+    ],
+    expandedContent: {
+      specialties: ['AI 应用', '前端开发', '效率工具'],
+      achievements: ['AI 辅助开发布道者', '多平台互动社群', '粉丝34K+'],
+      recentPosts: ['AI 赋能前端的 10 个场景', '开源工具推荐清单', '开发者如何玩转 AIGC']
+    }
+  },
+  {
+    id: 30,
+    name: '代码AI弗森',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=aifusen&backgroundColor=FFF7E8',
+    introduction: '专注 AI 代码助手与自动化实践，帮助开发者提升编码效率。',
+    followers: '3.5K+',
+    socialAccounts: [
+      { platform: '微信公众号:前端周看', url: 'https://mp.weixin.qq.com/', icon: '🌏' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/aifs2025', icon: '💻' }
+    ],
+    expandedContent: {
+      specialties: ['AI 辅助开发', '自动化测试', '前端工程化'],
+      achievements: ['AI 工具评测系列作者', '技术沙龙讲师', '粉丝3.5K+'],
+      recentPosts: ['AI 代码助手横评', '自动化测试流水线搭建', '前端智能化工作流实践']
+    }
+  },
+  {
+    id: 31,
+    name: 'kingssed',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=kingssed&backgroundColor=F4F1FF',
+    introduction: '将技术与商业洞察相结合的内容创作者，擅长故事化表达产品价值。',
+    followers: '70K+',
+    socialAccounts: [
+      { platform: '小红书', url: 'https://www.xiaohongshu.com/', icon: '📘' },
+      { platform: '视频号', url: 'https://channels.weixin.qq.com/', icon: '🎬' },
+      { platform: '微信公众号:农码开花', url: 'https://mp.weixin.qq.com/', icon: '🌏' }
+    ],
+    expandedContent: {
+      specialties: ['技术科普', '商业洞察', '品牌故事'],
+      achievements: ['多平台 7 万粉丝', '跨界内容创作者', '线下沙龙主理人'],
+      recentPosts: ['从技术到商业的转型经历', '开发者如何讲好作品故事', '技术人个人品牌运营指南']
+    }
+  },
+  {
+    id: 32,
+    name: '晓雨(是yu欸)',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=xiaoyu&backgroundColor=EAF6FF',
+    introduction: '专注云开发与 AI 应用的创作者，也是多个技术社群的组织者。',
+    followers: '100K+',
+    socialAccounts: [
+      { platform: 'CSDN', url: 'https://blog.csdn.net/WTYuong', icon: '💻' },
+      { platform: '微信公众号', url: '-', icon: '🌏' },
+      { platform: '腾讯云', url: 'https://cloud.tencent.com/developer/user', icon: '☁️' }
+    ],
+    expandedContent: {
+      specialties: ['云开发', 'AIGC', '社群运营'],
+      achievements: ['CSDN 平台优质创作者', '技术社群主理人', '粉丝100K+'],
+      recentPosts: ['企业 AIGC 落地实践', '云原生入门系列', '社群运营的经验复盘']
+    }
+  },
+  {
+    id: 33,
+    name: '木偶',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=muou&backgroundColor=FFF5F5',
+    introduction: '坚持原创的资深技术博主，长期深耕后端与数据结构领域。',
+    followers: '70K+',
+    socialAccounts: [
+      { platform: 'CSDN', url: 'https://strive-forward.blog.csdn.net/', icon: '💻' },
+      { platform: '掘金', url: 'https://juejin.cn/user/299965585059223', icon: '📝' },
+      { platform: '微信公众号', url: '-', icon: '🌏' }
+    ],
+    expandedContent: {
+      specialties: ['后端开发', '数据结构', '系统设计'],
+      achievements: ['CSDN 万粉博主', '企业培训讲师', '粉丝70K+'],
+      recentPosts: ['数据结构实战系列', '分布式锁全面解析', '从零搭建企业级权限系统']
+    }
+  },
+  {
+    id: 34,
+    name: '是Dream呀',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=dreamya&backgroundColor=EEFDF4',
+    introduction: '专注分享全栈与产品实战的创作者，擅长用故事化语言传递技术价值。',
+    followers: '100K+',
+    socialAccounts: [
+      { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_51390582', icon: '💻' },
+      { platform: '掘金', url: 'https://juejin.cn/user/3000787314294461', icon: '📝' },
+      { platform: '微信公众号', url: '-', icon: '🌏' }
+    ],
+    expandedContent: {
+      specialties: ['全栈开发', '产品实战', '内容创作'],
+      achievements: ['CSDN 百万阅读作者', '技术社群分享嘉宾', '粉丝10W+'],
+      recentPosts: ['创业公司技术栈实战', '从需求到上线的实战复盘', '技术人如何搭建产品 MVP']
+    }
   }
 ]
 

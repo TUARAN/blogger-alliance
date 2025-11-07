@@ -61,16 +61,20 @@ export function getBloggerStats() {
   }
 
   const manualOverrides = {
-    bloggerCount: 32,
     formattedFollowers: '220w',
     totalFollowers: 2200000,
-    averageFollowers: Math.floor(2200000 / 32),
     totalPosts: 300
   }
 
-  return {
+  const merged = {
     ...computedStats,
     ...manualOverrides
+  }
+
+  return {
+    ...merged,
+    bloggerCount: bloggersData.length,
+    averageFollowers: Math.floor(manualOverrides.totalFollowers / Math.max(bloggersData.length, 1))
   }
 }
 

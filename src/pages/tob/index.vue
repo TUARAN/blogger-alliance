@@ -17,16 +17,13 @@
               href="https://matrix-alliance.pages.dev/"
               target="_blank"
               rel="noopener noreferrer"
-              class="group relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300"
+              class="inline-flex items-center gap-1 text-gray-600 hover:text-indigo-600 transition-colors font-medium"
             >
-              <span class="absolute inset-0 rounded-full bg-white/10 opacity-0 group-hover:opacity-100 blur-[2px] transition-opacity"></span>
-              <span class="relative flex items-center gap-1">
-                <span class="text-base leading-none">✨</span>
-                <span class="leading-none">矩阵号联盟</span>
-                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </span>
+              <span class="text-base leading-none text-indigo-500">✴</span>
+              <span class="leading-none">矩阵号联盟</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
             </a>
           </div>
         </div>
@@ -233,7 +230,7 @@
       </div>
       
       <!-- Loading 状态 -->
-      <div v-if="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
         <div v-for="i in 3" :key="i" class="bg-white rounded-xl shadow-lg p-6 animate-pulse">
           <div class="flex items-center mb-4">
             <div class="w-16 h-16 bg-gray-200 rounded-full"></div>
@@ -250,37 +247,38 @@
       </div>
 
       <!-- 博主卡片 -->
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
         <div
           v-for="blogger in bloggers"
           :key="blogger.id"
-          class="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
+          class="group bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col h-full"
         >
           <!-- 博主基本信息 -->
-          <div class="p-6">
-            <div class="flex items-center mb-4">
+          <div class="p-5 xl:p-4 flex flex-col flex-1">
+            <div class="flex items-start mb-4 gap-3">
               <img
                 :src="blogger.avatar"
                 :alt="blogger.name"
-                class="w-16 h-16 rounded-full object-cover border-2 border-indigo-100 group-hover:border-indigo-300 transition-colors"
+                class="w-14 h-14 rounded-full object-cover border border-indigo-100 group-hover:border-indigo-300 transition-colors"
               />
-              <div class="ml-4 flex-1">
-                <h3 class="text-xl font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">{{ blogger.name }}</h3>
-                <p class="text-indigo-600 font-medium">{{ blogger.followers }} 粉丝</p>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2">
+                  <h3 class="text-lg font-semibold text-gray-900 truncate group-hover:text-indigo-600 transition-colors">{{ blogger.name }}</h3>
+                  <span class="text-sm font-medium text-indigo-600 whitespace-nowrap">{{ blogger.followers }}</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-1 leading-snug line-clamp-3">{{ blogger.introduction }}</p>
               </div>
             </div>
-            
-            <p class="text-gray-600 mb-4 leading-relaxed">{{ blogger.introduction }}</p>
-            
+
             <!-- 社交账号 -->
-            <div class="flex flex-wrap gap-2 mb-4">
+            <div class="flex flex-wrap gap-1.5 mt-auto">
               <template v-for="account in blogger.socialAccounts" :key="account.platform">
                 <a
                   v-if="account && account.url && account.url.trim() !== ''"
                   :href="account.url"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700 whitespace-nowrap hover:bg-indigo-100 hover:text-indigo-700 transition-colors cursor-pointer"
+                  class="inline-flex items-center px-2.5 py-1 bg-gray-100 rounded-full text-xs text-gray-700 whitespace-nowrap hover:bg-indigo-100 hover:text-indigo-700 transition-colors cursor-pointer"
                   @click="handleLinkClick(account.platform, account.url, blogger.name)"
                 >
                   <span class="mr-1">{{ account.icon }}</span>
@@ -288,7 +286,7 @@
                 </a>
                 <span
                   v-else
-                  class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700 whitespace-nowrap opacity-60"
+                  class="inline-flex items-center px-2.5 py-1 bg-gray-100 rounded-full text-xs text-gray-500 whitespace-nowrap opacity-60"
                 >
                   <span class="mr-1">{{ account.icon }}</span>
                   {{ account.platform }}
@@ -299,7 +297,7 @@
             <!-- 展开/收起按钮 -->
             <button
               @click="toggleExpanded(blogger.id)"
-              class="w-full py-2 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white"
+              class="mt-4 w-full py-2 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg transition-colors flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white"
             >
               <span>{{ expandedBloggers.includes(blogger.id) ? '收起详情' : '查看更多' }}</span>
               <svg
@@ -323,16 +321,16 @@
             leave-from-class="opacity-100 max-h-96"
             leave-to-class="opacity-0 max-h-0"
           >
-            <div v-show="expandedBloggers.includes(blogger.id)" class="px-6 pb-6 border-t border-gray-100">
-              <div class="pt-4 space-y-4">
+            <div v-show="expandedBloggers.includes(blogger.id)" class="px-5 xl:px-4 pb-5 border-t border-gray-100 bg-gray-50/60 rounded-b-2xl">
+              <div class="pt-4 space-y-3 text-sm">
                 <!-- 专长领域 -->
                 <div>
-                  <h4 class="font-semibold text-gray-900 mb-2">专长领域</h4>
-                  <div class="flex flex-wrap gap-2">
+                  <h4 class="font-semibold text-gray-900 mb-1">专长领域</h4>
+                  <div class="flex flex-wrap gap-1.5">
                     <span
                       v-for="specialty in blogger.expandedContent.specialties"
                       :key="specialty"
-                      class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                      class="px-2.5 py-0.5 bg-blue-100 text-blue-700 rounded-full"
                     >
                       {{ specialty }}
                     </span>
@@ -341,14 +339,14 @@
 
                 <!-- 成就荣誉 -->
                 <div>
-                  <h4 class="font-semibold text-gray-900 mb-2">成就荣誉</h4>
+                  <h4 class="font-semibold text-gray-900 mb-1">成就荣誉</h4>
                   <ul class="space-y-1">
                     <li
                       v-for="achievement in blogger.expandedContent.achievements"
                       :key="achievement"
-                      class="text-gray-600 text-sm flex items-center"
+                      class="text-gray-600 flex items-center"
                     >
-                      <span class="text-green-500 mr-2">✓</span>
+                      <span class="text-green-500 mr-1.5">✓</span>
                       {{ achievement }}
                     </li>
                   </ul>
@@ -356,14 +354,14 @@
 
                 <!-- 最近文章 -->
                 <div>
-                  <h4 class="font-semibold text-gray-900 mb-2">最近文章</h4>
+                  <h4 class="font-semibold text-gray-900 mb-1">最近文章</h4>
                   <ul class="space-y-1">
                     <li
                       v-for="post in blogger.expandedContent.recentPosts"
                       :key="post"
-                      class="text-gray-600 text-sm flex items-center"
+                      class="text-gray-600 flex items-center"
                     >
-                      <span class="text-indigo-500 mr-2">📝</span>
+                      <span class="text-indigo-500 mr-1.5">📝</span>
                       {{ post }}
                     </li>
                   </ul>
@@ -374,7 +372,7 @@
         </div>
         
         <!-- 还有更多博主卡片 -->
-        <div class="group bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-dashed border-indigo-200 hover:border-indigo-400 cursor-pointer">
+        <div class="group bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border-2 border-dashed border-indigo-200 hover:border-indigo-400 cursor-pointer">
           <div class="p-6 text-center">
             <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-full flex items-center justify-center text-white text-2xl">
               <span>✨</span>
@@ -407,7 +405,7 @@
           为什么选择我们？
         </h2>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-          20+专业技术博主，助力您的产品精准推广
+          {{ bloggerStats.bloggerCount }}+专业技术博主，助力您的产品精准推广
         </p>
       </div>
       
