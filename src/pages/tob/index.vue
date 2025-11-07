@@ -13,9 +13,21 @@
             <router-link to="/about" class="text-gray-600 hover:text-indigo-600 transition-colors">
               关于我们
             </router-link>
-            <router-link to="/tools" class="text-gray-600 hover:text-indigo-600 transition-colors">
-              工具项目
-            </router-link>
+            <a
+              href="https://matrix-alliance.pages.dev/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group relative inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300"
+            >
+              <span class="absolute inset-0 rounded-full bg-white/10 opacity-0 group-hover:opacity-100 blur-[2px] transition-opacity"></span>
+              <span class="relative flex items-center gap-1">
+                <span class="text-base leading-none">✨</span>
+                <span class="leading-none">矩阵号联盟</span>
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </span>
+            </a>
           </div>
         </div>
       </div>
@@ -32,26 +44,7 @@
             </span>
           </h1>
           <p class="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-            我们拥有一个专业的技术开发者博主联盟，致力于帮助优秀的产品获得技术圈的精准曝光。
-            通过我们的推广服务，让你的产品快速触达程序员群体
-            <span class="relative inline-block">
-              <span 
-                @mouseenter="showTip = true" 
-                @mouseleave="showTip = false"
-                class="inline-flex items-center justify-center w-6 h-6 bg-blue-100 text-blue-600 rounded-full text-sm font-bold cursor-help ml-1 hover:bg-blue-200 transition-colors"
-              >i</span>
-              <!-- Tip 内容 -->
-              <div 
-                v-if="showTip"
-                class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-80 bg-gray-900 text-white text-xs rounded-lg p-3 shadow-lg z-50"
-              >
-                <div>
-                  <p>2024年12月20日，工信部数据显示，我国软件开发者数量已突破<span class="font-bold text-blue-300">940万</span></p>
-                </div>
-                <!-- 小三角 -->
-                <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
-              </div>
-            </span>。
+            我们聚合专业技术博主，为优秀产品提供精准技术圈曝光，助你快速触达程序员受众<span class="inline-flex items-center ml-2 text-sm text-gray-500"><span class="inline-flex items-center justify-center w-5 h-5 bg-blue-50 text-blue-500 rounded-full text-xs font-bold mr-2">i</span>工信部数据显示，我国软件开发者数量已突破<span class="font-semibold text-blue-500 ml-1">940万</span></span>
           </p>
           
           <!-- CTA 按钮组 -->
@@ -612,7 +605,6 @@ const loading = ref(true)
 const bloggers = ref([])
 const expandedBloggers = ref([])
 const showQRCode = ref(false)
-const showTip = ref(false)
 const bloggerStats = ref(getBloggerStats())
 
 // 切换展开状态
