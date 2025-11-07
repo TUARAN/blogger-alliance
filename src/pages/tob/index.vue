@@ -254,7 +254,21 @@
           class="group bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col h-full"
         >
           <!-- 博主基本信息 -->
-          <div class="p-5 xl:p-4 flex flex-col flex-1">
+          <div class="relative p-5 xl:p-4 flex flex-col flex-1">
+            <span
+              v-if="isKOL(blogger.followers)"
+              class="absolute -top-3 -right-3 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/95 border border-amber-300/70 text-amber-600 text-xs font-semibold shadow-sm"
+            >
+              <span class="text-base leading-none">✨</span>
+              <span class="pr-1">KOL</span>
+            </span>
+            <span
+              v-else-if="isKOC(blogger.followers)"
+              class="absolute -top-3 -right-3 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/95 border border-sky-300/80 text-sky-600 text-xs font-semibold shadow-sm"
+            >
+              <span class="text-base leading-none">🌟</span>
+              <span class="pr-1">KOC</span>
+            </span>
             <div class="flex items-start mb-4 gap-3">
               <img
                 :src="blogger.avatar"
@@ -604,6 +618,37 @@ const bloggers = ref([])
 const expandedBloggers = ref([])
 const showQRCode = ref(false)
 const bloggerStats = ref(getBloggerStats())
+
+const parseFollowersValue = (followersStr) => {
+  if (!followersStr) return 0
+  const clean = followersStr.replace(/\s+/g, '').replace(/\+/g, '').toUpperCase()
+
+  if (clean.includes('K')) {
+    const num = parseFloat(clean.replace('K', ''))
+    return Number.isNaN(num) ? 0 : num * 1000
+  }
+
+  if (clean.includes('W')) {
+    const num = parseFloat(clean.replace('W', ''))
+    return Number.isNaN(num) ? 0 : num * 10000
+  }
+
+  if (clean.includes('M')) {
+    const num = parseFloat(clean.replace('M', ''))
+    return Number.isNaN(num) ? 0 : num * 1000000
+  }
+
+  const num = parseFloat(clean)
+  return Number.isNaN(num) ? 0 : num
+}
+
+const KOL_THRESHOLD = 5000
+
+const isKOL = (followersStr) => parseFollowersValue(followersStr) > KOL_THRESHOLD
+const isKOC = (followersStr) => {
+  const value = parseFollowersValue(followersStr)
+  return value > 0 && value <= KOL_THRESHOLD
+}
 
 // 切换展开状态
 const toggleExpanded = (bloggerId) => {
