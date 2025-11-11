@@ -10,9 +10,6 @@
             </router-link>
           </div>
           <div class="flex items-center space-x-4">
-            <router-link to="/about" class="text-gray-600 hover:text-indigo-600 transition-colors">
-              关于我们
-            </router-link>
             <a
               href="https://matrix-alliance.pages.dev/"
               target="_blank"
@@ -35,13 +32,13 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
         <div class="text-center">
           <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            开发者博主联盟
+            <span class="block">博主联盟</span>
             <span class="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-              助你推广程序员向产品
+              连接产品与技术影响力
             </span>
           </h1>
-          <p class="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-            我们聚合专业技术博主，为优秀产品提供精准技术圈曝光，助你快速触达程序员受众<span class="inline-flex items-center ml-2 text-sm text-gray-500"><span class="inline-flex items-center justify-center w-5 h-5 bg-blue-50 text-blue-500 rounded-full text-xs font-bold mr-2">i</span>工信部数据显示，我国软件开发者数量已突破<span class="font-semibold text-blue-500 ml-1">940万</span></span>
+          <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
+            我们聚合一批专业技术博主，突出一批面向程序员的优质产品，助你快速触达程序员受众<span class="inline-flex items-center ml-2 text-sm text-gray-500"><span class="inline-flex items-center justify-center w-5 h-5 bg-blue-50 text-blue-500 rounded-full text-xs font-bold mr-2">i</span>工信部数据显示，我国软件开发者数量已突破<span class="font-semibold text-blue-500 ml-1">940万</span></span>
           </p>
           
           <!-- CTA 按钮组 -->
@@ -52,7 +49,7 @@
             >
               <span class="relative z-10 flex items-center">
                 <span class="mr-2">👥</span>
-                我们的博主团队名单
+                我是品牌方，我想看看团队实力
               </span>
               <div class="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
@@ -64,7 +61,7 @@
             >
               <span class="relative z-10 flex items-center">
                 <span class="mr-2">🤝</span>
-                加入开发者博主联盟
+                我是个人博主，我想业余赚点钱
               </span>
               <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </a>
