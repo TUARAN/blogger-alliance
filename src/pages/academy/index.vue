@@ -131,14 +131,15 @@
           >
             <!-- 文档封面 -->
             <div class="relative h-32 sm:h-48 bg-gradient-to-br from-indigo-100 to-purple-100">
+              <img
+                v-if="doc.cover"
+                :src="doc.cover"
+                :alt="doc.title"
+                class="w-full h-full object-cover"
+              />
               <div class="absolute top-3 sm:top-4 left-3 sm:left-4 text-2xl sm:text-3xl">{{ doc.icon }}</div>
               <div class="absolute top-3 sm:top-4 right-3 sm:right-4 px-2 sm:px-3 py-1 bg-white bg-opacity-90 rounded-full text-xs sm:text-sm font-semibold text-gray-700">
                 {{ doc.category }}
-              </div>
-              <div class="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4">
-                <div class="bg-white/90 backdrop-blur-sm rounded-lg px-3 py-2">
-                  <div class="text-xs text-gray-600">更新于 {{ doc.updateTime }}</div>
-                </div>
               </div>
             </div>
 
@@ -299,67 +300,18 @@ const toolsLoading = ref(true)
 const tools = ref([])
 const selectedToolCategory = ref('全部')
 
-// 示例文档数据
+// 文档数据
 const docsData = [
   {
     id: 1,
-    title: '前端开发最佳实践',
-    description: '涵盖现代前端开发的核心技术栈、工程化实践和性能优化方案',
-    category: '前端开发',
-    tags: ['Vue', 'React', '性能优化'],
-    icon: '🎨',
-    updateTime: '2024-01-15',
-    url: '#'
-  },
-  {
-    id: 2,
-    title: '后端架构设计指南',
-    description: '从微服务到分布式系统，深入浅出讲解后端架构设计原则',
-    category: '后端开发',
-    tags: ['微服务', '分布式', '架构'],
-    icon: '🏗️',
-    updateTime: '2024-01-10',
-    url: '#'
-  },
-  {
-    id: 3,
-    title: 'AI/ML 应用实战',
-    description: '机器学习实战案例，从理论到应用的全流程指南',
+    title: 'AI Agent 技术奥德赛',
+    description: '面对AI Agent浪潮，普通开发者的成长跃迁指南。从基础到创新，再到影响力构建的系统化成长旅程。核心理念：AI Agent Developer = 技术纵深 × 系统创新 × 影响力构建。',
     category: 'AI/ML',
-    tags: ['机器学习', '深度学习', '实战'],
-    icon: '🤖',
-    updateTime: '2024-01-08',
-    url: '#'
-  },
-  {
-    id: 4,
-    title: 'DevOps 自动化实践',
-    description: 'CI/CD、容器化、监控告警等 DevOps 核心实践教程',
-    category: 'DevOps',
-    tags: ['CI/CD', 'Docker', 'K8s'],
-    icon: '⚙️',
-    updateTime: '2024-01-05',
-    url: '#'
-  },
-  {
-    id: 5,
-    title: '开源项目贡献指南',
-    description: '如何参与开源项目，贡献代码并建立技术影响力',
-    category: '开源',
-    tags: ['GitHub', '开源', '协作'],
-    icon: '🌟',
-    updateTime: '2024-01-03',
-    url: '#'
-  },
-  {
-    id: 6,
-    title: '技术写作技巧',
-    description: '如何写出高质量的技术文章，建立个人技术品牌',
-    category: '写作',
-    tags: ['写作', '博客', '影响力'],
-    icon: '✍️',
-    updateTime: '2024-01-01',
-    url: '#'
+    tags: ['AI Agent', '技术成长', '系统化学习', '影响力构建'],
+    icon: '🚀',
+    cover: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop',
+    updateTime: '2024-01-20',
+    url: 'https://dev-odyssey.pages.dev/'
   }
 ]
 
