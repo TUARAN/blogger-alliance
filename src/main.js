@@ -10,7 +10,7 @@ const routes = [
   { path: '/about', component: () => import('./views/Home.vue') },
   { path: '/tob', component: () => import('./pages/tob/index.vue') },
   { path: '/toc', component: () => import('./pages/toc/index.vue') },
-  { path: '/tools', component: () => import('./views/Tools.vue') }
+  { path: '/academy', component: () => import('./pages/academy/index.vue') }
 ]
 
 const router = createRouter({

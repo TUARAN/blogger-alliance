@@ -4,24 +4,35 @@
     <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
+          <!-- 左侧：Logo -->
           <div class="flex items-center">
             <router-link to="/" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
               🚀 开发者博主联盟
             </router-link>
           </div>
-          <div class="flex items-center space-x-4">
+          
+          <!-- 右侧：导航链接 -->
+          <div class="flex items-center gap-6">
+            <!-- 矩阵联盟 - 外部链接，颜色更醒目 -->
             <a
               href="https://matrix-alliance.pages.dev/"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-1 text-gray-600 hover:text-indigo-600 transition-colors font-medium"
+              class="inline-flex items-center gap-1.5 text-indigo-600 hover:text-indigo-700 transition-colors font-semibold text-base"
             >
-              <span class="text-base leading-none text-indigo-500">✴</span>
-              <span class="leading-none">矩阵号联盟</span>
-              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
+              <span class="text-base leading-none">✴</span>
+              <span>矩阵联盟</span>
             </a>
+            
+            <!-- 联盟学院 - 路由链接，颜色较淡 -->
+            <router-link
+              to="/academy"
+              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
+              active-class="text-gray-700 font-semibold"
+            >
+              <span class="text-base leading-none">📚</span>
+              <span>联盟学院</span>
+            </router-link>
           </div>
         </div>
       </div>
@@ -48,8 +59,8 @@
               class="group relative px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
             >
               <span class="relative z-10 flex items-center">
-                <span class="mr-2">👥</span>
-                我是品牌方，我想看看团队实力
+                <span class="mr-2">🚀</span>
+                我是品牌方，我想有效推广
               </span>
               <div class="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>

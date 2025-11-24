@@ -43,7 +43,7 @@
           </router-link>
           <!-- 工具/项目卡片 -->
           <router-link 
-            to="/tools" 
+            to="/academy" 
             class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-2xl transition-all p-6 sm:p-8 flex flex-col items-center group border-2 border-transparent hover:border-blue-400 min-h-[280px] sm:min-h-[320px] sm:col-span-2 lg:col-span-1"
             @click="handleButtonClick('工具项目卡片')"
           >
@@ -218,7 +218,7 @@
             @click="handleButtonClick('底部加入联盟')"
           >加入联盟</router-link>
           <router-link 
-            to="/tools" 
+            to="/academy" 
             class="px-6 sm:px-8 py-3 bg-white text-indigo-700 font-semibold rounded-lg shadow hover:bg-indigo-50 transition-all text-mobile"
             @click="handleButtonClick('底部浏览工具')"
           >浏览工具</router-link>
