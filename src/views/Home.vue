@@ -6,7 +6,7 @@
     <section class="flex-1 flex flex-col justify-center items-center section-mobile">
       <div class="container-mobile max-w-4xl mx-auto text-center">
         <h1 class="text-mobile-3xl sm:text-mobile-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
-          开发者博主联盟，连接产品与技术影响力
+          博主联盟，连接产品与技术影响力
         </h1>
         <p class="text-mobile-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">
           我们致力于帮助产品方精准推广程序员向产品，也为技术博主/开发者提供联盟成长与工具资源。<br class="hidden sm:block">
@@ -37,7 +37,7 @@
             @click="handleButtonClick('加入联盟卡片')"
           >
             <div class="text-3xl sm:text-4xl mb-4 group-hover:scale-110 transition-transform">🤝</div>
-            <h2 class="text-mobile-xl sm:text-2xl font-bold text-gray-900 mb-2 text-center">我想加入开发者博主联盟</h2>
+            <h2 class="text-mobile-xl sm:text-2xl font-bold text-gray-900 mb-2 text-center">我想加入博主联盟</h2>
             <p class="text-gray-600 mb-4 text-center text-mobile">结识同行、获取推广资源、联盟收益与成长机会</p>
             <span class="inline-block mt-auto px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-lg font-semibold shadow group-hover:from-green-600 group-hover:to-blue-600 transition-all text-mobile">加入联盟</span>
           </router-link>
@@ -204,7 +204,7 @@
     <!-- 底部 CTA -->
     <section class="py-8 sm:py-12 bg-gradient-to-r from-indigo-600 to-blue-600 text-white text-center">
       <div class="container-mobile max-w-4xl mx-auto">
-        <h2 class="text-mobile-2xl sm:text-2xl md:text-3xl font-bold mb-4">加入开发者博主联盟，开启你的影响力之旅！</h2>
+        <h2 class="text-mobile-2xl sm:text-2xl md:text-3xl font-bold mb-4">加入博主联盟，开启你的影响力之旅！</h2>
         <p class="text-mobile-lg sm:text-lg mb-6 sm:mb-8">无论你是产品方还是技术博主，欢迎加入我们，共创技术新生态。</p>
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
           <router-link 

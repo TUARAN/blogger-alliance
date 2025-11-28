@@ -7,7 +7,7 @@
           <!-- 左侧：Logo -->
           <div class="flex items-center">
             <router-link to="/" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
-              🚀 开发者博主联盟
+              🚀 博主联盟
             </router-link>
           </div>
           

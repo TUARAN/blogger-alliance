@@ -8,7 +8,7 @@
             <div class="w-8 h-8 bg-gradient-to-r from-primary-600 to-primary-800 rounded-lg flex items-center justify-center">
               <span class="text-white font-bold text-lg">博</span>
             </div>
-            <span class="text-lg sm:text-xl font-bold text-gray-900">开发者博主联盟</span>
+            <span class="text-lg sm:text-xl font-bold text-gray-900">博主联盟</span>
           </router-link>
         </div>
 

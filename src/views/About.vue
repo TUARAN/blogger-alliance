@@ -3,7 +3,7 @@
     <div class="container-mobile max-w-4xl mx-auto">
       <!-- Page Header -->
       <div class="text-center mb-8 sm:mb-12">
-        <h1 class="text-mobile-3xl sm:text-4xl font-bold text-gray-900 mb-4">关于开发者博主联盟</h1>
+        <h1 class="text-mobile-3xl sm:text-4xl font-bold text-gray-900 mb-4">关于博主联盟</h1>
         <p class="text-mobile-lg sm:text-lg text-gray-600">
           连接优秀的技术博主，分享知识，共同成长
         </p>
@@ -23,7 +23,7 @@
             <div>
               <h3 class="text-lg font-semibold text-gray-900 mb-3">促进技术交流</h3>
               <p class="text-gray-700 leading-relaxed text-mobile">
-                通过开发者博主联盟，我们希望促进不同技术领域之间的交流，激发创新思维，推动技术社区的发展。
+                通过博主联盟，我们希望促进不同技术领域之间的交流，激发创新思维，推动技术社区的发展。
               </p>
             </div>
           </div>

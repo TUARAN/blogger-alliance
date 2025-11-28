@@ -6,7 +6,7 @@
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center">
             <router-link to="/" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
-              🚀 开发者博主联盟
+              🚀 博主联盟
             </router-link>
           </div>
           <div class="flex items-center space-x-4">
@@ -23,7 +23,7 @@
       <!-- 页面标题 -->
       <div class="text-center mb-16">
         <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-          加入开发者博主联盟，开启技术变现之旅
+          加入博主联盟，开启技术变现之旅
         </h1>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
           无论你是想成为博主合伙人，还是寻找优质的技术工具，这里都能满足你的需求
@@ -99,7 +99,7 @@
             class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
           >
             <span class="mr-2">🚀</span>
-            Fork 项目加入开发者博主联盟
+            Fork 项目加入博主联盟
           </a>
         </div>
         

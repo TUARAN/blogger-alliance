@@ -1,7 +1,7 @@
 {
   "name": "blogger-alliance",
   "version": "1.0.0",
-  "description": "开发者博主联盟 - 技术博主展示平台",
+  "description": "博主联盟 - 技术博主展示平台",
   "type": "module",
   "scripts": {
     "dev": "vite",
