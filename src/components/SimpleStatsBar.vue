@@ -1,15 +1,21 @@
 <template>
-  <div class="w-full bg-white bg-opacity-80 shadow-sm py-2 px-3 sm:px-4 flex items-center justify-center text-xs sm:text-sm text-gray-700 font-medium rounded-b-xl">
-    <div class="flex flex-col sm:flex-row items-center gap-1 sm:gap-4">
+  <div class="w-full bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-indigo-100 py-2.5 px-3 sm:px-4 flex items-center justify-center text-xs sm:text-sm shadow-sm">
+    <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-6">
       <div class="flex items-center">
-        今日访问：
-        <span class="mx-1 text-blue-600 font-bold">{{ pv }}</span>（PV）/
-        <span class="mx-1 text-green-600 font-bold">{{ uv }}</span>（UV）
+        <span class="text-gray-600">今日访问：</span>
+        <span class="mx-1 text-blue-600 font-bold">{{ pv }}</span>
+        <span class="text-gray-500">PV</span>
+        <span class="mx-2 text-gray-300">/</span>
+        <span class="mx-1 text-green-600 font-bold">{{ uv }}</span>
+        <span class="text-gray-500">UV</span>
       </div>
       <div class="flex items-center">
-        累计访问：
-        <span class="mx-1 text-blue-600 font-bold">{{ totalPv }}</span>（PV）/
-        <span class="mx-1 text-green-600 font-bold">{{ totalUv }}</span>（UV）
+        <span class="text-gray-600">累计访问：</span>
+        <span class="mx-1 text-blue-600 font-bold">{{ formatNumber(totalPv) }}</span>
+        <span class="text-gray-500">PV</span>
+        <span class="mx-2 text-gray-300">/</span>
+        <span class="mx-1 text-green-600 font-bold">{{ formatNumber(totalUv) }}</span>
+        <span class="text-gray-500">UV</span>
       </div>
     </div>
   </div>
@@ -17,7 +23,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { getTodayStatsWithBonus, getTotalStatsWithMock } from '../utils/statsService.js'
+import { getTodayStats, getRealTimeStats } from '../utils/statsService.js'
 
 const pv = ref(0)
 const uv = ref(0)
@@ -25,17 +31,26 @@ const totalPv = ref(0)
 const totalUv = ref(0)
 
 const updateStats = () => {
-  const today = getTodayStatsWithBonus()
-  const total = getTotalStatsWithMock()
+  const today = getTodayStats()
+  const total = getRealTimeStats()
   pv.value = today.pv
   uv.value = today.uv
   totalPv.value = total.pv
   totalUv.value = total.uv
 }
 
+const formatNumber = (num) => {
+  if (num >= 10000) {
+    return (num / 10000).toFixed(1) + 'w'
+  } else if (num >= 1000) {
+    return (num / 1000).toFixed(1) + 'k'
+  }
+  return num.toString()
+}
+
 onMounted(() => {
   updateStats()
-  // 可选：每30秒刷新一次
+  // 每30秒刷新一次
   setInterval(updateStats, 30000)
 })
 </script>

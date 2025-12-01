@@ -1,5 +1,5 @@
 // 真实访问统计服务
-// 使用 localStorage 来记录访问数据，模拟真实的 PV/UV 统计
+// 使用 localStorage 记录访问数据，结合 Google Analytics 提供真实的 PV/UV 统计
 
 const STATS_KEY = 'blogger_alliance_stats'
 const VISITOR_KEY = 'blogger_alliance_visitor'
@@ -118,41 +118,6 @@ export function getTodayStats() {
   }
 }
 
-// 获取今日统计数据（带每日随机增量）
-export function getTodayStatsWithBonus() {
-  const stats = getStats()
-  const today = new Date().toISOString().split('T')[0]
-  let todayStats = stats.dailyStats[today]
-
-  // 获取或生成今日增量
-  const BONUS_KEY = 'blogger_alliance_today_bonus_' + today
-  let bonus = localStorage.getItem(BONUS_KEY)
-  if (!bonus) {
-    // 每天生成一个20-50的随机数
-    bonus = {
-      pv: Math.floor(Math.random() * 31) + 20, // 20-50
-      uv: Math.floor(Math.random() * 11) + 5   // 5-15
-    }
-    localStorage.setItem(BONUS_KEY, JSON.stringify(bonus))
-  } else {
-    bonus = JSON.parse(bonus)
-  }
-
-  // 如果 todayStats 不存在，直接用随机量
-  if (!todayStats) {
-    return {
-      pv: bonus.pv,
-      uv: bonus.uv,
-      date: today
-    }
-  }
-
-  return {
-    pv: todayStats.pv + bonus.pv,
-    uv: new Set(todayStats.visitors).size + bonus.uv,
-    date: today
-  }
-}
 
 // 获取历史统计数据（最近7天）
 export function getWeeklyStats() {
@@ -174,65 +139,3 @@ export function getWeeklyStats() {
   
   return weeklyStats
 }
-
-// 模拟一些初始数据（可选）
-export function initializeWithMockData() {
-  const stats = getStats()
-  
-  // 如果已经有数据，不覆盖
-  if (stats.pv > 0) {
-    return
-  }
-  
-  // 生成一些模拟的历史数据
-  const mockData = {
-    pv: 1250,
-    uv: 180,
-    dailyStats: {},
-    lastUpdate: new Date().toISOString()
-  }
-  
-  // 生成最近7天的模拟数据
-  for (let i = 6; i >= 0; i--) {
-    const date = new Date()
-    date.setDate(date.getDate() - i)
-    const dateStr = date.toISOString().split('T')[0]
-    
-    const dailyPV = Math.floor(Math.random() * 200) + 50
-    const dailyUV = Math.floor(Math.random() * 30) + 10
-    
-    mockData.dailyStats[dateStr] = {
-      pv: dailyPV,
-      visitors: []
-    }
-    
-    // 生成一些模拟访客
-    for (let j = 0; j < dailyUV; j++) {
-      mockData.dailyStats[dateStr].visitors.push(`visitor_${dateStr}_${j}`)
-    }
-  }
-  
-  localStorage.setItem(STATS_KEY, JSON.stringify(mockData))
-}
-
-// 获取累计统计数据（带mock增量，每天固定）
-export function getTotalStatsWithMock() {
-  const stats = getStats()
-  const today = new Date().toISOString().split('T')[0]
-  // 获取或生成累计增量
-  const TOTAL_BONUS_KEY = 'blogger_alliance_total_bonus_' + today
-  let bonus = localStorage.getItem(TOTAL_BONUS_KEY)
-  if (!bonus) {
-    bonus = {
-      pv: Math.floor(Math.random() * 10001) + 10000, // 10000-20000
-      uv: Math.floor(Math.random() * 3001) + 2000    // 2000-5000
-    }
-    localStorage.setItem(TOTAL_BONUS_KEY, JSON.stringify(bonus))
-  } else {
-    bonus = JSON.parse(bonus)
-  }
-  return {
-    pv: stats.pv + bonus.pv,
-    uv: stats.uv + bonus.uv
-  }
-} 

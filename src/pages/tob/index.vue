@@ -3,7 +3,7 @@
     <!-- 导航栏 -->
     <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
+        <div class="flex justify-between items-center h-16 gap-4">
           <!-- 左侧：Logo -->
           <div class="flex items-center">
             <router-link to="/" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
@@ -11,8 +11,29 @@
             </router-link>
           </div>
           
-          <!-- 右侧：导航链接 -->
-          <div class="flex items-center gap-6">
+          <!-- 右侧：统计 + 导航链接 -->
+          <div class="flex items-center gap-4 lg:gap-6">
+            <!-- 统计数据 - 紧凑显示 -->
+            <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg text-xs">
+              <div class="flex items-center gap-1">
+                <span class="text-gray-500">今日:</span>
+                <span class="text-blue-600 font-semibold">{{ todayPv }}</span>
+                <span class="text-gray-500">PV</span>
+                <span class="text-gray-400 mx-0.5">/</span>
+                <span class="text-green-600 font-semibold">{{ todayUv }}</span>
+                <span class="text-gray-500">UV</span>
+              </div>
+              <div class="w-px h-3 bg-gray-300"></div>
+              <div class="flex items-center gap-1">
+                <span class="text-gray-500">累计:</span>
+                <span class="text-blue-600 font-semibold">{{ formatNumber(totalPv) }}</span>
+                <span class="text-gray-500">PV</span>
+                <span class="text-gray-400 mx-0.5">/</span>
+                <span class="text-green-600 font-semibold">{{ formatNumber(totalUv) }}</span>
+                <span class="text-gray-500">UV</span>
+              </div>
+            </div>
+            
             <!-- 矩阵联盟 - 外部链接，颜色更醒目 -->
             <a
               href="https://matrix-alliance.pages.dev/"
@@ -237,25 +258,8 @@
 
       </div>
       
-      <!-- Loading 状态 -->
-      <div v-if="loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-        <div v-for="i in 3" :key="i" class="bg-white rounded-xl shadow-lg p-6 animate-pulse">
-          <div class="flex items-center mb-4">
-            <div class="w-16 h-16 bg-gray-200 rounded-full"></div>
-            <div class="ml-4 flex-1">
-              <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-              <div class="h-3 bg-gray-200 rounded w-1/2"></div>
-            </div>
-          </div>
-          <div class="space-y-2">
-            <div class="h-3 bg-gray-200 rounded"></div>
-            <div class="h-3 bg-gray-200 rounded w-5/6"></div>
-          </div>
-        </div>
-      </div>
-
       <!-- 博主卡片 -->
-      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
         <div
           v-for="blogger in bloggers"
           :key="blogger.id"
@@ -619,13 +623,37 @@ import { ref, onMounted } from 'vue'
 import { bloggersData } from '../../data/bloggerInfo.js'
 import { trackLinkClick } from '../../utils/hybridStats.js'
 import { getBloggerStats } from '../../utils/analytics.js'
+import { recordPageView, getTodayStats, getRealTimeStats } from '../../utils/statsService.js'
 
-// 响应式数据
-const loading = ref(true)
-const bloggers = ref([])
+// 响应式数据 - 直接初始化数据，无需加载状态
+const bloggers = ref(bloggersData)
 const expandedBloggers = ref([])
 const showQRCode = ref(false)
 const bloggerStats = ref(getBloggerStats())
+
+// 统计数据
+const todayPv = ref(0)
+const todayUv = ref(0)
+const totalPv = ref(0)
+const totalUv = ref(0)
+
+const formatNumber = (num) => {
+  if (num >= 10000) {
+    return (num / 10000).toFixed(1) + 'w'
+  } else if (num >= 1000) {
+    return (num / 1000).toFixed(1) + 'k'
+  }
+  return num.toString()
+}
+
+const updateStats = () => {
+  const today = getTodayStats()
+  const total = getRealTimeStats()
+  todayPv.value = today.pv
+  todayUv.value = today.uv
+  totalPv.value = total.pv
+  totalUv.value = total.uv
+}
 
 const parseFollowersValue = (followersStr) => {
   if (!followersStr) return 0
@@ -690,12 +718,12 @@ const scrollToBloggerTeam = () => {
   }
 }
 
-// 模拟加载数据
+// 页面加载时记录访问统计并更新数据显示
 onMounted(() => {
-  setTimeout(() => {
-    bloggers.value = bloggersData
-    loading.value = false
-  }, 1000)
+  recordPageView()
+  updateStats()
+  // 每30秒刷新一次统计数据
+  setInterval(updateStats, 30000)
 })
 </script>
 
