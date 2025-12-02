@@ -73,19 +73,6 @@
             我们聚合一批专业技术博主，突出一批面向程序员的优质产品，助你快速触达程序员受众<span class="inline-flex items-center ml-2 text-sm text-gray-500"><span class="inline-flex items-center justify-center w-5 h-5 bg-blue-50 text-blue-500 rounded-full text-xs font-bold mr-2">i</span>工信部数据显示，我国软件开发者数量已突破<span class="font-semibold text-blue-500 ml-1">940万</span></span>
           </p>
           
-          <!-- CTA 按钮组 -->
-          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <button
-              @click="toggleQRCode"
-              class="group relative px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
-            >
-              <span class="relative z-10 flex items-center">
-                <span class="mr-2">🤝</span>
-                我想"有效"推广
-              </span>
-              <div class="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
-          </div>
 
           <!-- 统计信息 -->
           <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
@@ -531,79 +518,35 @@
       </div>
     </section>
 
-    <!-- 右下角浮窗二维码 -->
+    <!-- 右下角二维码 -->
     <div class="fixed bottom-6 right-6 z-50">
-      <div class="relative group">
-        <!-- 主悬浮区域 -->
-        <div
-          @click="toggleQRCode"
-          class="relative cursor-pointer transition-all duration-300 hover:scale-105"
-        >
-          <!-- 背景装饰 -->
-          <div class="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-3xl blur-xl"></div>
+      <div class="relative animate-float">
+        <!-- 背景装饰 -->
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-2xl blur-xl"></div>
+        
+        <!-- 二维码卡片 -->
+        <div class="relative bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 p-4 w-52 hover:shadow-2xl hover:scale-105 transition-all duration-300">
+          <div class="text-center mb-2">
+            <div class="text-sm font-bold text-gray-800 mb-0.5">合作咨询</div>
+            <div class="text-xs text-gray-500">扫码添加微信/搜索atar24</div>
+          </div>
           
-          <!-- 主要内容 -->
-          <div class="relative bg-white/90 backdrop-blur-md rounded-3xl p-4 shadow-2xl border border-white/50 hover:shadow-3xl transition-all duration-300">
-            <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <span class="text-2xl">💬</span>
+          <div class="bg-gray-50 p-2 rounded-xl mb-2">
+            <img 
+              src="/src/img/qrcode.jpg" 
+              alt="微信二维码" 
+              class="w-full h-auto rounded-lg object-contain"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <!-- 备用显示，如果图片加载失败 -->
+            <div class="w-full h-36 bg-gray-100 rounded-lg flex items-center justify-center hidden">
+              <div class="text-center">
+                <div class="text-xl mb-1">📱</div>
+                <div class="text-xs text-gray-500">二维码图片</div>
               </div>
-              <div class="text-left">
-                <div class="text-sm font-bold text-gray-800">联系我们</div>
-                <div class="text-xs text-gray-600">推广合作咨询</div>
-              </div>
-              <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             </div>
           </div>
         </div>
-        
-        <!-- 二维码卡片 -->
-        <transition
-          enter-active-class="transition-all duration-300 ease-out"
-          enter-from-class="opacity-0 scale-95 translate-x-2"
-          enter-to-class="opacity-100 scale-100 translate-x-0"
-          leave-active-class="transition-all duration-300 ease-in"
-          leave-from-class="opacity-100 scale-100 translate-x-0"
-          leave-to-class="opacity-0 scale-95 translate-x-2"
-        >
-          <div
-            v-if="showQRCode"
-            class="absolute bottom-20 right-0 w-72 bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-white/50 p-6"
-          >
-            <div class="flex items-center justify-end mb-4">
-              <button
-                @click="toggleQRCode"
-                class="w-6 h-6 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors"
-              >
-                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            
-            <div class="text-center">
-              <div class="bg-gray-50 p-4 rounded-2xl mb-4">
-                <img 
-                  src="/src/img/qrcode.jpg" 
-                  alt="微信二维码" 
-                  class="w-full h-auto rounded-xl object-contain"
-                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                />
-                <!-- 备用显示，如果图片加载失败 -->
-                <div class="w-full h-64 bg-gray-100 rounded-xl flex items-center justify-center hidden">
-                  <div class="text-center">
-                    <div class="text-2xl mb-1">📱</div>
-                    <div class="text-xs text-gray-500">二维码图片</div>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="space-y-2">
-                <p class="text-base font-bold text-gray-800">扫码添加微信：atar24</p>
-              </div>
-            </div>
-          </div>
-        </transition>
       </div>
     </div>
 
@@ -625,7 +568,6 @@ import { recordPageView, getTodayStats, getRealTimeStats } from '../../utils/sta
 // 响应式数据 - 直接初始化数据，无需加载状态
 const bloggers = ref(bloggersData)
 const expandedBloggers = ref([])
-const showQRCode = ref(false)
 const bloggerStats = ref(getBloggerStats())
 
 // 统计数据
@@ -693,11 +635,6 @@ const toggleExpanded = (bloggerId) => {
   }
 }
 
-// 切换二维码显示
-const toggleQRCode = () => {
-  showQRCode.value = !showQRCode.value
-}
-
 // 处理链接点击
 const handleLinkClick = (platform, url, bloggerName) => {
   console.log('链接被点击:', platform, url, bloggerName)
@@ -723,5 +660,20 @@ onMounted(() => {
   setInterval(updateStats, 30000)
 })
 </script>
+
+<style scoped>
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+</style>
 
  
