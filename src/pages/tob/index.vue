@@ -76,33 +76,30 @@
           <!-- CTA 按钮组 -->
           <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <button
-              @click="scrollToBloggerTeam"
+              @click="toggleQRCode"
               class="group relative px-8 py-4 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
             >
               <span class="relative z-10 flex items-center">
-                <span class="mr-2">🚀</span>
-                我是品牌方，我想有效推广
+                <span class="mr-2">🤝</span>
+                我想"有效"推广
               </span>
               <div class="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
-            
-            <a
-              href="https://github.com/TUARAN/blogger-alliance"
-              target="_blank"
-              class="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
-            >
-              <span class="relative z-10 flex items-center">
-                <span class="mr-2">🤝</span>
-                我是个人博主，我想业余赚点钱
-              </span>
-              <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </a>
           </div>
 
           <!-- 统计信息 -->
           <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             <div class="text-center">
-              <div class="text-3xl font-bold text-indigo-600 mb-2">{{ bloggerStats.bloggerCount }} 位+</div>
+              <div class="text-3xl font-bold text-indigo-600 mb-2">
+                {{ bloggerStats.bloggerCount }} 位+
+                <button
+                  @click="scrollToBloggerTeam"
+                  class="ml-1.5 text-xl hover:scale-125 transition-transform duration-300 animate-bounce cursor-pointer"
+                  title="查看博主团队"
+                >
+                  👇
+                </button>
+              </div>
               <div class="text-gray-600">技术博主</div>
             </div>
             <div class="text-center">
