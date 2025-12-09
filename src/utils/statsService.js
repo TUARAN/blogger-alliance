@@ -1,5 +1,6 @@
 // 真实访问统计服务
 // 使用 localStorage 记录访问数据，结合 Google Analytics 提供真实的 PV/UV 统计
+import { busuanziStats } from './busuanzi.js'
 
 const STATS_KEY = 'blogger_alliance_stats'
 const VISITOR_KEY = 'blogger_alliance_visitor'
@@ -90,10 +91,22 @@ export function recordPageView() {
 // 获取实时统计数据
 export function getRealTimeStats() {
   const stats = getStats()
+  
+  // 如果不蒜子数据已加载，优先使用不蒜子数据作为总数
+  if (busuanziStats.sitePv > 0) {
+    return {
+      pv: busuanziStats.sitePv,
+      uv: busuanziStats.siteUv,
+      timestamp: new Date().toISOString(),
+      source: 'busuanzi'
+    }
+  }
+
   return {
     pv: stats.pv,
     uv: stats.uv,
-    timestamp: stats.lastUpdate
+    timestamp: stats.lastUpdate,
+    source: 'local'
   }
 }
 

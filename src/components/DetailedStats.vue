@@ -69,13 +69,13 @@
           实时数据
         </span>
         <div class="mt-1 flex justify-center space-x-2">
-          <span class="inline-flex items-center text-xs">
+          <span class="inline-flex items-center text-xs" v-if="totalStats.source === 'busuanzi'">
+            <span class="w-2 h-2 bg-purple-400 rounded-full mr-1"></span>
+            不蒜子统计
+          </span>
+          <span class="inline-flex items-center text-xs" v-else>
             <span class="w-2 h-2 bg-blue-400 rounded-full mr-1"></span>
             本地统计
-          </span>
-          <span class="inline-flex items-center text-xs" v-if="statsStatus.googleAnalytics">
-            <span class="w-2 h-2 bg-green-400 rounded-full mr-1"></span>
-            Google Analytics
           </span>
         </div>
       </div>
