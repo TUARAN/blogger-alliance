@@ -587,6 +587,41 @@ export const bloggersData = [
       achievements: ['CSDN 百万阅读作者', '技术社群分享嘉宾', '粉丝10W+'],
       recentPosts: ['创业公司技术栈实战', '从需求到上线的实战复盘', '技术人如何搭建产品 MVP']
     }
+  },
+  {
+    id: 35,
+    name: '不如摸鱼去',
+    avatar: 'https://api.dicebear.com/9.x/identicon/svg?seed=burumoyuqu',
+    introduction: '专注前端技术与AI编程知识的分享，多平台创作者，uni-app开源组件库wot-ui作者。',
+    followers: '4K+',
+    socialAccounts: [
+      { platform: '微信公众号:鱼哥聊前端', url: 'https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzk2NDAzNzEwNQ==&action=getalbum&album_id=4025495597703643138&scene=126&sessionid=1766160062126#wechat_redirect', icon: '🌏' },
+      { platform: 'GitHub', url: 'https://github.com/Moonofweisheng', icon: '🐙' },
+      { platform: '掘金', url: 'https://juejin.cn/user/26044011388510', icon: '📝' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/qq_31647491', icon: '💻' },
+    ],
+    expandedContent: {
+      specialties: ['前端开发', 'AI编程分享', '工具分享', '开源分享'],
+      achievements: ['GitHub Star 2K+ ', '社群粉丝2K+', 'uni-app插件大赛三等奖'],
+      recentPosts: ['TRAE SOLO 正式发布了？我用它将像老乡鸡那样做饭小程序开源了！', 'uni-app 也能远程调试？使用 PageSpy 打开调试的新大门！', 'AI 辅助下的 uni-app 跨端小程序工程化开发实践分享']
+    }
+  },
+  {
+    id: 36,
+    name: 'ErpanOmer',
+    avatar: "https://res.cloudinary.com/dkh81cvyt/image/upload/w_400/v1766673054/me_kknemi.jpg",
+    introduction: "Web全站工程师🧑‍💻,活跃在掘金技术社区,掘金6级作者、文章170余篇、阅读量90w+。专注于技术分享和社区建设",
+    followers: '1.7K+',
+    socialAccounts: [
+      { platform: 'GitHub', url: 'https://github.com/ErpanOmer', icon: '🐙' },
+      { platform: '掘金', url: 'https://juejin.cn/user/3878732754331096', icon: '📝' },
+      { platform: '知乎', url: 'https://www.zhihu.com/people/erpan-30', icon: '📚' }
+    ],
+    expandedContent: {
+      specialties: ['全栈开发', 'AI编程', '技术写作', 'Serverless'],
+      achievements: ['掘金6级-优秀创作者', '文章170+余篇', '阅读量90w+', '持续内容创作者'],
+      recentPosts: ['2025快手直播至暗时刻', '为什么永远不要相信前端输入？', '检测开发者工具是否打开？']
+    }
   }
 ]
 
