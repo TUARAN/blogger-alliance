@@ -6,7 +6,7 @@
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center">
             <router-link to="/" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
-              🚀 博主联盟
+              🚀开发者博主联盟
             </router-link>
           </div>
           <div class="flex items-center space-x-4">

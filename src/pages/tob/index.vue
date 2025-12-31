@@ -7,33 +7,12 @@
           <!-- 左侧：Logo -->
           <div class="flex items-center">
             <router-link to="/" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
-              🚀 博主联盟
+              🚀开发者博主联盟
             </router-link>
           </div>
           
-          <!-- 右侧：统计 + 导航链接 -->
+          <!-- 右侧：导航链接 -->
           <div class="flex items-center gap-4 lg:gap-6">
-            <!-- 统计数据 - 紧凑显示 -->
-            <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg text-xs">
-              <div class="flex items-center gap-1">
-                <span class="text-gray-500">今日:</span>
-                <span class="text-blue-600 font-semibold">{{ todayPv }}</span>
-                <span class="text-gray-500">PV</span>
-                <span class="text-gray-400 mx-0.5">/</span>
-                <span class="text-green-600 font-semibold">{{ todayUv }}</span>
-                <span class="text-gray-500">UV</span>
-              </div>
-              <div class="w-px h-3 bg-gray-300"></div>
-              <div class="flex items-center gap-1">
-                <span class="text-gray-500">累计:</span>
-                <span class="text-blue-600 font-semibold">{{ formatNumber(totalPv) }}</span>
-                <span class="text-gray-500">PV</span>
-                <span class="text-gray-400 mx-0.5">/</span>
-                <span class="text-green-600 font-semibold">{{ formatNumber(totalUv) }}</span>
-                <span class="text-gray-500">UV</span>
-              </div>
-            </div>
-            
             <!-- 矩阵联盟 - 外部链接，颜色更醒目 -->
             <a
               href="https://matrix-alliance.pages.dev/"
@@ -281,7 +260,7 @@
             </div>
 
             <!-- 社交账号 -->
-            <div class="flex flex-wrap gap-1.5 mt-auto">
+            <div class="flex flex-wrap gap-1.5 mt-4">
               <template v-for="account in blogger.socialAccounts" :key="account.platform">
                 <a
                   v-if="account && account.url && account.url.trim() !== ''"
@@ -527,8 +506,8 @@
         <!-- 二维码卡片 -->
         <div class="relative bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 p-4 w-52 hover:shadow-2xl hover:scale-105 transition-all duration-300">
           <div class="text-center mb-2">
-            <div class="text-sm font-bold text-gray-800 mb-0.5">合作咨询</div>
-            <div class="text-xs text-gray-500">扫码添加微信/搜索atar24</div>
+            <div class="text-sm font-bold text-gray-800 mb-0.5">合作与共创</div>
+            <div class="text-xs text-gray-500">扫码/添加微信号atar24</div>
           </div>
           
           <div class="bg-gray-50 p-2 rounded-xl mb-2">
@@ -563,36 +542,12 @@ import { ref, onMounted } from 'vue'
 import { bloggersData } from '../../data/bloggerInfo.js'
 import { trackLinkClick } from '../../utils/hybridStats.js'
 import { getBloggerStats } from '../../utils/analytics.js'
-import { recordPageView, getTodayStats, getRealTimeStats } from '../../utils/statsService.js'
+import { recordPageView } from '../../utils/statsService.js'
 
 // 响应式数据 - 直接初始化数据，无需加载状态
 const bloggers = ref(bloggersData)
 const expandedBloggers = ref([])
 const bloggerStats = ref(getBloggerStats())
-
-// 统计数据
-const todayPv = ref(0)
-const todayUv = ref(0)
-const totalPv = ref(0)
-const totalUv = ref(0)
-
-const formatNumber = (num) => {
-  if (num >= 10000) {
-    return (num / 10000).toFixed(1) + 'w'
-  } else if (num >= 1000) {
-    return (num / 1000).toFixed(1) + 'k'
-  }
-  return num.toString()
-}
-
-const updateStats = () => {
-  const today = getTodayStats()
-  const total = getRealTimeStats()
-  todayPv.value = today.pv
-  todayUv.value = today.uv
-  totalPv.value = total.pv
-  totalUv.value = total.uv
-}
 
 const parseFollowersValue = (followersStr) => {
   if (!followersStr) return 0
@@ -652,12 +607,9 @@ const scrollToBloggerTeam = () => {
   }
 }
 
-// 页面加载时记录访问统计并更新数据显示
+// 页面加载时记录访问
 onMounted(() => {
   recordPageView()
-  updateStats()
-  // 每30秒刷新一次统计数据
-  setInterval(updateStats, 30000)
 })
 </script>
 

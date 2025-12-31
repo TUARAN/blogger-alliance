@@ -97,45 +97,6 @@ git push origin feature/add-blogger-你的名字
 - ✅ 愿意分享真实的技术经验和产品使用心得
 - ✅ 认同我们的价值观：真实、专业、有温度
 
-### 🐛 提 Issue 指南
-
-如果你有其他建议或发现问题，欢迎提 Issue：
-
-#### Issue 类型
-- 🐛 **Bug 报告** - 网站功能问题
-- 💡 **功能建议** - 新功能或改进建议
-- 📝 **文档改进** - README 或文档相关
-- 🤝 **联盟相关** - 关于联盟运营的建议
-- ❓ **问题咨询** - 其他问题
-
-#### Issue 模板
-```markdown
-## 问题类型
-- [ ] Bug 报告
-- [ ] 功能建议
-- [ ] 文档改进
-- [ ] 联盟相关
-- [ ] 问题咨询
-
-## 详细描述
-请详细描述你的问题或建议...
-
-## 期望结果
-你希望看到什么样的结果？
-
-## 其他信息
-任何其他相关信息...
-```
-
-### 📞 联系我们
-
-- 📧 邮箱：tuaran666@gmail.com
-- 💬 微信群：添加微信 atar24 邀请进入
-
-- 🐦 微博：@BloggerAlliance
-
----
-
 ## 🤝 我们和其他 IT KOL 的区别？
 
 | 传统 IT KOL | Blogger Alliance |
@@ -147,35 +108,6 @@ git push origin feature/add-blogger-你的名字
 
 我们强调的是「创作力」+「信任力」+「转化力」。
 
-
-## 📁 目录结构
-
-```
-blogger-alliance/
-├── src/
-│   ├── pages/                     # 页面模块
-│   │   ├── tob/                   # ToB 推广服务页面
-│   │   │   └── index.vue
-│   │   └── toc/                   # ToC 博主合伙人和工具库页面
-│   │       └── index.vue
-│   ├── views/                     # 视图组件
-│   │   ├── Home.vue               # 首页 - 平台概览
-│   │   ├── Tools.vue              # 工具库页面
-│   │   └── About.vue              # 关于页面
-│   ├── data/
-│   │   └── bloggerInfo.js         # 博主信息数据
-│   ├── components/                # 通用组件
-│   ├── utils/                     # 工具函数
-│   ├── App.vue                    # 根组件
-│   ├── main.js                    # 入口文件
-│   └── style.css                  # 全局样式
-├── .github/                       # GitHub 配置文件
-├── index.html
-├── package.json
-├── vite.config.js
-├── tailwind.config.js
-└── README.md
-```
 
 ## 🤝 贡献
 

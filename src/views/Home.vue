@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-blue-50 to-green-100 flex flex-col">
-    <!-- 简洁统计条 -->
-    <SimpleStatsBar />
     <!-- Hero 区域 -->
     <section class="flex-1 flex flex-col justify-center items-center section-mobile">
       <div class="container-mobile max-w-4xl mx-auto text-center">
@@ -230,7 +228,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import SimpleStatsBar from '../components/SimpleStatsBar.vue'
 import DetailedStats from '../components/DetailedStats.vue'
 import { trackButtonClick, trackLinkClick } from '../utils/hybridStats.js'
 import { getBloggerStats } from '../utils/analytics.js'
