@@ -211,20 +211,95 @@
 
     <!-- 博主团队展示 -->
     <section id="blogger-team" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-          我们的博主团队名单
-        </h2>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-          专业的技术博主团队，覆盖前端、后端、AI、移动开发等多个技术领域
-        </p>
-
+      <div class="text-center mb-10">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">我们的博主团队名单</h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">专业的技术博主团队，覆盖前端、后端、AI、移动开发等多个技术领域</p>
       </div>
-      
-      <!-- 博主卡片 -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+
+      <!-- 控制栏：筛选与视图切换 -->
+      <div class="mb-8 flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+        <!-- 左侧：筛选器 -->
+        <div class="flex flex-wrap items-center gap-4 w-full md:w-auto">
+          <!-- 平台筛选 -->
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-500 whitespace-nowrap">筛选平台:</span>
+            <select
+              v-model="selectedPlatform"
+              class="block w-40 pl-3 pr-10 h-10 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md border"
+            >
+              <option value="all">全部平台</option>
+              <option v-for="platform in availablePlatforms" :key="platform" :value="platform">
+                {{ platform }}
+              </option>
+            </select>
+          </div>
+
+          <!-- 排序筛选 (统一交互) -->
+          <div class="flex items-center gap-2">
+            <span class="text-sm text-gray-500 whitespace-nowrap">排序:</span>
+            <select
+              v-model="sortField"
+              @change="sortOrder = 'desc'"
+              class="block w-32 pl-3 pr-10 h-10 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md border"
+            >
+              <option value="default">默认</option>
+              <option value="followers">粉丝数</option>
+              <option value="name">姓名</option>
+            </select>
+            <button
+              @click="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'"
+              class="flex items-center justify-center w-10 h-10 text-gray-500 hover:text-indigo-600 border border-gray-300 rounded-md transition-colors bg-white shadow-sm"
+              title="切换升序/降序"
+              v-if="sortField !== 'default'"
+            >
+              <span class="text-lg leading-none">{{ sortOrder === "asc" ? "⬆️" : "⬇️" }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 右侧：全局操作 -->
+        <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+          <!-- 导出/复制按钮 (仅在表格模式下显示) -->
+          <button
+            v-if="viewMode === 'table'"
+            @click="copyTableToClipboard"
+            class="inline-flex items-center px-4 h-10 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all"
+            title="复制当前表格数据到剪贴板，可直接粘贴到Excel"
+          >
+            <span class="mr-2">📋</span>
+            复制表格数据
+          </button>
+
+          <div class="h-6 w-px bg-gray-200 mx-1 hidden md:block"></div>
+
+          <!-- 视图切换按钮 -->
+          <div class="flex bg-gray-100 p-1 rounded-lg shrink-0">
+            <button
+              @click="viewMode = 'grid'"
+              class="px-3 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-1"
+              :class="viewMode === 'grid' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+            >
+              <span>📷</span>
+              <span class="hidden sm:inline">卡片</span>
+            </button>
+            <button
+              @click="viewMode = 'table'"
+              class="px-3 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-1"
+              :class="viewMode === 'table' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+            >
+              <span>📋</span>
+              <span class="hidden sm:inline">表格</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 视图内容 -->
+
+      <!-- 1. 卡片视图 (Grid View) -->
+      <div v-if="viewMode === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
         <div
-          v-for="blogger in bloggers"
+          v-for="blogger in filteredAndSortedBloggers"
           :key="blogger.id"
           class="group bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 flex flex-col h-full"
         >
@@ -385,6 +460,106 @@
           </div>
         </div>
       </div>
+
+      <!-- 2. 表格视图 (Table View) -->
+      <div v-else class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200 table-fixed">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  class="w-56 px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-indigo-600 select-none sticky left-0 bg-gray-50 z-10 shadow-[2px_0_5px_rgba(0,0,0,0.05)]"
+                  @click="toggleSort('name')"
+                >
+                  博主信息
+                  <span v-if="sortField === 'name'" class="ml-1">{{ sortOrder === "asc" ? "⬆" : "⬇" }}</span>
+                </th>
+                <th scope="col" class="w-40 px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider select-none text-gray-400">
+                  粉丝基数
+                </th>
+                <th scope="col" class="w-80 px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">擅长领域</th>
+                <th scope="col" class="w-96 px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider hidden md:table-cell">
+                  个人简介
+                </th>
+                <!-- 动态生成平台表头 -->
+                <th
+                  v-for="platform in availablePlatforms"
+                  :key="platform"
+                  scope="col"
+                  class="w-64 px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider border-l border-gray-100"
+                >
+                  {{ platform }}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="blogger in filteredAndSortedBloggers" :key="blogger.id" class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white group-hover:bg-gray-50 z-10 shadow-[2px_0_5px_rgba(0,0,0,0.05)]">
+                  <div class="flex items-center">
+                    <div class="flex-shrink-0 h-10 w-10">
+                      <img class="h-10 w-10 rounded-full border border-gray-200 object-cover" :src="blogger.avatar" :alt="blogger.name" />
+                    </div>
+                    <div class="ml-4">
+                      <div class="text-sm font-medium text-gray-900">
+                        {{ blogger.name }}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <span class="text-sm font-bold text-indigo-600">{{ blogger.followers }}</span>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex flex-wrap gap-1">
+                    <span
+                      v-for="(specialty, idx) in blogger.expandedContent.specialties.slice(0, 3)"
+                      :key="idx"
+                      class="px-2 py-0.5 text-xs font-medium rounded-full bg-blue-50 text-blue-700"
+                    >
+                      {{ specialty }}
+                    </span>
+                    <span v-if="blogger.expandedContent.specialties.length > 3" class="text-xs text-gray-400">...</span>
+                  </div>
+                </td>
+                <td class="px-6 py-4 hidden md:table-cell">
+                  <div class="text-sm text-gray-500 line-clamp-2 max-w-xs" :title="blogger.introduction">
+                    {{ blogger.introduction }}
+                  </div>
+                </td>
+                <!-- 动态生成平台数据 -->
+                <td v-for="platform in availablePlatforms" :key="platform" class="px-6 py-4 whitespace-nowrap">
+                  <div v-if="getAccountByPlatform(blogger, platform)" class="flex items-center gap-1.5">
+                    <span class="text-lg">{{ getAccountByPlatform(blogger, platform).icon }}</span>
+                    <a
+                      :href="getAccountByPlatform(blogger, platform).url"
+                      target="_blank"
+                      class="text-sm text-indigo-400 hover:text-indigo-600 underline truncate max-w-[120px] transition-colors"
+                      :title="getAccountByPlatform(blogger, platform).url"
+                      @click="
+                        handleLinkClick(getAccountByPlatform(blogger, platform).platform, getAccountByPlatform(blogger, platform).url, blogger.name)
+                      "
+                    >
+                      {{
+                        getAccountByPlatform(blogger, platform).platform.includes(":")
+                          ? getAccountByPlatform(blogger, platform).platform.split(":")[1]
+                          : "点击查看"
+                      }}
+                    </a>
+                  </div>
+                  <span v-else class="text-gray-300 text-xs">-</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- 空状态提示 -->
+          <div v-if="filteredAndSortedBloggers.length === 0" class="p-8 text-center text-gray-500">没有找到匹配的博主，请尝试其他关键词。</div>
+        </div>
+        <div class="bg-gray-50 px-6 py-3 border-t border-gray-200 text-xs text-center text-gray-500">
+          提示：您可以直接复制表格内容，并粘贴到 Excel、Notion 或飞书中。
+        </div>
+      </div>
     </section>
 
     <!-- 服务亮点展示 -->
@@ -538,7 +713,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { bloggersData } from '../../data/bloggerInfo.js'
 import { trackLinkClick } from '../../utils/hybridStats.js'
 import { getBloggerStats } from '../../utils/analytics.js'
@@ -600,10 +775,130 @@ const handleLinkClick = (platform, url, bloggerName) => {
 const scrollToBloggerTeam = () => {
   const element = document.getElementById('blogger-team')
   if (element) {
-    element.scrollIntoView({ 
+    element.scrollIntoView({
       behavior: 'smooth',
       block: 'start'
     })
+  }
+}
+
+// --- 列表/表格视图与筛选排序逻辑 ---
+const viewMode = ref("grid"); // 'grid' | 'table'
+const selectedPlatform = ref("all"); // 平台筛选
+const sortField = ref("default"); // 'default' | 'followers' | 'name'
+const sortOrder = ref("desc"); // 'asc' | 'desc'
+
+// 静态定义的常用平台，用于表头排序
+const staticPlatforms = ["掘金", "GitHub", "CSDN", "知乎", "微信公众号"];
+
+// 计算所有出现在数据中的唯一平台（分组处理）
+const availablePlatforms = computed(() => {
+  const platforms = new Set();
+  bloggersData.forEach((blogger) => {
+    blogger.socialAccounts.forEach((acc) => {
+      let p = acc.platform;
+      if (p.includes("微信公众号")) p = "微信公众号";
+      if (p.includes("腾讯云")) p = "腾讯云";
+      platforms.add(p);
+    });
+  });
+
+  const list = Array.from(platforms);
+  return list.sort((a, b) => {
+    const idxA = staticPlatforms.indexOf(a);
+    const idxB = staticPlatforms.indexOf(b);
+    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+    if (idxA !== -1) return -1;
+    if (idxB !== -1) return 1;
+    return a.localeCompare(b);
+  });
+});
+
+// 根据平台名称获取博主的账号信息（支持模糊匹配分组后的平台）
+const getAccountByPlatform = (blogger, platformName) => {
+  return blogger.socialAccounts.find((acc) => {
+    if (platformName === "微信公众号") return acc.platform.includes("微信公众号");
+    if (platformName === "腾讯云") return acc.platform.includes("腾讯云");
+    return acc.platform === platformName;
+  });
+};
+
+// 复制表格数据到剪贴板 (TSV格式，方便粘贴到Excel)
+const copyTableToClipboard = () => {
+  const headers = ["博主姓名", "粉丝基数", "擅长领域", "个人简介", ...availablePlatforms.value];
+
+  const rows = filteredAndSortedBloggers.value.map((blogger) => {
+    const rowData = [
+      blogger.name,
+      blogger.followers,
+      blogger.expandedContent.specialties.join(", "),
+      blogger.introduction.replace(/\n|\r/g, " "), // 简介放到领域后
+    ];
+
+    // 平台链接
+    availablePlatforms.value.forEach((p) => {
+      const acc = getAccountByPlatform(blogger, p);
+      rowData.push(acc ? acc.url : "-");
+    });
+
+    return rowData.join("\t");
+  });
+
+  const tsvHeader = headers.join("\t");
+  const tsvBody = rows.join("\n");
+  const finalContent = `${tsvHeader}\n${tsvBody}`;
+
+  navigator.clipboard
+    .writeText(finalContent)
+    .then(() => {
+      alert("✅ 表格数据已复制！\n\n您现在可以直接在 Excel、飞书或 Notion 中粘贴。");
+    })
+    .catch((err) => {
+      console.error("复制失败:", err);
+      alert("复制失败，请重试");
+    });
+};
+
+// 计算属性：筛选和排序后的博主列表
+const filteredAndSortedBloggers = computed(() => {
+  let result = [...bloggersData];
+
+  // 1. 平台筛选
+  if (selectedPlatform.value !== "all") {
+    result = result.filter((blogger) => getAccountByPlatform(blogger, selectedPlatform.value));
+  }
+
+  // 2. 排序
+  if (sortField.value !== "default") {
+    result.sort((a, b) => {
+      let valA, valB;
+
+      if (sortField.value === "followers") {
+        valA = parseFollowersValue(a.followers);
+        valB = parseFollowersValue(b.followers);
+      } else if (sortField.value === "name") {
+        valA = a.name;
+        valB = b.name;
+      }
+
+      if (valA < valB) return sortOrder.value === "asc" ? -1 : 1;
+      if (valA > valB) return sortOrder.value === "asc" ? 1 : -1;
+      return 0;
+    })
+  }
+
+  return result
+})
+
+// 处理排序点击
+const toggleSort = (field) => {
+  if (sortField.value === field) {
+    // 切换顺序
+    sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
+  } else {
+    // 切换字段，默认降序
+    sortField.value = field;
+    sortOrder.value = "desc";
   }
 }
 
