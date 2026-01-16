@@ -1,1 +1,0 @@
-import{a as o}from"./analytics-joBzzTZf.js";function a(t,n={}){o(t,{...n,timestamp:new Date().toISOString()}),console.log("User interaction tracked:",t,n)}function l(t,n=null){a("button_click",{button_name:t,page_path:n||window.location.pathname})}function k(t,n,i=null){a("link_click",{link_text:t,link_url:n,page_path:i||window.location.pathname})}export{l as a,k as t};
