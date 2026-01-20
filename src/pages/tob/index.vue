@@ -356,6 +356,15 @@
                   {{ account.platform }}
                 </span>
               </template>
+
+              <button
+                v-if="hasOnlyOnePlatform(blogger)"
+                type="button"
+                class="inline-flex items-center px-2.5 py-1 bg-gray-100 rounded-full text-xs text-indigo-600 whitespace-nowrap hover:bg-indigo-100 hover:text-indigo-700 transition-colors cursor-pointer"
+                @click.stop="openMoreDataModal(blogger)"
+              >
+                更多数据
+              </button>
             </div>
 
             <!-- 展开/收起按钮 -->
@@ -502,7 +511,7 @@
                     </div>
                     <div class="ml-4">
                       <div class="text-sm font-medium text-gray-900">
-                        {{ blogger.name }}
+                        <span>{{ blogger.name }}</span>
                       </div>
                     </div>
                   </div>
@@ -546,6 +555,15 @@
                           : "点击查看"
                       }}
                     </a>
+
+                    <button
+                      v-if="hasOnlyOnePlatform(blogger)"
+                      type="button"
+                      class="text-xs text-indigo-500 hover:text-indigo-700 underline ml-1"
+                      @click.stop="openMoreDataModal(blogger)"
+                    >
+                      更多数据
+                    </button>
                   </div>
                   <span v-else class="text-gray-300 text-xs">-</span>
                 </td>
@@ -709,6 +727,25 @@
       </div>
     </div>
 
+    <div v-if="moreDataModalOpen" class="fixed inset-0 z-[60] flex items-center justify-center p-4">
+      <div class="absolute inset-0 bg-black/40" @click="closeMoreDataModal"></div>
+      <div class="relative w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-200 p-6">
+        <div class="text-base font-semibold text-gray-900 mb-2">提示</div>
+        <div class="text-sm text-gray-600 leading-relaxed">
+          该博主尚未补全其他平台主页链接。补齐后即可展示更完整的影响力画像与覆盖人数。
+        </div>
+        <div class="mt-5 flex justify-end">
+          <button
+            type="button"
+            class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors"
+            @click="closeMoreDataModal"
+          >
+            知道了
+          </button>
+        </div>
+      </div>
+    </div>
+
 
 
 
@@ -729,6 +766,15 @@ const bloggers = ref(bloggersData)
 const expandedBloggers = ref([])
 const bloggerStats = ref(getBloggerStats())
 const trafficStats = computed(() => getRealTimeStats())
+
+const moreDataModalOpen = ref(false)
+const openMoreDataModal = () => {
+  moreDataModalOpen.value = true
+}
+const closeMoreDataModal = () => {
+  moreDataModalOpen.value = false
+}
+const hasOnlyOnePlatform = (blogger) => (blogger?.socialAccounts?.length ?? 0) === 1
 
 const parseFollowersValue = (followersStr) => {
   if (!followersStr) return 0
