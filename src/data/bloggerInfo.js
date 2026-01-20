@@ -440,7 +440,6 @@ export const bloggersData = [
     followers: '160K+',
     socialAccounts: [
       { platform: 'CSDN', url: 'https://xiaoxuzhu.blog.csdn.net/', icon: '💻' },
-      { platform: '掘金', url: 'https://juejin.cn/user/3747529825315230', icon: '📝' },
     ],
     expandedContent: {
       specialties: ['云原生', '后端架构', '开源分享'],
@@ -535,7 +534,6 @@ export const bloggersData = [
     followers: '100K+',
     socialAccounts: [
       { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_51390582', icon: '💻' },
-      { platform: '掘金', url: 'https://juejin.cn/user/3000787314294461', icon: '📝' },
     ],
     expandedContent: {
       specialties: ['全栈开发', '产品实战', '内容创作'],
