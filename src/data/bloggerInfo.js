@@ -5,9 +5,10 @@ export const bloggersData = [
     name: '掘金安东尼',
     avatar: 'https://p3-passport.byteacctimg.com/img/user-avatar/99b34a64642e38fd8e8b130e40956cd2~80x80.awebp',
     introduction: '多平台技术博主、掘金7级作者、社区共建者、签约作者、51CTO专家博主、文章400余篇、阅读量200余万、机械工业《程序员成长手记》作者、《扣子指南小册》作者',
-    followers: '15K+',
+    followers: '25K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/1521379823340792', icon: '📝' },
+      { platform: '小红书', url: 'https://xhslink.com/m/A9YGT5oW76h', icon: '📕' },
       { platform: 'GitHub', url: 'https://github.com/TUARAN', icon: '🐙' },
       { platform: '51CTO', url: 'https://blog.51cto.com/u_13961087', icon: '💻' },
       { platform: '头条', url: 'https://www.toutiao.com/c/user/token/CiytHKMTSTLr9UjjPapQfQgP0Qtz-mo_r7SZ-9a-vjhHMpxe4Zf0NZ5nXMww0BpJCjwAAAAAAAAAAAAATzLFgylPHFsiAK3qyEAfRlTqWH9UNxHBykjYOQGlKESnc18eU1QTS8cwMB6HSurHYfYQvfn1DRjDxYPqBCIBA2ciM6E=/?source=list&log_from=d3cb457759bbb_1751732899254', icon: '📰' },
@@ -112,24 +113,6 @@ export const bloggersData = [
     },
   },
   {
-    id: 7,
-    name: 'MiyueFE',
-    avatar: 'https://p26-passport.byteacctimg.com/img/user-avatar/afcc0b5364cba06f7814368d1f44fc11~180x180.awebp',
-    introduction: '前端开发工程师，多平台活跃博主，掘金5级，文章100+篇，GitHub 2k+ star',
-    followers: '4K+',
-    socialAccounts: [
-      { platform: '掘金', url: 'https://juejin.cn/user/747323639208391', icon: '📝' },
-      { platform: 'GitHub', url: 'https://github.com/miyuesc', icon: '🐙' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_43359503', icon: '💻' },
-      { platform: '微信公众号', url: 'https://mp.weixin.qq.com/s/miyuefe_wechat', icon: '🌏' },
-    ],
-    expandedContent: {
-      specialties: ['技术分享', '多平台运营', '社区建设', '技术写作'],
-      achievements: ['专家博主', '文章100+篇', '技术文章作者', '开源爱好者'],
-      recentPosts: ['什么可以帮助你在前端面试中取得成功', '让我害怕的 TypeScript 类型', '深入浅出Babel插件开发']
-    },
-  },
-  {
     id: 8,
     name: 'XiaomingX',
     avatar: 'https://api.dicebear.com/7.x/pixel-art/svg?seed=cloud&backgroundColor=00ced1',
@@ -156,7 +139,6 @@ export const bloggersData = [
       { platform: '掘金', url: 'https://juejin.cn/user/3131035352311646', icon: '📝' },
       { platform: 'GitHub', url: 'https://github.com/linweiqian', icon: '🐙' },
       { platform: '知乎', url: 'https://www.zhihu.com/people/rrskeo', icon: '💻' },
-      { platform: '微信公众号', url: '-', icon: '🌏' },
       { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_40808668?spm=1000.2115.3001.5343', icon: '💻' }
     ],
     expandedContent: {
@@ -247,7 +229,6 @@ export const bloggersData = [
     followers: '8.2K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/1714893870865303', icon: '📝' },
-      { platform: '微信公众号', url: '-', icon: '🌏' }
     ],
     expandedContent: {
       specialties: ['编程技术', '职场成长', '效率工具'],
@@ -263,8 +244,6 @@ export const bloggersData = [
     followers: '10K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/1574156383557255', icon: '📝' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' },
-      { platform: '微信公众号', url: '-', icon: '🌏' }
     ],
     expandedContent: {
       specialties: ['后端开发', '安全实践', '技术写作'],
@@ -279,7 +258,6 @@ export const bloggersData = [
     introduction: '云原生方向创作者，专注分享工程实践与架构经验，用真实案例帮助开发者成长。',
     followers: '7K+',
     socialAccounts: [
-      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' },
       { platform: '腾讯云', url: 'https://cloud.tencent.com/developer/user', icon: '☁️' }
     ],
     expandedContent: {
@@ -296,8 +274,6 @@ export const bloggersData = [
     followers: '3.1K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/787689310784280', icon: '📝' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' },
-      { platform: '微信公众号', url: '-', icon: '🌏' }
     ],
     expandedContent: {
       specialties: ['全栈开发', '前端工程化', '技术写作'],
@@ -313,8 +289,6 @@ export const bloggersData = [
     followers: '3K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/3843548383296686', icon: '📝' },
-      { platform: 'InfoQ', url: 'https://www.infoq.cn/', icon: '📚' },
-      { platform: 'B站', url: 'https://space.bilibili.com/', icon: '📺' }
     ],
     expandedContent: {
       specialties: ['全栈开发', '架构设计', '团队协作'],
@@ -330,7 +304,6 @@ export const bloggersData = [
     followers: '12K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/4394083322176301', icon: '📝' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' }
     ],
     expandedContent: {
       specialties: ['前端开发', '工程化', '可视化'],
@@ -346,7 +319,6 @@ export const bloggersData = [
     followers: '3.1K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/1468603264933742', icon: '📝' },
-      { platform: '微信公众号', url: '-', icon: '🌏' }
     ],
     expandedContent: {
       specialties: ['前端开发', '效率工具', '技术写作'],
@@ -378,8 +350,6 @@ export const bloggersData = [
     followers: '2.6K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/1011206428562957', icon: '📝' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' },
-      { platform: '微信公众号', url: '-', icon: '🌏' }
     ],
     expandedContent: {
       specialties: ['编程技术', '职场成长', '学习方法'],
@@ -395,8 +365,6 @@ export const bloggersData = [
     followers: '44K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/1688472903498189', icon: '📝' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' },
-      { platform: '微信公众号', url: '-', icon: '🌏' }
     ],
     expandedContent: {
       specialties: ['前端开发', '职场故事', '效率工具'],
@@ -427,8 +395,6 @@ export const bloggersData = [
     followers: '6.0K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/2805609406402798', icon: '📝' },
-      { platform: '知乎', url: 'https://www.zhihu.com/', icon: '📚' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' }
     ],
     expandedContent: {
       specialties: ['前端可视化', 'WebGL', '三维图形'],
@@ -444,8 +410,6 @@ export const bloggersData = [
     followers: '47K+',
     socialAccounts: [
       { platform: '掘金', url: 'https://juejin.cn/user/4283353031252967', icon: '📝' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' },
-      { platform: '微信公众号', url: '-', icon: '🌏' }
     ],
     expandedContent: {
       specialties: ['后端架构', '职业规划', '技术写作'],
@@ -460,7 +424,6 @@ export const bloggersData = [
     introduction: '知名前端创作者，擅长以浅显易懂的方式讲解底层原理。',
     followers: '64K+',
     socialAccounts: [
-      { platform: '微信公众号:前端之神', url: 'https://mp.weixin.qq.com/', icon: '🌏' },
       { platform: '掘金', url: 'https://juejin.cn/user/129268140737766', icon: '📝' }
     ],
     expandedContent: {
@@ -478,8 +441,6 @@ export const bloggersData = [
     socialAccounts: [
       { platform: 'CSDN', url: 'https://xiaoxuzhu.blog.csdn.net/', icon: '💻' },
       { platform: '掘金', url: 'https://juejin.cn/user/3747529825315230', icon: '📝' },
-      { platform: '知乎', url: 'https://www.zhihu.com/', icon: '📚' },
-      { platform: '微信公众号', url: '-', icon: '🌏' }
     ],
     expandedContent: {
       specialties: ['云原生', '后端架构', '开源分享'],
@@ -496,7 +457,6 @@ export const bloggersData = [
     socialAccounts: [
       { platform: 'X(Twitter)', url: 'https://twitter.com/', icon: '🐦' },
       { platform: '掘金', url: 'https://juejin.cn/user/2875978147692910', icon: '📝' },
-      { platform: 'CSDN', url: 'https://blog.csdn.net/', icon: '💻' }
     ],
     expandedContent: {
       specialties: ['AI 应用', '前端开发', '效率工具'],
@@ -511,7 +471,6 @@ export const bloggersData = [
     introduction: '专注 AI 代码助手与自动化实践，帮助开发者提升编码效率。',
     followers: '3.5K+',
     socialAccounts: [
-      { platform: '微信公众号:前端周看', url: 'https://mp.weixin.qq.com/', icon: '🌏' },
       { platform: 'CSDN', url: 'https://blog.csdn.net/aifs2025', icon: '💻' }
     ],
     expandedContent: {
@@ -529,7 +488,6 @@ export const bloggersData = [
     socialAccounts: [
       { platform: '小红书', url: 'https://www.xiaohongshu.com/', icon: '📘' },
       { platform: '视频号', url: 'https://channels.weixin.qq.com/', icon: '🎬' },
-      { platform: '微信公众号:农码开花', url: 'https://mp.weixin.qq.com/', icon: '🌏' }
     ],
     expandedContent: {
       specialties: ['技术科普', '商业洞察', '品牌故事'],
@@ -545,7 +503,6 @@ export const bloggersData = [
     followers: '100K+',
     socialAccounts: [
       { platform: 'CSDN', url: 'https://blog.csdn.net/WTYuong', icon: '💻' },
-      { platform: '微信公众号', url: '-', icon: '🌏' },
       { platform: '腾讯云', url: 'https://cloud.tencent.com/developer/user', icon: '☁️' }
     ],
     expandedContent: {
@@ -563,7 +520,6 @@ export const bloggersData = [
     socialAccounts: [
       { platform: 'CSDN', url: 'https://strive-forward.blog.csdn.net/', icon: '💻' },
       { platform: '掘金', url: 'https://juejin.cn/user/299965585059223', icon: '📝' },
-      { platform: '微信公众号', url: '-', icon: '🌏' }
     ],
     expandedContent: {
       specialties: ['后端开发', '数据结构', '系统设计'],
@@ -580,7 +536,6 @@ export const bloggersData = [
     socialAccounts: [
       { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_51390582', icon: '💻' },
       { platform: '掘金', url: 'https://juejin.cn/user/3000787314294461', icon: '📝' },
-      { platform: '微信公众号', url: '-', icon: '🌏' }
     ],
     expandedContent: {
       specialties: ['全栈开发', '产品实战', '内容创作'],
@@ -621,6 +576,115 @@ export const bloggersData = [
       specialties: ['全栈开发', 'AI编程', '技术写作', 'Serverless'],
       achievements: ['掘金6级-优秀创作者', '文章170+余篇', '阅读量90w+', '持续内容创作者'],
       recentPosts: ['2025快手直播至暗时刻', '为什么永远不要相信前端输入？', '检测开发者工具是否打开？']
+    }
+  },
+  {
+    id: 7,
+    name: 'MiyueFE',
+    avatar: 'https://p26-passport.byteacctimg.com/img/user-avatar/afcc0b5364cba06f7814368d1f44fc11~180x180.awebp',
+    introduction: '前端开发工程师，多平台活跃博主，掘金5级，文章100+篇，GitHub 2k+ star',
+    followers: '4K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/747323639208391', icon: '📝' },
+      { platform: 'GitHub', url: 'https://github.com/miyuesc', icon: '🐙' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_43359503', icon: '💻' },
+      { platform: '微信公众号', url: 'https://mp.weixin.qq.com/s/miyuefe_wechat', icon: '🌏' },
+    ],
+    expandedContent: {
+      specialties: ['技术分享', '多平台运营', '社区建设', '技术写作'],
+      achievements: ['专家博主', '文章100+篇', '技术文章作者', '开源爱好者'],
+      recentPosts: ['什么可以帮助你在前端面试中取得成功', '让我害怕的 TypeScript 类型', '深入浅出Babel插件开发']
+    },
+  },
+  // 追加：来自 Excel（广池_博主联盟&FinclipV20260119.xlsx / up主to昕屹20260106）里「当前 bloggersData 未包含」的博主
+  {
+    id: 37,
+    name: 'AI 你放心',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=ai_you_fangxin&backgroundColor=F2F5F9',
+    introduction: '小红书创作者，专注编程技术方向内容输出。',
+    followers: '10K+',
+    socialAccounts: [
+      { platform: '小红书', url: 'https://www.xiaohongshu.com/user/profile/65868423000000003d03655c', icon: '📕' }
+    ],
+    expandedContent: {
+      specialties: ['编程技术'],
+      achievements: ['小红书创作者', '粉丝10000+'],
+      recentPosts: ['编程技巧分享', '实战案例复盘', '学习路线与工具推荐']
+    }
+  },
+  {
+    id: 38,
+    name: '技术机觉授',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=jishu_jijueshou&backgroundColor=F2F5F9',
+    introduction: '小红书创作者，聚焦 AI 大模型方向，偏应用与实践分享。',
+    followers: '10K+',
+    socialAccounts: [
+      { platform: '小红书', url: 'https://www.xiaohongshu.com/user/profile/66093ef0000000000d024720', icon: '📕' }
+    ],
+    expandedContent: {
+      specialties: ['AI大模型'],
+      achievements: ['小红书创作者', '粉丝10000+'],
+      recentPosts: ['大模型工具链体验', 'AI 应用落地案例', '提示词与工作流分享']
+    }
+  },
+  {
+    id: 39,
+    name: '艾伦的AI课堂',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=allen_ai_class&backgroundColor=F2F5F9',
+    introduction: '小红书创作者，专注 AI 大模型学习与实操内容。',
+    followers: '10K+',
+    socialAccounts: [
+      { platform: '小红书', url: 'https://xhslink.com/m/6tP5ikPcqu8', icon: '📕' }
+    ],
+    expandedContent: {
+      specialties: ['AI大模型'],
+      achievements: ['小红书创作者', '粉丝10000+'],
+      recentPosts: ['大模型入门路径', '常用工具实操', '应用案例拆解']
+    }
+  },
+  {
+    id: 40,
+    name: 'K总科技洞见',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=kzong_tech&backgroundColor=F2F5F9',
+    introduction: '小红书创作者，关注 AI 大模型趋势与技术洞见。',
+    followers: '2K+',
+    socialAccounts: [
+      { platform: '小红书', url: 'https://xhslink.com/m/1qxox59FEVj', icon: '📕' }
+    ],
+    expandedContent: {
+      specialties: ['AI大模型'],
+      achievements: ['小红书创作者', '粉丝2000+'],
+      recentPosts: ['模型能力观察', 'AI 工具对比', '落地方案思路']
+    }
+  },
+  {
+    id: 41,
+    name: '图说IT',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=tushuo_it&backgroundColor=F2F5F9',
+    introduction: '小红书创作者，偏图解风格输出 AI 大模型相关内容。',
+    followers: '1K+',
+    socialAccounts: [
+      { platform: '小红书', url: 'https://xhslink.com/m/7tJ9OBz9MBn', icon: '📕' }
+    ],
+    expandedContent: {
+      specialties: ['AI大模型'],
+      achievements: ['小红书创作者', '粉丝1000+'],
+      recentPosts: ['图解概念科普', '工具链梳理', '案例拆解速读']
+    }
+  },
+  {
+    id: 42,
+    name: '虫虫的Ai学习笔记',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=chongchong_ai_notes&backgroundColor=F2F5F9',
+    introduction: '小红书创作者，记录 AI 大模型学习笔记与实操过程。',
+    followers: '1K+',
+    socialAccounts: [
+      { platform: '小红书', url: 'https://xhslink.com/m/AQKqWYrNatX', icon: '📕' }
+    ],
+    expandedContent: {
+      specialties: ['AI大模型'],
+      achievements: ['小红书创作者', '粉丝1000+'],
+      recentPosts: ['学习笔记沉淀', '踩坑记录', '工具使用心得']
     }
   }
 ]

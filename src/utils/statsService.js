@@ -91,22 +91,39 @@ export function recordPageView() {
 // 获取实时统计数据
 export function getRealTimeStats() {
   const stats = getStats()
+
+  const hostname = typeof window !== 'undefined' ? window.location.hostname : ''
+  const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1'
+  if (isLocalhost) {
+    return {
+      pv: stats.pv,
+      uv: stats.uv,
+      pagePv: 0,
+      timestamp: stats.lastUpdate,
+      source: 'local',
+      loading: false
+    }
+  }
   
   // 如果不蒜子数据已加载，优先使用不蒜子数据作为总数
   if (busuanziStats.sitePv > 0) {
     return {
       pv: busuanziStats.sitePv,
       uv: busuanziStats.siteUv,
+      pagePv: busuanziStats.pagePv,
       timestamp: new Date().toISOString(),
-      source: 'busuanzi'
+      source: 'busuanzi',
+      loading: busuanziStats.loading
     }
   }
 
   return {
     pv: stats.pv,
     uv: stats.uv,
+    pagePv: 0,
     timestamp: stats.lastUpdate,
-    source: 'local'
+    source: 'local',
+    loading: false
   }
 }
 

@@ -18,7 +18,7 @@
               href="https://matrix-alliance.pages.dev/"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-1.5 text-indigo-600 hover:text-indigo-700 transition-colors font-semibold text-base"
+              class="inline-flex items-center gap-1.5 text-green-600 hover:text-green-700 transition-colors font-semibold text-base"
             >
               <span class="text-base leading-none">✴</span>
               <span>矩阵联盟</span>
@@ -672,6 +672,11 @@
       </div>
     </section>
 
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 text-center text-xs text-gray-500">
+      <span v-if="trafficStats.loading">流量统计加载中...</span>
+      <span v-else>总PV {{ trafficStats.pv }} · 总UV {{ trafficStats.uv }} · 本页PV {{ trafficStats.pagePv }}</span>
+    </div>
+
     <!-- 右下角二维码 -->
     <div class="fixed bottom-6 right-6 z-50">
       <div class="relative animate-float">
@@ -687,7 +692,7 @@
           
           <div class="bg-gray-50 p-2 rounded-xl mb-2">
             <img 
-              src="/src/img/qrcode.jpg" 
+              src="/src/img/qrcode1.jpg" 
               alt="微信二维码" 
               class="w-full h-auto rounded-lg object-contain"
               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
@@ -717,12 +722,13 @@ import { ref, onMounted, computed } from 'vue'
 import { bloggersData } from '../../data/bloggerInfo.js'
 import { trackLinkClick } from '../../utils/hybridStats.js'
 import { getBloggerStats } from '../../utils/analytics.js'
-import { recordPageView } from '../../utils/statsService.js'
+import { getRealTimeStats, recordPageView } from '../../utils/statsService.js'
 
 // 响应式数据 - 直接初始化数据，无需加载状态
 const bloggers = ref(bloggersData)
 const expandedBloggers = ref([])
 const bloggerStats = ref(getBloggerStats())
+const trafficStats = computed(() => getRealTimeStats())
 
 const parseFollowersValue = (followersStr) => {
   if (!followersStr) return 0
@@ -753,6 +759,15 @@ const isKOL = (followersStr) => parseFollowersValue(followersStr) > KOL_THRESHOL
 const isKOC = (followersStr) => {
   const value = parseFollowersValue(followersStr)
   return value > 0 && value <= KOL_THRESHOLD
+}
+
+const hasExplicitAvatar = (blogger) => {
+  const avatar = blogger?.avatar
+  if (typeof avatar !== 'string') return false
+  const trimmed = avatar.trim()
+  if (!trimmed) return false
+  // dicebear 是占位头像，不算“明确头像”
+  return !trimmed.includes('dicebear.com')
 }
 
 // 切换展开状态
@@ -787,6 +802,9 @@ const viewMode = ref("grid"); // 'grid' | 'table'
 const selectedPlatform = ref("all"); // 平台筛选
 const sortField = ref("default"); // 'default' | 'followers' | 'name'
 const sortOrder = ref("desc"); // 'asc' | 'desc'
+
+const bloggerOrderIndex = new Map(bloggersData.map((blogger, index) => [blogger.id, index]))
+const getBloggerOriginalIndex = (blogger) => bloggerOrderIndex.get(blogger.id) ?? Number.MAX_SAFE_INTEGER
 
 // 静态定义的常用平台，用于表头排序
 const staticPlatforms = ["掘金", "GitHub", "CSDN", "知乎", "微信公众号"];
@@ -869,7 +887,26 @@ const filteredAndSortedBloggers = computed(() => {
   }
 
   // 2. 排序
-  if (sortField.value !== "default") {
+  if (sortField.value === "default") {
+    // 默认排序：明确头像优先；有头像时 KOL 在前、KOC 在后（组内保持原顺序）；无明确头像按粉丝量降序
+    result.sort((a, b) => {
+      const hasA = hasExplicitAvatar(a)
+      const hasB = hasExplicitAvatar(b)
+
+      if (hasA !== hasB) return hasA ? -1 : 1
+
+      if (hasA && hasB) {
+        const tierA = isKOL(a.followers) ? 0 : isKOC(a.followers) ? 1 : 2
+        const tierB = isKOL(b.followers) ? 0 : isKOC(b.followers) ? 1 : 2
+        if (tierA !== tierB) return tierA - tierB
+        return getBloggerOriginalIndex(a) - getBloggerOriginalIndex(b)
+      }
+
+      const followersDiff = parseFollowersValue(b.followers) - parseFollowersValue(a.followers)
+      if (followersDiff !== 0) return followersDiff
+      return getBloggerOriginalIndex(a) - getBloggerOriginalIndex(b)
+    })
+  } else {
     result.sort((a, b) => {
       let valA, valB;
 
