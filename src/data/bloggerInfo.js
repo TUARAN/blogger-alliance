@@ -313,7 +313,7 @@ export const bloggersData = [
   },
   {
     id: 20,
-    name: 'J',
+    name: '阿杰的人生路',
     avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=authorJ&backgroundColor=EEF2FF',
     introduction: '专注现代 Web 技术的创作者，关注效率工具与开发者成长。',
     followers: '3.1K+',
@@ -424,7 +424,7 @@ export const bloggersData = [
     introduction: '知名前端创作者，擅长以浅显易懂的方式讲解底层原理。',
     followers: '64K+',
     socialAccounts: [
-      { platform: '掘金', url: 'https://juejin.cn/user/129268140737766', icon: '📝' }
+      { platform: '掘金', url: 'https://juejin.cn/user/1292681407377624', icon: '📝' }
     ],
     expandedContent: {
       specialties: ['前端底层原理', '知识体系', '职业成长'],
@@ -518,7 +518,6 @@ export const bloggersData = [
     followers: '70K+',
     socialAccounts: [
       { platform: 'CSDN', url: 'https://strive-forward.blog.csdn.net/', icon: '💻' },
-      { platform: '掘金', url: 'https://juejin.cn/user/299965585059223', icon: '📝' },
     ],
     expandedContent: {
       specialties: ['后端开发', '数据结构', '系统设计'],
@@ -586,7 +585,6 @@ export const bloggersData = [
       { platform: '掘金', url: 'https://juejin.cn/user/747323639208391', icon: '📝' },
       { platform: 'GitHub', url: 'https://github.com/miyuesc', icon: '🐙' },
       { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_43359503', icon: '💻' },
-      { platform: '微信公众号', url: 'https://mp.weixin.qq.com/s/miyuefe_wechat', icon: '🌏' },
     ],
     expandedContent: {
       specialties: ['技术分享', '多平台运营', '社区建设', '技术写作'],
