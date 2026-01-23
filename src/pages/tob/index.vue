@@ -363,7 +363,7 @@
                 class="inline-flex items-center px-2.5 py-1 bg-gray-100 rounded-full text-xs text-indigo-600 whitespace-nowrap hover:bg-indigo-100 hover:text-indigo-700 transition-colors cursor-pointer"
                 @click.stop="openMoreDataModal(blogger)"
               >
-                更多数据
+                平台补全中
               </button>
             </div>
 
@@ -562,7 +562,7 @@
                       class="text-xs text-indigo-500 hover:text-indigo-700 underline ml-1"
                       @click.stop="openMoreDataModal(blogger)"
                     >
-                      更多数据
+                      平台补全中
                     </button>
                   </div>
                   <span v-else class="text-gray-300 text-xs">-</span>
