@@ -13,17 +13,6 @@
           
           <!-- 右侧：导航链接 -->
           <div class="flex items-center gap-4 lg:gap-6">
-            <!-- 矩阵联盟 - 外部链接，颜色更醒目 -->
-            <a
-              href="https://matrix-alliance.pages.dev/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-1.5 text-green-600 hover:text-green-700 transition-colors font-semibold text-base"
-            >
-              <span class="text-base leading-none">✴</span>
-              <span>矩阵联盟</span>
-            </a>
-            
             <!-- 联盟学院 - 路由链接，颜色较淡 -->
             <router-link
               to="/academy"
@@ -86,7 +75,20 @@
           
           <!-- 合作品牌轮播 -->
           <div class="mt-12 max-w-4xl mx-auto">
-            <h3 class="text-center text-lg font-semibold text-gray-700 mb-6">合作品牌</h3>
+            <div class="flex items-center justify-center gap-3 mb-6">
+              <h3 class="text-center text-lg font-semibold text-gray-700">合作品牌</h3>
+              <a
+                href="#cooperation-services"
+                class="group relative inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 transition-colors"
+              >
+                合作服务
+                <span
+                  class="pointer-events-none absolute right-0 top-0 -translate-y-[calc(100%+8px)] whitespace-nowrap rounded-lg bg-gray-900 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100"
+                >
+                  包含：推文、引流、社群 3 类服务
+                </span>
+              </a>
+            </div>
             <div class="relative overflow-hidden">
               <div class="flex animate-scroll">
                 <div class="flex space-x-12 whitespace-nowrap">
@@ -580,6 +582,124 @@
       </div>
     </section>
 
+    <!-- 合作服务 -->
+    <section id="cooperation-services" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          合作服务
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          覆盖内容创作与分发、链接引流与社群推广三类合作方式
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- 写推文 -->
+        <router-link
+          to="/tob/services/tweet"
+          aria-label="查看：写推文 服务详情"
+          class="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm p-8 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+        >
+          <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
+          <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+            推文
+          </span>
+          <div class="text-4xl mb-4">✍️</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">写推文</h3>
+          <ul class="space-y-3 text-gray-700">
+            <li class="flex items-start">
+              <span class="text-indigo-500 mr-2 mt-1">•</span>
+              <span>
+                <span class="font-semibold text-gray-900">直发：</span>
+                快速传播品牌信息，直接发布品牌内容。
+              </span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-indigo-500 mr-2 mt-1">•</span>
+              <span>
+                <span class="font-semibold text-gray-900">常规测评/发文：</span>
+                基础评测，涵盖品牌推广、用户注册及核心功能等。
+              </span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-indigo-500 mr-2 mt-1">•</span>
+              <span>
+                <span class="font-semibold text-gray-900">深度测评/发文：</span>
+                全面评估与体验，深入解析与推广产品功能与表现等。
+              </span>
+            </li>
+          </ul>
+        </router-link>
+
+        <!-- 植入链接引流 -->
+        <router-link
+          to="/tob/services/cpc"
+          aria-label="查看：植入链接引流 服务详情"
+          class="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm p-8 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-400/60"
+        >
+          <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-green-500 to-blue-500"></div>
+          <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-100">
+            引流
+          </span>
+          <div class="text-4xl mb-4">🔗</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">植入链接引流</h3>
+          <ul class="space-y-3 text-gray-700">
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2 mt-1">•</span>
+              <span>
+                <span class="font-semibold text-gray-900">CPC（长尾文章）：</span>
+                植入高表现长尾内容，受众精准，流量随时间递减。
+              </span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2 mt-1">•</span>
+              <span>
+                <span class="font-semibold text-gray-900">CPC（最近文章）：</span>
+                植入最新发布内容，曝光更高，相关性略弱。
+              </span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-green-500 mr-2 mt-1">•</span>
+              <span>
+                <span class="font-semibold text-gray-900">AI文章+CPC：</span>
+                AI 生成专题创作，平台接受度不一，不按 UV 结算。
+              </span>
+            </li>
+          </ul>
+        </router-link>
+
+        <!-- 社群推广 -->
+        <router-link
+          to="/tob/services/community"
+          aria-label="查看：社群推广 服务详情"
+          class="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm p-8 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+        >
+          <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
+          <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+            社群
+          </span>
+          <div class="text-4xl mb-4">👥</div>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">社群推广</h3>
+          <ul class="space-y-3 text-gray-700">
+            <li class="flex items-start">
+              <span class="text-blue-500 mr-2 mt-1">•</span>
+              <span>
+                <span class="font-semibold text-gray-900">社群宣传：</span>
+                将内容分发到现有技术社群，起量快、成本低，转化与沉淀能力有限。
+              </span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-blue-500 mr-2 mt-1">•</span>
+              <span>
+                <span class="font-semibold text-gray-900">建立社群：</span>
+                自建并长期运营社群，用户黏性与复用价值高，冷启动和维护成本较高。
+              </span>
+            </li>
+          </ul>
+        </router-link>
+      </div>
+    </section>
+
     <!-- 服务亮点展示 -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white">
       <div class="text-center mb-16">
@@ -670,10 +790,10 @@
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="text-center bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-white">
         <h2 class="text-3xl md:text-4xl font-bold mb-6">
-          想要获得技术圈推广？
+          想在技术圈扩大影响力、顺便把内容变成长期价值吗？
         </h2>
         <p class="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-          我们的博主团队名单可以帮助你的产品快速触达技术人群，提升品牌知名度和用户转化率
+          博主联盟面向开发者开放，适合兼职参与或深度共创，一起输出技术内容、对接真实项目与品牌合作，在提升个人影响力的同时获得稳定回报。
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <a
@@ -696,19 +816,39 @@
     </div>
 
     <!-- 右下角二维码 -->
-    <div class="fixed bottom-6 right-6 z-50">
+    <div v-if="!qrHidden" class="fixed bottom-6 right-6 z-50">
       <div class="relative animate-float">
         <!-- 背景装饰 -->
         <div class="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-2xl blur-xl"></div>
         
         <!-- 二维码卡片 -->
-        <div class="relative bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 p-4 w-52 hover:shadow-2xl hover:scale-105 transition-all duration-300">
-          <div class="text-center mb-2">
-            <div class="text-sm font-bold text-gray-800 mb-0.5">合作与共创</div>
-            <div class="text-xs text-gray-500">扫码/添加微信号atar24</div>
+        <div class="relative bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 p-2 w-52 hover:shadow-2xl hover:scale-105 transition-all duration-300">
+          <div class="mb-1">
+            <div class="relative">
+              <div class="h-6 flex items-center justify-center text-sm font-bold text-gray-800">合作与共创</div>
+              <div class="absolute right-0 top-0 h-6 flex items-center gap-1">
+                <button
+                  type="button"
+                  class="inline-flex items-center justify-center w-6 h-6 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                  :title="qrCollapsed ? '展开' : '收缩'"
+                  @click.stop="qrCollapsed = !qrCollapsed"
+                >
+                  <span class="text-base leading-none">{{ qrCollapsed ? '+' : '−' }}</span>
+                </button>
+                <button
+                  type="button"
+                  class="inline-flex items-center justify-center w-6 h-6 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                  title="关闭"
+                  @click.stop="qrHidden = true"
+                >
+                  <span class="text-base leading-none">×</span>
+                </button>
+              </div>
+            </div>
+            <div v-if="!qrCollapsed" class="text-center text-xs text-gray-500">扫码/添加微信号atar24</div>
           </div>
           
-          <div class="bg-gray-50 p-2 rounded-xl mb-2">
+          <div v-if="!qrCollapsed" class="bg-gray-50 p-1 rounded-xl">
             <img 
               src="/src/img/qrcode1.jpg" 
               alt="微信二维码" 
@@ -766,6 +906,9 @@ const bloggers = ref(bloggersData)
 const expandedBloggers = ref([])
 const bloggerStats = ref(getBloggerStats())
 const trafficStats = computed(() => getRealTimeStats())
+
+const qrHidden = ref(false)
+const qrCollapsed = ref(false)
 
 const moreDataModalOpen = ref(false)
 const openMoreDataModal = () => {
