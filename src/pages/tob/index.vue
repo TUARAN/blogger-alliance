@@ -47,13 +47,6 @@
             <div class="text-center">
               <div class="text-3xl font-bold text-indigo-600 mb-2">
                 {{ bloggerStats.bloggerCount }} 位+
-                <button
-                  @click="scrollToBloggerTeam"
-                  class="ml-1.5 text-xl hover:scale-125 transition-transform duration-300 animate-bounce cursor-pointer"
-                  title="查看博主团队"
-                >
-                  👇
-                </button>
               </div>
               <div class="text-gray-600">技术博主</div>
             </div>
@@ -75,11 +68,17 @@
           
           <!-- 合作品牌轮播 -->
           <div class="mt-12 max-w-4xl mx-auto">
-            <div class="flex items-center justify-center gap-3 mb-6">
-              <h3 class="text-center text-lg font-semibold text-gray-700">合作品牌</h3>
+            <div class="mb-6 flex flex-wrap items-center justify-center gap-2">
+              <h3 class="text-lg font-semibold text-gray-700">合作品牌</h3>
+              <span
+                aria-hidden="true"
+                class="inline-block text-xl leading-none text-indigo-600/90 animate-nudge-x motion-reduce:animate-none"
+              >
+                👉
+              </span>
               <a
                 href="#cooperation-services"
-                class="group relative inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-100 hover:bg-indigo-100 transition-colors"
+                class="group relative inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-100 shadow-sm hover:bg-indigo-100 hover:shadow transition-all"
               >
                 合作服务
                 <span
@@ -1155,6 +1154,20 @@ onMounted(() => {
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+@keyframes nudgeX {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+}
+
+.animate-nudge-x {
+  animation: nudgeX 0.9s ease-in-out infinite;
+  will-change: transform;
 }
 </style>
 

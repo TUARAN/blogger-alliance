@@ -174,7 +174,7 @@
         </section>
 
         <!-- 案例 & 数据参考（预留） -->
-        <section class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-sm p-6">
+        <section v-if="false" class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-sm p-6">
           <h2 class="text-lg font-semibold text-gray-900">案例 &amp; 数据参考（预留）</h2>
           <div class="mt-4 rounded-xl border border-dashed border-gray-300 bg-white/60 p-5 text-sm text-gray-600">
             预留位置：后续可补充具体案例、点击数据、转化链路、素材示例与复盘摘要。
