@@ -321,16 +321,25 @@
               <span class="text-base leading-none">🌟</span>
               <span class="pr-1">KOC</span>
             </span>
-            <div class="flex items-start mb-4 gap-3">
-              <img
-                :src="blogger.avatar"
-                :alt="blogger.name"
-                class="w-14 h-14 rounded-full object-cover border border-indigo-100 group-hover:border-indigo-300 transition-colors"
-              />
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center justify-between gap-2">
-                  <h3 class="text-lg font-semibold text-gray-900 truncate group-hover:text-indigo-600 transition-colors">{{ blogger.name }}</h3>
-                  <span class="text-sm font-medium text-indigo-600 whitespace-nowrap">{{ blogger.followers }}</span>
+            <div class="mb-4">
+              <div class="flex justify-center">
+                <img
+                  :src="blogger.avatar"
+                  :alt="blogger.name"
+                  class="w-14 h-14 rounded-full object-cover border border-indigo-100 group-hover:border-indigo-300 transition-colors"
+                />
+              </div>
+
+              <div class="mt-3 min-w-0">
+                <div class="w-full text-center">
+                  <span class="relative inline-block max-w-full">
+                    <span class="text-lg font-semibold text-gray-900 whitespace-normal break-words leading-snug group-hover:text-indigo-600 transition-colors">
+                      {{ blogger.name }}
+                    </span>
+                    <span class="absolute left-full ml-2 top-1/2 -translate-y-1/2 text-sm font-medium text-indigo-600 whitespace-nowrap">
+                      {{ blogger.followers }}
+                    </span>
+                  </span>
                 </div>
                 <p class="text-xs text-gray-500 mt-1 leading-snug line-clamp-3">{{ blogger.introduction }}</p>
               </div>
