@@ -39,9 +39,9 @@
 
     <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <header class="mb-8">
-        <h1 class="text-3xl md:text-4xl font-bold text-gray-900">社群推广</h1>
-        <p class="mt-3 text-gray-600">
-          面向开发者社群的触达与运营合作，提供「社群宣传」与「建设社群」两种方案：前者持续在存量社群中宣发，后者帮助品牌方搭建专属社群并沉淀长期资产。
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900">社群服务</h1>
+        <p class="mt-3 text-lg text-gray-600">
+          发布社群需求，导入社群成员、维持社群活跃、实现用户沉淀与结算。为你打造专属社群资产，建立长期的开发者关系。
         </p>
       </header>
 
@@ -74,6 +74,38 @@
                 <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>无法提供清晰卖点/报名链接/福利机制，社群用户很难行动</span></li>
                 <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>没有长期投入预期却希望快速做成“高活跃私域”</span></li>
               </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 服务流程 -->
+        <section class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-6">完整服务流程</h2>
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+            <div class="rounded-xl border-2 border-blue-300 bg-blue-50 p-4">
+              <div class="text-2xl font-bold text-blue-700 mb-2">1️⃣</div>
+              <div class="text-sm font-semibold text-gray-900">发布需求</div>
+              <p class="mt-1 text-xs text-gray-600">定义社群目标和运营方向</p>
+            </div>
+            <div class="rounded-xl border-2 border-blue-300 bg-blue-50 p-4">
+              <div class="text-2xl font-bold text-blue-700 mb-2">2️⃣</div>
+              <div class="text-sm font-semibold text-gray-900">导入社群</div>
+              <p class="mt-1 text-xs text-gray-600">将目标用户导入社群</p>
+            </div>
+            <div class="rounded-xl border-2 border-blue-300 bg-blue-50 p-4">
+              <div class="text-2xl font-bold text-blue-700 mb-2">3️⃣</div>
+              <div class="text-sm font-semibold text-gray-900">社群活跃</div>
+              <p class="mt-1 text-xs text-gray-600">定期发布内容和互动</p>
+            </div>
+            <div class="rounded-xl border-2 border-blue-300 bg-blue-50 p-4">
+              <div class="text-2xl font-bold text-blue-700 mb-2">4️⃣</div>
+              <div class="text-sm font-semibold text-gray-900">成员沉淀</div>
+              <p class="mt-1 text-xs text-gray-600">建立高价值用户池</p>
+            </div>
+            <div class="rounded-xl border-2 border-blue-300 bg-blue-50 p-4">
+              <div class="text-2xl font-bold text-blue-700 mb-2">5️⃣</div>
+              <div class="text-sm font-semibold text-gray-900">结算报告</div>
+              <p class="mt-1 text-xs text-gray-600">周期结算和效果报告</p>
             </div>
           </div>
         </section>

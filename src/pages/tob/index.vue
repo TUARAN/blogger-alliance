@@ -38,7 +38,7 @@
             </span>
           </h1>
           <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-            我们聚合一批专业技术博主，突出一批面向程序员的优质产品，助你快速触达程序员受众<span class="inline-flex items-center ml-2 text-sm text-gray-500"><span class="inline-flex items-center justify-center w-5 h-5 bg-blue-50 text-blue-500 rounded-full text-xs font-bold mr-2">i</span>工信部数据显示，我国软件开发者数量已突破<span class="font-semibold text-blue-500 ml-1">940万</span></span>
+            我们聚合一批专业技术博主，突出一批面向程序员的优质产品，助力好产品快速触达程序员受众<span class="inline-flex items-center ml-2 text-sm text-gray-500"><span class="inline-flex items-center justify-center w-5 h-5 bg-blue-50 text-blue-500 rounded-full text-xs font-bold mr-2">i</span>工信部数据显示，我国软件开发者数量已突破<span class="font-semibold text-blue-500 ml-1">940万</span></span>
           </p>
           
 
@@ -592,20 +592,30 @@
 
     <!-- 合作服务 -->
     <section id="cooperation-services" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <!-- 总体介绍 -->
       <div class="text-center mb-16">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
           合作服务
         </h2>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-          覆盖内容创作与分发、链接引流与社群推广三类合作方式
+        <p class="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
+          博主联盟提供<span class="font-semibold text-gray-900">一站式品牌推广与合作平台</span>，<br class="hidden md:block">通过专业技术博主的力量，帮助品牌<span class="font-semibold text-gray-900">精准触达程序员受众</span>。
+          <br><br>
+          我们支持<span class="font-semibold text-indigo-600">三类合作模式</span>：内容创作 · 流量转化 · 社群运营<br>
+          <span class="text-base text-gray-500 mt-1 inline-block">无论是快速传播还是长期沉淀，我们都能为你找到最合适的方案。</span>
         </p>
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-100">
+          <span class="text-sm text-indigo-700">
+            <span class="font-semibold">合作流程清晰透明：</span>需求发布 → 博主承接 → 内容创作 → 质量审核 → 全网发布 → 数据统计 → 结款
+          </span>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- 写推文 -->
+      <!-- 三类服务卡片 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <!-- 推文服务 -->
         <router-link
           to="/tob/services/tweet"
-          aria-label="查看：写推文 服务详情"
+          aria-label="查看：推文 服务详情"
           class="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm p-8 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
         >
           <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
@@ -613,36 +623,41 @@
             推文
           </span>
           <div class="text-4xl mb-4">✍️</div>
-          <h3 class="text-xl font-bold text-gray-900 mb-4">写推文</h3>
-          <ul class="space-y-3 text-gray-700">
-            <li class="flex items-start">
-              <span class="text-indigo-500 mr-2 mt-1">•</span>
-              <span>
-                <span class="font-semibold text-gray-900">直发：</span>
-                快速传播品牌信息，直接发布品牌内容。
-              </span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-indigo-500 mr-2 mt-1">•</span>
-              <span>
-                <span class="font-semibold text-gray-900">常规测评/发文：</span>
-                基础评测，涵盖品牌推广、用户注册及核心功能等。
-              </span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-indigo-500 mr-2 mt-1">•</span>
-              <span>
-                <span class="font-semibold text-gray-900">深度测评/发文：</span>
-                全面评估与体验，深入解析与推广产品功能与表现等。
-              </span>
-            </li>
-          </ul>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">推文服务</h3>
+          <p class="text-sm text-gray-600 mb-6">内容创作与分发，让技术博主用专业笔触为你写推文</p>
+          <div class="space-y-3 text-sm text-gray-700">
+            <div class="font-semibold text-indigo-700 mb-3">服务流程：</div>
+            <div class="flex items-start gap-3">
+              <span class="text-indigo-500 font-semibold flex-shrink-0">1</span>
+              <span>选号 - 从几十位博主中甄选合适的创作者（可选项）</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-indigo-500 font-semibold flex-shrink-0">2</span>
+              <span>发布brief需求 - 清晰阐述产品要点和推广目标</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-indigo-500 font-semibold flex-shrink-0">3</span>
+              <span>博主承接写文 - 专业团队进行内容创作</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-indigo-500 font-semibold flex-shrink-0">4</span>
+              <span>质量审核 - 确保内容质量和品牌一致性</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-indigo-500 font-semibold flex-shrink-0">5</span>
+              <span>全网发布 - 在掘金、知乎等平台广泛传播</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-indigo-500 font-semibold flex-shrink-0">6</span>
+              <span>结款 - 支持对公结算</span>
+            </div>
+          </div>
         </router-link>
 
-        <!-- 植入链接引流 -->
+        <!-- 引流服务 -->
         <router-link
           to="/tob/services/cpc"
-          aria-label="查看：植入链接引流 服务详情"
+          aria-label="查看：引流 服务详情"
           class="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm p-8 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-400/60"
         >
           <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-green-500 to-blue-500"></div>
@@ -650,36 +665,37 @@
             引流
           </span>
           <div class="text-4xl mb-4">🔗</div>
-          <h3 class="text-xl font-bold text-gray-900 mb-4">植入链接引流</h3>
-          <ul class="space-y-3 text-gray-700">
-            <li class="flex items-start">
-              <span class="text-green-500 mr-2 mt-1">•</span>
-              <span>
-                <span class="font-semibold text-gray-900">CPC（长尾文章）：</span>
-                植入高表现长尾内容，受众精准，流量随时间递减。
-              </span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-green-500 mr-2 mt-1">•</span>
-              <span>
-                <span class="font-semibold text-gray-900">CPC（最近文章）：</span>
-                植入最新发布内容，曝光更高，相关性略弱。
-              </span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-green-500 mr-2 mt-1">•</span>
-              <span>
-                <span class="font-semibold text-gray-900">AI文章+CPC：</span>
-                AI 生成专题创作，平台接受度不一，不按 UV 结算。
-              </span>
-            </li>
-          </ul>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">引流服务</h3>
+          <p class="text-sm text-gray-600 mb-6">链接植入与效果转化，为你带来精准的流量与用户</p>
+          <div class="space-y-3 text-sm text-gray-700">
+            <div class="font-semibold text-green-700 mb-3">服务流程：</div>
+            <div class="flex items-start gap-3">
+              <span class="text-green-500 font-semibold flex-shrink-0">1</span>
+              <span>发布推广需求 - 明确引流目标和转化期望</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-green-500 font-semibold flex-shrink-0">2</span>
+              <span>内容宣发 - 联盟进行全网推广和链接植入</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-green-500 font-semibold flex-shrink-0">3</span>
+              <span>链接追踪 - 实时监测点击和转化数据</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-green-500 font-semibold flex-shrink-0">4</span>
+              <span>数据统计 - 生成详细的流量和转化报告</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-green-500 font-semibold flex-shrink-0">5</span>
+              <span>优化方案 - 基于数据反馈持续优化</span>
+            </div>
+          </div>
         </router-link>
 
-        <!-- 社群推广 -->
+        <!-- 社群服务 -->
         <router-link
           to="/tob/services/community"
-          aria-label="查看：社群推广 服务详情"
+          aria-label="查看：社群 服务详情"
           class="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm p-8 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400/60"
         >
           <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
@@ -687,24 +703,79 @@
             社群
           </span>
           <div class="text-4xl mb-4">👥</div>
-          <h3 class="text-xl font-bold text-gray-900 mb-4">社群推广</h3>
-          <ul class="space-y-3 text-gray-700">
-            <li class="flex items-start">
-              <span class="text-blue-500 mr-2 mt-1">•</span>
-              <span>
-                <span class="font-semibold text-gray-900">社群宣传：</span>
-                将内容分发到现有技术社群，起量快、成本低，转化与沉淀能力有限。
-              </span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-blue-500 mr-2 mt-1">•</span>
-              <span>
-                <span class="font-semibold text-gray-900">建立社群：</span>
-                自建并长期运营社群，用户黏性与复用价值高，冷启动和维护成本较高。
-              </span>
-            </li>
-          </ul>
+          <h3 class="text-xl font-bold text-gray-900 mb-4">社群服务</h3>
+          <p class="text-sm text-gray-600 mb-6">社群运营与用户沉淀，为品牌打造专属社群资产</p>
+          <div class="space-y-3 text-sm text-gray-700">
+            <div class="font-semibold text-blue-700 mb-3">服务流程：</div>
+            <div class="flex items-start gap-3">
+              <span class="text-blue-500 font-semibold flex-shrink-0">1</span>
+              <span>发布社群需求 - 定义社群目标和运营方向</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-blue-500 font-semibold flex-shrink-0">2</span>
+              <span>导入社群成员 - 将目标用户导入社群</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-blue-500 font-semibold flex-shrink-0">3</span>
+              <span>社群活跃运营 - 定期发布内容和互动</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-blue-500 font-semibold flex-shrink-0">4</span>
+              <span>成员沉淀 - 逐步建立高价值用户池</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-blue-500 font-semibold flex-shrink-0">5</span>
+              <span>结算与报告 - 按周期生成效果总结和结款</span>
+            </div>
+          </div>
         </router-link>
+      </div>
+
+      <!-- 服务对比表格 -->
+      <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 p-8 overflow-x-auto">
+        <h3 class="text-xl font-bold text-gray-900 mb-6">服务对比一览</h3>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200">
+              <th class="text-left py-4 px-4 font-semibold text-gray-900">对比维度</th>
+              <th class="text-left py-4 px-4 font-semibold text-indigo-700">推文服务</th>
+              <th class="text-left py-4 px-4 font-semibold text-green-700">引流服务</th>
+              <th class="text-left py-4 px-4 font-semibold text-blue-700">社群服务</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-100">
+              <td class="py-4 px-4 text-gray-900 font-semibold">核心价值</td>
+              <td class="py-4 px-4 text-gray-700">内容创作与品牌传播</td>
+              <td class="py-4 px-4 text-gray-700">精准流量与转化</td>
+              <td class="py-4 px-4 text-gray-700">用户沉淀与长期运营</td>
+            </tr>
+            <tr class="border-b border-gray-100">
+              <td class="py-4 px-4 text-gray-900 font-semibold">适合场景</td>
+              <td class="py-4 px-4 text-gray-700">产品上线、功能发布、品牌宣传</td>
+              <td class="py-4 px-4 text-gray-700">活动推广、获客转化、ROI优化</td>
+              <td class="py-4 px-4 text-gray-700">建立粉丝社群、长期用户运营</td>
+            </tr>
+            <tr class="border-b border-gray-100">
+              <td class="py-4 px-4 text-gray-900 font-semibold">周期</td>
+              <td class="py-4 px-4 text-gray-700">1-4周</td>
+              <td class="py-4 px-4 text-gray-700">1-12周（按需调整）</td>
+              <td class="py-4 px-4 text-gray-700">1-3个月+持续运营</td>
+            </tr>
+            <tr class="border-b border-gray-100">
+              <td class="py-4 px-4 text-gray-900 font-semibold">预期效果</td>
+              <td class="py-4 px-4 text-gray-700">品牌曝光、公信力积累</td>
+              <td class="py-4 px-4 text-gray-700">可追踪的点击和转化</td>
+              <td class="py-4 px-4 text-gray-700">高粘性用户群体、复用价值</td>
+            </tr>
+            <tr>
+              <td class="py-4 px-4 text-gray-900 font-semibold">结算方式</td>
+              <td class="py-4 px-4 text-gray-700">按件数（对公）</td>
+              <td class="py-4 px-4 text-gray-700">按点击/转化</td>
+              <td class="py-4 px-4 text-gray-700">按周期/成员数</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 

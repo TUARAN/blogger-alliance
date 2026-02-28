@@ -39,8 +39,8 @@
 
     <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <header class="mb-8">
-        <h1 class="text-3xl md:text-4xl font-bold text-gray-900">植入链接引流</h1>
-        <p class="mt-3 text-gray-600">面向技术受众的内容植入与链接引流合作（CPC），用于放大曝光与获得可衡量的点击。</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900">引流服务</h1>
+        <p class="mt-3 text-lg text-gray-600">通过链接植入与数据追踪，为你的产品获取精准流量。需求发布、全网宣发、数据统计、结算一站式解决。</p>
       </header>
 
       <div class="space-y-6">
@@ -86,6 +86,33 @@
                   </span>
                 </li>
               </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 服务流程 -->
+        <section class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-6">完整服务流程</h2>
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <div class="rounded-xl border-2 border-green-300 bg-green-50 p-4">
+              <div class="text-2xl font-bold text-green-700 mb-2">1️⃣</div>
+              <div class="text-sm font-semibold text-gray-900">发布需求</div>
+              <p class="mt-1 text-xs text-gray-600">明确引流目标、产品卖点、转化链路</p>
+            </div>
+            <div class="rounded-xl border-2 border-green-300 bg-green-50 p-4">
+              <div class="text-2xl font-bold text-green-700 mb-2">2️⃣</div>
+              <div class="text-sm font-semibold text-gray-900">全网宣发</div>
+              <p class="mt-1 text-xs text-gray-600">联盟进行链接植入和推广宣发</p>
+            </div>
+            <div class="rounded-xl border-2 border-green-300 bg-green-50 p-4">
+              <div class="text-2xl font-bold text-green-700 mb-2">3️⃣</div>
+              <div class="text-sm font-semibold text-gray-900">数据统计</div>
+              <p class="mt-1 text-xs text-gray-600">实时监测点击、转化等关键数据</p>
+            </div>
+            <div class="rounded-xl border-2 border-green-300 bg-green-50 p-4">
+              <div class="text-2xl font-bold text-green-700 mb-2">4️⃣</div>
+              <div class="text-sm font-semibold text-gray-900">结款</div>
+              <p class="mt-1 text-xs text-gray-600">按约定口径结算、生成报告</p>
             </div>
           </div>
         </section>
