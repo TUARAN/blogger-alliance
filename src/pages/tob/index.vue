@@ -256,18 +256,29 @@
 
         <!-- 右侧：全局操作 -->
         <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-          <!-- 导出/复制按钮 (仅在表格模式下显示) -->
-          <button
-            v-if="viewMode === 'table'"
-            @click="copyTableToClipboard"
-            class="inline-flex items-center px-4 h-10 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all"
-            title="复制当前表格数据到剪贴板，可直接粘贴到Excel"
-          >
-            <span class="mr-2">📋</span>
-            复制表格数据
-          </button>
+          <!-- 操作按钮组 -->
+          <div class="flex bg-gray-100 p-1 rounded-lg shrink-0">
+            <a
+              :href="bloggerRosterFile"
+              download="博主联盟花名册v20260106.xlsx"
+              class="px-3 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-1 bg-white text-indigo-600 shadow-sm hover:text-indigo-700"
+              title="下载博主联盟花名册到本地"
+            >
+              <span>⬇️</span>
+              <span class="hidden sm:inline">下载到本地</span>
+            </a>
 
-          <div class="h-6 w-px bg-gray-200 mx-1 hidden md:block"></div>
+            <!-- 导出/复制按钮 (仅在表格模式下显示) -->
+            <button
+              v-if="viewMode === 'table'"
+              @click="copyTableToClipboard"
+              class="px-3 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-1 text-gray-500 hover:text-green-700"
+              title="复制当前表格数据到剪贴板，可直接粘贴到Excel"
+            >
+              <span>📋</span>
+              <span class="hidden sm:inline">复制表格数据</span>
+            </button>
+          </div>
 
           <!-- 视图切换按钮 -->
           <div class="flex bg-gray-100 p-1 rounded-lg shrink-0">
@@ -625,7 +636,7 @@
             <div class="font-semibold text-indigo-700 mb-3">服务流程：</div>
             <div class="flex items-start gap-3">
               <span class="text-indigo-500 font-semibold flex-shrink-0">1</span>
-              <span>选号 - 从几十位博主中甄选合适的创作者（可选项）</span>
+              <span>选号 - 从几十位博主中甄选合适的创作者</span>
             </div>
             <div class="flex items-start gap-3">
               <span class="text-indigo-500 font-semibold flex-shrink-0">2</span>
@@ -994,6 +1005,7 @@ import { bloggersData } from '../../data/bloggerInfo.js'
 import { trackLinkClick } from '../../utils/hybridStats.js'
 import { getBloggerStats } from '../../utils/analytics.js'
 import { getRealTimeStats, recordPageView } from '../../utils/statsService.js'
+import bloggerRosterFile from '../../data/博主联盟花名册v20260106.xlsx?url'
 
 // 响应式数据 - 直接初始化数据，无需加载状态
 const bloggers = ref(bloggersData)
