@@ -7,7 +7,7 @@
           博主联盟，连接产品与技术影响力
         </h1>
         <p class="text-mobile-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">
-          我们致力于帮助产品方精准推广程序员向产品，也为技术博主/开发者提供联盟成长与工具资源。<br class="hidden sm:block">
+          我们致力于帮助产品方精准推广程序员 / AI / 科技方向产品，也为技术博主/开发者提供联盟成长与工具资源。<br class="hidden sm:block">
           无论你是产品方，还是内容创作者，这里都能找到属于你的价值！
         </p>
         
@@ -24,7 +24,7 @@
             @click="handleButtonClick('推广产品卡片')"
           >
             <div class="text-3xl sm:text-4xl mb-4 group-hover:scale-110 transition-transform">🚀</div>
-            <h2 class="text-mobile-xl sm:text-2xl font-bold text-gray-900 mb-2 text-center">我要推广程序员方向的产品</h2>
+            <h2 class="text-mobile-xl sm:text-2xl font-bold text-gray-900 mb-2 text-center">我要推广程序员 / AI / 科技方向产品</h2>
             <p class="text-gray-600 mb-4 text-center text-mobile">精准触达开发者群体，提升产品曝光与转化</p>
             <span class="inline-block mt-auto px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold shadow group-hover:from-indigo-700 group-hover:to-purple-700 transition-all text-mobile">了解推广服务</span>
           </router-link>
@@ -68,7 +68,7 @@
               </li>
               <li class="flex items-start">
                 <span class="text-indigo-500 mr-2 mt-1">•</span>
-                <span>覆盖 {{ bloggerStats.formattedFollowers }}+ 程序员受众</span>
+                <span>覆盖 {{ bloggerStats.formattedFollowers }}+ 程序员 / AI / 科技受众</span>
               </li>
               <li class="flex items-start">
                 <span class="text-indigo-500 mr-2 mt-1">•</span>

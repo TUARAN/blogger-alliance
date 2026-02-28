@@ -38,7 +38,7 @@
             </span>
           </h1>
           <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-            我们聚合一批专业技术博主，突出一批面向程序员的优质产品，助力好产品快速触达程序员受众<span class="inline-flex items-center ml-2 text-sm text-gray-500"><span class="inline-flex items-center justify-center w-5 h-5 bg-blue-50 text-blue-500 rounded-full text-xs font-bold mr-2">i</span>工信部数据显示，我国软件开发者数量已突破<span class="font-semibold text-blue-500 ml-1">940万</span></span>
+            我们聚合一批专业技术博主，突出一批面向程序员 / AI 爱好者 / 科技爱好者的优质产品，助力好产品快速触达目标受众<span class="inline-flex items-center ml-2 text-sm text-gray-500"><span class="inline-flex items-center justify-center w-5 h-5 bg-blue-50 text-blue-500 rounded-full text-xs font-bold mr-2">i</span>工信部数据显示，我国软件开发者数量已突破<span class="font-semibold text-blue-500 ml-1">940万</span></span>
           </p>
           
 
@@ -52,7 +52,7 @@
             </div>
             <div class="text-center">
               <div class="text-3xl font-bold text-purple-600 mb-2">{{ bloggerStats.formattedFollowers }}+</div>
-              <div class="text-gray-600">覆盖程序员粉丝</div>
+              <div class="text-gray-600">覆盖程序员 / 科技粉丝</div>
             </div>
             <div class="text-center">
               <div class="text-3xl font-bold text-green-600 mb-2">{{ bloggerStats.totalPosts }} 篇+</div>
@@ -598,7 +598,7 @@
           合作服务
         </h2>
         <p class="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-          博主联盟提供<span class="font-semibold text-gray-900">一站式品牌推广与合作平台</span>，<br class="hidden md:block">通过专业技术博主的力量，帮助品牌<span class="font-semibold text-gray-900">精准触达程序员受众</span>。
+          博主联盟提供<span class="font-semibold text-gray-900">一站式品牌推广与合作平台</span>，<br class="hidden md:block">通过专业技术博主的力量，帮助品牌<span class="font-semibold text-gray-900">精准触达程序员 / AI 爱好者 / 科技爱好者</span>。
           <br><br>
           我们支持<span class="font-semibold text-indigo-600">三类合作模式</span>：内容创作 · 流量转化 · 社群运营<br>
           <span class="text-base text-gray-500 mt-1 inline-block">无论是快速传播还是长期沉淀，我们都能为你找到最合适的方案。</span>
@@ -645,11 +645,11 @@
             </div>
             <div class="flex items-start gap-3">
               <span class="text-indigo-500 font-semibold flex-shrink-0">5</span>
-              <span>全网发布 - 在掘金、知乎等平台广泛传播</span>
+              <span>全网发布 - 在掘金、公众号、CSDN、头条、知乎等 10+ 个主流平台或技术社区发布</span>
             </div>
             <div class="flex items-start gap-3">
               <span class="text-indigo-500 font-semibold flex-shrink-0">6</span>
-              <span>结款 - 支持对公结算</span>
+              <span>结算与报告 - 支持对公结算，生成效果报告</span>
             </div>
           </div>
         </router-link>
@@ -687,7 +687,11 @@
             </div>
             <div class="flex items-start gap-3">
               <span class="text-green-500 font-semibold flex-shrink-0">5</span>
-              <span>优化方案 - 基于数据反馈持续优化</span>
+              <span>数据统计 - 生成详细的流量和转化报告</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="text-green-500 font-semibold flex-shrink-0">6</span>
+              <span>结算与报告 - 按约定口径对账结款，生成效果报告</span>
             </div>
           </div>
         </router-link>
@@ -802,7 +806,7 @@
             </li>
                           <li class="flex items-start">
                 <span class="text-indigo-500 mr-2 mt-1">•</span>
-                <span>覆盖 {{ bloggerStats.formattedFollowers }}+ 程序员受众</span>
+                <span>覆盖 {{ bloggerStats.formattedFollowers }}+ 程序员 / AI / 科技受众</span>
               </li>
             <li class="flex items-start">
               <span class="text-indigo-500 mr-2 mt-1">•</span>
