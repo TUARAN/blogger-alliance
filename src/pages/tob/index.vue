@@ -68,26 +68,22 @@
           
           <!-- 合作品牌轮播 -->
           <div class="mt-12 max-w-4xl mx-auto">
-            <div class="mb-6 flex flex-wrap items-center justify-center gap-2">
-              <h3 class="text-lg font-semibold text-gray-700">合作品牌</h3>
-              <span
-                aria-hidden="true"
-                class="inline-block text-xl leading-none text-indigo-600/90 animate-nudge-x motion-reduce:animate-none"
-              >
-                👉
-              </span>
+            <div class="mb-6 flex items-center justify-center">
               <a
                 href="#cooperation-services"
-                class="group relative inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-100 shadow-sm hover:bg-indigo-100 hover:shadow transition-all"
+                class="group relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm md:text-base font-extrabold text-white bg-gradient-to-r from-indigo-600 to-purple-600 border border-indigo-400/30 shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 animate-pulse motion-reduce:animate-none"
               >
-                合作服务
+                <span class="text-base leading-none">🔥</span>
+                <span>我想合作</span>
+                <span class="text-base leading-none transition-transform group-hover:translate-x-1">→</span>
                 <span
-                  class="pointer-events-none absolute right-0 top-0 -translate-y-[calc(100%+8px)] whitespace-nowrap rounded-lg bg-gray-900 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100"
+                  class="pointer-events-none absolute right-0 top-0 -translate-y-[calc(100%+10px)] whitespace-nowrap rounded-lg bg-gray-900 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100"
                 >
                   包含：推文、引流、社群 3 类服务
                 </span>
               </a>
             </div>
+            <h3 class="mb-4 text-center text-sm md:text-base font-semibold text-gray-600">已合作品牌</h3>
             <div class="relative overflow-hidden">
               <div class="flex animate-scroll">
                 <div class="flex space-x-12 whitespace-nowrap">
@@ -652,6 +648,11 @@
               <span>结算与报告 - 支持对公结算，生成效果报告</span>
             </div>
           </div>
+          <div class="mt-6">
+            <div class="inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-extrabold text-white bg-gradient-to-r from-indigo-600 to-purple-600 shadow-md group-hover:shadow-xl transition-all duration-300">
+              查看推文服务详情 →
+            </div>
+          </div>
         </router-link>
 
         <!-- 引流服务 -->
@@ -687,11 +688,16 @@
             </div>
             <div class="flex items-start gap-3">
               <span class="text-green-500 font-semibold flex-shrink-0">5</span>
-              <span>数据统计 - 生成详细的流量和转化报告</span>
+              <span>优化投放 - 基于数据反馈持续优化策略</span>
             </div>
             <div class="flex items-start gap-3">
               <span class="text-green-500 font-semibold flex-shrink-0">6</span>
               <span>结算与报告 - 按约定口径对账结款，生成效果报告</span>
+            </div>
+          </div>
+          <div class="mt-6">
+            <div class="inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-extrabold text-white bg-gradient-to-r from-green-600 to-emerald-600 shadow-md group-hover:shadow-xl transition-all duration-300">
+              查看引流服务详情 →
             </div>
           </div>
         </router-link>
@@ -730,6 +736,11 @@
             <div class="flex items-start gap-3">
               <span class="text-blue-500 font-semibold flex-shrink-0">5</span>
               <span>结算与报告 - 按周期生成效果总结和结款</span>
+            </div>
+          </div>
+          <div class="mt-6">
+            <div class="inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-extrabold text-white bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md group-hover:shadow-xl transition-all duration-300">
+              查看社群服务详情 →
             </div>
           </div>
         </router-link>
@@ -774,9 +785,9 @@
             </tr>
             <tr>
               <td class="py-4 px-4 text-gray-900 font-semibold">结算方式</td>
-              <td class="py-4 px-4 text-gray-700">按件数（对公）</td>
-              <td class="py-4 px-4 text-gray-700">按点击/转化</td>
-              <td class="py-4 px-4 text-gray-700">按周期/成员数</td>
+              <td class="py-4 px-4 text-gray-700">按件数（支持对公开票）</td>
+              <td class="py-4 px-4 text-gray-700">按点击/转化（支持对公开票）</td>
+              <td class="py-4 px-4 text-gray-700">按周期/成员数（支持对公开票）</td>
             </tr>
           </tbody>
         </table>

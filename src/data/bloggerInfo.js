@@ -12,7 +12,7 @@ export const bloggersData = [
       { platform: 'GitHub', url: 'https://github.com/TUARAN', icon: '🐙' },
       { platform: '51CTO', url: 'https://blog.51cto.com/u_13961087', icon: '💻' },
       { platform: '头条', url: 'https://www.toutiao.com/c/user/token/CiytHKMTSTLr9UjjPapQfQgP0Qtz-mo_r7SZ-9a-vjhHMpxe4Zf0NZ5nXMww0BpJCjwAAAAAAAAAAAAATzLFgylPHFsiAK3qyEAfRlTqWH9UNxHBykjYOQGlKESnc18eU1QTS8cwMB6HSurHYfYQvfn1DRjDxYPqBCIBA2ciM6E=/?source=list&log_from=d3cb457759bbb_1751732899254', icon: '📰' },
-      { platform: '微信公众号', url: 'https://mp.weixin.qq.com/s/anthony_wechat', icon: '🌏' },
+      { platform: '微信公众号：前端周看', url: 'https://mp.weixin.qq.com/s/anthony_wechat', icon: '🌏' },
       { platform: 'CSDN', url: 'https://blog.csdn.net/Anthony1453?spm=1000.2115.3001.5343', icon: '💻' }
     ],
     expandedContent: {
