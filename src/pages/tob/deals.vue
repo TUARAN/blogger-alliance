@@ -138,7 +138,7 @@ const commercialDeals = ref([
     service: '引流服务',
     category: 'CPC',
     progress: '持续计费 + 待结算',
-    remark: '1 期',
+    remark: '1期',
     referrer: '安东尼',
     updatedAt: '2026.2.11'
   },
@@ -148,7 +148,7 @@ const commercialDeals = ref([
     service: '引流服务',
     category: 'CPC',
     progress: '持续计费 + 待结算',
-    remark: '1 期',
+    remark: '1期',
     referrer: '安东尼',
     updatedAt: '2026.3.9'
   },
@@ -158,7 +158,7 @@ const commercialDeals = ref([
     service: '推文服务',
     category: 'AI写文',
     progress: '写文中',
-    remark: '',
+    remark: '1期',
     referrer: '安东尼',
     updatedAt: '2026.3.9'
   },
@@ -168,7 +168,7 @@ const commercialDeals = ref([
     service: '推文服务',
     category: '品牌推文',
     progress: '需求沟通中',
-    remark: '',
+    remark: '只支持互选-公众号/视频号，推荐单独沟通',
     referrer: '前端之虎陈随易',
     updatedAt: '2026.3.9'
   },
@@ -178,7 +178,7 @@ const commercialDeals = ref([
     service: '推文服务',
     category: '品牌推文',
     progress: '完成需求沟通，报价协商中',
-    remark: '',
+    remark: '1期报价沟通中',
     referrer: '不如摸鱼去',
     updatedAt: '2026.3.4'
   },
@@ -188,7 +188,7 @@ const commercialDeals = ref([
     service: '推文服务',
     category: '直发推文',
     progress: '对接验证闭环',
-    remark: '已实现 1 单成交，更多需求沟通中',
+    remark: '已实现1单结算闭环，更多需求整理中',
     referrer: '安东尼',
     updatedAt: '2026.3.6'
   }
