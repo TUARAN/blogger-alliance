@@ -13,6 +13,15 @@
           
           <!-- 右侧：导航链接 -->
           <div class="flex items-center gap-4 lg:gap-6">
+            <router-link
+              to="/tob/deals"
+              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
+              active-class="text-gray-700 font-semibold"
+            >
+              <span class="text-base leading-none">🧭</span>
+              <span>商单进度</span>
+            </router-link>
+
             <!-- 联盟学院 - 路由链接，颜色较淡 -->
             <router-link
               to="/academy"
@@ -29,12 +38,12 @@
 
     <!-- Hero 区域 -->
     <section class="relative overflow-hidden">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16 lg:pt-14 lg:pb-24">
         <div class="text-center">
           <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            <span class="block">博主联盟</span>
+            <span class="block mb-6">博主联盟</span>
             <span class="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-              连接产品与技术影响力
+              连接好产品与技术影响力
             </span>
           </h1>
           <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
