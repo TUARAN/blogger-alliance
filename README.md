@@ -113,6 +113,43 @@ git push origin feature/add-blogger-你的名字
 
 欢迎提交 Issue 和 Pull Request！
 
+## 🔐 商单进度数据维护（内部协作）
+
+商单进度页使用密文文件：
+
+- [src/data/commercialDeals.encrypted.js](src/data/commercialDeals.encrypted.js)
+
+### 1) 明文源数据放哪里？
+
+- 本地明文默认路径：`private/commercialDeals.source.json`
+- 该目录已在 `.gitignore` 中忽略，不会进入仓库。
+- 可参考示例结构：`src/data/commercialDeals.source.example.json`
+
+### 2) 如何解密到本地（用于新增/编辑）
+
+```bash
+DEALS_CREDENTIAL=你的6位凭证 npm run deals:decrypt
+```
+
+执行后会生成本地明文：`private/commercialDeals.source.json`
+
+### 3) 如何新增商单并重新加密
+
+1. 编辑 `private/commercialDeals.source.json`
+2. 执行：
+
+```bash
+DEALS_CREDENTIAL=你的6位凭证 npm run deals:encrypt
+```
+
+3. 提交密文文件变更：`src/data/commercialDeals.encrypted.js`
+
+### 4) 协作建议（推荐）
+
+- 统一由 1~2 位维护人掌管凭证并负责加密发布。
+- 团队成员通过私有表格或内部文档提交新增商单信息。
+- 公开仓库只保留密文，不存明文业务数据。
+
 ---
 
 **Blogger Alliance** - 技术人影响力平台 🚀

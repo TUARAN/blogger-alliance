@@ -29,3 +29,7 @@ dist-ssr
 .env.development.local
 .env.test.local
 .env.production.local 
+
+# Internal plaintext business data (do not commit)
+private/
+src/data/commercialDeals.source.json
