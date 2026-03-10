@@ -53,6 +53,7 @@ export const matrixAllianceBloggers = [
         id: 'anthony',
         name: '掘金安东尼',
         handle: 'anthony',
+        domains: ['编程创作'],
         platforms: [
           {
             platform: 'CSDN',
@@ -106,6 +107,7 @@ export const matrixAllianceBloggers = [
         id: 'code-ai-frosen',
         name: '安东尼与AI',
         handle: 'code-ai-frosen',
+        domains: ['AI大模型'],
         platforms: [
           {
             platform: 'CSDN',
@@ -139,6 +141,7 @@ export const matrixAllianceBloggers = [
         id: 'thirty-cube',
         name: '三十而立方',
         handle: 'thirty-cube',
+        domains: ['社会洞察'],
         platforms: [
           {
             platform: '知乎',
@@ -162,6 +165,7 @@ export const matrixAllianceBloggers = [
         id: 'frontend-weekly',
         name: '前端周看',
         handle: 'frontend-weekly',
+        domains: ['前端周刊'],
         platforms: [
           {
             platform: '公众号',
@@ -185,6 +189,7 @@ export const matrixAllianceBloggers = [
         id: 'anthony404',
         name: '安东尼404',
         handle: 'anthony404',
+        domains: ['科技资讯'],
         platforms: [
           {
             platform: '小红书',
@@ -236,7 +241,7 @@ export const matrixAllianceBloggers = [
       ],
       monetizationPlatforms: [
         {
-          group: '技术内容平台（写即有钱）',
+          group: '技术内容平台',
           items: [
             { name: '掘金创作', url: 'https://juejin.cn/' },
             { name: 'CSDN 创作中心', url: 'https://blog.csdn.net/' },

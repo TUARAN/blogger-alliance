@@ -136,12 +136,33 @@
           </div>
 
           <div class="xl:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <div class="text-lg font-semibold text-gray-900 mb-3">仪表盘能力（账号排行 / 全局指标 / 平台跳转）</div>
+            <div class="text-lg font-semibold text-gray-900 mb-3">仪表盘能力</div>
+            <div class="mb-3 grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div class="md:col-span-2">
+                <input
+                  v-model="accountKeyword"
+                  type="text"
+                  placeholder="筛选账号（名称 / handle / 平台）"
+                  class="w-full h-10 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+              </div>
+              <div>
+                <select
+                  v-model="accountPlatformFilter"
+                  class="w-full h-10 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <option value="all">全部平台</option>
+                  <option v-for="platform in accountPlatformOptions" :key="platform" :value="platform">{{ platform }}</option>
+                </select>
+              </div>
+            </div>
             <div class="overflow-x-auto">
               <table class="min-w-full text-sm">
                 <thead class="bg-indigo-50 text-gray-700">
                   <tr>
                     <th class="px-3 py-2 text-left">账号（IP）</th>
+                    <th class="px-3 py-2 text-left">平台</th>
+                    <th class="px-3 py-2 text-left">领域</th>
                     <th class="px-3 py-2 text-left">粉丝</th>
                     <th class="px-3 py-2 text-left">阅读</th>
                     <th class="px-3 py-2 text-left">文章/帖子</th>
@@ -149,33 +170,51 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="item in accountRanking" :key="item.id" class="border-t border-gray-100">
+                  <tr v-for="item in filteredAccountRanking" :key="item.id" class="border-t border-gray-100">
                     <td class="px-3 py-2 font-medium text-gray-900">{{ item.name }}</td>
+                    <td class="px-3 py-2">
+                      <div class="flex flex-wrap gap-1.5">
+                        <a
+                          v-for="platform in item.platforms"
+                          :key="`${item.id}-${platform.platform}`"
+                          :href="platform.link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] leading-4 whitespace-nowrap font-semibold bg-indigo-600 text-white border border-indigo-600 shadow-sm hover:bg-indigo-700 hover:border-indigo-700 transition-colors"
+                        >
+                          <span>🔗</span>
+                          {{ platform.platform }}
+                        </a>
+                      </div>
+                    </td>
+                    <td class="px-3 py-2">
+                      <div class="flex flex-wrap gap-1.5">
+                        <span
+                          v-for="domain in (item.domains || [])"
+                          :key="`${item.id}-${domain}`"
+                          class="px-2 py-0.5 rounded text-[11px] leading-4 whitespace-nowrap font-medium bg-emerald-50 text-emerald-700 border border-emerald-200"
+                        >
+                          {{ domain }}
+                        </span>
+                        <span
+                          v-if="!item.domains || item.domains.length === 0"
+                          class="text-xs text-gray-400"
+                        >
+                          -
+                        </span>
+                      </div>
+                    </td>
                     <td class="px-3 py-2">{{ formatNumber(item.subtotal.followers) }}</td>
                     <td class="px-3 py-2">{{ formatNumber(item.subtotal.reads) }}</td>
                     <td class="px-3 py-2">{{ formatNumber(item.subtotal.posts) }}</td>
                     <td class="px-3 py-2">{{ formatNumber(item.subtotal.likes) }}</td>
                   </tr>
+                  <tr v-if="filteredAccountRanking.length === 0">
+                    <td colspan="7" class="px-3 py-8 text-center text-gray-500">暂无匹配账号，请调整筛选条件。</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
-          </div>
-        </section>
-
-        <section class="mt-6 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <div class="text-lg font-semibold text-gray-900 mb-3">各平台外链入口</div>
-          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-            <a
-              v-for="item in platformLinks"
-              :key="`${item.account}-${item.platform}`"
-              :href="item.link"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="rounded-xl border border-gray-200 px-4 py-3 hover:border-indigo-300 hover:bg-indigo-50/50 transition-colors"
-            >
-              <div class="text-sm text-gray-500">{{ item.account }}</div>
-              <div class="font-semibold text-gray-900">{{ item.platform }}</div>
-            </a>
           </div>
         </section>
 
@@ -198,7 +237,7 @@
 
         <section class="mt-6">
           <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <div class="text-lg font-semibold text-gray-900 mb-3">变现平台清单（写即有钱）</div>
+            <div class="text-lg font-semibold text-gray-900 mb-3">变现平台清单</div>
             <div class="space-y-3">
               <div v-for="group in currentBlogger.allianceProfile.monetizationPlatforms" :key="group.group" class="rounded-xl border border-gray-200 p-3">
                 <div class="text-sm font-semibold text-gray-900 mb-2">{{ group.group }}</div>
@@ -235,6 +274,8 @@ const bloggers = matrixAllianceBloggers
 const selectedBloggerId = ref('tuaran')
 const isLoading = ref(true)
 const animationFrame = ref(null)
+const accountKeyword = ref('')
+const accountPlatformFilter = ref('all')
 
 const currentBlogger = computed(() => {
   return bloggers.find((item) => item.id === selectedBloggerId.value) || bloggers[0] || null
@@ -252,6 +293,35 @@ const chartColors = ['#6366F1', '#A855F7', '#14B8A6', '#F59E0B', '#06B6D4', '#EC
 const accountRanking = computed(() => {
   if (!currentBlogger.value) return []
   return [...currentBlogger.value.accounts].sort((a, b) => b.subtotal.followers - a.subtotal.followers)
+})
+
+const accountPlatformOptions = computed(() => {
+  if (!currentBlogger.value) return []
+
+  const platforms = currentBlogger.value.accounts.flatMap((account) => {
+    return account.platforms.map((platform) => platform.platform)
+  })
+
+  return [...new Set(platforms)]
+})
+
+const filteredAccountRanking = computed(() => {
+  const keyword = accountKeyword.value.trim().toLowerCase()
+
+  return accountRanking.value.filter((account) => {
+    const platformMatch = accountPlatformFilter.value === 'all' || account.platforms.some((platform) => platform.platform === accountPlatformFilter.value)
+
+    if (!platformMatch) return false
+    if (!keyword) return true
+
+    const searchableText = [
+      account.name,
+      account.handle,
+      ...account.platforms.map((platform) => platform.platform)
+    ].join(' ').toLowerCase()
+
+    return searchableText.includes(keyword)
+  })
 })
 
 const accountFanDistribution = computed(() => {
@@ -283,18 +353,6 @@ const pieStyle = computed(() => {
   return {
     background: `conic-gradient(${segments.join(',')})`
   }
-})
-
-const platformLinks = computed(() => {
-  if (!currentBlogger.value) return []
-
-  return currentBlogger.value.accounts.flatMap((account) => {
-    return account.platforms.map((platform) => ({
-      account: account.name,
-      platform: platform.platform,
-      link: platform.link
-    }))
-  })
 })
 
 const animateOverview = () => {
@@ -338,6 +396,8 @@ const formatNumber = (value) => {
 }
 
 watch(currentBlogger, () => {
+  accountKeyword.value = ''
+  accountPlatformFilter.value = 'all'
   animateOverview()
 })
 
