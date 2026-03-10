@@ -22,6 +22,15 @@
               <span>商单进度</span>
             </router-link>
 
+            <router-link
+              to="/matrix"
+              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
+              active-class="text-gray-700 font-semibold"
+            >
+              <span class="text-base leading-none">🧩</span>
+              <span>矩阵联盟</span>
+            </router-link>
+
             <!-- 联盟学院 - 路由链接，颜色较淡 -->
             <router-link
               to="/academy"

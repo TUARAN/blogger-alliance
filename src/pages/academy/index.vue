@@ -10,8 +10,11 @@
             </router-link>
           </div>
           <div class="flex items-center space-x-4">
-            <router-link to="/" class="text-gray-600 hover:text-indigo-600 transition-colors">
-              返回首页
+            <router-link to="/tob" class="text-gray-600 hover:text-indigo-600 transition-colors">
+              博主联盟
+            </router-link>
+            <router-link to="/matrix" class="text-gray-600 hover:text-indigo-600 transition-colors">
+              矩阵联盟
             </router-link>
           </div>
         </div>
