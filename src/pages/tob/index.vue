@@ -47,7 +47,7 @@
             </span>
           </h1>
           <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-            我们聚合一批专业技术博主，突出一批面向程序员 / AI 爱好者 / 科技爱好者的优质产品，助力好产品快速触达目标受众<span class="inline-flex items-center ml-2 text-sm text-gray-500"><span class="inline-flex items-center justify-center w-5 h-5 bg-blue-50 text-blue-500 rounded-full text-xs font-bold mr-2">i</span>工信部数据显示，我国软件开发者数量已突破<span class="font-semibold text-blue-500 ml-1">940万</span></span>
+            我们聚合一批专业技术博主，突出一批面向程序员 / AI 爱好者 / 科技爱好者的优质产品，助力好产品快速触达目标受众。
           </p>
           
 
