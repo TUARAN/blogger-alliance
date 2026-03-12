@@ -418,21 +418,6 @@ export const bloggersData = [
     }
   },
   {
-    id: 27,
-    name: '林三心',
-    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=linsanxin&backgroundColor=FFEFF7',
-    introduction: '知名前端创作者，擅长以浅显易懂的方式讲解底层原理。',
-    followers: '64K+',
-    socialAccounts: [
-      { platform: '掘金', url: 'https://juejin.cn/user/1292681407377624', icon: '📝' }
-    ],
-    expandedContent: {
-      specialties: ['前端底层原理', '知识体系', '职业成长'],
-      achievements: ['公众号前端之神主理人', '掘金头部创作者', '粉丝64K+'],
-      recentPosts: ['JavaScript 执行机制全览', 'Vue3 源码阅读笔记', '技术人个人品牌打造']
-    }
-  },
-  {
     id: 28,
     name: '小虚竹',
     avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=zhuxiao&backgroundColor=EFFFF7',
