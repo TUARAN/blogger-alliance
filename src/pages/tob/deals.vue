@@ -3,7 +3,7 @@
     <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 gap-4">
-          <div class="flex items-center">
+          <div class="flex items-center min-w-0">
             <router-link to="/tob" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
               🚀开发者博主联盟
             </router-link>
@@ -16,7 +16,7 @@
               active-class="text-gray-700 font-semibold"
             >
               <span class="text-base leading-none">🧭</span>
-              <span>商单进度</span>
+              <span>合作查询</span>
             </router-link>
 
             <router-link
@@ -44,7 +44,7 @@
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="bg-white rounded-2xl border border-indigo-100 shadow-sm p-6 md:p-8">
         <div class="mb-6 md:mb-8">
-          <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3">查询商单进度</h1>
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3">合作查询</h1>
           <div class="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800 text-sm md:text-base">
             当前页信息已加密，仅支持凭证解密查看。
           </div>
@@ -55,7 +55,7 @@
           class="mb-6 rounded-xl border border-indigo-200 bg-indigo-50 p-4 md:p-5"
         >
           <h2 class="text-base md:text-lg font-semibold text-indigo-900 mb-2">请输入访问凭证</h2>
-          <p class="text-sm text-indigo-700 mb-4">凭证由联盟内部统一发放，输入后可解密展示商单进度。</p>
+          <p class="text-sm text-indigo-700 mb-4">凭证由联盟内部统一发放，输入后可解密展示合作查询内容。</p>
 
           <div class="flex flex-col md:flex-row gap-3">
             <input
@@ -80,7 +80,7 @@
         <template v-else>
           <div class="mb-4 flex items-center justify-between gap-3">
             <div class="text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-              ✅ 已完成解密，可查看商单进度。
+              ✅ 已完成解密，可查看合作查询内容。
             </div>
             <button
               class="h-9 px-3 rounded-lg border border-gray-300 text-gray-600 hover:text-gray-800 hover:border-gray-400 text-sm"

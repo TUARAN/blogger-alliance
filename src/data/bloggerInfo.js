@@ -373,21 +373,6 @@ export const bloggersData = [
     }
   },
   {
-    id: 24,
-    name: '程序员海军',
-    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=haijun&backgroundColor=F7FBFF',
-    introduction: '新锐技术博主，坚持每日学习打卡，记录真实的编程成长轨迹。',
-    followers: '538+',
-    socialAccounts: [
-      { platform: '掘金', url: 'https://juejin.cn/user/1239904848713592', icon: '📝' }
-    ],
-    expandedContent: {
-      specialties: ['前端基础', '学习笔记', '算法刷题'],
-      achievements: ['掘金日更计划成员', '学习社群活跃', '粉丝快速增长'],
-      recentPosts: ['每日算法一题总结', 'Vue3 核心知识点笔记', '程序员成长日常 Vlog']
-    }
-  },
-  {
     id: 25,
     name: '前端图形(Fly)',
     avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=fly&backgroundColor=EEF8FF',

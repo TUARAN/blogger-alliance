@@ -113,9 +113,9 @@ git push origin feature/add-blogger-你的名字
 
 欢迎提交 Issue 和 Pull Request！
 
-## 🔐 商单进度数据维护（内部协作）
+## 🔐 合作查询数据维护（内部协作）
 
-商单进度页使用密文文件：
+合作查询页使用密文文件：
 
 - [src/data/commercialDeals.encrypted.js](src/data/commercialDeals.encrypted.js)
 

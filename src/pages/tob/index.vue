@@ -5,7 +5,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 gap-4">
           <!-- 左侧：Logo -->
-          <div class="flex items-center">
+          <div class="flex items-center min-w-0">
             <router-link to="/" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
               🚀开发者博主联盟
             </router-link>
@@ -19,7 +19,7 @@
               active-class="text-gray-700 font-semibold"
             >
               <span class="text-base leading-none">🧭</span>
-              <span>商单进度</span>
+              <span>合作查询</span>
             </router-link>
 
             <router-link
@@ -51,8 +51,18 @@
         <div class="text-center">
           <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             <span class="block mb-6">博主联盟</span>
-            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-              连接好产品与技术影响力
+            <span class="relative inline-block">
+              <span class="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
+                连接 AI 产品与技术影响力
+              </span>
+              <router-link
+                to="/ecosystem"
+                class="group absolute left-full top-1/2 ml-4 hidden -translate-y-1/2 lg:inline-flex items-center gap-2 whitespace-nowrap text-indigo-600 transition-colors hover:text-indigo-800"
+              >
+                <span class="translate-y-[0.02em] text-[0.95em] leading-none">🗺️</span>
+                <span aria-hidden="true" class="text-sm leading-none text-indigo-500">↖</span>
+                <span class="text-sm font-medium leading-none text-gray-500 underline-offset-4 group-hover:underline">生态定位</span>
+              </router-link>
             </span>
           </h1>
           <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
@@ -228,7 +238,13 @@
     <section id="blogger-team" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="text-center mb-10">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">我们的博主团队名单</h2>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto">专业的技术博主团队，覆盖前端、后端、AI、移动开发等多个技术领域</p>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          专业的技术博主团队，覆盖前端、后端、AI、移动开发等多个技术领域
+          <a href="#join-cta" class="ml-2 inline-flex items-center gap-1 text-indigo-600 font-medium hover:text-indigo-800 hover:underline underline-offset-4">
+            <span>持续招募中</span>
+            <span aria-hidden="true">↘</span>
+          </a>
+        </p>
       </div>
 
       <!-- 控制栏：筛选与视图切换 -->
@@ -479,30 +495,6 @@
           </transition>
         </div>
         
-        <!-- 还有更多博主卡片 -->
-        <div class="group bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 border-2 border-dashed border-indigo-200 hover:border-indigo-400 cursor-pointer">
-          <div class="p-6 text-center">
-            <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-full flex items-center justify-center text-white text-2xl">
-              <span>✨</span>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">还有更多博主</h3>
-            <p class="text-gray-600 mb-4">我们正在持续招募优秀的技术博主加入联盟</p>
-            <div class="flex flex-wrap gap-2 justify-center mb-4">
-              <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">前端开发</span>
-              <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">后端架构</span>
-              <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">AI/ML</span>
-              <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">移动开发</span>
-            </div>
-            <a
-              href="https://github.com/TUARAN/blogger-alliance"
-              target="_blank"
-              class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-            >
-              <span class="mr-2">🤝</span>
-              加入我们
-            </a>
-          </div>
-        </div>
       </div>
 
       <!-- 2. 表格视图 (Table View) -->
@@ -910,7 +902,7 @@
     </section>
 
     <!-- 底部 CTA 区域 -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <section id="join-cta" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="text-center bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-white">
         <h2 class="text-3xl md:text-4xl font-bold mb-6">
           想在技术圈扩大影响力、顺便把内容变成长期价值吗？

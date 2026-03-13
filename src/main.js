@@ -10,6 +10,7 @@ const routes = [
   { path: '/tob', component: () => import('./pages/tob/index.vue') },
   { path: '/tob/deals', component: () => import('./pages/tob/deals.vue') },
   { path: '/matrix', component: () => import('./pages/matrix/index.vue') },
+  { path: '/ecosystem', component: () => import('./pages/ecosystem/index.vue') },
   { path: '/tob/services/tweet', component: () => import('./pages/tob/services/Tweet.vue') },
   { path: '/tob/services/cpc', component: () => import('./pages/tob/services/Cpc.vue') },
   { path: '/tob/services/community', component: () => import('./pages/tob/services/Community.vue') },

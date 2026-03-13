@@ -3,7 +3,7 @@
     <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 gap-4">
-          <div class="flex items-center">
+          <div class="flex items-center min-w-0">
             <router-link to="/tob" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
               🚀开发者博主联盟
             </router-link>
@@ -16,7 +16,7 @@
               active-class="text-gray-700 font-semibold"
             >
               <span class="text-base leading-none">🧭</span>
-              <span>商单进度</span>
+              <span>合作查询</span>
             </router-link>
 
             <router-link
