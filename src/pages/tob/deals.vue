@@ -135,6 +135,18 @@
             </div>
           </div>
 
+          <div class="mb-4 flex items-center justify-end gap-3">
+            <span v-if="copyFeedback" class="text-xs text-green-700 bg-green-50 border border-green-200 rounded px-2.5 py-1">
+              {{ copyFeedback }}
+            </span>
+            <button
+              class="h-9 px-3 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-sm font-medium"
+              @click="copyDealsTableToClipboard"
+            >
+              复制为表格（飞书可粘贴）
+            </button>
+          </div>
+
           <div class="overflow-x-auto rounded-xl border border-gray-100">
             <table class="min-w-full text-sm">
               <thead class="bg-indigo-50/80 text-gray-700">
@@ -193,6 +205,9 @@ const dealServiceFilter = ref('all')
 const dealStatusFilter = ref('all')
 const dealYearFilter = ref('all')
 const dealKeyword = ref('')
+const copyFeedback = ref('')
+
+let copyFeedbackTimer = null
 
 async function unlockDeals() {
   if (!credentialInput.value.trim()) {
@@ -237,6 +252,38 @@ function lockDeals() {
   dealYearFilter.value = 'all'
   dealKeyword.value = ''
   unlockError.value = ''
+}
+
+async function copyDealsTableToClipboard() {
+  const headers = ['品牌/项目', '合作内容', '服务分类', '当前进度', '备注', '推荐人', '最近沟通时间']
+
+  const rows = filteredCommercialDeals.value.map((row) => [
+    row.brand || '-',
+    row.service || '-',
+    row.category || '-',
+    row.progress || '-',
+    row.remark || '-',
+    row.referrer || '-',
+    row.updatedAt || '-'
+  ])
+
+  const tsv = [headers, ...rows]
+    .map((line) => line.join('\t'))
+    .join('\n')
+
+  try {
+    await navigator.clipboard.writeText(tsv)
+    copyFeedback.value = `已复制 ${rows.length} 条，可直接粘贴到飞书表格。`
+  } catch {
+    copyFeedback.value = '复制失败，请检查浏览器剪贴板权限。'
+  }
+
+  if (copyFeedbackTimer) {
+    clearTimeout(copyFeedbackTimer)
+  }
+  copyFeedbackTimer = setTimeout(() => {
+    copyFeedback.value = ''
+  }, 2500)
 }
 
 const dealServiceOptions = computed(() => {
