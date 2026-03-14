@@ -10,7 +10,7 @@ const routes = [
   { path: '/tob', component: () => import('./pages/tob/index.vue') },
   { path: '/tob/deals', component: () => import('./pages/tob/deals.vue') },
   { path: '/matrix', component: () => import('./pages/matrix/index.vue') },
-  { path: '/ecosystem', component: () => import('./pages/ecosystem/index.vue') },
+  { path: '/ecosystem', redirect: '/why-us#ecosystem' },
   { path: '/why-us', component: () => import('./pages/why-us/index.vue') },
   { path: '/tob/services/tweet', component: () => import('./pages/tob/services/Tweet.vue') },
   { path: '/tob/services/cpc', component: () => import('./pages/tob/services/Cpc.vue') },
@@ -28,6 +28,18 @@ const router = createRouter({
     }
 
     if (to.hash) {
+      const target = document.querySelector(to.hash)
+
+      if (target) {
+        const topOffset = 88
+
+        return {
+          top: target.getBoundingClientRect().top + window.scrollY - topOffset,
+          left: 0,
+          behavior: 'smooth'
+        }
+      }
+
       return {
         el: to.hash,
         top: 0,

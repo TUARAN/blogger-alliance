@@ -93,7 +93,7 @@ const layers = [
               active-class="text-gray-700 font-semibold"
             >
               <span class="text-base leading-none">🧩</span>
-              <span>矩阵联盟</span>
+              <span>矩阵看板</span>
             </router-link>
 
             <router-link

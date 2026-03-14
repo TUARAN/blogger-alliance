@@ -25,7 +25,7 @@
               active-class="text-indigo-700"
             >
               <span class="text-base leading-none">🧩</span>
-              <span>矩阵联盟</span>
+              <span>矩阵看板</span>
             </router-link>
 
             <router-link
@@ -45,7 +45,7 @@
       <section class="bg-white rounded-2xl border border-indigo-100 shadow-sm p-6 md:p-8">
         <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">矩阵联盟总览</h1>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">矩阵看板总览</h1>
             <p class="mt-2 text-gray-600 leading-relaxed max-w-3xl">
               以账号为维度管理博主矩阵，面向博主沉淀运营数据，面向品牌方直观展示账号资产与合作价值。
             </p>
@@ -260,7 +260,7 @@
       </template>
 
       <section v-else class="mt-6 rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center text-gray-500">
-        暂无可展示的矩阵联盟数据。
+        暂无可展示的矩阵看板数据。
       </section>
     </main>
   </div>

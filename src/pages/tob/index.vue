@@ -28,7 +28,7 @@
               active-class="text-gray-700 font-semibold"
             >
               <span class="text-base leading-none">🧩</span>
-              <span>矩阵联盟</span>
+              <span>矩阵看板</span>
             </router-link>
 
             <!-- 联盟学院 - 路由链接，颜色较淡 -->
@@ -55,14 +55,6 @@
               <span class="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                 连接 AI 产品与技术影响力
               </span>
-              <router-link
-                to="/ecosystem"
-                class="group absolute left-full top-1/2 ml-4 hidden -translate-y-1/2 lg:inline-flex items-center gap-2 whitespace-nowrap text-indigo-600 transition-colors hover:text-indigo-800"
-              >
-                <span class="translate-y-[0.02em] text-[0.95em] leading-none">🗺️</span>
-                <span aria-hidden="true" class="text-sm leading-none text-indigo-500">↖</span>
-                <span class="text-sm font-medium leading-none text-gray-500 underline-offset-4 group-hover:underline">生态定位</span>
-              </router-link>
             </span>
           </h1>
           <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
@@ -833,7 +825,7 @@
               to="/why-us"
               class="mt-2 inline-flex items-center justify-center gap-1 text-indigo-600 transition-colors hover:text-indigo-800 md:absolute md:left-full md:top-1/2 md:ml-3 md:mt-0 md:-translate-y-1/2 whitespace-nowrap"
             >
-              <span class="text-3xl md:text-4xl leading-none">❓</span>
+              <span class="text-3xl md:text-4xl leading-none">✨</span>
               <span class="text-sm font-medium text-indigo-700 underline decoration-indigo-300 underline-offset-4 hover:decoration-indigo-500">我们与泛娱乐 MCN 的区别在哪里？</span>
             </router-link>
           </div>
