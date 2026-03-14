@@ -11,6 +11,7 @@ const routes = [
   { path: '/tob/deals', component: () => import('./pages/tob/deals.vue') },
   { path: '/matrix', component: () => import('./pages/matrix/index.vue') },
   { path: '/ecosystem', component: () => import('./pages/ecosystem/index.vue') },
+  { path: '/why-us', component: () => import('./pages/why-us/index.vue') },
   { path: '/tob/services/tweet', component: () => import('./pages/tob/services/Tweet.vue') },
   { path: '/tob/services/cpc', component: () => import('./pages/tob/services/Cpc.vue') },
   { path: '/tob/services/community', component: () => import('./pages/tob/services/Community.vue') },
@@ -20,7 +21,26 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+
+    if (to.hash) {
+      return {
+        el: to.hash,
+        top: 0,
+        behavior: 'smooth'
+      }
+    }
+
+    return {
+      top: 0,
+      left: 0,
+      behavior: 'auto'
+    }
+  }
 })
 
 const app = createApp(App)

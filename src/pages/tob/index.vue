@@ -818,9 +818,20 @@
     <!-- 服务亮点展示 -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white">
       <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-          为什么选择我们？
-        </h2>
+        <div class="mb-6">
+          <div class="relative inline-block max-w-full">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
+              为什么选择我们
+            </h2>
+            <router-link
+              to="/why-us"
+              class="mt-2 inline-flex items-center justify-center gap-1 text-indigo-600 transition-colors hover:text-indigo-800 md:absolute md:left-full md:top-1/2 md:ml-3 md:mt-0 md:-translate-y-1/2 whitespace-nowrap"
+            >
+              <span class="text-3xl md:text-4xl leading-none">❓</span>
+              <span class="text-sm font-medium text-indigo-700 underline decoration-indigo-300 underline-offset-4 hover:decoration-indigo-500">我们与泛娱乐 MCN 的区别在哪里？</span>
+            </router-link>
+          </div>
+        </div>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
           {{ bloggerStats.bloggerCount }}+专业技术博主，助力您的产品精准推广
         </p>
