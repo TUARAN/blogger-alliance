@@ -4,6 +4,7 @@ import annualDashboardImage from '../../img/example/wechat_2026-03-16_104619_761
 import annualCloudImage from '../../img/example/wechat_2026-03-16_104632_010.png'
 import reportExplanationImage from '../../img/example/wechat_2026-03-16_113829_555.png'
 import distributionFormImage from '../../img/example/image.png'
+import geoShowcaseImage from '../../img/example/微信图片_2026-03-16_145503_945.png'
 
 const activeTab = ref('tweet')
 
@@ -58,36 +59,28 @@ const advantages = [
 
 const writingFlow = [
   {
-    title: '需求沟通',
-    description: '对齐品牌目标、投放时间、核心卖点、限制项和期望覆盖的平台。'
+    title: '发布需求',
+    description: '品牌方提交合作背景、传播目标、核心卖点和基础素材，明确本轮合作方向。'
   },
   {
-    title: '资料同步',
-    description: '收集官网资料、产品文档、演示账号、素材包和已有传播口径，建立基础信息面板。'
+    title: '博主承接',
+    description: '根据项目调性与受众匹配合适博主，确认承接人选、排期与执行方式。'
   },
   {
-    title: '选题策划',
-    description: '结合开发者兴趣点，拆出教程型、体验型、对比型、场景型等不同选题方向。'
+    title: '写文审核',
+    description: '博主完成内容初稿后，由品牌与联盟共同审核，保证信息准确、表达自然。'
   },
   {
-    title: '提纲确认',
-    description: '先确认标题、结构、重点信息和 CTA，确保内容方向与品牌诉求一致。'
+    title: '分发活跃',
+    description: '按分发表单统一推进发布与活跃动作，同步跟踪链接、平台和执行状态。'
   },
   {
-    title: '博主写文',
-    description: '由匹配领域的技术博主完成初稿，突出真实体验、技术价值和适用人群。'
+    title: '数据报告',
+    description: '整理阅读、互动、平台表现与关键反馈，输出结构化报告供品牌复盘查看。'
   },
   {
-    title: '品牌审核',
-    description: '品牌侧核对事实、表述和风险点，我们同步修改细节并完成终稿。'
-  },
-  {
-    title: '矩阵发布',
-    description: '按排期在博主主阵地和相关平台发布，并配合社群扩散与二次转发。'
-  },
-  {
-    title: '数据复盘',
-    description: '整理阅读、互动、引流和平台表现，输出报告，为下一轮内容优化提供依据。'
+    title: '结算沉淀',
+    description: '完成对账与结算，并将优质内容继续沉淀为长期可复用的传播与 GEO 资产。'
   }
 ]
 </script>
@@ -216,7 +209,7 @@ const writingFlow = [
           <p class="text-sm font-semibold uppercase tracking-[0.2em] text-indigo-600">Why us</p>
           <h2 class="mt-3 text-2xl md:text-3xl font-bold text-gray-900">我们的优势</h2>
           <p class="mt-3 text-sm md:text-base leading-7 text-gray-600">
-            我们不是泛流量分发团队，而是更懂技术内容、更懂开发者场景的合作伙伴，重点帮助品牌把传播做得可信、可追踪、可沉淀。
+            我们不是泛流量分发团队，而是更懂技术内容、更懂开发者场景的合作伙伴，重点帮助品牌把传播做得可信、可追踪、可沉淀，并逐步形成真实有效的 GEO 结果。
           </p>
         </div>
 
@@ -231,6 +224,10 @@ const writingFlow = [
             <p class="mt-2 text-sm leading-6 text-gray-600">{{ item.description }}</p>
           </article>
         </div>
+
+        <div class="mt-5 rounded-2xl border border-emerald-100 bg-emerald-50/60 px-5 py-4 text-sm leading-7 text-emerald-900">
+          除了短期传播，我们也关注内容在搜索结果、社区问答和技术检索场景中的长期沉淀，让一次合作逐步延伸为真实有效的 GEO 资产。
+        </div>
       </section>
       </template>
 
@@ -244,11 +241,11 @@ const writingFlow = [
           </p>
         </div>
 
-        <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div class="mt-8 overflow-x-auto pb-2">
           <article
             v-for="(step, index) in writingFlow"
             :key="step.title"
-            class="rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-slate-50 p-5 shadow-sm"
+            class="inline-block w-[220px] align-top mr-4 last:mr-0 xl:w-[calc((100%-5rem)/6)] rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-slate-50 p-5 shadow-sm"
           >
             <div class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
               {{ index + 1 }}
@@ -295,6 +292,26 @@ const writingFlow = [
           </div>
           <div class="flex items-center justify-center bg-white p-4 md:p-6">
             <img :src="reportExplanationImage" alt="数据报告补充说明示意图" class="max-h-[680px] w-full rounded-xl object-contain object-center" />
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-3xl border border-fuchsia-100 bg-white px-6 py-8 shadow-sm md:px-8 md:py-10">
+        <div class="max-w-4xl">
+          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-fuchsia-600">Case Showcase</p>
+          <h2 class="mt-3 text-2xl md:text-3xl font-bold text-gray-900">优化大模型检索结果 GEO 展示</h2>
+          <p class="mt-3 text-sm md:text-base leading-7 text-gray-600">
+            这是案例中的另一类优质展示方式：通过更直观的页面呈现，把检索结果优化、展示逻辑和内容组织效果集中展示出来，便于品牌侧快速理解输出质量与传播价值。
+          </p>
+        </div>
+
+        <div class="mt-6 overflow-hidden rounded-2xl border border-fuchsia-100 bg-fuchsia-50/40 shadow-sm">
+          <div class="border-b border-fuchsia-100 px-5 py-4">
+            <h3 class="text-lg font-semibold text-gray-900">GEO 展示示意图</h3>
+            <p class="mt-1 text-sm text-gray-500">补充展示案例中的检索结果优化与展示效果。</p>
+          </div>
+          <div class="flex items-center justify-center bg-white p-4 md:p-6">
+            <img :src="geoShowcaseImage" alt="优化大模型检索结果 GEO 展示示意图" class="max-h-[680px] w-full rounded-xl object-contain object-center" />
           </div>
         </div>
       </section>

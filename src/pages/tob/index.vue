@@ -58,7 +58,7 @@
             </span>
           </h1>
           <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-            我们聚合一批专业技术博主，把技术品牌带到开发者 / AI 爱好者 / 科技爱好者真正会讨论的地方🔥
+            我们聚合一批专业技术博主，把技术品牌带到开发者 / AI 爱好者 / 科技爱好者真正会讨论的地方，并持续沉淀真实有效的 GEO 结果🔥
             <router-link
               to="/why-us"
               class="mt-3 inline-block text-sm md:text-base font-medium text-indigo-700 underline decoration-indigo-300 underline-offset-4 transition-colors hover:text-indigo-800 hover:decoration-indigo-500"
@@ -827,7 +827,7 @@
         <div class="mb-6">
           <div class="relative inline-block max-w-full">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
-              为什么选择我们
+              品牌方为什么选择我们？
             </h2>
             <router-link
               to="/why-us"
@@ -839,79 +839,79 @@
           </div>
         </div>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-          {{ bloggerStats.bloggerCount }}+专业技术博主，助力您的产品精准推广
+          我们聚合程序员出身的一众专业技术博主，帮助品牌完成精准传播、真实反馈获取与长期 GEO 沉淀。
         </p>
       </div>
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- 产品推广亮点 -->
+        <!-- 品牌传播价值 -->
         <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
           <div class="text-4xl mb-4">🚀</div>
-          <h3 class="text-xl font-bold text-indigo-700 mb-4">产品推广亮点</h3>
+          <h3 class="text-xl font-bold text-indigo-700 mb-4">品牌传播价值</h3>
           <ul class="space-y-3 text-gray-700">
             <li class="flex items-start">
               <span class="text-indigo-500 mr-2 mt-1">•</span>
               <span>技术博主真实测评与内容分发</span>
             </li>
-                          <li class="flex items-start">
-                <span class="text-indigo-500 mr-2 mt-1">•</span>
-                <span>覆盖 {{ bloggerStats.formattedFollowers }}+ 程序员 / AI / 科技受众</span>
-              </li>
             <li class="flex items-start">
               <span class="text-indigo-500 mr-2 mt-1">•</span>
-              <span>多平台曝光（掘金、知乎、GitHub 等）</span>
+              <span>覆盖 {{ bloggerStats.formattedFollowers }}+ 开发者 / AI / 科技受众</span>
             </li>
             <li class="flex items-start">
               <span class="text-indigo-500 mr-2 mt-1">•</span>
-              <span>数据追踪与效果反馈</span>
+              <span>多平台曝光与开发者圈层触达</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-indigo-500 mr-2 mt-1">•</span>
+              <span>让品牌进入用户真正会讨论的场景</span>
             </li>
           </ul>
         </div>
         
-        <!-- 联盟权益亮点 -->
+        <!-- 合作交付能力 -->
         <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
           <div class="text-4xl mb-4">🤝</div>
-          <h3 class="text-xl font-bold text-green-700 mb-4">联盟权益亮点</h3>
+          <h3 class="text-xl font-bold text-green-700 mb-4">合作交付能力</h3>
           <ul class="space-y-3 text-gray-700">
             <li class="flex items-start">
               <span class="text-green-500 mr-2 mt-1">•</span>
-              <span>联盟推广分成，提升收入</span>
+              <span>需求沟通、筛选博主、内容审核一体推进</span>
             </li>
             <li class="flex items-start">
               <span class="text-green-500 mr-2 mt-1">•</span>
-              <span>资源共享，涨粉更快</span>
+              <span>发布分发、数据报告、结算流程清晰</span>
             </li>
             <li class="flex items-start">
               <span class="text-green-500 mr-2 mt-1">•</span>
-              <span>专属工具库，提升创作效率</span>
+              <span>快速响应，降低品牌侧沟通成本</span>
             </li>
             <li class="flex items-start">
               <span class="text-green-500 mr-2 mt-1">•</span>
-              <span>行业交流与成长机会</span>
+              <span>支持复盘优化与下一轮投放衔接</span>
             </li>
           </ul>
         </div>
         
-        <!-- 工具/项目亮点 -->
+        <!-- 长期沉淀价值 -->
         <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
           <div class="text-4xl mb-4">🛠️</div>
-          <h3 class="text-xl font-bold text-blue-700 mb-4">工具/项目亮点</h3>
+          <h3 class="text-xl font-bold text-blue-700 mb-4">长期沉淀价值</h3>
           <ul class="space-y-3 text-gray-700">
             <li class="flex items-start">
               <span class="text-blue-500 mr-2 mt-1">•</span>
-              <span>精选开源工具，助力开发提效</span>
+              <span>内容可持续沉淀为真实有效的 GEO 结果</span>
             </li>
             <li class="flex items-start">
               <span class="text-blue-500 mr-2 mt-1">•</span>
-              <span>丰富项目案例，开源共建</span>
+              <span>增强品牌在搜索结果与社区讨论中的占位</span>
             </li>
             <li class="flex items-start">
               <span class="text-blue-500 mr-2 mt-1">•</span>
-              <span>一站式体验与学习</span>
+              <span>技术问题搜索场景下持续获得新增阅读</span>
             </li>
             <li class="flex items-start">
               <span class="text-blue-500 mr-2 mt-1">•</span>
-              <span>持续更新，紧跟技术前沿</span>
+              <span>让一次合作延伸为长期内容资产</span>
             </li>
           </ul>
         </div>
