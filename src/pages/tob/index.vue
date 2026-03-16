@@ -63,7 +63,7 @@
               to="/why-us"
               class="mt-3 inline-block text-sm md:text-base font-medium text-indigo-700 underline decoration-indigo-300 underline-offset-4 transition-colors hover:text-indigo-800 hover:decoration-indigo-500"
             >
-              我们与泛娱乐 MCN 的区别在哪里？
+              为什么选择博主联盟？
             </router-link>
           </p>
           
@@ -834,7 +834,7 @@
               class="mt-2 inline-flex items-center justify-center gap-1 text-indigo-600 transition-colors hover:text-indigo-800 md:absolute md:left-full md:top-1/2 md:ml-3 md:mt-0 md:-translate-y-1/2 whitespace-nowrap"
             >
               <span class="text-3xl md:text-4xl leading-none">✨</span>
-              <span class="text-sm font-medium text-indigo-700 underline decoration-indigo-300 underline-offset-4 hover:decoration-indigo-500">我们与泛娱乐 MCN 的区别在哪里？</span>
+              <span class="text-sm font-medium text-indigo-700 underline decoration-indigo-300 underline-offset-4 hover:decoration-indigo-500">为什么选择博主联盟？</span>
             </router-link>
           </div>
         </div>
