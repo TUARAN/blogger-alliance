@@ -95,19 +95,29 @@
           <!-- 合作品牌轮播 -->
           <div class="mt-12 max-w-4xl mx-auto">
             <div class="mb-6 flex items-center justify-center">
-              <a
-                href="#cooperation-services"
-                class="group relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm md:text-base font-extrabold text-white bg-gradient-to-r from-indigo-600 to-purple-600 border border-indigo-400/30 shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 animate-pulse motion-reduce:animate-none"
-              >
-                <span class="text-base leading-none">🔥</span>
-                <span>我想合作</span>
-                <span class="text-base leading-none transition-transform group-hover:translate-x-1">→</span>
-                <span
-                  class="pointer-events-none absolute right-0 top-0 -translate-y-[calc(100%+10px)] whitespace-nowrap rounded-lg bg-gray-900 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100"
+              <div class="flex flex-wrap items-center justify-center gap-3">
+                <router-link
+                  to="/cases"
+                  class="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm md:text-base font-bold text-indigo-700 bg-white border border-indigo-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
                 >
-                  包含：推文、引流、社群 3 类服务
-                </span>
-              </a>
+                  <span class="text-base leading-none">📘</span>
+                  <span>案例介绍</span>
+                </router-link>
+
+                <a
+                  href="#cooperation-services"
+                  class="group relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm md:text-base font-extrabold text-white bg-gradient-to-r from-indigo-600 to-purple-600 border border-indigo-400/30 shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 animate-pulse motion-reduce:animate-none"
+                >
+                  <span class="text-base leading-none">🔥</span>
+                  <span>我想合作</span>
+                  <span class="text-base leading-none transition-transform group-hover:translate-x-1">→</span>
+                  <span
+                    class="pointer-events-none absolute right-0 top-0 -translate-y-[calc(100%+10px)] whitespace-nowrap rounded-lg bg-gray-900 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100"
+                  >
+                    包含：推文、引流、社群 3 类服务
+                  </span>
+                </a>
+              </div>
             </div>
             <h3 class="mb-4 text-center text-sm md:text-base font-semibold text-gray-600">已合作品牌</h3>
             <div class="relative overflow-hidden">

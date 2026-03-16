@@ -8,6 +8,7 @@ const routes = [
   { path: '/', component: () => import('./pages/tob/index.vue') },
   { path: '/about', component: () => import('./views/Home.vue') },
   { path: '/tob', component: () => import('./pages/tob/index.vue') },
+  { path: '/cases', component: () => import('./pages/cases/index.vue') },
   { path: '/tob/deals', component: () => import('./pages/tob/deals.vue') },
   { path: '/matrix', component: () => import('./pages/matrix/index.vue') },
   { path: '/ecosystem', redirect: '/why-us#ecosystem' },
