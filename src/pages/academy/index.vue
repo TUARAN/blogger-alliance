@@ -3,18 +3,48 @@
     <!-- 导航栏 -->
     <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
+        <div class="flex justify-between items-center h-16 gap-4">
           <div class="flex items-center min-w-0">
-            <router-link to="/" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
+            <router-link to="/tob" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors truncate">
               🚀开发者博主联盟
             </router-link>
           </div>
-          <div class="flex items-center space-x-4">
-            <router-link to="/tob" class="text-gray-600 hover:text-indigo-600 transition-colors">
-              博主联盟
+
+          <div class="flex items-center gap-4 lg:gap-6 overflow-x-auto whitespace-nowrap">
+            <router-link
+              to="/tob"
+              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
+              active-class="text-gray-700 font-semibold"
+            >
+              <span class="text-base leading-none">🏠</span>
+              <span>回到首页</span>
             </router-link>
-            <router-link to="/matrix" class="text-gray-600 hover:text-indigo-600 transition-colors">
-              矩阵看板
+
+            <router-link
+              to="/tob/deals"
+              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
+              active-class="text-gray-700 font-semibold"
+            >
+              <span class="text-base leading-none">🧭</span>
+              <span>合作查询</span>
+            </router-link>
+
+            <router-link
+              to="/matrix"
+              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
+              active-class="text-gray-700 font-semibold"
+            >
+              <span class="text-base leading-none">🧩</span>
+              <span>矩阵看板</span>
+            </router-link>
+
+            <router-link
+              to="/academy"
+              class="inline-flex items-center gap-1.5 text-gray-700 transition-colors font-semibold text-base"
+              active-class="text-gray-700 font-semibold"
+            >
+              <span class="text-base leading-none">📚</span>
+              <span>联盟学院</span>
             </router-link>
           </div>
         </div>

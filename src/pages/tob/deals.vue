@@ -11,6 +11,15 @@
 
           <div class="flex items-center gap-4 lg:gap-6">
             <router-link
+              to="/tob"
+              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
+              active-class="text-gray-700 font-semibold"
+            >
+              <span class="text-base leading-none">🏠</span>
+              <span>回到首页</span>
+            </router-link>
+
+            <router-link
               to="/tob/deals"
               class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
               active-class="text-gray-700 font-semibold"
@@ -200,7 +209,7 @@
             <div class="mb-4 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
               <div>
                 <h2 class="text-lg md:text-xl font-semibold text-gray-900">报告查询</h2>
-                <p class="text-sm text-gray-500 mt-1">查询推广后的数据效果报告，支持关键词检索与一键复制。</p>
+                <p class="text-sm text-gray-500 mt-1">查询推广后的数据效果报告，支持关键词检索、一键复制和导出 PDF。</p>
               </div>
 
               <div class="w-full md:w-80">
@@ -223,12 +232,20 @@
                 <div class="mb-3 flex flex-col gap-3">
                   <div class="flex items-start justify-between gap-3">
                     <h3 class="text-base md:text-lg font-semibold text-gray-900 leading-6">{{ report.title }}</h3>
-                    <button
-                      class="inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-sm font-medium text-indigo-700 hover:bg-indigo-100"
-                      @click="copyReportData(report)"
-                    >
-                      复制数据
-                    </button>
+                    <div class="flex shrink-0 flex-wrap items-center gap-2">
+                      <button
+                        class="inline-flex h-9 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-sm font-medium text-indigo-700 hover:bg-indigo-100"
+                        @click="copyReportData(report)"
+                      >
+                        复制数据
+                      </button>
+                      <button
+                        class="inline-flex h-9 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 px-3 text-sm font-medium text-rose-700 hover:bg-rose-100"
+                        @click="exportReportToPdf(report)"
+                      >
+                        导出 PDF
+                      </button>
+                    </div>
                   </div>
 
                   <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs md:text-sm">
@@ -264,6 +281,12 @@
                     <p v-else-if="reportCopyFeedback === `${report.id}-error`" class="text-xs text-red-600">
                       复制失败，请检查浏览器剪贴板权限。
                     </p>
+                    <p v-if="reportExportFeedback === report.id" class="text-xs text-green-700 mt-1">
+                      已打开 PDF 导出窗口，请在打印面板中选择“保存为 PDF”。
+                    </p>
+                    <p v-else-if="reportExportFeedback === `${report.id}-error`" class="text-xs text-red-600 mt-1">
+                      导出失败，请检查浏览器弹窗权限后重试。
+                    </p>
                   </div>
                 </div>
                 <div class="rounded-lg bg-white/80 px-3 py-3 md:px-4 md:py-4">
@@ -294,6 +317,15 @@ import { decryptJsonPayload } from '../../utils/securePayload'
 const DEALS_CACHE_KEY = 'blogger-alliance:deals-cache'
 const DEALS_CACHE_DURATION = 30 * 60 * 1000
 
+function createPayloadFingerprint(payload) {
+  return [payload?.version, payload?.salt, payload?.iv, (payload?.ciphertext || '').length].join(':')
+}
+
+const DEALS_CACHE_FINGERPRINT = [
+  createPayloadFingerprint(encryptedCommercialDealsPayload),
+  createPayloadFingerprint(encryptedPromotionReportsPayload)
+].join('|')
+
 const commercialDeals = ref([])
 const isUnlocked = ref(false)
 const isUnlocking = ref(false)
@@ -307,10 +339,12 @@ const dealKeyword = ref('')
 const copyFeedback = ref('')
 const reportKeyword = ref('')
 const reportCopyFeedback = ref('')
+const reportExportFeedback = ref('')
 const promotionReports = ref([])
 
 let copyFeedbackTimer = null
 let reportCopyFeedbackTimer = null
+let reportExportFeedbackTimer = null
 
 function attachReportCodes(reports) {
   return reports.map((report) => ({
@@ -322,6 +356,7 @@ function attachReportCodes(reports) {
 function persistDealsCache(deals, reports) {
   localStorage.setItem(DEALS_CACHE_KEY, JSON.stringify({
     expiresAt: Date.now() + DEALS_CACHE_DURATION,
+    fingerprint: DEALS_CACHE_FINGERPRINT,
     deals,
     reports
   }))
@@ -342,6 +377,11 @@ function restoreDealsCache() {
     const parsed = JSON.parse(rawCache)
 
     if (!parsed?.expiresAt || !Array.isArray(parsed?.deals) || !Array.isArray(parsed?.reports)) {
+      clearDealsCache()
+      return
+    }
+
+    if (parsed.fingerprint !== DEALS_CACHE_FINGERPRINT) {
       clearDealsCache()
       return
     }
@@ -435,6 +475,7 @@ function lockDeals() {
   dealKeyword.value = ''
   reportKeyword.value = ''
   reportCopyFeedback.value = ''
+  reportExportFeedback.value = ''
   unlockError.value = ''
   clearDealsCache()
 }
@@ -497,6 +538,193 @@ async function copyReportData(report) {
   reportCopyFeedbackTimer = setTimeout(() => {
     reportCopyFeedback.value = ''
   }, 2500)
+}
+
+function escapeReportHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function buildReportPrintHtml(report) {
+  const paragraphs = report.content
+    .split(/\n\n+/)
+    .map((paragraph) => `<p>${escapeReportHtml(paragraph).replace(/\n/g, '<br />')}</p>`)
+    .join('')
+
+  const platformTags = report.platforms
+    .map((platform) => `<span class="tag">${escapeReportHtml(platform)}</span>`)
+    .join('')
+
+  return `<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${escapeReportHtml(report.project)} - 数据报告</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 32px;
+        font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+        color: #111827;
+        background: #f8fafc;
+        line-height: 1.7;
+      }
+      .sheet {
+        max-width: 860px;
+        margin: 0 auto;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #4338ca;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      h1 {
+        margin: 16px 0 8px;
+        font-size: 28px;
+        line-height: 1.3;
+      }
+      .subtitle {
+        margin: 0 0 24px;
+        color: #4b5563;
+        font-size: 14px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .card {
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 14px 16px;
+        background: #f9fafb;
+      }
+      .label {
+        font-size: 12px;
+        color: #6b7280;
+        margin-bottom: 6px;
+      }
+      .value {
+        font-size: 15px;
+        color: #111827;
+        font-weight: 600;
+        word-break: break-word;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .content {
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid #e5e7eb;
+      }
+      .content p {
+        margin: 0 0 16px;
+        font-size: 15px;
+        color: #1f2937;
+      }
+      @media print {
+        body {
+          background: #ffffff;
+          padding: 0;
+        }
+        .sheet {
+          max-width: none;
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="sheet">
+      <div class="eyebrow">数据报告</div>
+      <h1>${escapeReportHtml(report.project)}</h1>
+      <p class="subtitle">报告编号：${escapeReportHtml(report.reportCode)}</p>
+
+      <section class="grid">
+        <div class="card">
+          <div class="label">统计周期</div>
+          <div class="value">${escapeReportHtml(report.period)}</div>
+        </div>
+        <div class="card">
+          <div class="label">执行人</div>
+          <div class="value">${escapeReportHtml(report.author)}</div>
+        </div>
+        <div class="card" style="grid-column: 1 / -1;">
+          <div class="label">推广平台</div>
+          <div class="tags">${platformTags}</div>
+        </div>
+      </section>
+
+      <section class="content">${paragraphs}</section>
+    </main>
+  </body>
+</html>`
+}
+
+function exportReportToPdf(report) {
+  const printWindow = window.open('', '_blank', 'width=960,height=1200')
+
+  if (!printWindow) {
+    reportExportFeedback.value = `${report.id}-error`
+  } else {
+    printWindow.document.open()
+    printWindow.document.write(buildReportPrintHtml(report))
+    printWindow.document.close()
+
+    printWindow.onload = () => {
+      printWindow.focus()
+      printWindow.print()
+    }
+
+    reportExportFeedback.value = report.id
+  }
+
+  if (reportExportFeedbackTimer) {
+    clearTimeout(reportExportFeedbackTimer)
+  }
+
+  reportExportFeedbackTimer = setTimeout(() => {
+    reportExportFeedback.value = ''
+  }, 3500)
 }
 
 function createReportHash(value) {

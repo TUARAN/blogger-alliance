@@ -11,6 +11,15 @@
 
           <div class="flex items-center gap-4 lg:gap-6">
             <router-link
+              to="/tob"
+              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
+              active-class="text-gray-700 font-semibold"
+            >
+              <span class="text-base leading-none">🏠</span>
+              <span>回到首页</span>
+            </router-link>
+
+            <router-link
               to="/tob/deals"
               class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
               active-class="text-gray-700 font-semibold"

@@ -58,10 +58,10 @@
             </span>
           </h1>
           <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-            我们聚合一批专业技术博主，突出一批面向程序员 / AI 爱好者 / 科技爱好者的优质产品，助力好产品快速触达目标受众。
+            我们聚合一批专业技术博主，把技术品牌带到开发者 / AI 爱好者 / 科技爱好者真正会讨论的地方🔥
             <router-link
               to="/why-us"
-              class="ml-2 inline text-sm md:text-base font-medium text-indigo-700 underline decoration-indigo-300 underline-offset-4 transition-colors hover:text-indigo-800 hover:decoration-indigo-500"
+              class="mt-3 inline-block text-sm md:text-base font-medium text-indigo-700 underline decoration-indigo-300 underline-offset-4 transition-colors hover:text-indigo-800 hover:decoration-indigo-500"
             >
               我们与泛娱乐 MCN 的区别在哪里？
             </router-link>

@@ -2,17 +2,17 @@
 import { ref } from 'vue'
 import annualDashboardImage from '../../img/example/wechat_2026-03-16_104619_761.png'
 import annualCloudImage from '../../img/example/wechat_2026-03-16_104632_010.png'
+import reportExplanationImage from '../../img/example/wechat_2026-03-16_113829_555.png'
+import distributionFormImage from '../../img/example/image.png'
 
-const activeTab = ref('overview')
+const activeTab = ref('tweet')
 
 const caseTabs = [
-  { key: 'overview', label: '25年总览', icon: '📊' },
-  { key: 'tweet', label: '推文案例', icon: '✍️' }
+  { key: 'tweet', label: '推文案例', icon: '✍️' },
+  { key: 'overview', label: '25年总览', icon: '📊' }
 ]
 
 const partnerBrands = [
-  '百度文心',
-  '百度 OCR',
   '秒哒',
   'FinClip',
   '亚马逊云科技',
@@ -56,16 +56,7 @@ const advantages = [
   }
 ]
 
-const workflow = [
-  '发布需求',
-  '写文 / 引流',
-  '审核',
-  '发布',
-  '数据报告',
-  '结算'
-]
-
-const baiduWritingFlow = [
+const writingFlow = [
   {
     title: '需求沟通',
     description: '对齐品牌目标、投放时间、核心卖点、限制项和期望覆盖的平台。'
@@ -114,6 +105,15 @@ const baiduWritingFlow = [
 
           <div class="flex items-center gap-4 lg:gap-6 overflow-x-auto whitespace-nowrap">
             <router-link
+              to="/tob"
+              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
+              active-class="text-gray-700 font-semibold"
+            >
+              <span class="text-base leading-none">🏠</span>
+              <span>回到首页</span>
+            </router-link>
+
+            <router-link
               to="/tob/deals"
               class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
               active-class="text-gray-700 font-semibold"
@@ -145,33 +145,6 @@ const baiduWritingFlow = [
     </nav>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 space-y-8 md:space-y-10">
-      <section class="relative overflow-hidden rounded-3xl border border-indigo-100 bg-white px-6 py-8 shadow-sm md:px-10 md:py-12">
-        <div class="absolute inset-y-0 right-0 hidden w-1/3 bg-gradient-to-l from-indigo-100/60 to-transparent md:block"></div>
-        <div class="relative max-w-4xl">
-          <h1 class="mt-4 text-3xl md:text-5xl font-bold tracking-tight text-gray-900">把技术品牌带到开发者真正会讨论的地方</h1>
-          <p class="mt-4 text-base md:text-lg leading-8 text-gray-600">
-            2025 年，我们与
-            <span class="font-semibold text-gray-900">{{ partnerBrands.join('、') }}</span>
-            等品牌完成合作，围绕技术内容分发、平台种草、社群扩散和数据复盘，持续帮助品牌建立开发者认知。
-          </p>
-          <div class="mt-6 flex flex-wrap gap-3">
-            <router-link
-              to="/tob#cooperation-services"
-              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-200 transition-transform hover:-translate-y-0.5"
-            >
-              <span>🔥</span>
-              <span>我也想合作</span>
-            </router-link>
-            <router-link
-              to="/tob/deals"
-              class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-gray-700 shadow-sm transition-colors hover:border-indigo-200 hover:text-indigo-700"
-            >
-              <span>🧭</span>
-              <span>合作查询</span>
-            </router-link>
-          </div>
-        </div>
-      </section>
 
       <section class="rounded-2xl border border-indigo-100 bg-white/90 p-2 shadow-sm backdrop-blur-sm">
         <div class="flex flex-wrap gap-2">
@@ -196,6 +169,9 @@ const baiduWritingFlow = [
         <div class="max-w-3xl">
           <p class="text-sm uppercase tracking-[0.24em] text-indigo-200">2025 年合作情况</p>
           <h2 class="mt-3 text-2xl md:text-3xl font-bold">年度合作分发与传播画像</h2>
+          <p class="mt-3 text-sm md:text-base leading-7 text-slate-300">
+            2025 年，我们与 <span class="font-semibold text-white">{{ partnerBrands.join('、') }}</span> 等品牌完成合作，围绕技术内容分发、平台种草、社群扩散和数据复盘，持续帮助品牌建立开发者认知。
+          </p>
           <p class="mt-3 text-sm md:text-base leading-7 text-slate-300">
             这一年里，我们的内容主要分发在掘金、CSDN、知乎、公众号、头条、博客园、腾讯云开发者社区等平台，并通过社群和矩阵号持续放大传播声量。
           </p>
@@ -262,15 +238,15 @@ const baiduWritingFlow = [
       <section class="rounded-3xl border border-blue-100 bg-white px-6 py-8 shadow-sm md:px-8 md:py-10">
         <div class="max-w-4xl">
           <p class="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">Tweet Case</p>
-          <h2 class="mt-3 text-2xl md:text-3xl font-bold text-gray-900">推文案例：百度写文流程</h2>
+          <h2 class="mt-3 text-2xl md:text-3xl font-bold text-gray-900">推文案例：写文流程</h2>
           <p class="mt-3 text-sm md:text-base leading-7 text-gray-600">
-            在推文合作里，我们更关注内容是否像“技术分享”而不是“广告文案”。以百度相关合作为例，写文流程会先解决信息准确，再保证表达自然，最后通过审核与发布节奏保证效果和稳定性。
+            在推文合作里，我们更关注内容是否像“技术分享”而不是“广告文案”。案例中的写文流程会先解决信息准确，再保证表达自然，最后通过审核与发布节奏保证效果和稳定性。
           </p>
         </div>
 
         <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <article
-            v-for="(step, index) in baiduWritingFlow"
+            v-for="(step, index) in writingFlow"
             :key="step.title"
             class="rounded-2xl border border-gray-100 bg-gradient-to-b from-white to-slate-50 p-5 shadow-sm"
           >
@@ -283,13 +259,53 @@ const baiduWritingFlow = [
         </div>
       </section>
 
+      <section class="rounded-3xl border border-amber-100 bg-white px-6 py-8 shadow-sm md:px-8 md:py-10">
+        <div class="max-w-4xl">
+          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-amber-600">Distribution Stage</p>
+          <h2 class="mt-3 text-2xl md:text-3xl font-bold text-gray-900">分发阶段填表展示</h2>
+          <p class="mt-3 text-sm md:text-base leading-7 text-gray-600">
+            在进入分发阶段后，我们会统一收集发布链接、平台信息、博主排期与执行状态，通过标准化表单推进协作，保证矩阵分发过程透明、可追踪、可复盘。
+          </p>
+        </div>
+
+        <div class="mt-6 overflow-hidden rounded-2xl border border-amber-100 bg-amber-50/40 shadow-sm">
+          <div class="border-b border-amber-100 px-5 py-4">
+            <h3 class="text-lg font-semibold text-gray-900">分发表单示意图</h3>
+            <p class="mt-1 text-sm text-gray-500">展示案例执行过程中，分发阶段的信息收集与协作表单。</p>
+          </div>
+          <div class="flex items-center justify-center bg-white p-4 md:p-6">
+            <img :src="distributionFormImage" alt="分发阶段填表情况示意图" class="max-h-[680px] w-full rounded-xl object-contain object-center" />
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-3xl border border-violet-100 bg-white px-6 py-8 shadow-sm md:px-8 md:py-10">
+        <div class="max-w-4xl">
+          <p class="text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">Report Sample</p>
+          <h2 class="mt-3 text-2xl md:text-3xl font-bold text-gray-900">数据报告案例展示</h2>
+          <p class="mt-3 text-sm md:text-base leading-7 text-gray-600">
+            在合作收尾阶段，我们会输出结构化的数据报告，统一汇总发布时间、投放平台、阅读与互动反馈，帮助品牌快速理解本轮内容传播效果，并为下一轮合作提供复盘依据。
+          </p>
+        </div>
+
+        <div class="mt-6 overflow-hidden rounded-2xl border border-violet-100 bg-slate-50 shadow-sm">
+          <div class="border-b border-violet-100 px-5 py-4">
+            <h3 class="text-lg font-semibold text-gray-900">报告示意图</h3>
+            <p class="mt-1 text-sm text-gray-500">补充展示数据报告在实际合作中的呈现方式。</p>
+          </div>
+          <div class="flex items-center justify-center bg-white p-4 md:p-6">
+            <img :src="reportExplanationImage" alt="数据报告补充说明示意图" class="max-h-[680px] w-full rounded-xl object-contain object-center" />
+          </div>
+        </div>
+      </section>
+
       <section class="rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-cyan-50 px-6 py-8 shadow-sm md:px-8 md:py-10">
         <div class="grid gap-5 lg:grid-cols-3">
           <article class="rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm lg:col-span-2">
             <p class="text-sm font-semibold text-emerald-700">交付重点</p>
             <h3 class="mt-2 text-xl font-bold text-gray-900">让技术内容既能看懂，也愿意转发</h3>
             <p class="mt-3 text-sm leading-7 text-gray-600">
-              我们在百度写文类合作里，会更强调“真实体验 + 明确场景 + 易传播标题”。这样既能兼顾品牌信息准确度，也更符合技术平台的阅读习惯。
+              我们在写文类合作里，会更强调“真实体验 + 明确场景 + 易传播标题”。这样既能兼顾品牌信息准确度，也更符合技术平台的阅读习惯。
             </p>
           </article>
 
