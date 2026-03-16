@@ -269,17 +269,17 @@
             <select
               v-model="sortField"
               @change="sortOrder = 'desc'"
-              class="block w-32 pl-3 pr-10 h-10 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md border"
+              class="block w-40 md:w-44 pl-3 pr-10 h-10 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md border"
             >
-              <option value="default">默认</option>
+              <option value="cooperationHeat">合作热度</option>
+              <option value="recommended">合作推荐</option>
               <option value="followers">粉丝数</option>
-              <option value="name">姓名</option>
             </select>
             <button
               @click="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'"
               class="flex items-center justify-center w-10 h-10 text-gray-500 hover:text-indigo-600 border border-gray-300 rounded-md transition-colors bg-white shadow-sm"
               title="切换升序/降序"
-              v-if="sortField !== 'default'"
+              v-if="!['cooperationHeat', 'recommended'].includes(sortField)"
             >
               <span class="text-lg leading-none">{{ sortOrder === "asc" ? "⬆️" : "⬇️" }}</span>
             </button>
@@ -503,11 +503,9 @@
               <tr>
                 <th
                   scope="col"
-                  class="w-56 px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-indigo-600 select-none sticky left-0 bg-gray-50 z-10 shadow-[2px_0_5px_rgba(0,0,0,0.05)]"
-                  @click="toggleSort('name')"
+                  class="w-56 px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider select-none sticky left-0 bg-gray-50 z-10 shadow-[2px_0_5px_rgba(0,0,0,0.05)]"
                 >
                   博主信息
-                  <span v-if="sortField === 'name'" class="ml-1">{{ sortOrder === "asc" ? "⬆" : "⬇" }}</span>
                 </th>
                 <th scope="col" class="w-40 px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider select-none text-gray-400">
                   粉丝基数
@@ -1114,11 +1112,35 @@ const scrollToBloggerTeam = () => {
 // --- 列表/表格视图与筛选排序逻辑 ---
 const viewMode = ref("grid"); // 'grid' | 'table'
 const selectedPlatform = ref("all"); // 平台筛选
-const sortField = ref("default"); // 'default' | 'followers' | 'name'
+const sortField = ref("cooperationHeat"); // 'cooperationHeat' | 'recommended' | 'followers'
 const sortOrder = ref("desc"); // 'asc' | 'desc'
 
 const bloggerOrderIndex = new Map(bloggersData.map((blogger, index) => [blogger.id, index]))
 const getBloggerOriginalIndex = (blogger) => bloggerOrderIndex.get(blogger.id) ?? Number.MAX_SAFE_INTEGER
+const cooperationHeatPriorityNames = ['安东尼', '主任', '前端之虎', '小包', '中杯可乐', '阿杆', '浪里行舟', 'ErpanOmer', '南方者', '万少']
+
+const getCooperationHeatPriority = (blogger) => {
+  const priorityIndex = cooperationHeatPriorityNames.findIndex((keyword) => blogger.name.includes(keyword))
+  return priorityIndex === -1 ? Number.MAX_SAFE_INTEGER : priorityIndex
+}
+
+const compareByRecommendedOrder = (a, b) => {
+  const hasA = hasExplicitAvatar(a)
+  const hasB = hasExplicitAvatar(b)
+
+  if (hasA !== hasB) return hasA ? -1 : 1
+
+  if (hasA && hasB) {
+    const tierA = isKOL(a.followers) ? 0 : isKOC(a.followers) ? 1 : 2
+    const tierB = isKOL(b.followers) ? 0 : isKOC(b.followers) ? 1 : 2
+    if (tierA !== tierB) return tierA - tierB
+    return getBloggerOriginalIndex(a) - getBloggerOriginalIndex(b)
+  }
+
+  const followersDiff = parseFollowersValue(b.followers) - parseFollowersValue(a.followers)
+  if (followersDiff !== 0) return followersDiff
+  return getBloggerOriginalIndex(a) - getBloggerOriginalIndex(b)
+}
 
 // 静态定义的常用平台，用于表头排序
 const staticPlatforms = ["掘金", "GitHub", "CSDN", "知乎", "微信公众号"];
@@ -1201,57 +1223,40 @@ const filteredAndSortedBloggers = computed(() => {
   }
 
   // 2. 排序
-  if (sortField.value === "default") {
-    // 默认排序：明确头像优先；有头像时 KOL 在前、KOC 在后（组内保持原顺序）；无明确头像按粉丝量降序
+  if (sortField.value === "cooperationHeat") {
     result.sort((a, b) => {
-      const hasA = hasExplicitAvatar(a)
-      const hasB = hasExplicitAvatar(b)
+      const priorityA = getCooperationHeatPriority(a)
+      const priorityB = getCooperationHeatPriority(b)
 
-      if (hasA !== hasB) return hasA ? -1 : 1
-
-      if (hasA && hasB) {
-        const tierA = isKOL(a.followers) ? 0 : isKOC(a.followers) ? 1 : 2
-        const tierB = isKOL(b.followers) ? 0 : isKOC(b.followers) ? 1 : 2
-        if (tierA !== tierB) return tierA - tierB
-        return getBloggerOriginalIndex(a) - getBloggerOriginalIndex(b)
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB
       }
 
-      const followersDiff = parseFollowersValue(b.followers) - parseFollowersValue(a.followers)
-      if (followersDiff !== 0) return followersDiff
-      return getBloggerOriginalIndex(a) - getBloggerOriginalIndex(b)
+      return compareByRecommendedOrder(a, b)
+    })
+  } else if (sortField.value === "recommended") {
+    // 合作推荐：明确头像优先；有头像时 KOL 在前、KOC 在后（组内保持原顺序）；无明确头像按粉丝量降序
+    result.sort((a, b) => {
+      return compareByRecommendedOrder(a, b)
     })
   } else {
     result.sort((a, b) => {
-      let valA, valB;
+      let valA
+      let valB
 
       if (sortField.value === "followers") {
-        valA = parseFollowersValue(a.followers);
-        valB = parseFollowersValue(b.followers);
-      } else if (sortField.value === "name") {
-        valA = a.name;
-        valB = b.name;
+        valA = parseFollowersValue(a.followers)
+        valB = parseFollowersValue(b.followers)
       }
 
-      if (valA < valB) return sortOrder.value === "asc" ? -1 : 1;
-      if (valA > valB) return sortOrder.value === "asc" ? 1 : -1;
-      return 0;
+      if (valA < valB) return sortOrder.value === "asc" ? -1 : 1
+      if (valA > valB) return sortOrder.value === "asc" ? 1 : -1
+      return 0
     })
   }
 
   return result
 })
-
-// 处理排序点击
-const toggleSort = (field) => {
-  if (sortField.value === field) {
-    // 切换顺序
-    sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
-  } else {
-    // 切换字段，默认降序
-    sortField.value = field;
-    sortOrder.value = "desc";
-  }
-}
 
 // 页面加载时记录访问
 onMounted(() => {

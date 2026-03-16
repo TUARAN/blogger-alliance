@@ -418,22 +418,6 @@ export const bloggersData = [
     }
   },
   {
-    id: 29,
-    name: 'xiaoming',
-    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=xiaoming&backgroundColor=E8F6FF',
-    introduction: '关注 AI 与前端交叉领域的创作者，分享实战案例与开源工具体验。',
-    followers: '34K+',
-    socialAccounts: [
-      { platform: 'X(Twitter)', url: 'https://twitter.com/', icon: '🐦' },
-      { platform: '掘金', url: 'https://juejin.cn/user/2875978147692910', icon: '📝' },
-    ],
-    expandedContent: {
-      specialties: ['AI 应用', '前端开发', '效率工具'],
-      achievements: ['AI 辅助开发布道者', '多平台互动社群', '粉丝34K+'],
-      recentPosts: ['AI 赋能前端的 10 个场景', '开源工具推荐清单', '开发者如何玩转 AIGC']
-    }
-  },
-  {
     id: 30,
     name: '代码AI弗森',
     avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=aifusen&backgroundColor=FFF7E8',
