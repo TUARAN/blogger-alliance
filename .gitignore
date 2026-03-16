@@ -33,3 +33,4 @@ dist-ssr
 # Internal plaintext business data (do not commit)
 private/
 src/data/commercialDeals.source.json
+src/data/promotionReports.source.json

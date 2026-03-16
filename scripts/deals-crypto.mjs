@@ -7,6 +7,22 @@ const cwd = process.cwd()
 
 const DEFAULT_SOURCE_PATH = path.resolve(cwd, 'private/commercialDeals.source.json')
 const DEFAULT_ENCRYPTED_JS_PATH = path.resolve(cwd, 'src/data/commercialDeals.encrypted.js')
+const DEFAULT_PAYLOAD_EXPORT = 'encryptedCommercialDealsPayload'
+
+const PAYLOAD_PRESETS = {
+  deals: {
+    sourcePath: DEFAULT_SOURCE_PATH,
+    encryptedPath: DEFAULT_ENCRYPTED_JS_PATH,
+    exportName: 'encryptedCommercialDealsPayload',
+    label: '合作进度数据'
+  },
+  reports: {
+    sourcePath: path.resolve(cwd, 'private/promotionReports.source.json'),
+    encryptedPath: path.resolve(cwd, 'src/data/promotionReports.encrypted.js'),
+    exportName: 'encryptedPromotionReportsPayload',
+    label: '数据报告'
+  }
+}
 
 function getArg(name) {
   const hit = process.argv.find((arg) => arg.startsWith(`${name}=`))
@@ -16,6 +32,23 @@ function getArg(name) {
 function normalizePath(inputPath, fallbackPath) {
   const finalPath = inputPath || fallbackPath
   return path.isAbsolute(finalPath) ? finalPath : path.resolve(cwd, finalPath)
+}
+
+function getPayloadConfig() {
+  const payloadType = (getArg('--type') || 'deals').trim()
+  const preset = PAYLOAD_PRESETS[payloadType]
+
+  if (!preset) {
+    throw new Error(`不支持的数据类型：${payloadType}。可选值：${Object.keys(PAYLOAD_PRESETS).join(', ')}`)
+  }
+
+  return {
+    payloadType,
+    sourcePath: normalizePath(getArg('--in'), preset.sourcePath),
+    encryptedPath: normalizePath(getArg('--out'), preset.encryptedPath),
+    exportName: getArg('--export') || preset.exportName,
+    label: preset.label
+  }
 }
 
 function getCredential() {
@@ -32,10 +65,10 @@ function toWrappedBase64(base64, width = 160) {
   return chunks.join('\n    ')
 }
 
-function encodePayloadAsModule(payload) {
+function encodePayloadAsModule(payload, exportName = DEFAULT_PAYLOAD_EXPORT) {
   const wrappedCiphertext = toWrappedBase64(payload.ciphertext)
 
-  return `export const encryptedCommercialDealsPayload = {\n  version: ${payload.version},\n  algorithm: '${payload.algorithm}',\n  kdf: '${payload.kdf}',\n  hash: '${payload.hash}',\n  iterations: ${payload.iterations},\n  salt: '${payload.salt}',\n  iv: '${payload.iv}',\n  ciphertext: \`\n    ${wrappedCiphertext}\n  \`\n}\n`
+  return `export const ${exportName} = {\n  version: ${payload.version},\n  algorithm: '${payload.algorithm}',\n  kdf: '${payload.kdf}',\n  hash: '${payload.hash}',\n  iterations: ${payload.iterations},\n  salt: '${payload.salt}',\n  iv: '${payload.iv}',\n  ciphertext: \`\n    ${wrappedCiphertext}\n  \`\n}\n`
 }
 
 function parseCiphertextBase64(value) {
@@ -89,10 +122,10 @@ async function ensureDirForFile(filePath) {
   await fs.mkdir(path.dirname(filePath), { recursive: true })
 }
 
-async function loadPayloadFromModule(modulePath) {
+async function loadPayloadFromModule(modulePath, exportName) {
   const moduleUrl = pathToFileURL(modulePath).href
   const imported = await import(`${moduleUrl}?t=${Date.now()}`)
-  return imported.encryptedCommercialDealsPayload
+  return imported[exportName]
 }
 
 async function runEncrypt() {
@@ -101,8 +134,7 @@ async function runEncrypt() {
     throw new Error('缺少凭证：请传入 --credential=xxxx 或设置 DEALS_CREDENTIAL 环境变量。')
   }
 
-  const sourcePath = normalizePath(getArg('--in'), DEFAULT_SOURCE_PATH)
-  const outputPath = normalizePath(getArg('--out'), DEFAULT_ENCRYPTED_JS_PATH)
+  const { sourcePath, encryptedPath, exportName, label } = getPayloadConfig()
 
   const sourceText = await fs.readFile(sourcePath, 'utf8')
   const sourceData = JSON.parse(sourceText)
@@ -112,12 +144,12 @@ async function runEncrypt() {
   }
 
   const payload = encryptDealsData(sourceData, credential)
-  const moduleText = encodePayloadAsModule(payload)
+  const moduleText = encodePayloadAsModule(payload, exportName)
 
-  await ensureDirForFile(outputPath)
-  await fs.writeFile(outputPath, moduleText, 'utf8')
+  await ensureDirForFile(encryptedPath)
+  await fs.writeFile(encryptedPath, moduleText, 'utf8')
 
-  console.log(`✅ 已加密并写入: ${path.relative(cwd, outputPath)}`)
+  console.log(`✅ ${label}已加密并写入: ${path.relative(cwd, encryptedPath)}`)
 }
 
 async function runDecrypt() {
@@ -126,20 +158,19 @@ async function runDecrypt() {
     throw new Error('缺少凭证：请传入 --credential=xxxx 或设置 DEALS_CREDENTIAL 环境变量。')
   }
 
-  const inputPath = normalizePath(getArg('--in'), DEFAULT_ENCRYPTED_JS_PATH)
-  const outputPath = normalizePath(getArg('--out'), DEFAULT_SOURCE_PATH)
+  const { sourcePath, encryptedPath, exportName, label } = getPayloadConfig()
 
-  const payload = await loadPayloadFromModule(inputPath)
+  const payload = await loadPayloadFromModule(encryptedPath, exportName)
   if (!payload) {
-    throw new Error('未找到 encryptedCommercialDealsPayload 导出。')
+    throw new Error(`未找到 ${exportName} 导出。`)
   }
 
   const data = decryptDealsData(payload, credential)
 
-  await ensureDirForFile(outputPath)
-  await fs.writeFile(outputPath, `${JSON.stringify(data, null, 2)}\n`, 'utf8')
+  await ensureDirForFile(sourcePath)
+  await fs.writeFile(sourcePath, `${JSON.stringify(data, null, 2)}\n`, 'utf8')
 
-  console.log(`✅ 已解密并写入: ${path.relative(cwd, outputPath)}`)
+  console.log(`✅ ${label}已解密并写入: ${path.relative(cwd, sourcePath)}`)
 }
 
 async function main() {
@@ -155,7 +186,7 @@ async function main() {
     return
   }
 
-  console.log(`用法:\n  npm run deals:credential\n  DEALS_CREDENTIAL=xxxx npm run deals:decrypt\n  DEALS_CREDENTIAL=xxxx npm run deals:encrypt\n\n可选参数:\n  --in=路径   输入文件路径\n  --out=路径  输出文件路径\n  --credential=凭证`)
+  console.log(`用法:\n  DEALS_CREDENTIAL=xxxx npm run deals:decrypt\n  DEALS_CREDENTIAL=xxxx npm run deals:encrypt\n  DEALS_CREDENTIAL=xxxx npm run reports:decrypt\n  DEALS_CREDENTIAL=xxxx npm run reports:encrypt\n\n可选参数:\n  --type=deals|reports\n  --in=路径   输入文件路径\n  --out=路径  输出文件路径\n  --export=名称  导出的 payload 常量名\n  --credential=凭证`)
 }
 
 main().catch((err) => {

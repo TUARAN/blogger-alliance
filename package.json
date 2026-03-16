@@ -8,7 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "deals:encrypt": "node scripts/deals-crypto.mjs encrypt",
-    "deals:decrypt": "node scripts/deals-crypto.mjs decrypt"
+    "deals:decrypt": "node scripts/deals-crypto.mjs decrypt",
+    "reports:encrypt": "node scripts/deals-crypto.mjs encrypt --type=reports",
+    "reports:decrypt": "node scripts/deals-crypto.mjs decrypt --type=reports"
   },
   "dependencies": {
     "vue": "^3.4.0",

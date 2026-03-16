@@ -118,6 +118,7 @@ git push origin feature/add-blogger-你的名字
 合作查询页使用密文文件：
 
 - [src/data/commercialDeals.encrypted.js](src/data/commercialDeals.encrypted.js)
+- [src/data/promotionReports.encrypted.js](src/data/promotionReports.encrypted.js)
 
 ### 1) 明文源数据放哪里？
 
@@ -149,6 +150,61 @@ DEALS_CREDENTIAL=你的6位凭证 npm run deals:encrypt
 - 统一由 1~2 位维护人掌管凭证并负责加密发布。
 - 团队成员通过私有表格或内部文档提交新增商单信息。
 - 公开仓库只保留密文，不存明文业务数据。
+
+## 🔐 数据报告维护（内部协作）
+
+报告查询页同样使用密文文件：
+
+- [src/data/promotionReports.encrypted.js](src/data/promotionReports.encrypted.js)
+
+### 1) 固定模板在哪里？
+
+- 本地实际数据文件：`private/promotionReports.source.json`
+- 本地固定模板文件：`private/promotionReports.template.json`
+- 仓库示例文件：`src/data/promotionReports.source.example.json`
+
+推荐流程：
+
+1. 复制 `private/promotionReports.template.json` 里的对象结构
+2. 粘贴到 `private/promotionReports.source.json` 数组中
+3. 只改字段值
+4. 执行加密命令
+
+### 2) 字段说明
+
+- `id`：报告唯一业务 ID，建议格式：`report-YYYYMMDD-序号`
+- `title`：报告标题，当前统一使用 `数据报告`
+- `project`：合作项目名称，例如 `向日葵AI 合作`
+- `author`：执行人姓名
+- `period`：统计周期展示文案
+- `publishedAt`：发布时间戳，使用 ISO 格式，例如 `2026-03-12T10:00:00+08:00`
+- `platforms`：推广平台数组，例如 `[`公众号`, `CSDN`, `知乎`]`
+- `content`：完整报告正文
+
+### 3) 新增一条数据报告
+
+1. 编辑 `private/promotionReports.source.json`
+2. 按模板新增一个对象
+3. 执行：
+
+```bash
+DEALS_CREDENTIAL=你的6位凭证 npm run reports:encrypt
+```
+
+4. 提交密文文件变更：`src/data/promotionReports.encrypted.js`
+
+### 4) 如需查看当前报告明文
+
+```bash
+DEALS_CREDENTIAL=你的6位凭证 npm run reports:decrypt
+```
+
+### 5) 推荐维护方式
+
+- 先在 `private/promotionReports.source.json` 维护所有报告
+- 每次只新增或修改 JSON，不直接改前端页面
+- 修改完成后只执行一次 `npm run reports:encrypt`
+- 页面会自动读取新的密文数据
 
 ---
 
