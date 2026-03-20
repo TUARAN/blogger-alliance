@@ -14,31 +14,12 @@
           <!-- 右侧：导航链接 -->
           <div class="flex items-center gap-4 lg:gap-6">
             <router-link
-              to="/tob/deals"
+              to="/workspace"
               class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
               active-class="text-gray-700 font-semibold"
             >
-              <span class="text-base leading-none">🧭</span>
-              <span>合作查询</span>
-            </router-link>
-
-            <router-link
-              to="/matrix"
-              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
-              active-class="text-gray-700 font-semibold"
-            >
-              <span class="text-base leading-none">🧩</span>
-              <span>矩阵看板</span>
-            </router-link>
-
-            <!-- 联盟学院 - 路由链接，颜色较淡 -->
-            <router-link
-              to="/academy"
-              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
-              active-class="text-gray-700 font-semibold"
-            >
-              <span class="text-base leading-none">📚</span>
-              <span>联盟学院</span>
+              <span class="text-base leading-none">🗂️</span>
+              <span>联盟工作台</span>
             </router-link>
           </div>
         </div>
@@ -58,13 +39,23 @@
             </span>
           </h1>
           <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-            我们聚合一批专业技术博主，把技术品牌带到开发者 / AI 爱好者 / 科技爱好者真正会讨论的地方，并持续沉淀真实有效的 GEO 结果🔥
-            <router-link
-              to="/why-us"
-              class="mt-3 inline-block text-sm md:text-base font-medium text-indigo-700 underline decoration-indigo-300 underline-offset-4 transition-colors hover:text-indigo-800 hover:decoration-indigo-500"
-            >
-              为什么选择博主联盟？
-            </router-link>
+            我们聚合一批专业技术博主，把技术品牌带到开发者 / AI 爱好者 / 科技爱好者真正会讨论的地方，并持续沉淀真实有效的 GEO 结果
+            <span class="mt-3 inline-flex flex-wrap items-center justify-center gap-4">
+              <router-link
+                to="/why-us"
+                class="inline-flex items-center gap-1 text-sm md:text-base font-medium text-indigo-700 transition-colors hover:text-indigo-800"
+              >
+                <span class="leading-none no-underline">✨</span>
+                <span class="underline decoration-indigo-300 underline-offset-4 hover:decoration-indigo-500">为什么选择博主联盟？</span>
+              </router-link>
+              <router-link
+                to="/ecosystem"
+                class="inline-flex items-center gap-1 text-sm md:text-base font-medium text-indigo-700 transition-colors hover:text-indigo-800"
+              >
+                <span class="leading-none no-underline">📍</span>
+                <span class="underline decoration-indigo-300 underline-offset-4 hover:decoration-indigo-500">生态定位</span>
+              </router-link>
+            </span>
           </p>
           
 
@@ -104,19 +95,19 @@
                   <span>案例介绍</span>
                 </router-link>
 
-                <a
-                  href="#cooperation-services"
-                  class="group relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm md:text-base font-extrabold text-white bg-gradient-to-r from-indigo-600 to-purple-600 border border-indigo-400/30 shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 animate-pulse motion-reduce:animate-none"
+                <router-link
+                  to="/tob/services"
+                  class="group relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm md:text-base font-extrabold text-white bg-gradient-to-r from-indigo-600 to-purple-600 border border-indigo-400/30 shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
                 >
                   <span class="text-base leading-none">🔥</span>
-                  <span>我想合作</span>
+                  <span>我要合作</span>
                   <span class="text-base leading-none transition-transform group-hover:translate-x-1">→</span>
                   <span
                     class="pointer-events-none absolute right-0 top-0 -translate-y-[calc(100%+10px)] whitespace-nowrap rounded-lg bg-gray-900 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100"
                   >
-                    包含：推文、引流、社群 3 类服务
+                    进入服务介绍
                   </span>
-                </a>
+                </router-link>
               </div>
             </div>
             <h3 class="mb-4 text-center text-sm md:text-base font-semibold text-gray-600">已合作品牌</h3>
@@ -613,330 +604,25 @@
       </div>
     </section>
 
-    <!-- 合作服务 -->
-    <section id="cooperation-services" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <!-- 总体介绍 -->
-      <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-          合作服务
-        </h2>
-        <p class="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
-          博主联盟提供<span class="font-semibold text-gray-900">一站式品牌推广与合作平台</span>，<br class="hidden md:block">通过专业技术博主的力量，帮助品牌<span class="font-semibold text-gray-900">精准触达程序员 / AI 爱好者 / 科技爱好者</span>。
-          <br><br>
-          我们支持<span class="font-semibold text-indigo-600">三类合作模式</span>：内容创作 · 流量转化 · 社群运营<br>
-          <span class="text-base text-gray-500 mt-1 inline-block">无论是快速传播还是长期沉淀，我们都能为你找到最合适的方案。</span>
-        </p>
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 border border-indigo-100">
-          <span class="text-sm text-indigo-700">
-            <span class="font-semibold">合作流程清晰透明：</span>需求发布 → 博主承接 → 内容创作 → 质量审核 → 全网发布 → 数据统计 → 结款
-          </span>
-        </div>
-      </div>
-
-      <!-- 三类服务卡片 -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-        <!-- 推文服务 -->
-        <router-link
-          to="/tob/services/tweet"
-          aria-label="查看：推文 服务详情"
-          class="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm p-8 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
-        >
-          <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
-          <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
-            推文
-          </span>
-          <div class="text-4xl mb-4">✍️</div>
-          <h3 class="text-xl font-bold text-gray-900 mb-4">推文服务</h3>
-          <p class="text-sm text-gray-600 mb-6">内容创作与分发，让技术博主用专业笔触为你写推文</p>
-          <div class="space-y-3 text-sm text-gray-700">
-            <div class="font-semibold text-indigo-700 mb-3">服务流程：</div>
-            <div class="flex items-start gap-3">
-              <span class="text-indigo-500 font-semibold flex-shrink-0">1</span>
-              <span>选号 - 从几十位博主中甄选合适的创作者</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-indigo-500 font-semibold flex-shrink-0">2</span>
-              <span>发布brief需求 - 清晰阐述产品要点和推广目标</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-indigo-500 font-semibold flex-shrink-0">3</span>
-              <span>博主承接写文 - 专业团队进行内容创作</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-indigo-500 font-semibold flex-shrink-0">4</span>
-              <span>质量审核 - 确保内容质量和品牌一致性</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-indigo-500 font-semibold flex-shrink-0">5</span>
-              <span>全网发布 - 在掘金、公众号、CSDN、头条、知乎等 10+ 个主流平台或技术社区发布</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-indigo-500 font-semibold flex-shrink-0">6</span>
-              <span>结算与报告 - 支持对公结算，生成效果报告</span>
-            </div>
-          </div>
-          <div class="mt-6">
-            <div class="inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-extrabold text-white bg-gradient-to-r from-indigo-600 to-purple-600 shadow-md group-hover:shadow-xl transition-all duration-300">
-              查看推文服务详情 →
-            </div>
-          </div>
-        </router-link>
-
-        <!-- 引流服务 -->
-        <router-link
-          to="/tob/services/cpc"
-          aria-label="查看：引流 服务详情"
-          class="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm p-8 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-green-400/60"
-        >
-          <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-green-500 to-blue-500"></div>
-          <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-100">
-            引流
-          </span>
-          <div class="text-4xl mb-4">🔗</div>
-          <h3 class="text-xl font-bold text-gray-900 mb-4">引流服务</h3>
-          <p class="text-sm text-gray-600 mb-6">链接植入与效果转化，为你带来精准的流量与用户</p>
-          <div class="space-y-3 text-sm text-gray-700">
-            <div class="font-semibold text-green-700 mb-3">服务流程：</div>
-            <div class="flex items-start gap-3">
-              <span class="text-green-500 font-semibold flex-shrink-0">1</span>
-              <span>发布推广需求 - 明确引流目标和转化期望</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-green-500 font-semibold flex-shrink-0">2</span>
-              <span>内容宣发 - 联盟进行全网推广和链接植入</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-green-500 font-semibold flex-shrink-0">3</span>
-              <span>链接追踪 - 实时监测点击和转化数据</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-green-500 font-semibold flex-shrink-0">4</span>
-              <span>数据统计 - 生成详细的流量和转化报告</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-green-500 font-semibold flex-shrink-0">5</span>
-              <span>优化投放 - 基于数据反馈持续优化策略</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-green-500 font-semibold flex-shrink-0">6</span>
-              <span>结算与报告 - 按约定口径对账结款，生成效果报告</span>
-            </div>
-          </div>
-          <div class="mt-6">
-            <div class="inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-extrabold text-white bg-gradient-to-r from-green-600 to-emerald-600 shadow-md group-hover:shadow-xl transition-all duration-300">
-              查看引流服务详情 →
-            </div>
-          </div>
-        </router-link>
-
-        <!-- 社群服务 -->
-        <router-link
-          to="/tob/services/community"
-          aria-label="查看：社群 服务详情"
-          class="group relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm p-8 shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400/60"
-        >
-          <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500"></div>
-          <span class="absolute top-4 right-4 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
-            社群
-          </span>
-          <div class="text-4xl mb-4">👥</div>
-          <h3 class="text-xl font-bold text-gray-900 mb-4">社群服务</h3>
-          <p class="text-sm text-gray-600 mb-6">社群运营与用户沉淀，为品牌打造专属社群资产</p>
-          <div class="space-y-3 text-sm text-gray-700">
-            <div class="font-semibold text-blue-700 mb-3">服务流程：</div>
-            <div class="flex items-start gap-3">
-              <span class="text-blue-500 font-semibold flex-shrink-0">1</span>
-              <span>发布社群需求 - 定义社群目标和运营方向</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-blue-500 font-semibold flex-shrink-0">2</span>
-              <span>导入社群成员 - 将目标用户导入社群</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-blue-500 font-semibold flex-shrink-0">3</span>
-              <span>社群活跃运营 - 定期发布内容和互动</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-blue-500 font-semibold flex-shrink-0">4</span>
-              <span>成员沉淀 - 逐步建立高价值用户池</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <span class="text-blue-500 font-semibold flex-shrink-0">5</span>
-              <span>结算与报告 - 按周期生成效果总结和结款</span>
-            </div>
-          </div>
-          <div class="mt-6">
-            <div class="inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-extrabold text-white bg-gradient-to-r from-blue-600 to-indigo-600 shadow-md group-hover:shadow-xl transition-all duration-300">
-              查看社群服务详情 →
-            </div>
-          </div>
-        </router-link>
-      </div>
-
-      <!-- 服务对比表格 -->
-      <div class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 p-8 overflow-x-auto">
-        <h3 class="text-xl font-bold text-gray-900 mb-6">服务对比一览</h3>
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="border-b border-gray-200">
-              <th class="text-left py-4 px-4 font-semibold text-gray-900">对比维度</th>
-              <th class="text-left py-4 px-4 font-semibold text-indigo-700">推文服务</th>
-              <th class="text-left py-4 px-4 font-semibold text-green-700">引流服务</th>
-              <th class="text-left py-4 px-4 font-semibold text-blue-700">社群服务</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="border-b border-gray-100">
-              <td class="py-4 px-4 text-gray-900 font-semibold">核心价值</td>
-              <td class="py-4 px-4 text-gray-700">内容创作与品牌传播</td>
-              <td class="py-4 px-4 text-gray-700">精准流量与转化</td>
-              <td class="py-4 px-4 text-gray-700">用户沉淀与长期运营</td>
-            </tr>
-            <tr class="border-b border-gray-100">
-              <td class="py-4 px-4 text-gray-900 font-semibold">适合场景</td>
-              <td class="py-4 px-4 text-gray-700">产品上线、功能发布、品牌宣传</td>
-              <td class="py-4 px-4 text-gray-700">活动推广、获客转化、ROI优化</td>
-              <td class="py-4 px-4 text-gray-700">建立粉丝社群、长期用户运营</td>
-            </tr>
-            <tr class="border-b border-gray-100">
-              <td class="py-4 px-4 text-gray-900 font-semibold">周期</td>
-              <td class="py-4 px-4 text-gray-700">1-4周</td>
-              <td class="py-4 px-4 text-gray-700">1-12周（按需调整）</td>
-              <td class="py-4 px-4 text-gray-700">1-3个月+持续运营</td>
-            </tr>
-            <tr class="border-b border-gray-100">
-              <td class="py-4 px-4 text-gray-900 font-semibold">预期效果</td>
-              <td class="py-4 px-4 text-gray-700">品牌曝光、公信力积累</td>
-              <td class="py-4 px-4 text-gray-700">可追踪的点击和转化</td>
-              <td class="py-4 px-4 text-gray-700">高粘性用户群体、复用价值</td>
-            </tr>
-            <tr>
-              <td class="py-4 px-4 text-gray-900 font-semibold">结算方式</td>
-              <td class="py-4 px-4 text-gray-700">按件数（支持对公开票）</td>
-              <td class="py-4 px-4 text-gray-700">按点击/转化（支持对公开票）</td>
-              <td class="py-4 px-4 text-gray-700">按周期/成员数（支持对公开票）</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- 服务亮点展示 -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white">
-      <div class="text-center mb-16">
-        <div class="mb-6">
-          <div class="relative inline-block max-w-full">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900">
-              品牌方为什么选择我们？
-            </h2>
-            <router-link
-              to="/why-us"
-              class="mt-2 inline-flex items-center justify-center gap-1 text-indigo-600 transition-colors hover:text-indigo-800 md:absolute md:left-full md:top-1/2 md:ml-3 md:mt-0 md:-translate-y-1/2 whitespace-nowrap"
-            >
-              <span class="text-3xl md:text-4xl leading-none">✨</span>
-              <span class="text-sm font-medium text-indigo-700 underline decoration-indigo-300 underline-offset-4 hover:decoration-indigo-500">为什么选择博主联盟？</span>
-            </router-link>
-          </div>
-        </div>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-          我们聚合程序员出身的一众专业技术博主，帮助品牌完成精准传播、真实反馈获取与长期 GEO 沉淀。
-        </p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- 品牌传播价值 -->
-        <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-          <div class="text-4xl mb-4">🚀</div>
-          <h3 class="text-xl font-bold text-indigo-700 mb-4">品牌传播价值</h3>
-          <ul class="space-y-3 text-gray-700">
-            <li class="flex items-start">
-              <span class="text-indigo-500 mr-2 mt-1">•</span>
-              <span>技术博主真实测评与内容分发</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-indigo-500 mr-2 mt-1">•</span>
-              <span>覆盖 {{ bloggerStats.formattedFollowers }}+ 开发者 / AI / 科技受众</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-indigo-500 mr-2 mt-1">•</span>
-              <span>多平台曝光与开发者圈层触达</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-indigo-500 mr-2 mt-1">•</span>
-              <span>让品牌进入用户真正会讨论的场景</span>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- 合作交付能力 -->
-        <div class="bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-          <div class="text-4xl mb-4">🤝</div>
-          <h3 class="text-xl font-bold text-green-700 mb-4">合作交付能力</h3>
-          <ul class="space-y-3 text-gray-700">
-            <li class="flex items-start">
-              <span class="text-green-500 mr-2 mt-1">•</span>
-              <span>需求沟通、筛选博主、内容审核一体推进</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-green-500 mr-2 mt-1">•</span>
-              <span>发布分发、数据报告、结算流程清晰</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-green-500 mr-2 mt-1">•</span>
-              <span>快速响应，降低品牌侧沟通成本</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-green-500 mr-2 mt-1">•</span>
-              <span>支持复盘优化与下一轮投放衔接</span>
-            </li>
-          </ul>
-        </div>
-        
-        <!-- 长期沉淀价值 -->
-        <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-          <div class="text-4xl mb-4">🛠️</div>
-          <h3 class="text-xl font-bold text-blue-700 mb-4">长期沉淀价值</h3>
-          <ul class="space-y-3 text-gray-700">
-            <li class="flex items-start">
-              <span class="text-blue-500 mr-2 mt-1">•</span>
-              <span>内容可持续沉淀为真实有效的 GEO 结果</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-blue-500 mr-2 mt-1">•</span>
-              <span>增强品牌在搜索结果与社区讨论中的占位</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-blue-500 mr-2 mt-1">•</span>
-              <span>技术问题搜索场景下持续获得新增阅读</span>
-            </li>
-            <li class="flex items-start">
-              <span class="text-blue-500 mr-2 mt-1">•</span>
-              <span>让一次合作延伸为长期内容资产</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
     <!-- 底部 CTA 区域 -->
     <section id="join-cta" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div class="text-center bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-white">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">
-          想在技术圈扩大影响力、顺便把内容变成长期价值吗？
-        </h2>
-        <p class="text-xl mb-8 max-w-2xl mx-auto opacity-90">
-          博主联盟面向开发者开放，适合兼职参与或深度共创，一起输出技术内容、对接真实项目与品牌合作，在提升个人影响力的同时获得稳定回报。
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <div class="relative overflow-hidden rounded-[28px] border border-amber-200 bg-[linear-gradient(135deg,#fffdf7_0%,#fff7ed_48%,#fffefb_100%)] px-6 py-6 shadow-[0_20px_60px_rgba(120,53,15,0.08)] md:px-8">
+        <div class="absolute right-6 top-5 rotate-6 text-2xl opacity-70">✉️</div>
+        <div class="max-w-3xl">
+          <div class="text-xs font-semibold uppercase tracking-[0.24em] text-amber-700/80">To Builders</div>
+          <div class="mt-2 text-sm font-medium text-amber-800">致程序员 / 技术博主 / 大学生 / AI 爱好者</div>
+          <p class="mt-4 text-sm leading-7 text-gray-700 md:text-base">
+            如果你也想一起共创内容、尝试做 AI 项目、打磨开发者工具，或者用兼职方式参与真实合作，欢迎来和我们聊聊。这里既欢迎长期深度协作，也欢迎从一次内容共创、一次项目尝试开始。
+          </p>
+        </div>
+        <div class="mt-5">
           <a
             href="https://github.com/TUARAN/blogger-alliance"
             target="_blank"
-            class="px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-xl hover:bg-white hover:text-indigo-700 transform hover:-translate-y-1 transition-all duration-300"
+            class="inline-flex items-center rounded-full border border-amber-300 bg-white/90 px-4 py-2 text-sm font-semibold text-amber-800 transition-colors hover:bg-amber-50"
           >
-            <span class="flex items-center">
-              <span class="mr-2">🤝</span>
-              加入博主联盟
-            </span>
+            <span class="mr-2">🤝</span>
+            加入博主联盟
           </a>
         </div>
       </div>

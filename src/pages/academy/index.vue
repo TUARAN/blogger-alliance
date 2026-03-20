@@ -10,44 +10,17 @@
             </router-link>
           </div>
 
-          <div class="flex items-center gap-4 lg:gap-6 overflow-x-auto whitespace-nowrap">
+          <div class="flex items-center gap-2 overflow-x-auto whitespace-nowrap">
             <router-link
-              to="/tob"
-              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
-              active-class="text-gray-700 font-semibold"
-            >
-              <span class="text-base leading-none">🏠</span>
-              <span>回到首页</span>
-            </router-link>
-
-            <router-link
-              to="/tob/deals"
-              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
-              active-class="text-gray-700 font-semibold"
-            >
-              <span class="text-base leading-none">🧭</span>
-              <span>合作查询</span>
-            </router-link>
-
-            <router-link
-              to="/matrix"
-              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
-              active-class="text-gray-700 font-semibold"
-            >
-              <span class="text-base leading-none">🧩</span>
-              <span>矩阵看板</span>
-            </router-link>
-
-            <router-link
-              to="/academy"
+              to="/workspace"
               class="inline-flex items-center gap-1.5 text-gray-700 transition-colors font-semibold text-base"
-              active-class="text-gray-700 font-semibold"
             >
-              <span class="text-base leading-none">📚</span>
-              <span>联盟学院</span>
+              <span class="text-base leading-none">🗂️</span>
+              <span>联盟工作台</span>
             </router-link>
           </div>
         </div>
+
       </div>
     </nav>
 

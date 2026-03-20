@@ -1,3 +1,162 @@
+<script setup>
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { matrixAllianceBloggers } from '../../data/matrixAlliance.js'
+import annualDashboardImage from '../../img/example/wechat_2026-03-16_104619_761.png'
+import annualCloudImage from '../../img/example/wechat_2026-03-16_104632_010.png'
+
+const partnerBrands = ['秒哒', 'FinClip', '亚马逊云科技', '火山引擎', '明基', '秦托邦']
+const summaryCards = [
+  { label: '合作品牌', value: '8+', accent: 'from-indigo-500 to-blue-500' },
+  { label: '累计投放', value: '376 篇', accent: 'from-fuchsia-500 to-violet-500' },
+  { label: '覆盖平台', value: '11+', accent: 'from-emerald-500 to-cyan-500' },
+  { label: '社群辐射', value: '20+', accent: 'from-amber-500 to-orange-500' }
+]
+
+const bloggers = matrixAllianceBloggers
+const selectedBloggerId = ref('tuaran')
+const isLoading = ref(true)
+const animationFrame = ref(null)
+const accountKeyword = ref('')
+const accountPlatformFilter = ref('all')
+
+const currentBlogger = computed(() => {
+  return bloggers.find((item) => item.id === selectedBloggerId.value) || bloggers[0] || null
+})
+
+const animatedOverview = ref({
+  totalFollowers: 0,
+  totalReads: 0,
+  totalLikes: 0,
+  totalPosts: 0
+})
+
+const chartColors = ['#6366F1', '#A855F7', '#14B8A6', '#F59E0B', '#06B6D4', '#EC4899', '#84CC16', '#F97316']
+
+const accountRanking = computed(() => {
+  if (!currentBlogger.value) return []
+  return [...currentBlogger.value.accounts].sort((a, b) => b.subtotal.followers - a.subtotal.followers)
+})
+
+const accountPlatformOptions = computed(() => {
+  if (!currentBlogger.value) return []
+
+  const platforms = currentBlogger.value.accounts.flatMap((account) => {
+    return account.platforms.map((platform) => platform.platform)
+  })
+
+  return [...new Set(platforms)]
+})
+
+const filteredAccountRanking = computed(() => {
+  const keyword = accountKeyword.value.trim().toLowerCase()
+
+  return accountRanking.value.filter((account) => {
+    const platformMatch = accountPlatformFilter.value === 'all' || account.platforms.some((platform) => platform.platform === accountPlatformFilter.value)
+
+    if (!platformMatch) return false
+    if (!keyword) return true
+
+    const searchableText = [
+      account.name,
+      account.handle,
+      ...account.platforms.map((platform) => platform.platform)
+    ].join(' ').toLowerCase()
+
+    return searchableText.includes(keyword)
+  })
+})
+
+const accountFanDistribution = computed(() => {
+  if (!currentBlogger.value) return []
+  const total = currentBlogger.value.overview.totalFollowers || 1
+
+  return currentBlogger.value.accounts.map((account) => ({
+    name: account.name,
+    value: account.subtotal.followers,
+    percent: ((account.subtotal.followers / total) * 100).toFixed(1)
+  }))
+})
+
+const pieStyle = computed(() => {
+  if (!accountFanDistribution.value.length) {
+    return { background: '#E5E7EB' }
+  }
+
+  let start = 0
+  const segments = accountFanDistribution.value.map((item, idx) => {
+    const span = Number(item.percent)
+    const end = start + span
+    const color = chartColors[idx % chartColors.length]
+    const segment = `${color} ${start}% ${end}%`
+    start = end
+    return segment
+  })
+
+  return {
+    background: `conic-gradient(${segments.join(',')})`
+  }
+})
+
+const animateOverview = () => {
+  if (!currentBlogger.value) return
+
+  if (animationFrame.value) {
+    cancelAnimationFrame(animationFrame.value)
+  }
+
+  const target = {
+    totalFollowers: currentBlogger.value.overview.totalFollowers,
+    totalReads: currentBlogger.value.overview.totalReads,
+    totalLikes: currentBlogger.value.overview.totalLikes,
+    totalPosts: currentBlogger.value.overview.totalPosts
+  }
+
+  const duration = 900
+  const start = performance.now()
+
+  const step = (now) => {
+    const progress = Math.min((now - start) / duration, 1)
+    const eased = 1 - Math.pow(1 - progress, 3)
+
+    animatedOverview.value = {
+      totalFollowers: Math.floor(target.totalFollowers * eased),
+      totalReads: Math.floor(target.totalReads * eased),
+      totalLikes: Math.floor(target.totalLikes * eased),
+      totalPosts: Math.floor(target.totalPosts * eased)
+    }
+
+    if (progress < 1) {
+      animationFrame.value = requestAnimationFrame(step)
+    }
+  }
+
+  animationFrame.value = requestAnimationFrame(step)
+}
+
+const formatNumber = (value) => {
+  return Number(value || 0).toLocaleString('zh-CN')
+}
+
+watch(currentBlogger, () => {
+  accountKeyword.value = ''
+  accountPlatformFilter.value = 'all'
+  animateOverview()
+})
+
+onMounted(() => {
+  setTimeout(() => {
+    isLoading.value = false
+    animateOverview()
+  }, 300)
+})
+
+onBeforeUnmount(() => {
+  if (animationFrame.value) {
+    cancelAnimationFrame(animationFrame.value)
+  }
+})
+</script>
+
 <template>
   <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
     <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
@@ -9,49 +168,68 @@
             </router-link>
           </div>
 
-          <div class="flex items-center gap-4 lg:gap-6">
+          <div class="flex items-center gap-2 overflow-x-auto whitespace-nowrap">
             <router-link
-              to="/tob"
-              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
-              active-class="text-gray-700 font-semibold"
+              to="/workspace"
+              class="inline-flex items-center gap-1.5 text-gray-700 transition-colors font-semibold text-base"
             >
-              <span class="text-base leading-none">🏠</span>
-              <span>回到首页</span>
-            </router-link>
-
-            <router-link
-              to="/tob/deals"
-              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
-              active-class="text-gray-700 font-semibold"
-            >
-              <span class="text-base leading-none">🧭</span>
-              <span>合作查询</span>
-            </router-link>
-
-            <router-link
-              to="/matrix"
-              class="inline-flex items-center gap-1.5 text-indigo-600 transition-colors font-semibold text-base"
-              active-class="text-indigo-700"
-            >
-              <span class="text-base leading-none">🧩</span>
-              <span>矩阵看板</span>
-            </router-link>
-
-            <router-link
-              to="/academy"
-              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
-              active-class="text-gray-700 font-semibold"
-            >
-              <span class="text-base leading-none">📚</span>
-              <span>联盟学院</span>
+              <span class="text-base leading-none">🗂️</span>
+              <span>联盟工作台</span>
             </router-link>
           </div>
         </div>
+
       </div>
     </nav>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-      <section class="bg-white rounded-2xl border border-indigo-100 shadow-sm p-6 md:p-8">
+      <section class="rounded-3xl border border-slate-200 bg-slate-900 px-6 py-8 text-white shadow-xl md:px-8 md:py-10">
+        <div class="max-w-3xl">
+          <p class="text-sm uppercase tracking-[0.24em] text-indigo-200">2025 年总览</p>
+          <h2 class="mt-3 text-2xl md:text-3xl font-bold">年度合作分发与传播画像</h2>
+          <p class="mt-3 text-sm md:text-base leading-7 text-slate-300">
+            2025 年，我们与 <span class="font-semibold text-white">{{ partnerBrands.join('、') }}</span> 等品牌完成合作，围绕技术内容分发、平台种草、社群扩散和数据复盘，持续帮助品牌建立开发者认知。
+          </p>
+          <p class="mt-3 text-sm md:text-base leading-7 text-slate-300">
+            这一年里，我们的内容主要分发在掘金、CSDN、知乎、公众号、头条、博客园、腾讯云开发者社区等平台，并通过社群和矩阵号持续放大传播声量。
+          </p>
+        </div>
+
+        <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <article
+            v-for="card in summaryCards"
+            :key="card.label"
+            class="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-sm backdrop-blur-sm"
+          >
+            <div class="inline-flex rounded-xl bg-gradient-to-r px-3 py-1 text-sm font-semibold text-white" :class="card.accent">
+              {{ card.label }}
+            </div>
+            <div class="mt-4 text-3xl font-bold text-white">{{ card.value }}</div>
+          </article>
+        </div>
+
+        <div class="mt-6 grid gap-5 xl:grid-cols-2">
+          <article class="overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg">
+            <div class="border-b border-white/10 px-5 py-4">
+              <h3 class="text-lg font-semibold">数据看板</h3>
+              <p class="mt-1 text-sm text-slate-300">全年累计投放、平台分布与内容数量概览</p>
+            </div>
+            <img :src="annualDashboardImage" alt="2025 合作数据看板" class="w-full object-cover" />
+          </article>
+
+          <article class="overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg">
+            <div class="border-b border-white/10 px-5 py-4">
+              <h3 class="text-lg font-semibold">品牌与博主词云</h3>
+              <p class="mt-1 text-sm text-slate-300">品牌方与开发者博主合作网络的可视化展示</p>
+            </div>
+            <div class="flex min-h-[320px] items-center justify-center bg-slate-950/30">
+              <img :src="annualCloudImage" alt="2025 品牌与博主合作词云" class="max-h-[520px] w-full object-contain object-center" />
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="mt-8 bg-white rounded-2xl border border-indigo-100 shadow-sm p-6 md:p-8">
         <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
             <h1 class="text-2xl md:text-3xl font-bold text-gray-900">矩阵看板总览</h1>
@@ -274,155 +452,6 @@
     </main>
   </div>
 </template>
-
-<script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { matrixAllianceBloggers } from '../../data/matrixAlliance.js'
-
-const bloggers = matrixAllianceBloggers
-const selectedBloggerId = ref('tuaran')
-const isLoading = ref(true)
-const animationFrame = ref(null)
-const accountKeyword = ref('')
-const accountPlatformFilter = ref('all')
-
-const currentBlogger = computed(() => {
-  return bloggers.find((item) => item.id === selectedBloggerId.value) || bloggers[0] || null
-})
-
-const animatedOverview = ref({
-  totalFollowers: 0,
-  totalReads: 0,
-  totalLikes: 0,
-  totalPosts: 0
-})
-
-const chartColors = ['#6366F1', '#A855F7', '#14B8A6', '#F59E0B', '#06B6D4', '#EC4899', '#84CC16', '#F97316']
-
-const accountRanking = computed(() => {
-  if (!currentBlogger.value) return []
-  return [...currentBlogger.value.accounts].sort((a, b) => b.subtotal.followers - a.subtotal.followers)
-})
-
-const accountPlatformOptions = computed(() => {
-  if (!currentBlogger.value) return []
-
-  const platforms = currentBlogger.value.accounts.flatMap((account) => {
-    return account.platforms.map((platform) => platform.platform)
-  })
-
-  return [...new Set(platforms)]
-})
-
-const filteredAccountRanking = computed(() => {
-  const keyword = accountKeyword.value.trim().toLowerCase()
-
-  return accountRanking.value.filter((account) => {
-    const platformMatch = accountPlatformFilter.value === 'all' || account.platforms.some((platform) => platform.platform === accountPlatformFilter.value)
-
-    if (!platformMatch) return false
-    if (!keyword) return true
-
-    const searchableText = [
-      account.name,
-      account.handle,
-      ...account.platforms.map((platform) => platform.platform)
-    ].join(' ').toLowerCase()
-
-    return searchableText.includes(keyword)
-  })
-})
-
-const accountFanDistribution = computed(() => {
-  if (!currentBlogger.value) return []
-  const total = currentBlogger.value.overview.totalFollowers || 1
-
-  return currentBlogger.value.accounts.map((account) => ({
-    name: account.name,
-    value: account.subtotal.followers,
-    percent: ((account.subtotal.followers / total) * 100).toFixed(1)
-  }))
-})
-
-const pieStyle = computed(() => {
-  if (!accountFanDistribution.value.length) {
-    return { background: '#E5E7EB' }
-  }
-
-  let start = 0
-  const segments = accountFanDistribution.value.map((item, idx) => {
-    const span = Number(item.percent)
-    const end = start + span
-    const color = chartColors[idx % chartColors.length]
-    const segment = `${color} ${start}% ${end}%`
-    start = end
-    return segment
-  })
-
-  return {
-    background: `conic-gradient(${segments.join(',')})`
-  }
-})
-
-const animateOverview = () => {
-  if (!currentBlogger.value) return
-
-  if (animationFrame.value) {
-    cancelAnimationFrame(animationFrame.value)
-  }
-
-  const target = {
-    totalFollowers: currentBlogger.value.overview.totalFollowers,
-    totalReads: currentBlogger.value.overview.totalReads,
-    totalLikes: currentBlogger.value.overview.totalLikes,
-    totalPosts: currentBlogger.value.overview.totalPosts
-  }
-
-  const duration = 900
-  const start = performance.now()
-
-  const step = (now) => {
-    const progress = Math.min((now - start) / duration, 1)
-    const eased = 1 - Math.pow(1 - progress, 3)
-
-    animatedOverview.value = {
-      totalFollowers: Math.floor(target.totalFollowers * eased),
-      totalReads: Math.floor(target.totalReads * eased),
-      totalLikes: Math.floor(target.totalLikes * eased),
-      totalPosts: Math.floor(target.totalPosts * eased)
-    }
-
-    if (progress < 1) {
-      animationFrame.value = requestAnimationFrame(step)
-    }
-  }
-
-  animationFrame.value = requestAnimationFrame(step)
-}
-
-const formatNumber = (value) => {
-  return Number(value || 0).toLocaleString('zh-CN')
-}
-
-watch(currentBlogger, () => {
-  accountKeyword.value = ''
-  accountPlatformFilter.value = 'all'
-  animateOverview()
-})
-
-onMounted(() => {
-  setTimeout(() => {
-    isLoading.value = false
-    animateOverview()
-  }, 300)
-})
-
-onBeforeUnmount(() => {
-  if (animationFrame.value) {
-    cancelAnimationFrame(animationFrame.value)
-  }
-})
-</script>
 
 <style scoped>
 .metric-card {

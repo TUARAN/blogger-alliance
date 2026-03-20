@@ -10,12 +10,11 @@ const routes = [
   { path: '/tob', component: () => import('./pages/tob/index.vue') },
   { path: '/cases', component: () => import('./pages/cases/index.vue') },
   { path: '/tob/deals', component: () => import('./pages/tob/deals.vue') },
+  { path: '/tob/services', component: () => import('./pages/tob/services/index.vue') },
   { path: '/matrix', component: () => import('./pages/matrix/index.vue') },
-  { path: '/ecosystem', redirect: '/why-us#ecosystem' },
+  { path: '/workspace', component: () => import('./pages/workspace/index.vue') },
+  { path: '/ecosystem', component: () => import('./pages/ecosystem-position/index.vue') },
   { path: '/why-us', component: () => import('./pages/why-us/index.vue') },
-  { path: '/tob/services/tweet', component: () => import('./pages/tob/services/Tweet.vue') },
-  { path: '/tob/services/cpc', component: () => import('./pages/tob/services/Cpc.vue') },
-  { path: '/tob/services/community', component: () => import('./pages/tob/services/Community.vue') },
   { path: '/toc', component: () => import('./pages/toc/index.vue') },
   { path: '/academy', component: () => import('./pages/academy/index.vue') }
 ]
