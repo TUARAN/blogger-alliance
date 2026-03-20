@@ -364,7 +364,7 @@
         <header class="mb-8">
           <h2 class="text-3xl md:text-4xl font-bold text-gray-900">AI Access 推广</h2>
           <p class="mt-3 text-lg text-gray-600">
-            面向海外大模型与 AI 工具使用需求，围绕 ChatGPT、Claude 等话题持续做资讯分发、内容二创、站点引流与社群承接，适合按转化结果长期合作。
+            面向海外大模型与 AI 工具使用需求，围绕 ChatGPT、Claude 等话题持续做资讯分发、内容二创、建站承接、文档沉淀、仓库搭建和社区扩散，适合按高提成结果长期合作。
           </p>
         </header>
 
@@ -374,23 +374,24 @@
             <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
               <div class="text-sm font-semibold text-gray-900">这项服务在做什么</div>
               <p class="mt-2 text-sm text-gray-600 leading-relaxed">
-                持续围绕大模型热点、模型使用门槛、账号获取方式、使用技巧与资讯变化发布内容，把有需求的用户引导到社群、帖子或指定落地入口。
+                持续围绕大模型热点、模型使用门槛、账号获取方式、使用技巧与资讯变化发布内容，并把用户承接到站点、文档、仓库、社群或指定落地入口，形成可持续转化链路。
               </p>
             </div>
             <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
               <div class="text-sm font-semibold text-gray-900">适合谁</div>
               <ul class="mt-2 space-y-1.5 text-sm text-gray-600">
                 <li class="flex items-start"><span class="text-orange-600 mr-2">•</span><span>面向国内用户提供海外 AI 模型使用支持、账号服务或配套工具的团队</span></li>
-                <li class="flex items-start"><span class="text-orange-600 mr-2">•</span><span>希望在小红书等平台持续获取高意向 AI 用户</span></li>
-                <li class="flex items-start"><span class="text-orange-600 mr-2">•</span><span>接受内容分发、社群承接和长期转化模型的合作方</span></li>
+                <li class="flex items-start"><span class="text-orange-600 mr-2">•</span><span>希望在小红书、社区、搜索入口持续获取高意向 AI 用户</span></li>
+                <li class="flex items-start"><span class="text-orange-600 mr-2">•</span><span>接受高提成合作方式，并愿意把转化链路交给我们一起搭建的合作方</span></li>
               </ul>
             </div>
             <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
-              <div class="text-sm font-semibold text-gray-900">内容来源与形式</div>
+              <div class="text-sm font-semibold text-gray-900">我们能做什么</div>
               <ul class="mt-2 space-y-1.5 text-sm text-gray-600">
                 <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>跟踪 Twitter/X、海外 AI 社区、产品更新和热点事件</span></li>
-                <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>做资讯整理、新闻转发、观点二创和实用教程</span></li>
-                <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>结合帖子、评论、社群和落地页形成持续引流</span></li>
+                <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>做资讯整理、新闻转发、观点二创、实用教程和专题内容</span></li>
+                <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>搭建门户站点、文档页、导航页、GitHub 仓库和专题落地页</span></li>
+                <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>结合帖子、评论、社群和社区平台形成持续引流</span></li>
               </ul>
             </div>
           </div>
@@ -501,20 +502,20 @@
           <h2 class="text-lg font-semibold text-gray-900">合作方式</h2>
           <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
-              <div class="text-sm font-semibold text-gray-900">内容代运营</div>
-              <p class="mt-2 text-sm text-gray-600 leading-relaxed">围绕 AI Access 方向持续规划选题、发布内容和维护引流入口。</p>
+              <div class="text-sm font-semibold text-gray-900">内容与分发承接</div>
+              <p class="mt-2 text-sm text-gray-600 leading-relaxed">围绕 AI Access 方向持续规划选题、发布内容，并在小红书、帖子、评论区和社区平台完成分发承接。</p>
             </div>
             <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
-              <div class="text-sm font-semibold text-gray-900">社群与评论承接</div>
-              <p class="mt-2 text-sm text-gray-600 leading-relaxed">配合社群答疑、评论区引导和帖子承接，提高高意向用户的转化效率。</p>
+              <div class="text-sm font-semibold text-gray-900">站点与资产搭建</div>
+              <p class="mt-2 text-sm text-gray-600 leading-relaxed">可以同步搭建门户站点、文档页、导航页、GitHub 仓库和专题页，把内容流量沉淀成长期资产。</p>
             </div>
             <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
-              <div class="text-sm font-semibold text-gray-900">站点与专题页建设</div>
-              <p class="mt-2 text-sm text-gray-600 leading-relaxed">可同步搭建门户站点、导航页或专题页，用于聚合内容、承接搜索流量和沉淀长期资产。</p>
+              <div class="text-sm font-semibold text-gray-900">高提成合作</div>
+              <p class="mt-2 text-sm text-gray-600 leading-relaxed">这类项目要求提成空间足够高，只有收益空间够大，才值得持续投入内容、人力和整套转化链路建设。</p>
             </div>
           </div>
           <p class="mt-4 text-sm leading-7 text-gray-600">
-            该类合作更适合按长期结果来协同推进，具体合作口径会根据内容节奏、承接方式和转化路径单独沟通。
+            我们更看重能不能把内容、站点、文档、仓库、社区和转化链路一起做起来，因此这类合作默认按长期结果协同推进，且要求提成足够高。
           </p>
         </section>
 

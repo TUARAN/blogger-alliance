@@ -42,18 +42,18 @@
             我们聚合一批专业技术博主，把技术品牌带到开发者 / AI 爱好者 / 科技爱好者真正会讨论的地方，并持续沉淀真实有效的 GEO 结果
             <span class="mt-3 inline-flex flex-wrap items-center justify-center gap-4">
               <router-link
-                to="/why-us"
-                class="inline-flex items-center gap-1 text-sm md:text-base font-medium text-indigo-700 transition-colors hover:text-indigo-800"
-              >
-                <span class="leading-none no-underline">✨</span>
-                <span class="underline decoration-indigo-300 underline-offset-4 hover:decoration-indigo-500">为什么选择博主联盟？</span>
-              </router-link>
-              <router-link
                 to="/ecosystem"
                 class="inline-flex items-center gap-1 text-sm md:text-base font-medium text-indigo-700 transition-colors hover:text-indigo-800"
               >
                 <span class="leading-none no-underline">📍</span>
                 <span class="underline decoration-indigo-300 underline-offset-4 hover:decoration-indigo-500">生态定位</span>
+              </router-link>
+              <router-link
+                to="/why-us"
+                class="inline-flex items-center gap-1 text-sm md:text-base font-medium text-indigo-700 transition-colors hover:text-indigo-800"
+              >
+                <span class="leading-none no-underline">✨</span>
+                <span class="underline decoration-indigo-300 underline-offset-4 hover:decoration-indigo-500">为什么选择博主联盟？</span>
               </router-link>
             </span>
           </p>
@@ -234,7 +234,7 @@
     </section>
 
     <!-- 博主团队展示 -->
-    <section id="blogger-team" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <section id="blogger-team" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16">
       <div class="text-center mb-10">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">我们的博主团队名单</h2>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">

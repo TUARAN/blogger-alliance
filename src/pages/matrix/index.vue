@@ -405,45 +405,6 @@ onBeforeUnmount(() => {
           </div>
         </section>
 
-        <section class="mt-6 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <div class="text-lg font-semibold text-gray-900 mb-4">平台运营计划</div>
-          <div class="space-y-4">
-            <div v-for="plan in currentBlogger.allianceProfile.operationPlans" :key="plan.stage" class="rounded-xl border border-gray-200 p-4 bg-gray-50/70">
-              <div class="font-semibold text-gray-900">{{ plan.stage }}</div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3 text-sm">
-                <div><span class="text-gray-500">阶段总结：</span><span class="text-gray-700">{{ plan.summary }}</span></div>
-                <div><span class="text-gray-500">目标：</span><span class="text-gray-700">{{ plan.goal }}</span></div>
-                <div><span class="text-gray-500">策略：</span><span class="text-gray-700">{{ plan.strategy }}</span></div>
-                <div><span class="text-gray-500">挑战：</span><span class="text-gray-700">{{ plan.challenge }}</span></div>
-                <div><span class="text-gray-500">机会：</span><span class="text-gray-700">{{ plan.opportunity }}</span></div>
-                <div><span class="text-gray-500">写作计划：</span><span class="text-gray-700">{{ plan.writingPlan }}</span></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="mt-6">
-          <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <div class="text-lg font-semibold text-gray-900 mb-3">变现平台清单</div>
-            <div class="space-y-3">
-              <div v-for="group in currentBlogger.allianceProfile.monetizationPlatforms" :key="group.group" class="rounded-xl border border-gray-200 p-3">
-                <div class="text-sm font-semibold text-gray-900 mb-2">{{ group.group }}</div>
-                <div class="flex flex-wrap gap-2">
-                  <a
-                    v-for="item in group.items"
-                    :key="item.name"
-                    :href="item.url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-xs hover:bg-amber-100 transition-colors"
-                  >
-                    {{ item.name }}
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
       </template>
 
       <section v-else class="mt-6 rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center text-gray-500">
