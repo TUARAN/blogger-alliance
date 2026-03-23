@@ -30,20 +30,20 @@
         </p>
       </div>
 
-      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
         <router-link
           to="/tob/services"
-          class="group rounded-3xl border border-white/70 bg-white/85 p-7 shadow-lg shadow-emerald-100/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+          class="group rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-emerald-100/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
         >
-          <div class="flex items-center justify-between">
-            <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-2xl">🔥</span>
-            <span class="text-sm font-semibold text-emerald-600">品牌合作</span>
+          <div class="flex items-start justify-between gap-3">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-2xl">🔥</span>
+            <span class="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">品牌合作</span>
           </div>
-          <h2 class="mt-6 text-2xl font-bold text-gray-900">服务介绍</h2>
-          <p class="mt-3 text-sm leading-7 text-gray-600">
-            查看常规服务与专题服务，目前包含推文、引流、社群和 AI Access 推广。
+          <h2 class="mt-5 text-xl font-bold text-gray-900">服务介绍</h2>
+          <p class="mt-2 text-sm leading-6 text-gray-600">
+            推文、引流、社群和 AI Access 推广。
           </p>
-          <div class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-emerald-700">
+          <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-emerald-700">
             <span>进入模块</span>
             <span class="transition-transform group-hover:translate-x-1">→</span>
           </div>
@@ -51,17 +51,17 @@
 
         <router-link
           to="/tob/deals"
-          class="group rounded-3xl border border-white/70 bg-white/85 p-7 shadow-lg shadow-indigo-100/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+          class="group rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-indigo-100/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
         >
-          <div class="flex items-center justify-between">
-            <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-100 text-2xl">🧭</span>
-            <span class="text-sm font-semibold text-indigo-600">内部查询</span>
+          <div class="flex items-start justify-between gap-3">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-100 text-2xl">🧭</span>
+            <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700">内部查询</span>
           </div>
-          <h2 class="mt-6 text-2xl font-bold text-gray-900">合作查询</h2>
-          <p class="mt-3 text-sm leading-7 text-gray-600">
-            查看合作记录与相关明细，适合内部按项目、合作方或执行情况快速检索。
+          <h2 class="mt-5 text-xl font-bold text-gray-900">合作查询</h2>
+          <p class="mt-2 text-sm leading-6 text-gray-600">
+            合作记录、项目明细与执行检索。
           </p>
-          <div class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-indigo-700">
+          <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-indigo-700">
             <span>进入模块</span>
             <span class="transition-transform group-hover:translate-x-1">→</span>
           </div>
@@ -69,17 +69,17 @@
 
         <router-link
           to="/matrix"
-          class="group rounded-3xl border border-white/70 bg-white/85 p-7 shadow-lg shadow-purple-100/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+          class="group rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-purple-100/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
         >
-          <div class="flex items-center justify-between">
-            <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-purple-100 text-2xl">🧩</span>
-            <span class="text-sm font-semibold text-purple-600">数据概览</span>
+          <div class="flex items-start justify-between gap-3">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-100 text-2xl">🧩</span>
+            <span class="rounded-full bg-purple-50 px-2.5 py-1 text-xs font-semibold text-purple-700">数据概览</span>
           </div>
-          <h2 class="mt-6 text-2xl font-bold text-gray-900">矩阵看板</h2>
-          <p class="mt-3 text-sm leading-7 text-gray-600">
-            汇总博主矩阵、内容分发和整体表现，用于快速浏览当前联盟的运营盘面。
+          <h2 class="mt-5 text-xl font-bold text-gray-900">矩阵看板</h2>
+          <p class="mt-2 text-sm leading-6 text-gray-600">
+            博主矩阵、内容分发与整体表现概览。
           </p>
-          <div class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-purple-700">
+          <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-purple-700">
             <span>进入模块</span>
             <span class="transition-transform group-hover:translate-x-1">→</span>
           </div>
@@ -87,17 +87,17 @@
 
         <router-link
           to="/academy"
-          class="group rounded-3xl border border-white/70 bg-white/85 p-7 shadow-lg shadow-blue-100/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+          class="group rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-blue-100/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
         >
-          <div class="flex items-center justify-between">
-            <span class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-2xl">📚</span>
-            <span class="text-sm font-semibold text-blue-600">知识资源</span>
+          <div class="flex items-start justify-between gap-3">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-2xl">📚</span>
+            <span class="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">知识资源</span>
           </div>
-          <h2 class="mt-6 text-2xl font-bold text-gray-900">联盟学院</h2>
-          <p class="mt-3 text-sm leading-7 text-gray-600">
-            集中查看学习资料、工具资源和知识沉淀，方便成员持续复用和成长。
+          <h2 class="mt-5 text-xl font-bold text-gray-900">联盟学院</h2>
+          <p class="mt-2 text-sm leading-6 text-gray-600">
+            学习资料、工具资源和知识沉淀。
           </p>
-          <div class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-blue-700">
+          <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-700">
             <span>进入模块</span>
             <span class="transition-transform group-hover:translate-x-1">→</span>
           </div>

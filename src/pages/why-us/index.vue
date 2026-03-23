@@ -28,6 +28,10 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[calc(100vh-4rem)]">
       <section id="difference" class="scroll-mt-24 bg-white rounded-2xl border border-indigo-100 shadow-sm px-4 py-3 md:px-5 md:py-4">
         <div class="max-w-5xl">
+          <div class="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700">
+            <span>✨</span>
+            <span>从技术认知、信任网络到 GEO 沉淀的六层优势结构</span>
+          </div>
           <h1 class="text-2xl md:text-3xl font-bold text-gray-900">为什么选择博主联盟？</h1>
           <p class="mt-2 text-sm md:text-base text-gray-600 leading-relaxed">
             技术博主联盟的优势不只是一批账号，而是由技术理解、博主信任、开发者圈层、技术内容生产、真实有效 GEO 沉淀和交易履约组成的六层优势结构。六层叠加后，形成的是既能传播、又能长期沉淀搜索价值的技术内容渠道网络。
