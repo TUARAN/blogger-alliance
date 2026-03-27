@@ -12,6 +12,7 @@ const routes = [
   { path: '/tob/deals', component: () => import('./pages/tob/deals.vue') },
   { path: '/tob/services', component: () => import('./pages/tob/services/index.vue') },
   { path: '/matrix', component: () => import('./pages/matrix/index.vue') },
+  { path: '/annual-report-2025', component: () => import('./pages/annual-report/index.vue') },
   { path: '/workspace', component: () => import('./pages/workspace/index.vue') },
   { path: '/ecosystem', component: () => import('./pages/ecosystem-position/index.vue') },
   { path: '/why-us', component: () => import('./pages/why-us/index.vue') },

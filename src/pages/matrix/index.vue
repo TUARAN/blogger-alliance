@@ -1,174 +1,201 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { matrixAllianceBloggers } from '../../data/matrixAlliance.js'
-import annualDashboardImage from '../../img/example/wechat_2026-03-16_104619_761.png'
-import annualCloudImage from '../../img/example/wechat_2026-03-16_104632_010.png'
-
-const partnerBrands = ['秒哒', 'FinClip', '亚马逊云科技', '火山引擎', '明基', '秦托邦']
-const summaryCards = [
-  { label: '合作品牌', value: '8+', accent: 'from-indigo-500 to-blue-500' },
-  { label: '累计投放', value: '376 篇', accent: 'from-fuchsia-500 to-violet-500' },
-  { label: '覆盖平台', value: '11+', accent: 'from-emerald-500 to-cyan-500' },
-  { label: '社群辐射', value: '20+', accent: 'from-amber-500 to-orange-500' }
-]
 
 const bloggers = matrixAllianceBloggers
 const selectedBloggerId = ref('tuaran')
-const isLoading = ref(true)
-const animationFrame = ref(null)
-const accountKeyword = ref('')
-const accountPlatformFilter = ref('all')
+const chartColors = ['#111827', '#2563eb', '#14b8a6', '#f97316', '#8b5cf6', '#ef4444', '#22c55e', '#f59e0b']
+
+const platformCatalog = [
+  {
+    key: 'media',
+    title: '媒体平台',
+    items: [
+      { platform: '公众号', label: '微信公众号', iconText: '微', iconClass: 'bg-emerald-50 text-emerald-700 border-emerald-200', fallback: '待更新' },
+      { platform: '知乎', label: '知乎', iconText: '知', iconClass: 'bg-sky-50 text-sky-700 border-sky-200', fallback: '待更新' },
+      { platform: '网易号', label: '网易号', iconText: '网', iconClass: 'bg-rose-50 text-rose-700 border-rose-200', fallback: '待更新' },
+      { platform: '微博', label: '微博头条', iconText: '微', iconClass: 'bg-red-50 text-red-700 border-red-200', fallback: '待更新' },
+      { platform: '少数派', label: '少数派', iconText: 'π', iconClass: 'bg-neutral-100 text-neutral-700 border-neutral-200', fallback: '待更新' },
+      { platform: '抖音', label: '抖音文章', iconText: '抖', iconClass: 'bg-neutral-900 text-white border-neutral-800', fallback: '待更新' },
+      { platform: '头条', label: '今日头条', iconText: '头', iconClass: 'bg-red-50 text-red-700 border-red-200', fallback: '待更新' },
+      { platform: '百家号', label: '百家号', iconText: '百', iconClass: 'bg-indigo-50 text-indigo-700 border-indigo-200', fallback: '待更新' },
+      { platform: '搜狐号', label: '搜狐号', iconText: '狐', iconClass: 'bg-amber-50 text-amber-700 border-amber-200', fallback: '待更新' },
+      { platform: 'B站', label: 'B站专栏', iconText: 'B', iconClass: 'bg-cyan-50 text-cyan-700 border-cyan-200', fallback: '待更新' },
+      { platform: 'Twitter', label: 'Twitter Articles', iconText: 'X', iconClass: 'bg-neutral-900 text-white border-neutral-800', fallback: '检测中' },
+      { platform: '小红书', label: '小红书', iconText: '红', iconClass: 'bg-pink-50 text-pink-700 border-pink-200', fallback: '待更新' }
+    ]
+  },
+  {
+    key: 'blog',
+    title: '博客平台',
+    items: [
+      { platform: 'CSDN', label: 'CSDN', iconText: 'C', iconClass: 'bg-orange-50 text-orange-700 border-orange-200', fallback: '待更新' },
+      { platform: '掘金', label: '掘金', iconText: '掘', iconClass: 'bg-blue-50 text-blue-700 border-blue-200', fallback: '待更新' },
+      { platform: '51CTO', label: '51CTO', iconText: '51', iconClass: 'bg-rose-50 text-rose-700 border-rose-200', fallback: '待更新' },
+      { platform: '开源中国', label: '开源中国', iconText: '开', iconClass: 'bg-green-50 text-green-700 border-green-200', fallback: '待更新' },
+      { platform: '简书', label: '简书', iconText: '简', iconClass: 'bg-orange-50 text-orange-700 border-orange-200', fallback: '待更新' },
+      { platform: '博客园', label: '博客园', iconText: '园', iconClass: 'bg-sky-50 text-sky-700 border-sky-200', fallback: '待更新' },
+      { platform: 'Medium', label: 'Medium', iconText: 'M', iconClass: 'bg-neutral-900 text-white border-neutral-800', fallback: '检测中' },
+      { platform: '思否', label: '思否', iconText: '思', iconClass: 'bg-green-50 text-green-700 border-green-200', fallback: '待更新' },
+      { platform: 'InfoQ', label: 'InfoQ', iconText: 'I', iconClass: 'bg-emerald-50 text-emerald-700 border-emerald-200', fallback: '待更新' }
+    ]
+  },
+  {
+    key: 'cloud',
+    title: '云平台及开发者社区',
+    items: [
+      { platform: '腾讯云开发者社区', label: '腾讯云开发者社区', iconText: '腾', iconClass: 'bg-sky-50 text-sky-700 border-sky-200', fallback: '待更新' },
+      { platform: '华为云开发者博客', label: '华为云开发者博客', iconText: '华', iconClass: 'bg-rose-50 text-rose-700 border-rose-200', fallback: '待更新' },
+      { platform: '百度云千帆', label: '百度云千帆', iconText: '百', iconClass: 'bg-blue-50 text-blue-700 border-blue-200', fallback: '待更新' },
+      { platform: 'ModelScope', label: 'ModelScope 魔搭社区', iconText: '魔', iconClass: 'bg-violet-50 text-violet-700 border-violet-200', fallback: '待更新' },
+      { platform: '电子发烧友', label: '电子发烧友', iconText: '电', iconClass: 'bg-amber-50 text-amber-700 border-amber-200', fallback: '待更新' },
+      { platform: '阿里云开发者社区', label: '阿里云开发者社区', iconText: '阿', iconClass: 'bg-orange-50 text-orange-700 border-orange-200', fallback: '待更新' },
+      { platform: '华为开发者文章', label: '华为开发者文章', iconText: '华', iconClass: 'bg-rose-50 text-rose-700 border-rose-200', fallback: '待更新' },
+      { platform: '支付宝开放平台', label: '支付宝开放平台', iconText: '支', iconClass: 'bg-blue-50 text-blue-700 border-blue-200', fallback: '待更新' },
+      { platform: '火山引擎开发者社区', label: '火山引擎开发者社区', iconText: '火', iconClass: 'bg-cyan-50 text-cyan-700 border-cyan-200', fallback: '待更新' }
+    ]
+  }
+]
 
 const currentBlogger = computed(() => {
   return bloggers.find((item) => item.id === selectedBloggerId.value) || bloggers[0] || null
 })
 
-const animatedOverview = ref({
-  totalFollowers: 0,
-  totalReads: 0,
-  totalLikes: 0,
-  totalPosts: 0
-})
+const currentPlatformMap = computed(() => {
+  if (!currentBlogger.value) return new Map()
 
-const chartColors = ['#6366F1', '#A855F7', '#14B8A6', '#F59E0B', '#06B6D4', '#EC4899', '#84CC16', '#F97316']
-
-const accountRanking = computed(() => {
-  if (!currentBlogger.value) return []
-  return [...currentBlogger.value.accounts].sort((a, b) => b.subtotal.followers - a.subtotal.followers)
-})
-
-const accountPlatformOptions = computed(() => {
-  if (!currentBlogger.value) return []
-
-  const platforms = currentBlogger.value.accounts.flatMap((account) => {
-    return account.platforms.map((platform) => platform.platform)
+  const platformEntries = currentBlogger.value.accounts.flatMap((account) => {
+    return account.platforms.map((platform) => ({
+      ...platform,
+      accountName: account.name,
+      handle: account.handle
+    }))
   })
 
-  return [...new Set(platforms)]
+  return new Map(platformEntries.map((item) => [item.platform, item]))
 })
 
-const filteredAccountRanking = computed(() => {
-  const keyword = accountKeyword.value.trim().toLowerCase()
+const currentMatrixAccountCount = computed(() => {
+  return currentBlogger.value?.accounts?.length || 0
+})
 
-  return accountRanking.value.filter((account) => {
-    const platformMatch = accountPlatformFilter.value === 'all' || account.platforms.some((platform) => platform.platform === accountPlatformFilter.value)
+const currentActivePlatformCount = computed(() => {
+  return currentPlatformMap.value.size
+})
 
-    if (!platformMatch) return false
-    if (!keyword) return true
+const groupedPlatforms = computed(() => {
+  return platformCatalog.map((group) => {
+    const items = group.items.map((item) => {
+      const matched = currentPlatformMap.value.get(item.platform)
 
-    const searchableText = [
-      account.name,
-      account.handle,
-      ...account.platforms.map((platform) => platform.platform)
-    ].join(' ').toLowerCase()
+      return {
+        ...item,
+        checked: Boolean(matched),
+        accountName: matched?.accountName || '',
+        handle: matched?.handle ? `@${matched.handle}` : item.fallback,
+        link: matched?.link || '',
+        reads: matched?.reads || 0,
+        followers: matched?.followers || 0
+      }
+    })
 
-    return searchableText.includes(keyword)
+    return {
+      ...group,
+      items,
+      checkedCount: items.filter((item) => item.checked).length
+    }
   })
 })
 
-const accountFanDistribution = computed(() => {
+const selectedPlatformCount = computed(() => {
+  return groupedPlatforms.value.reduce((total, group) => total + group.checkedCount, 0)
+})
+
+const selectedPlatformsLabel = computed(() => {
+  return `媒体平台（${selectedPlatformCount.value}）`
+})
+
+const accountShare = computed(() => {
   if (!currentBlogger.value) return []
+
   const total = currentBlogger.value.overview.totalFollowers || 1
 
-  return currentBlogger.value.accounts.map((account) => ({
+  return currentBlogger.value.accounts.map((account, index) => ({
     name: account.name,
-    value: account.subtotal.followers,
-    percent: ((account.subtotal.followers / total) * 100).toFixed(1)
+    followers: account.subtotal.followers,
+    reads: account.subtotal.reads,
+    percent: ((account.subtotal.followers / total) * 100).toFixed(1),
+    color: chartColors[index % chartColors.length]
   }))
 })
 
 const pieStyle = computed(() => {
-  if (!accountFanDistribution.value.length) {
-    return { background: '#E5E7EB' }
+  if (!accountShare.value.length) {
+    return { background: '#e5e7eb' }
   }
 
   let start = 0
-  const segments = accountFanDistribution.value.map((item, idx) => {
-    const span = Number(item.percent)
-    const end = start + span
-    const color = chartColors[idx % chartColors.length]
-    const segment = `${color} ${start}% ${end}%`
+  const segments = accountShare.value.map((item) => {
+    const end = start + Number(item.percent)
+    const segment = `${item.color} ${start}% ${end}%`
     start = end
     return segment
   })
 
   return {
-    background: `conic-gradient(${segments.join(',')})`
+    background: `conic-gradient(${segments.join(', ')})`
   }
 })
 
-const animateOverview = () => {
-  if (!currentBlogger.value) return
+const platformBars = computed(() => {
+  if (!currentBlogger.value) return []
 
-  if (animationFrame.value) {
-    cancelAnimationFrame(animationFrame.value)
-  }
+  const merged = currentBlogger.value.accounts
+    .flatMap((account) => account.platforms)
+    .reduce((acc, item) => {
+      if (!acc[item.platform]) {
+        acc[item.platform] = {
+          platform: item.platform,
+          reads: 0,
+          followers: 0
+        }
+      }
 
-  const target = {
-    totalFollowers: currentBlogger.value.overview.totalFollowers,
-    totalReads: currentBlogger.value.overview.totalReads,
-    totalLikes: currentBlogger.value.overview.totalLikes,
-    totalPosts: currentBlogger.value.overview.totalPosts
-  }
+      acc[item.platform].reads += item.reads || 0
+      acc[item.platform].followers += item.followers || 0
+      return acc
+    }, {})
 
-  const duration = 900
-  const start = performance.now()
+  const rows = Object.values(merged)
+    .sort((a, b) => b.reads - a.reads)
+    .slice(0, 8)
 
-  const step = (now) => {
-    const progress = Math.min((now - start) / duration, 1)
-    const eased = 1 - Math.pow(1 - progress, 3)
+  const maxReads = rows[0]?.reads || 1
 
-    animatedOverview.value = {
-      totalFollowers: Math.floor(target.totalFollowers * eased),
-      totalReads: Math.floor(target.totalReads * eased),
-      totalLikes: Math.floor(target.totalLikes * eased),
-      totalPosts: Math.floor(target.totalPosts * eased)
-    }
+  return rows.map((item, index) => ({
+    ...item,
+    width: `${Math.max((item.reads / maxReads) * 100, 8)}%`,
+    color: chartColors[index % chartColors.length]
+  }))
+})
 
-    if (progress < 1) {
-      animationFrame.value = requestAnimationFrame(step)
-    }
-  }
-
-  animationFrame.value = requestAnimationFrame(step)
-}
-
-const formatNumber = (value) => {
+function formatNumber(value) {
   return Number(value || 0).toLocaleString('zh-CN')
 }
-
-watch(currentBlogger, () => {
-  accountKeyword.value = ''
-  accountPlatformFilter.value = 'all'
-  animateOverview()
-})
-
-onMounted(() => {
-  setTimeout(() => {
-    isLoading.value = false
-    animateOverview()
-  }, 300)
-})
-
-onBeforeUnmount(() => {
-  if (animationFrame.value) {
-    cancelAnimationFrame(animationFrame.value)
-  }
-})
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-    <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
+  <div class="min-h-screen bg-[#f6f7f8]">
+    <nav class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 gap-4">
           <div class="flex items-center min-w-0">
-            <router-link to="/tob" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
+            <router-link to="/tob" class="text-xl font-bold text-gray-900 hover:text-indigo-700 transition-colors">
               🚀开发者博主联盟
             </router-link>
           </div>
 
-          <div class="flex items-center gap-2 overflow-x-auto whitespace-nowrap">
+          <div class="flex items-center gap-3 overflow-x-auto whitespace-nowrap">
             <router-link
               to="/workspace"
               class="inline-flex items-center gap-1.5 text-gray-700 transition-colors font-semibold text-base"
@@ -178,248 +205,207 @@ onBeforeUnmount(() => {
             </router-link>
           </div>
         </div>
-
       </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
-      <section class="rounded-3xl border border-slate-200 bg-slate-900 px-6 py-8 text-white shadow-xl md:px-8 md:py-10">
-        <div class="max-w-3xl">
-          <p class="text-sm uppercase tracking-[0.24em] text-indigo-200">2025 年总览</p>
-          <h2 class="mt-3 text-2xl md:text-3xl font-bold">年度合作分发与传播画像</h2>
-          <p class="mt-3 text-sm md:text-base leading-7 text-slate-300">
-            2025 年，我们与 <span class="font-semibold text-white">{{ partnerBrands.join('、') }}</span> 等品牌完成合作，围绕技术内容分发、平台种草、社群扩散和数据复盘，持续帮助品牌建立开发者认知。
-          </p>
-          <p class="mt-3 text-sm md:text-base leading-7 text-slate-300">
-            这一年里，我们的内容主要分发在掘金、CSDN、知乎、公众号、头条、博客园、腾讯云开发者社区等平台，并通过社群和矩阵号持续放大传播声量。
-          </p>
-        </div>
-
-        <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <article
-            v-for="card in summaryCards"
-            :key="card.label"
-            class="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-sm backdrop-blur-sm"
-          >
-            <div class="inline-flex rounded-xl bg-gradient-to-r px-3 py-1 text-sm font-semibold text-white" :class="card.accent">
-              {{ card.label }}
-            </div>
-            <div class="mt-4 text-3xl font-bold text-white">{{ card.value }}</div>
-          </article>
-        </div>
-
-        <div class="mt-6 grid gap-5 xl:grid-cols-2">
-          <article class="overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg">
-            <div class="border-b border-white/10 px-5 py-4">
-              <h3 class="text-lg font-semibold">数据看板</h3>
-              <p class="mt-1 text-sm text-slate-300">全年累计投放、平台分布与内容数量概览</p>
-            </div>
-            <img :src="annualDashboardImage" alt="2025 合作数据看板" class="w-full object-cover" />
-          </article>
-
-          <article class="overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-lg">
-            <div class="border-b border-white/10 px-5 py-4">
-              <h3 class="text-lg font-semibold">品牌与博主词云</h3>
-              <p class="mt-1 text-sm text-slate-300">品牌方与开发者博主合作网络的可视化展示</p>
-            </div>
-            <div class="flex min-h-[320px] items-center justify-center bg-slate-950/30">
-              <img :src="annualCloudImage" alt="2025 品牌与博主合作词云" class="max-h-[520px] w-full object-contain object-center" />
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="mt-8 bg-white rounded-2xl border border-indigo-100 shadow-sm p-6 md:p-8">
+    <main class="max-w-[1440px] mx-auto px-4 py-5 sm:px-6 lg:px-8">
+      <section class="rounded-[24px] border border-gray-200 bg-white px-6 py-6 md:px-8">
         <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">矩阵看板总览</h1>
-            <p class="mt-2 text-gray-600 leading-relaxed max-w-3xl">
-              以账号为维度管理博主矩阵，面向博主沉淀运营数据，面向品牌方直观展示账号资产与合作价值。
-            </p>
+            <div class="text-[14px] font-medium uppercase tracking-[0.18em] text-gray-400">Matrix Board</div>
+            <h1 class="mt-2 text-[30px] leading-none font-bold tracking-tight text-[#111827]">矩阵看板</h1>
+            <p class="mt-3 text-[15px] text-gray-500">按博主查看矩阵账号分布、平台覆盖和核心数据表现。</p>
           </div>
-          <div class="inline-flex items-center self-start rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-sm text-indigo-700 font-medium">
-            默认展示：TUARAN
-          </div>
-        </div>
 
-        <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="rounded-xl border border-green-200 bg-green-50 p-4">
-            <div class="text-sm font-semibold text-green-800 mb-1">面向博主</div>
-            <ul class="text-sm text-green-700 space-y-1">
-              <li>• 号召一线技术博主开矩阵号并持续记录数据</li>
-              <li>• 支持账号分平台运营与阶段复盘</li>
-            </ul>
-          </div>
-          <div class="rounded-xl border border-purple-200 bg-purple-50 p-4">
-            <div class="text-sm font-semibold text-purple-800 mb-1">面向品牌方</div>
-            <ul class="text-sm text-purple-700 space-y-1">
-              <li>• 可直接查看账号级覆盖、活跃与增长势能</li>
-              <li>• 辅助合作对象筛选与投放决策</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+          <div class="flex flex-col items-start gap-3 md:items-end">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-sm text-gray-500">矩阵账号：</span>
+              <button
+                v-for="blogger in bloggers"
+                :key="blogger.id"
+                class="rounded-full border px-3 py-1.5 text-sm font-semibold transition-colors"
+                :class="selectedBloggerId === blogger.id
+                  ? 'border-gray-900 bg-gray-900 text-white'
+                  : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:text-gray-900'"
+                @click="selectedBloggerId = blogger.id"
+              >
+                {{ blogger.name }}
+              </button>
+            </div>
 
-      <section class="mt-6 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-        <div class="flex flex-wrap items-center gap-3">
-          <span class="text-sm text-gray-500">博主切换：</span>
-          <button
-            v-for="blogger in bloggers"
-            :key="blogger.id"
-            class="px-3 py-1.5 rounded-full border text-sm font-medium transition-colors"
-            :class="selectedBloggerId === blogger.id
-              ? 'bg-indigo-600 border-indigo-600 text-white'
-              : 'bg-white border-gray-200 text-gray-600 hover:text-indigo-600 hover:border-indigo-300'"
-            @click="selectedBloggerId = blogger.id"
-          >
-            {{ blogger.name }}
-          </button>
-        </div>
-      </section>
-
-      <section v-if="isLoading" class="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        <div v-for="idx in 4" :key="idx" class="h-28 rounded-xl bg-white border border-gray-100 animate-pulse"></div>
-      </section>
-
-      <template v-else-if="currentBlogger">
-        <section class="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-          <div class="metric-card">
-            <div class="text-xs text-gray-500">全网粉丝</div>
-            <div class="mt-2 text-3xl font-bold text-indigo-600">{{ formatNumber(animatedOverview.totalFollowers) }}</div>
-          </div>
-          <div class="metric-card">
-            <div class="text-xs text-gray-500">全网阅读</div>
-            <div class="mt-2 text-3xl font-bold text-purple-600">{{ formatNumber(animatedOverview.totalReads) }}</div>
-          </div>
-          <div class="metric-card">
-            <div class="text-xs text-gray-500">全网点赞</div>
-            <div class="mt-2 text-3xl font-bold text-emerald-600">{{ formatNumber(animatedOverview.totalLikes) }}</div>
-          </div>
-          <div class="metric-card">
-            <div class="text-xs text-gray-500">全网文章/帖子</div>
-            <div class="mt-2 text-3xl font-bold text-amber-600">{{ formatNumber(animatedOverview.totalPosts) }}</div>
-          </div>
-        </section>
-
-        <section class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="summary-chip">矩阵账号数：{{ currentBlogger.overview.matrixAccountCount }}</div>
-          <div class="summary-chip">活跃平台数：{{ currentBlogger.overview.activePlatformCount }}</div>
-          <div class="summary-chip">数据更新时间：{{ currentBlogger.updatedAt }}</div>
-        </section>
-
-        <section class="mt-6 grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div class="xl:col-span-1 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <div class="text-lg font-semibold text-gray-900 mb-3">账号粉丝分布饼图</div>
-            <div class="mx-auto w-56 h-56 rounded-full" :style="pieStyle"></div>
-            <div class="mt-4 space-y-2">
-              <div v-for="(item, idx) in accountFanDistribution" :key="item.name" class="flex items-center justify-between text-sm">
-                <div class="flex items-center gap-2 text-gray-700">
-                  <span class="w-3 h-3 rounded-full" :style="{ backgroundColor: chartColors[idx % chartColors.length] }"></span>
-                  <span>{{ item.name }}</span>
-                </div>
-                <div class="text-gray-500">{{ item.percent }}%</div>
-              </div>
+            <div v-if="currentBlogger" class="rounded-2xl border border-gray-200 bg-[#fafafa] px-4 py-3 text-sm text-gray-600">
+              已接入 <span class="font-bold text-gray-900">{{ currentMatrixAccountCount }}</span> 个矩阵账号，
+              覆盖 <span class="font-bold text-gray-900">{{ currentActivePlatformCount }}</span> 个活跃平台
             </div>
           </div>
+        </div>
 
-          <div class="xl:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <div class="text-lg font-semibold text-gray-900 mb-3">仪表盘能力</div>
-            <div class="mb-3 grid grid-cols-1 md:grid-cols-3 gap-3">
-              <div class="md:col-span-2">
-                <input
-                  v-model="accountKeyword"
-                  type="text"
-                  placeholder="筛选账号（名称 / handle / 平台）"
-                  class="w-full h-10 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-              </div>
+        <section v-if="currentBlogger" class="mt-8 grid grid-cols-1 gap-5 xl:grid-cols-[0.88fr_1.12fr]">
+          <article class="rounded-[22px] border border-gray-200 bg-[#fafafa] p-5">
+            <div class="flex items-center justify-between gap-3">
               <div>
-                <select
-                  v-model="accountPlatformFilter"
-                  class="w-full h-10 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-                  <option value="all">全部平台</option>
-                  <option v-for="platform in accountPlatformOptions" :key="platform" :value="platform">{{ platform }}</option>
-                </select>
+                <h2 class="text-lg font-semibold text-[#111827]">矩阵账号占比</h2>
+                <p class="mt-1 text-sm text-gray-500">按账号粉丝规模分布</p>
+              </div>
+              <div class="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-500">
+                粉丝口径
               </div>
             </div>
-            <div class="overflow-x-auto">
-              <table class="min-w-full text-sm">
-                <thead class="bg-indigo-50 text-gray-700">
-                  <tr>
-                    <th class="px-3 py-2 text-left">账号（IP）</th>
-                    <th class="px-3 py-2 text-left">平台</th>
-                    <th class="px-3 py-2 text-left">领域</th>
-                    <th class="px-3 py-2 text-left">粉丝</th>
-                    <th class="px-3 py-2 text-left">阅读</th>
-                    <th class="px-3 py-2 text-left">文章/帖子</th>
-                    <th class="px-3 py-2 text-left">点赞</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="item in filteredAccountRanking" :key="item.id" class="border-t border-gray-100">
-                    <td class="px-3 py-2 font-medium text-gray-900">{{ item.name }}</td>
-                    <td class="px-3 py-2">
-                      <div class="flex flex-wrap gap-1.5">
-                        <a
-                          v-for="platform in item.platforms"
-                          :key="`${item.id}-${platform.platform}`"
-                          :href="platform.link"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] leading-4 whitespace-nowrap font-semibold bg-indigo-600 text-white border border-indigo-600 shadow-sm hover:bg-indigo-700 hover:border-indigo-700 transition-colors"
-                        >
-                          <span>🔗</span>
-                          {{ platform.platform }}
-                        </a>
-                      </div>
-                    </td>
-                    <td class="px-3 py-2">
-                      <div class="flex flex-wrap gap-1.5">
-                        <span
-                          v-for="domain in (item.domains || [])"
-                          :key="`${item.id}-${domain}`"
-                          class="px-2 py-0.5 rounded text-[11px] leading-4 whitespace-nowrap font-medium bg-emerald-50 text-emerald-700 border border-emerald-200"
-                        >
-                          {{ domain }}
-                        </span>
-                        <span
-                          v-if="!item.domains || item.domains.length === 0"
-                          class="text-xs text-gray-400"
-                        >
-                          -
-                        </span>
-                      </div>
-                    </td>
-                    <td class="px-3 py-2">{{ formatNumber(item.subtotal.followers) }}</td>
-                    <td class="px-3 py-2">{{ formatNumber(item.subtotal.reads) }}</td>
-                    <td class="px-3 py-2">{{ formatNumber(item.subtotal.posts) }}</td>
-                    <td class="px-3 py-2">{{ formatNumber(item.subtotal.likes) }}</td>
-                  </tr>
-                  <tr v-if="filteredAccountRanking.length === 0">
-                    <td colspan="7" class="px-3 py-8 text-center text-gray-500">暂无匹配账号，请调整筛选条件。</td>
-                  </tr>
-                </tbody>
-              </table>
+
+            <div class="mt-6 flex flex-col items-center gap-6 lg:flex-row lg:items-start">
+              <div class="relative h-52 w-52 shrink-0 rounded-full" :style="pieStyle">
+                <div class="absolute inset-[18%] flex items-center justify-center rounded-full bg-white text-center border border-gray-100">
+                  <div>
+                    <div class="text-[11px] uppercase tracking-[0.2em] text-gray-400">Total</div>
+                    <div class="mt-2 text-2xl font-bold text-[#111827]">
+                      {{ formatNumber(currentBlogger.overview.totalFollowers) }}
+                    </div>
+                    <div class="mt-1 text-xs text-gray-400">全网粉丝</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="w-full space-y-3">
+                <div
+                  v-for="item in accountShare"
+                  :key="item.name"
+                  class="rounded-2xl border border-gray-200 bg-white px-4 py-3"
+                >
+                  <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                      <span class="h-3 w-3 rounded-full" :style="{ backgroundColor: item.color }"></span>
+                      <span class="text-sm font-medium text-[#111827]">{{ item.name }}</span>
+                    </div>
+                    <span class="text-sm font-medium text-gray-500">{{ item.percent }}%</span>
+                  </div>
+                  <div class="mt-2 flex flex-wrap items-center gap-3 text-xs text-gray-400">
+                    <span>粉丝 {{ formatNumber(item.followers) }}</span>
+                    <span>阅读 {{ formatNumber(item.reads) }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          </article>
+
+          <article class="rounded-[22px] border border-gray-200 bg-[#fafafa] p-5">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <h2 class="text-lg font-semibold text-[#111827]">平台阅读柱状图</h2>
+                <p class="mt-1 text-sm text-gray-500">按平台汇总阅读表现</p>
+              </div>
+              <div class="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-500">
+                TOP {{ platformBars.length }}
+              </div>
+            </div>
+
+            <div class="mt-6 space-y-4">
+              <div
+                v-for="item in platformBars"
+                :key="item.platform"
+                class="grid grid-cols-[92px_1fr_auto] items-center gap-3"
+              >
+                <div class="text-sm font-medium text-gray-600">{{ item.platform }}</div>
+                <div class="h-10 rounded-2xl bg-white border border-gray-200 p-1">
+                  <div
+                    class="flex h-full items-center rounded-xl px-3 text-xs font-semibold text-white transition-all"
+                    :style="{ width: item.width, backgroundColor: item.color }"
+                  >
+                    {{ formatNumber(item.reads) }}
+                  </div>
+                </div>
+                <div class="text-xs text-gray-400">粉丝 {{ formatNumber(item.followers) }}</div>
+              </div>
+            </div>
+          </article>
         </section>
 
-      </template>
+        <div class="mt-8 flex flex-wrap items-center gap-5 text-[16px] font-semibold text-gray-500">
+          <div class="text-gray-900">平台矩阵</div>
+          <div class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-[#fafafa] px-3 py-1.5 text-sm font-medium text-gray-500">
+            <span>{{ selectedPlatformsLabel }}</span>
+          </div>
+        </div>
 
-      <section v-else class="mt-6 rounded-2xl border border-dashed border-gray-300 bg-white p-8 text-center text-gray-500">
-        暂无可展示的矩阵看板数据。
+        <div class="mt-6 grid grid-cols-1 gap-5 xl:grid-cols-3">
+          <section
+            v-for="group in groupedPlatforms"
+            :key="group.key"
+            class="rounded-[22px] border border-gray-200 bg-[#fafafa] p-4"
+          >
+            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 pb-3 text-[17px] font-semibold">
+              <div class="text-gray-700">
+                {{ group.title }}（{{ group.items.length }}）
+              </div>
+              <div class="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1">
+                <span class="text-base font-extrabold tracking-tight text-emerald-700">
+                  {{ group.checkedCount }}/{{ group.items.length }}
+                </span>
+              </div>
+            </div>
+
+            <div class="mt-4 space-y-1.5">
+              <article
+                v-for="item in group.items"
+                :key="`${group.key}-${item.platform}`"
+                class="flex min-h-[56px] items-center gap-3 rounded-2xl bg-white px-3 py-2"
+              >
+                <div
+                  class="h-2.5 w-2.5 shrink-0 rounded-full"
+                  :class="item.checked ? 'bg-emerald-500' : 'bg-gray-200'"
+                >
+                </div>
+
+                <div
+                  class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border text-[15px] font-semibold"
+                  :class="item.iconClass"
+                >
+                  {{ item.iconText }}
+                </div>
+
+                <div class="min-w-0 flex-1">
+                  <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <div class="text-[18px] font-bold text-[#111827]">{{ item.label }}</div>
+                    <div
+                      v-if="item.checked"
+                      class="inline-flex items-center gap-2 text-[15px] text-gray-500"
+                    >
+                      <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-[13px] font-semibold text-gray-700">
+                        {{ item.accountName.slice(0, 1) || '号' }}
+                      </span>
+                      <a
+                        v-if="item.link"
+                        :href="item.link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="truncate hover:text-indigo-700"
+                      >
+                        {{ item.accountName }}
+                      </a>
+                      <span v-else>{{ item.accountName }}</span>
+                    </div>
+                    <div
+                      v-else
+                      class="text-[15px] text-gray-400"
+                    >
+                      {{ item.handle }}
+                    </div>
+                  </div>
+
+                  <div
+                    v-if="item.checked"
+                    class="mt-1 flex flex-wrap items-center gap-3 text-xs text-gray-400"
+                  >
+                    <span>{{ item.handle }}</span>
+                    <span>阅读 {{ formatNumber(item.reads) }}</span>
+                    <span>粉丝 {{ formatNumber(item.followers) }}</span>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+
       </section>
     </main>
   </div>
 </template>
-
-<style scoped>
-.metric-card {
-  @apply bg-white rounded-2xl border border-gray-100 shadow-sm p-5 transition-transform duration-300 hover:-translate-y-0.5;
-}
-
-.summary-chip {
-  @apply rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700;
-}
-</style>

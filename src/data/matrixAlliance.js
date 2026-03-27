@@ -94,6 +94,46 @@ export const matrixAllianceBloggers = [
             dailyFollowers: 5,
             dailyReads: 0,
             link: 'https://weibo.com/'
+          },
+          {
+            platform: '腾讯云开发者社区',
+            followers: 0,
+            reads: 0,
+            posts: 0,
+            likes: 0,
+            dailyFollowers: 0,
+            dailyReads: 0,
+            link: 'https://cloud.tencent.com/developer/user/10172274'
+          },
+          {
+            platform: '华为云开发者博客',
+            followers: 0,
+            reads: 0,
+            posts: 0,
+            likes: 0,
+            dailyFollowers: 0,
+            dailyReads: 0,
+            link: 'https://developer.huaweicloud.com/usercenter/certificate'
+          },
+          {
+            platform: '阿里云开发者社区',
+            followers: 0,
+            reads: 0,
+            posts: 0,
+            likes: 0,
+            dailyFollowers: 0,
+            dailyReads: 0,
+            link: 'https://developer.aliyun.com/profile'
+          },
+          {
+            platform: '火山引擎开发者社区',
+            followers: 0,
+            reads: 0,
+            posts: 0,
+            likes: 0,
+            dailyFollowers: 0,
+            dailyReads: 0,
+            link: 'https://developer.volcengine.com/'
           }
         ],
         subtotal: {
@@ -106,7 +146,7 @@ export const matrixAllianceBloggers = [
       {
         id: 'code-ai-frosen',
         name: '安东尼与AI',
-        handle: 'code-ai-frosen',
+        handle: 'anthony-ai',
         domains: ['AI大模型'],
         platforms: [
           {
