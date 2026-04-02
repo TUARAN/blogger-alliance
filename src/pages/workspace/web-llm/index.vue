@@ -237,6 +237,23 @@ onMounted(() => {
               推理错误：{{ state.inferenceError }}
             </p>
 
+            <div
+              v-if="state.isGenerating"
+              class="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+            >
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.16em]">
+                  {{ state.generationStage }}
+                </span>
+                <span>耗时 {{ (state.generationElapsedMs / 1000).toFixed(1) }}s</span>
+                <span>Token {{ state.generatedTokens }}</span>
+                <span v-if="state.generationTps">{{ state.generationTps }} tokens/s</span>
+              </div>
+              <p class="mt-2 text-xs leading-5 text-amber-800/80">
+                当前会显示准备上下文、编码输入、生成回复等阶段，不再只有“正在生成中”。
+              </p>
+            </div>
+
             <div class="mt-4 rounded-[1.75rem] border border-slate-200 bg-white p-3 shadow-sm">
               <div class="flex flex-wrap gap-2 px-2 pb-3">
                 <button

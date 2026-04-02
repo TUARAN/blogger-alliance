@@ -24,6 +24,10 @@ export function useWebLlmChat() {
     diagnostics: getEnvironmentDiagnostics(),
     isLoadingModel: false,
     isGenerating: false,
+    generationStage: 'idle',
+    generationElapsedMs: 0,
+    generatedTokens: 0,
+    generationTps: null,
     loadProgress: 0,
     loadStatus: '尚未加载模型',
     loadError: '',
@@ -193,6 +197,10 @@ export function useWebLlmChat() {
     composerText.value = ''
     state.inferenceError = ''
     state.isGenerating = true
+    state.generationStage = 'preparing'
+    state.generationElapsedMs = 0
+    state.generatedTokens = 0
+    state.generationTps = null
     clearImage()
     await persistActiveSession()
 
@@ -200,6 +208,12 @@ export function useWebLlmChat() {
       await generateReply({
         runtime: runtime.value,
         messages: activeSession.value.messages.filter((message) => !message.pending),
+        onStatus: ({ stage, elapsedMs, generatedTokens, tps }) => {
+          state.generationStage = stage
+          state.generationElapsedMs = elapsedMs ?? 0
+          state.generatedTokens = generatedTokens ?? 0
+          state.generationTps = tps ?? null
+        },
         onStream: ({ text, tps }) => {
           assistantMessage.text = text
           assistantMessage.tps = tps

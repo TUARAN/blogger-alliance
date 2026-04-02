@@ -11,11 +11,12 @@ import siteContext from '../../data/webLlmSiteContext.md?raw'
 env.allowLocalModels = false
 
 class DomTextStreamer extends TextStreamer {
-  constructor(tokenizer, { onUpdate, onComplete }) {
+  constructor(tokenizer, { onUpdate, onComplete, onToken }) {
     const state = {
       text: '',
       generatedTokens: 0,
-      decodeStartAt: 0
+      decodeStartAt: 0,
+      firstTokenAt: 0
     }
 
     super(tokenizer, {
@@ -33,7 +34,15 @@ class DomTextStreamer extends TextStreamer {
           state.decodeStartAt = performance.now()
         }
 
+        if (!state.firstTokenAt && tokens.length > 0) {
+          state.firstTokenAt = performance.now()
+        }
+
         state.generatedTokens += tokens.length
+        onToken?.({
+          generatedTokens: state.generatedTokens,
+          firstTokenAt: state.firstTokenAt
+        })
       }
     })
 
@@ -46,7 +55,9 @@ class DomTextStreamer extends TextStreamer {
 
     this.onComplete?.({
       text: this.state.text,
-      tps: calculateTps(this.state.generatedTokens, this.state.decodeStartAt)
+      tps: calculateTps(this.state.generatedTokens, this.state.decodeStartAt),
+      generatedTokens: this.state.generatedTokens,
+      firstTokenAt: this.state.firstTokenAt
     })
   }
 }
@@ -216,9 +227,25 @@ export async function generateReply({
   runtime,
   messages,
   onStream,
+  onStatus,
   maxNewTokens = MAX_NEW_TOKENS
 }) {
+  const startedAt = performance.now()
+  onStatus?.({
+    stage: 'preparing',
+    elapsedMs: 0,
+    generatedTokens: 0,
+    tps: null
+  })
+
   const conversation = buildConversation(messages)
+  onStatus?.({
+    stage: 'building_prompt',
+    elapsedMs: Math.round(performance.now() - startedAt),
+    generatedTokens: 0,
+    tps: null
+  })
+
   const images = await Promise.all(
     messages
       .filter((message) => message.role === 'user' && message.image)
@@ -229,15 +256,59 @@ export async function generateReply({
     add_generation_prompt: true
   })
 
-  const inputs = await runtime.processor(prompt, images.length > 0 ? images : null)
+  onStatus?.({
+    stage: 'encoding',
+    elapsedMs: Math.round(performance.now() - startedAt),
+    generatedTokens: 0,
+    tps: null
+  })
+
+  const inputs = images.length > 0
+    ? await runtime.processor(prompt, images)
+    : runtime.processor.tokenizer(prompt, {
+        add_special_tokens: false,
+        return_tensor: true
+      })
+
+  const generationStartedAt = performance.now()
+  onStatus?.({
+    stage: 'generating',
+    elapsedMs: Math.round(generationStartedAt - startedAt),
+    generatedTokens: 0,
+    tps: null
+  })
 
   return runtime.model.generate({
     ...inputs,
     max_new_tokens: maxNewTokens,
     do_sample: false,
     streamer: new DomTextStreamer(runtime.processor.tokenizer, {
-      onUpdate: onStream,
-      onComplete: onStream
+      onUpdate: ({ text, tps }) => {
+        onStream?.({
+          text,
+          tps
+        })
+      },
+      onToken: ({ generatedTokens, firstTokenAt }) => {
+        onStatus?.({
+          stage: 'generating',
+          elapsedMs: Math.round((firstTokenAt || performance.now()) - startedAt),
+          generatedTokens,
+          tps: calculateTps(generatedTokens, firstTokenAt)
+        })
+      },
+      onComplete: ({ text, tps, generatedTokens, firstTokenAt }) => {
+        onStream?.({
+          text,
+          tps
+        })
+        onStatus?.({
+          stage: 'complete',
+          elapsedMs: Math.round(performance.now() - startedAt),
+          generatedTokens,
+          tps: tps ?? calculateTps(generatedTokens, firstTokenAt)
+        })
+      }
     })
   })
 }
