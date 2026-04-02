@@ -30,7 +30,7 @@
         </p>
       </div>
 
-      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-5">
+      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
         <router-link
           to="/tob/services"
           class="group rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-emerald-100/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
@@ -116,6 +116,24 @@
             学习资料、工具资源和知识沉淀。
           </p>
           <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-700">
+            <span>进入模块</span>
+            <span class="transition-transform group-hover:translate-x-1">→</span>
+          </div>
+        </router-link>
+
+        <router-link
+          to="/workspace/web-llm"
+          class="group rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-amber-100/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+        >
+          <div class="flex items-start justify-between gap-3">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-2xl">🧠</span>
+            <span class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">本地推理</span>
+          </div>
+          <h2 class="mt-5 text-xl font-bold text-gray-900">网页大模型</h2>
+          <p class="mt-2 text-sm leading-6 text-gray-600">
+            浏览器端 WebGPU 模型加载、流式问答与本地会话。
+          </p>
+          <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-amber-700">
             <span>进入模块</span>
             <span class="transition-transform group-hover:translate-x-1">→</span>
           </div>
