@@ -23,3 +23,11 @@ export const MODEL_OPTIONS = [
 
 export const MAX_NEW_TOKENS = 384
 export const IMAGE_MAX_EDGE = 1024
+
+export const SUGGESTED_QUESTIONS = [
+  '博主联盟是干嘛的？',
+  '联盟工作台里都有哪些能力入口？',
+  '联盟学院适合什么人看？',
+  '品牌合作和合作查询分别有什么用？',
+  '如果我是技术博主，加入这个联盟能获得什么帮助？'
+]

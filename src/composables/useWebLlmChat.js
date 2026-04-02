@@ -218,6 +218,10 @@ export function useWebLlmChat() {
     }
   }
 
+  function applySuggestedQuestion(question) {
+    composerText.value = question
+  }
+
   onMounted(() => {
     bootstrapSessions()
   })
@@ -244,6 +248,7 @@ export function useWebLlmChat() {
     selectSession,
     selectedModel,
     sendMessage,
+    applySuggestedQuestion,
     sessions,
     state,
     uploadInputRef,

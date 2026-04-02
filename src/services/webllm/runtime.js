@@ -6,6 +6,7 @@ import {
   env
 } from '@huggingface/transformers'
 import { IMAGE_MAX_EDGE, MAX_NEW_TOKENS, MODEL_OPTIONS } from './constants'
+import siteContext from '../../data/webLlmSiteContext.md?raw'
 
 env.allowLocalModels = false
 
@@ -133,7 +134,21 @@ function getModelConfig(modelId) {
 }
 
 function buildConversation(messages) {
-  return messages.map((message) => {
+  const systemPrompt = [
+    '你是“开发者博主联盟”网站里的本地大模型问答助手。',
+    '你的主要职责是结合站点固定上下文，回答用户关于本站定位、模块、能力和使用方式的问题。',
+    '如果用户问题与站点内容相关，优先依据给定上下文回答。',
+    '如果上下文没有提供答案，必须明确说明当前站点上下文没有提供这部分信息，不要编造。',
+    '以下是站点固定上下文：',
+    siteContext
+  ].join('\n\n')
+
+  return [
+    {
+      role: 'system',
+      content: systemPrompt
+    },
+    ...messages.map((message) => {
     if (message.role === 'user' && message.image) {
       return {
         role: 'user',
@@ -148,7 +163,8 @@ function buildConversation(messages) {
       role: message.role,
       content: message.text || ''
     }
-  })
+    })
+  ]
 }
 
 async function dataUrlToRawImage(dataUrl) {

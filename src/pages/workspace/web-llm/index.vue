@@ -5,11 +5,12 @@ import ChatMessage from '../../../components/workspace/web-llm/ChatMessage.vue'
 import LoadingModal from '../../../components/workspace/web-llm/LoadingModal.vue'
 import SessionList from '../../../components/workspace/web-llm/SessionList.vue'
 import { useWebLlmChat } from '../../../composables/useWebLlmChat'
-import { MODEL_OPTIONS } from '../../../services/webllm/constants'
+import { MODEL_OPTIONS, SUGGESTED_QUESTIONS } from '../../../services/webllm/constants'
 
 const {
   activeSession,
   activeSessionId,
+  applySuggestedQuestion,
   canSend,
   composerText,
   createSession,
@@ -101,7 +102,7 @@ onMounted(() => {
       <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div class="min-w-0">
           <RouterLink to="/workspace" class="text-lg font-bold text-slate-900 transition hover:text-amber-600">
-            联盟工作台 / 网页大模型
+            联盟工作台 / 大模型问答
           </RouterLink>
         </div>
         <RouterLink to="/workspace" class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900">
@@ -237,6 +238,18 @@ onMounted(() => {
             </p>
 
             <div class="mt-4 rounded-[1.75rem] border border-slate-200 bg-white p-3 shadow-sm">
+              <div class="flex flex-wrap gap-2 px-2 pb-3">
+                <button
+                  v-for="question in SUGGESTED_QUESTIONS"
+                  :key="question"
+                  type="button"
+                  class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800 transition hover:border-amber-300 hover:bg-amber-100"
+                  @click="applySuggestedQuestion(question)"
+                >
+                  {{ question }}
+                </button>
+              </div>
+
               <textarea
                 ref="textareaRef"
                 v-model="composerText"

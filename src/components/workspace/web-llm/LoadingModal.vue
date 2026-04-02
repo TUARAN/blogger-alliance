@@ -27,7 +27,7 @@ defineProps({
     <div v-if="open" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 px-4 backdrop-blur-sm">
       <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
         <p class="text-xs font-semibold uppercase tracking-[0.25em] text-amber-600">Model Loading</p>
-        <h3 class="mt-2 text-2xl font-bold text-slate-900">正在初始化网页大模型</h3>
+        <h3 class="mt-2 text-2xl font-bold text-slate-900">正在初始化大模型问答</h3>
         <p class="mt-3 text-sm leading-6 text-slate-600">{{ status }}</p>
 
         <div class="mt-6 h-3 overflow-hidden rounded-full bg-slate-100">

@@ -129,7 +129,7 @@
             <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-2xl">🧠</span>
             <span class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">本地推理</span>
           </div>
-          <h2 class="mt-5 text-xl font-bold text-gray-900">网页大模型</h2>
+          <h2 class="mt-5 text-xl font-bold text-gray-900">大模型问答</h2>
           <p class="mt-2 text-sm leading-6 text-gray-600">
             浏览器端 WebGPU 模型加载、流式问答与本地会话。
           </p>
