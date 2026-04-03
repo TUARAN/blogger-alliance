@@ -15,19 +15,18 @@ const emit = defineEmits(['create', 'select', 'delete'])
 
 <template>
   <aside class="rounded-[2rem] border border-white/70 bg-white/90 p-5 shadow-xl shadow-slate-200/40">
-    <div class="flex items-center justify-between gap-3">
-      <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Sessions</p>
-        <h2 class="mt-2 text-xl font-bold text-slate-900">本地会话</h2>
-      </div>
-      <button
-        type="button"
-        class="rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
-        @click="emit('create')"
-      >
-        新建
-      </button>
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Sessions</p>
+      <h2 class="mt-2 text-xl font-bold text-slate-900">本地会话</h2>
     </div>
+
+    <button
+      type="button"
+      class="mt-5 w-full rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-700"
+      @click="emit('create')"
+    >
+      新建会话
+    </button>
 
     <div class="mt-5 space-y-3">
       <button

@@ -29,9 +29,27 @@ defineProps({
         class="mb-3 max-h-56 w-full rounded-2xl object-cover"
       >
 
-      <p class="whitespace-pre-wrap break-words text-sm leading-7">
+      <div v-if="message.pending" class="mb-3 flex items-center gap-3">
+        <div class="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-[11px] font-medium text-amber-700">
+          <span class="inline-flex h-2 w-2 animate-pulse rounded-full bg-amber-500" />
+          <span>生成进行中</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="h-1.5 w-1.5 rounded-full bg-amber-400 animate-bounce [animation-delay:-0.2s]" />
+          <span class="h-1.5 w-1.5 rounded-full bg-amber-400 animate-bounce [animation-delay:-0.1s]" />
+          <span class="h-1.5 w-1.5 rounded-full bg-amber-400 animate-bounce" />
+        </div>
+      </div>
+
+      <p :class="message.pending ? 'text-slate-600' : ''" class="whitespace-pre-wrap break-words text-sm leading-7 transition-opacity">
         {{ message.text || (message.pending ? '正在生成中...' : '') }}
       </p>
+
+      <div v-if="message.pending" class="mt-3 space-y-2">
+        <div class="h-2 w-32 animate-pulse rounded-full bg-slate-200/80" />
+        <div class="h-2 w-48 animate-pulse rounded-full bg-slate-200/70" />
+        <div class="h-2 w-24 animate-pulse rounded-full bg-slate-200/60" />
+      </div>
     </div>
   </div>
 </template>

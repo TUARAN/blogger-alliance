@@ -1,4 +1,4 @@
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref, toRaw, watch } from 'vue'
 import { DEFAULT_MODEL_ID } from '../services/webllm/constants'
 import {
   createEmptySession,
@@ -7,10 +7,14 @@ import {
   saveSession
 } from '../services/webllm/sessionStore'
 import {
+  buildKnowledgeFallbackReply,
+  createGenerationController,
   generateReply,
   getEnvironmentDiagnostics,
   loadModelRuntime
 } from '../services/webllm/runtime'
+
+const FIRST_TOKEN_TIMEOUT_MS = 15000
 
 export function useWebLlmChat() {
   const sessions = ref([])
@@ -19,6 +23,7 @@ export function useWebLlmChat() {
   const selectedModel = ref(DEFAULT_MODEL_ID)
   const composerText = ref('')
   const uploadInputRef = ref(null)
+  let activeGenerationController = null
 
   const state = reactive({
     diagnostics: getEnvironmentDiagnostics(),
@@ -28,6 +33,11 @@ export function useWebLlmChat() {
     generationElapsedMs: 0,
     generatedTokens: 0,
     generationTps: null,
+    promptProcessingMs: 0,
+    firstTokenMs: null,
+    totalGenerationMs: 0,
+    contextSelectedTerms: [],
+    contextEntryCount: 0,
     loadProgress: 0,
     loadStatus: '尚未加载模型',
     loadError: '',
@@ -36,7 +46,10 @@ export function useWebLlmChat() {
     imageName: '',
     imageMimeType: '',
     modelReady: false,
-    loadedModelId: ''
+    loadedModelId: '',
+    generationHint: '',
+    fallbackMode: '',
+    fallbackReason: ''
   })
 
   const activeSession = computed(() => {
@@ -45,18 +58,14 @@ export function useWebLlmChat() {
 
   const canSend = computed(() => {
     return Boolean(
-      state.modelReady &&
-      state.loadedModelId === selectedModel.value &&
       !state.isGenerating &&
       composerText.value.trim() &&
       activeSession.value
     )
   })
 
-  function replaceSession(nextSession) {
-    sessions.value = sessions.value.map((session) => {
-      return session.id === nextSession.id ? nextSession : session
-    }).sort((a, b) => (b.updatedAt ?? 0) - (a.updatedAt ?? 0))
+  function stopActiveGeneration(reason = '已停止生成') {
+    activeGenerationController?.stop?.()
   }
 
   async function persistActiveSession() {
@@ -64,9 +73,13 @@ export function useWebLlmChat() {
       return
     }
 
-    const saved = await saveSession(activeSession.value)
-    replaceSession(saved)
-    activeSessionId.value = saved.id
+    try {
+      const raw = toRaw(activeSession.value)
+      const rawMessages = raw.messages.map((msg) => toRaw(msg))
+      await saveSession({ ...raw, messages: rawMessages })
+    } catch {
+      // IndexedDB save failed silently — non-critical
+    }
   }
 
   async function bootstrapSessions() {
@@ -174,60 +187,113 @@ export function useWebLlmChat() {
   }
 
   async function sendMessage() {
-    if (!activeSession.value || !runtime.value || !composerText.value.trim() || state.isGenerating) {
+    if (!activeSession.value || !composerText.value.trim() || state.isGenerating) {
       return
     }
 
-    const userMessage = {
-      role: 'user',
-      text: composerText.value.trim(),
-      image: state.imagePreview || null,
-      tps: null
-    }
-    const assistantMessage = {
-      role: 'assistant',
-      text: '',
-      image: null,
-      tps: null,
-      pending: true
-    }
-
-    activeSession.value.messages.push(userMessage, assistantMessage)
-    activeSession.value.updatedAt = Date.now()
+    const userText = composerText.value.trim()
+    const userImage = state.imagePreview || null
     composerText.value = ''
+    clearImage()
+
+    activeSession.value.messages.push(
+      { role: 'user', text: userText, image: userImage, tps: null },
+      { role: 'assistant', text: '', image: null, tps: null, pending: true }
+    )
+    const assistantMessage = activeSession.value.messages[activeSession.value.messages.length - 1]
+
     state.inferenceError = ''
     state.isGenerating = true
     state.generationStage = 'preparing'
     state.generationElapsedMs = 0
     state.generatedTokens = 0
     state.generationTps = null
-    clearImage()
-    await persistActiveSession()
+    state.promptProcessingMs = 0
+    state.firstTokenMs = null
+    state.totalGenerationMs = 0
+    state.contextSelectedTerms = []
+    state.contextEntryCount = 0
+    state.generationHint = ''
+    state.fallbackMode = ''
+    state.fallbackReason = ''
 
     try {
+      const modelAvailable = runtime.value && state.modelReady && state.loadedModelId === selectedModel.value
+
+      if (!modelAvailable) {
+        const fallback = buildKnowledgeFallbackReply(
+          activeSession.value.messages.filter((m) => !m.pending),
+          {
+            reason: '当前未加载可用的本地 WebGPU 模型',
+            includeImageNotice: Boolean(userImage)
+          }
+        )
+
+        assistantMessage.text = fallback.text
+        state.fallbackMode = 'knowledge'
+        state.fallbackReason = '未加载模型时直接使用知识库检索回答'
+        state.contextSelectedTerms = fallback.selectedTerms
+        state.contextEntryCount = fallback.entryCount
+        state.generationHint = '当前回答来自站点知识库兜底，不依赖 WebGPU 推理。'
+        state.generationStage = 'complete'
+        return
+      }
+
+      activeGenerationController = createGenerationController()
+
       await generateReply({
         runtime: runtime.value,
-        messages: activeSession.value.messages.filter((message) => !message.pending),
-        onStatus: ({ stage, elapsedMs, generatedTokens, tps }) => {
+        messages: activeSession.value.messages.filter((m) => !m.pending),
+        generationController: activeGenerationController,
+        onStatus: ({ stage, elapsedMs, generatedTokens, tps, promptProcessingMs, firstTokenMs, totalGenerationMs, selectedTerms, entryCount }) => {
           state.generationStage = stage
           state.generationElapsedMs = elapsedMs ?? 0
           state.generatedTokens = generatedTokens ?? 0
           state.generationTps = tps ?? null
+          state.promptProcessingMs = promptProcessingMs ?? 0
+          state.firstTokenMs = firstTokenMs ?? null
+          state.totalGenerationMs = totalGenerationMs ?? 0
+          state.contextSelectedTerms = selectedTerms ?? []
+          state.contextEntryCount = entryCount ?? 0
+
+          if (stage === 'generating' && generatedTokens > 0) {
+            state.generationHint = '模型正在持续解码。'
+          } else if (stage === 'generating') {
+            state.generationHint = '模型已进入生成阶段，正在等待首个 token。'
+          } else if (stage === 'complete') {
+            state.generationHint = '生成完成。'
+          }
         },
         onStream: ({ text, tps }) => {
           assistantMessage.text = text
           assistantMessage.tps = tps
-          activeSession.value.updatedAt = Date.now()
         }
       })
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error)
-      assistantMessage.text = `推理失败：${message}`
-      state.inferenceError = message
+      const errorMsg = error instanceof Error ? error.message : String(error)
+      const fallback = buildKnowledgeFallbackReply(
+        activeSession.value.messages.filter((m) => !m.pending),
+        {
+          reason: errorMsg,
+          includeImageNotice: Boolean(userImage)
+        }
+      )
+
+      assistantMessage.text = fallback.text
+      assistantMessage.tps = null
+      state.inferenceError = errorMsg
+      state.fallbackMode = 'knowledge'
+      state.fallbackReason = `本地模型失败后切换知识库兜底：${errorMsg}`
+      state.contextSelectedTerms = fallback.selectedTerms
+      state.contextEntryCount = fallback.entryCount
+      state.generationHint = '本地模型失败，已自动切换为站点知识库检索回答。'
+      state.generationStage = 'complete'
     } finally {
       assistantMessage.pending = false
-      activeSession.value.updatedAt = Date.now()
+      activeGenerationController = null
       state.isGenerating = false
+      state.generationStage = 'complete'
+      activeSession.value.updatedAt = Date.now()
       await persistActiveSession()
     }
   }
@@ -238,6 +304,10 @@ export function useWebLlmChat() {
 
   onMounted(() => {
     bootstrapSessions()
+  })
+
+  onUnmounted(() => {
+    activeGenerationController?.stop?.()
   })
 
   watch(selectedModel, (nextModel) => {
@@ -262,6 +332,7 @@ export function useWebLlmChat() {
     selectSession,
     selectedModel,
     sendMessage,
+    stopActiveGeneration,
     applySuggestedQuestion,
     sessions,
     state,
