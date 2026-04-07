@@ -450,7 +450,7 @@ export const bloggersData = [
   },
   {
     id: 32,
-    name: '晓雨(是yu欸)',
+    name: '晓雨',
     avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=xiaoyu&backgroundColor=EAF6FF',
     introduction: '专注云开发与 AI 应用的创作者，也是多个技术社群的组织者。',
     followers: '100K+',

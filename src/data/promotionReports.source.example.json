@@ -1,12 +1,24 @@
 [
   {
-    "id": "report-demo-20260312",
+    "id": "report-demo-1",
+    "cooperationId": "brand-demo",
     "title": "数据报告",
     "project": "示例项目合作",
     "author": "示例执行人",
     "period": "3 月 12 日 - 3 月 16 日（4 天）",
     "publishedAt": "2026-03-12T10:00:00+08:00",
     "platforms": ["公众号", "CSDN"],
+    "stats": {
+      "reads": 12800,
+      "likes": 420,
+      "favorites": 96,
+      "comments": 38,
+      "shares": 15
+    },
+    "platformStats": {
+      "公众号": { "reads": 8000, "likes": 260, "favorites": 60, "comments": 24, "shares": 10 },
+      "CSDN": { "reads": 4800, "likes": 160, "favorites": 36, "comments": 14, "shares": 5 }
+    },
     "content": "示例报告内容，请替换为真实推广效果数据。"
   }
 ]

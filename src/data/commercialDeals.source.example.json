@@ -1,11 +1,10 @@
 [
   {
-    "id": "brand-demo-202603",
+    "id": "brand-demo",
     "brand": "示例品牌",
     "service": "推文服务",
-    "category": "品牌推文",
-    "progress": "需求沟通中",
-    "remark": "示例数据，请勿用于生产",
+    "progress": "需求沟通",
+    "remark": "品牌推文；示例数据，请勿用于生产",
     "referrer": "示例推荐人",
     "updatedAt": "2026.3.9"
   }

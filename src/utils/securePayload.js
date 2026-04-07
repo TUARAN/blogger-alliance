@@ -1,3 +1,5 @@
+import { normalizeCredential } from './credentialNormalize'
+
 const textEncoder = new TextEncoder()
 const textDecoder = new TextDecoder()
 
@@ -41,7 +43,9 @@ async function deriveAesKey(credential, salt, iterations = 150000) {
 }
 
 export async function decryptJsonPayload(payload, credential) {
-  if (!credential?.trim()) {
+  const normalized = normalizeCredential(credential)
+
+  if (!normalized) {
     throw new Error('EMPTY_CREDENTIAL')
   }
 
@@ -53,7 +57,7 @@ export async function decryptJsonPayload(payload, credential) {
   const iv = base64ToBytes(payload.iv)
   const encryptedBytes = base64ToBytes(payload.ciphertext)
 
-  const key = await deriveAesKey(credential, salt, payload.iterations || 150000)
+  const key = await deriveAesKey(normalized, salt, payload.iterations || 150000)
   const decrypted = await crypto.subtle.decrypt(
     {
       name: 'AES-GCM',

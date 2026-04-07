@@ -210,7 +210,7 @@ function collectQueryTerms(messages) {
     .filter((term) => term.length >= 2)
 
   const phraseTerms = [
-    '博主联盟', '工作台', '大模型问答', '服务介绍', '合作查询', '矩阵看板', '联盟学院', '25年报告',
+    '博主联盟', '工作台', '大模型问答', '服务介绍', '合作进度查询', '矩阵看板', '联盟学院', '25年报告',
     '推文服务', '引流服务', '社群服务', 'ai access', 'ai', '大模型', '前端', '后端', '云原生',
     '全栈', '博主', '品牌', '合作', '资源', '工具', 'faq'
   ].filter((term) => normalized.includes(normalizeText(term)))

@@ -84,7 +84,7 @@ const layers = [
               active-class="text-gray-700 font-semibold"
             >
               <span class="text-base leading-none">🧭</span>
-              <span>合作查询</span>
+              <span>合作进度查询</span>
             </router-link>
 
             <router-link

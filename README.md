@@ -113,18 +113,21 @@ git push origin feature/add-blogger-你的名字
 
 欢迎提交 Issue 和 Pull Request！
 
-## 🔐 合作查询数据维护（内部协作）
+## 🔐 合作进度查询数据维护（内部协作）
 
-合作查询页使用密文文件：
+合作进度查询页使用密文文件：
 
 - [src/data/commercialDeals.encrypted.js](src/data/commercialDeals.encrypted.js)
-- [src/data/promotionReports.encrypted.js](src/data/promotionReports.encrypted.js)
+
+前端「合作进度查询」与「数据报告查询」共用同一访问凭证；在任一页面解密后 **30 分钟内**另一页免重复输入（见 `src/utils/secureDataCaches.js`）。在任一页点击「锁定页面」会同时清空两页的本地缓存与会话。
 
 ### 1) 明文源数据放哪里？
 
 - 本地明文默认路径：`private/commercialDeals.source.json`
 - 该目录已在 `.gitignore` 中忽略，不会进入仓库。
 - 可参考示例结构：`src/data/commercialDeals.source.example.json`
+
+每条合作须有唯一 **`id`（合作编码）**，在「合作进度查询」页第一列以大写展示，并参与关键词检索与复制表格；建议使用可读、稳定的业务编号（如 `品牌缩写-服务类型-序号`）。
 
 ### 2) 如何解密到本地（用于新增/编辑）
 
@@ -153,7 +156,7 @@ DEALS_CREDENTIAL=你的6位凭证 npm run deals:encrypt
 
 ## 🔐 数据报告维护（内部协作）
 
-报告查询页同样使用密文文件：
+数据报告查询页同样使用密文文件：
 
 - [src/data/promotionReports.encrypted.js](src/data/promotionReports.encrypted.js)
 
@@ -173,13 +176,15 @@ DEALS_CREDENTIAL=你的6位凭证 npm run deals:encrypt
 ### 2) 字段说明
 
 - `id`：报告唯一业务 ID，建议格式：`report-YYYYMMDD-序号`
-- `title`：报告标题，当前统一使用 `数据报告`
-- `project`：合作项目名称，例如 `向日葵AI 合作`
+- `title`：**数据报告的固定标题**，当前统一填写 `数据报告`；勿将推广图文的 headline 写进该字段
+- `articleTitle`：（可选）推广图文的标题正文，无需带书名号；页面展示时会自动加上《》；与 `title`（数据报告）区分
+- `project`：合作项目名称（在报告列表中作为主标题展示），例如 `向日葵AI 合作`
 - `author`：执行人姓名
 - `period`：统计周期展示文案
 - `publishedAt`：发布时间戳，使用 ISO 格式，例如 `2026-03-12T10:00:00+08:00`
 - `platforms`：推广平台数组，例如 `[`公众号`, `CSDN`, `知乎`]`
-- `content`：完整报告正文
+- `stats`：**推荐必填**的结构化指标对象（不要只写在正文里）。键可用英文或中文，数值为非负整数。英文键：`reads`、`likes`、`favorites`、`comments`、`shares`；亦支持 `阅读量`、`点赞` 等别名
+- `content`：完整报告正文。若某条暂未维护 `stats`，页面会尝试从正文里识别「阅读量：…」「点赞：…」或 Markdown 表格列等片段，**按字段补全仍为 0 的项**；正式数据仍以 `stats` 为准，填好对象后请重新加密发布
 
 ### 3) 新增一条数据报告
 

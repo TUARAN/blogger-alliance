@@ -10,6 +10,7 @@ const routes = [
   { path: '/tob', component: () => import('./pages/tob/index.vue') },
   { path: '/cases', component: () => import('./pages/cases/index.vue') },
   { path: '/tob/deals', component: () => import('./pages/tob/deals.vue') },
+  { path: '/tob/reports', component: () => import('./pages/tob/reports.vue') },
   { path: '/tob/services', component: () => import('./pages/tob/services/index.vue') },
   { path: '/matrix', component: () => import('./pages/matrix/index.vue') },
   { path: '/annual-report-2025', component: () => import('./pages/annual-report/index.vue') },

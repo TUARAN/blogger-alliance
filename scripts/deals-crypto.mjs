@@ -2,6 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import crypto from 'node:crypto'
 import { pathToFileURL } from 'node:url'
+import { normalizeCredential } from '../src/utils/credentialNormalize.js'
 
 const cwd = process.cwd()
 
@@ -54,7 +55,7 @@ function getPayloadConfig() {
 function getCredential() {
   const fromArg = getArg('--credential')
   const fromEnv = process.env.DEALS_CREDENTIAL
-  return (fromArg || fromEnv || '').trim()
+  return normalizeCredential(fromArg || fromEnv || '')
 }
 
 function toWrappedBase64(base64, width = 160) {
@@ -178,6 +179,11 @@ async function main() {
 
   if (command === 'encrypt') {
     await runEncrypt()
+    return
+  }
+
+  if (command === 'decrypt') {
+    await runDecrypt()
     return
   }
 
