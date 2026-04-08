@@ -365,6 +365,8 @@
                 <img
                   :src="blogger.avatar"
                   :alt="blogger.name"
+                  :data-fallback-avatar="getFallbackAvatar(blogger.name)"
+                  @error="handleAvatarError"
                   class="w-14 h-14 rounded-full object-cover border border-indigo-100 group-hover:border-indigo-300 transition-colors"
                 />
               </div>
@@ -531,7 +533,13 @@
                 <td class="px-6 py-4 whitespace-nowrap sticky left-0 bg-white group-hover:bg-gray-50 z-10 shadow-[2px_0_5px_rgba(0,0,0,0.05)]">
                   <div class="flex items-center">
                     <div class="flex-shrink-0 h-10 w-10">
-                      <img class="h-10 w-10 rounded-full border border-gray-200 object-cover" :src="blogger.avatar" :alt="blogger.name" />
+                      <img
+                        class="h-10 w-10 rounded-full border border-gray-200 object-cover"
+                        :src="blogger.avatar"
+                        :alt="blogger.name"
+                        :data-fallback-avatar="getFallbackAvatar(blogger.name)"
+                        @error="handleAvatarError"
+                      />
                     </div>
                     <div class="ml-4">
                       <div class="text-sm font-medium text-gray-900">
@@ -737,6 +745,46 @@ const closeMoreDataModal = () => {
   moreDataModalOpen.value = false
 }
 const hasOnlyOnePlatform = (blogger) => (blogger?.socialAccounts?.length ?? 0) === 1
+
+const avatarPalette = [
+  ['#E0EAFF', '#6D28D9'],
+  ['#DFF6F3', '#0F766E'],
+  ['#FFE7D6', '#C2410C'],
+  ['#FDE7F3', '#BE185D'],
+  ['#E9F7D9', '#3F6212']
+]
+
+const getInitials = (name = '') => {
+  const normalized = String(name).trim()
+  if (!normalized) return '博'
+
+  const compact = normalized.replace(/\s+/g, '')
+  return compact.slice(0, Math.min(2, compact.length))
+}
+
+const getFallbackAvatar = (name = '') => {
+  const initials = getInitials(name)
+  const seed = Array.from(String(name)).reduce((sum, char) => sum + char.charCodeAt(0), 0)
+  const [bgColor, textColor] = avatarPalette[seed % avatarPalette.length]
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96">
+      <rect width="96" height="96" rx="48" fill="${bgColor}" />
+      <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" fill="${textColor}" font-family="Arial, PingFang SC, Microsoft YaHei, sans-serif" font-size="34" font-weight="700">${initials}</text>
+    </svg>
+  `
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`
+}
+
+const handleAvatarError = (event) => {
+  const target = event?.target
+  if (!(target instanceof HTMLImageElement)) return
+
+  const fallbackAvatar = target.dataset.fallbackAvatar || getFallbackAvatar(target.alt)
+  if (target.src === fallbackAvatar) return
+
+  target.src = fallbackAvatar
+}
 
 const parseFollowersValue = (followersStr) => {
   if (!followersStr) return 0
