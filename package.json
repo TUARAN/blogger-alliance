@@ -13,6 +13,8 @@
     "reports:decrypt": "node scripts/deals-crypto.mjs decrypt --type=reports"
   },
   "dependencies": {
+    "@huggingface/transformers": "^4.0.0",
+    "idb": "^8.0.3",
     "vue": "^3.4.0",
     "vue-router": "^4.2.5",
     "@vueuse/core": "^10.7.0"
