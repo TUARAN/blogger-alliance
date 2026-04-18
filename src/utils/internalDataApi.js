@@ -63,3 +63,23 @@ export async function fetchReportCooperationIds(token) {
   const payload = await apiRequest('/api/internal/reports/coop-ids', { token })
   return Array.isArray(payload?.cooperationIds) ? payload.cooperationIds : []
 }
+
+export async function fetchInternalHealth() {
+  return apiRequest('/api/internal/health')
+}
+
+export async function updateCommercialDeals(token, deals) {
+  return apiRequest('/api/internal/admin/deals', {
+    method: 'PUT',
+    token,
+    body: { deals }
+  })
+}
+
+export async function updatePromotionReports(token, reports) {
+  return apiRequest('/api/internal/admin/reports', {
+    method: 'PUT',
+    token,
+    body: { reports }
+  })
+}

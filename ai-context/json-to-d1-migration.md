@@ -204,6 +204,10 @@ Cloudflare D1 远端导入时报错，不接受这类事务语句。报错含义
 
 - `https://blogger-alliance.tuaran666.workers.dev`
 
+当前后台录入页：
+
+- `https://blogger-alliance.tuaran666.workers.dev/workspace/internal-data-admin`
+
 部署成功时的 Worker Version ID：
 
 - `abd12d1c-2a26-48ef-8693-478b2be19ecc`
@@ -232,17 +236,24 @@ Cloudflare D1 远端导入时报错，不接受这类事务语句。报错含义
 
 ### 中期
 
-如果想完全摆脱 JSON 文件，可以继续做：
+这里已经有一个最小可用管理后台：
 
-- 管理后台或内部录入页
-- 直接写入 D1 的新增/编辑 API
-- 更细粒度的更新脚本，而不是每次整库覆盖
+- 页面：`/workspace/internal-data-admin`
+- 可直接加载 `deals` / `reports`
+- 可直接整表覆盖写回 D1
+- 可查看 `/api/internal/health`
+
+如果还要继续升级，可以做：
+
+- 行级表单编辑，而不是整段 JSON 文本编辑
+- 新增 / 删除 / 拖拽排序等交互
+- 更细粒度更新脚本，而不是每次整库覆盖
 
 ### 风险点
 
 - 当前导入脚本是“整表清空再重灌”，适合当前小数据量，不适合多人同时在线编辑
 - 当前鉴权是单一内部凭证，不是用户体系
-- 目前没有单独的 health/check API
+- 当前后台编辑仍然是整段 JSON 编辑，不是细粒度表单
 
 ## 相关文件索引
 

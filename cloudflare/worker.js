@@ -158,6 +158,87 @@ function mapReportRow(row) {
   }
 }
 
+function emptyString(value) {
+  return value == null ? '' : String(value)
+}
+
+function normalizeDealRecord(record) {
+  return {
+    id: emptyString(record?.id).trim(),
+    brand: emptyString(record?.brand).trim(),
+    service: emptyString(record?.service).trim(),
+    progress: emptyString(record?.progress).trim(),
+    remark: emptyString(record?.remark).trim(),
+    category: emptyString(record?.category).trim(),
+    referrer: emptyString(record?.referrer).trim(),
+    updatedAt: emptyString(record?.updatedAt).trim(),
+    muted: record?.muted === true,
+    reportCooperationId: emptyString(record?.reportCooperationId).trim()
+  }
+}
+
+function normalizeReportRecord(record) {
+  return {
+    id: emptyString(record?.id).trim(),
+    title: emptyString(record?.title).trim(),
+    articleTitle: emptyString(record?.articleTitle).trim(),
+    project: emptyString(record?.project).trim(),
+    author: emptyString(record?.author).trim(),
+    period: emptyString(record?.period).trim(),
+    publishedAt: emptyString(record?.publishedAt).trim(),
+    cooperationId: emptyString(record?.cooperationId).trim(),
+    platforms: Array.isArray(record?.platforms) ? record.platforms : [],
+    stats: record?.stats && typeof record.stats === 'object' && !Array.isArray(record.stats) ? record.stats : {},
+    platformStats: record?.platformStats && typeof record.platformStats === 'object' && !Array.isArray(record.platformStats) ? record.platformStats : {},
+    authorSections: Array.isArray(record?.authorSections) ? record.authorSections : [],
+    content: emptyString(record?.content)
+  }
+}
+
+function validateDeals(records) {
+  if (!Array.isArray(records)) {
+    throw new Error('DEALS_PAYLOAD_MUST_BE_ARRAY')
+  }
+
+  const ids = new Set()
+  return records.map((record) => {
+    const next = normalizeDealRecord(record)
+
+    if (!next.id || !next.brand || !next.service || !next.progress) {
+      throw new Error('DEAL_REQUIRED_FIELDS_MISSING')
+    }
+
+    if (ids.has(next.id)) {
+      throw new Error('DEAL_ID_DUPLICATED')
+    }
+
+    ids.add(next.id)
+    return next
+  })
+}
+
+function validateReports(records) {
+  if (!Array.isArray(records)) {
+    throw new Error('REPORTS_PAYLOAD_MUST_BE_ARRAY')
+  }
+
+  const ids = new Set()
+  return records.map((record) => {
+    const next = normalizeReportRecord(record)
+
+    if (!next.id || !next.title || !next.project || !next.author || !next.content) {
+      throw new Error('REPORT_REQUIRED_FIELDS_MISSING')
+    }
+
+    if (ids.has(next.id)) {
+      throw new Error('REPORT_ID_DUPLICATED')
+    }
+
+    ids.add(next.id)
+    return next
+  })
+}
+
 async function requireSession(request, env) {
   const token = readBearerToken(request)
   const session = await verifySessionToken(token, env.INTERNAL_SESSION_SECRET)
@@ -273,6 +354,142 @@ async function handleReportCoopIds(request, env) {
   })
 }
 
+async function handleHealth(_request, env) {
+  const [dealsCount, reportsCount] = await Promise.all([
+    env.DB.prepare('SELECT COUNT(*) AS count FROM commercial_deals').first(),
+    env.DB.prepare('SELECT COUNT(*) AS count FROM promotion_reports').first()
+  ])
+
+  return json({
+    ok: true,
+    service: 'blogger-alliance-internal-api',
+    database: 'blogger-alliance',
+    counts: {
+      deals: Number(dealsCount?.count || 0),
+      reports: Number(reportsCount?.count || 0)
+    },
+    timestamp: new Date().toISOString()
+  })
+}
+
+async function replaceDeals(env, deals) {
+  const statements = [env.DB.prepare('DELETE FROM commercial_deals')]
+
+  deals.forEach((deal, index) => {
+    statements.push(
+      env.DB.prepare(`
+        INSERT INTO commercial_deals (
+          id,
+          brand,
+          service,
+          progress,
+          remark,
+          category,
+          referrer,
+          updated_at,
+          muted,
+          report_cooperation_id,
+          sort_order
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).bind(
+        deal.id,
+        deal.brand,
+        deal.service,
+        deal.progress,
+        deal.remark,
+        deal.category,
+        deal.referrer,
+        deal.updatedAt,
+        deal.muted ? 1 : 0,
+        deal.reportCooperationId,
+        index
+      )
+    )
+  })
+
+  await env.DB.batch(statements)
+}
+
+async function replaceReports(env, reports) {
+  const statements = [env.DB.prepare('DELETE FROM promotion_reports')]
+
+  reports.forEach((report, index) => {
+    statements.push(
+      env.DB.prepare(`
+        INSERT INTO promotion_reports (
+          id,
+          title,
+          article_title,
+          project,
+          author,
+          period,
+          published_at,
+          cooperation_id,
+          platforms_json,
+          stats_json,
+          platform_stats_json,
+          author_sections_json,
+          content,
+          sort_order
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).bind(
+        report.id,
+        report.title,
+        report.articleTitle,
+        report.project,
+        report.author,
+        report.period,
+        report.publishedAt,
+        report.cooperationId,
+        JSON.stringify(report.platforms),
+        JSON.stringify(report.stats),
+        JSON.stringify(report.platformStats),
+        JSON.stringify(report.authorSections),
+        report.content,
+        index
+      )
+    )
+  })
+
+  await env.DB.batch(statements)
+}
+
+async function handleAdminDealsUpdate(request, env) {
+  const session = await requireSession(request, env)
+
+  if (!session) {
+    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  }
+
+  const body = await request.json().catch(() => null)
+
+  try {
+    const deals = validateDeals(body?.deals)
+    await replaceDeals(env, deals)
+    return json({ ok: true, count: deals.length, expiresAt: session.exp })
+  } catch (error) {
+    return json({ error: error.message || 'INVALID_DEALS_PAYLOAD' }, { status: 400 })
+  }
+}
+
+async function handleAdminReportsUpdate(request, env) {
+  const session = await requireSession(request, env)
+
+  if (!session) {
+    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  }
+
+  const body = await request.json().catch(() => null)
+
+  try {
+    const reports = validateReports(body?.reports)
+    await replaceReports(env, reports)
+    return json({ ok: true, count: reports.length, expiresAt: session.exp })
+  } catch (error) {
+    return json({ error: error.message || 'INVALID_REPORTS_PAYLOAD' }, { status: 400 })
+  }
+}
+
 async function handleApi(request, env) {
   if (!env.DB) {
     return json({ error: 'D1_NOT_CONFIGURED' }, { status: 500 })
@@ -283,6 +500,10 @@ async function handleApi(request, env) {
   }
 
   const url = new URL(request.url)
+
+  if (request.method === 'GET' && url.pathname === '/api/internal/health') {
+    return handleHealth(request, env)
+  }
 
   if (request.method === 'POST' && url.pathname === '/api/internal/session') {
     return handleCreateSession(request, env)
@@ -298,6 +519,14 @@ async function handleApi(request, env) {
 
   if (request.method === 'GET' && url.pathname === '/api/internal/reports/coop-ids') {
     return handleReportCoopIds(request, env)
+  }
+
+  if (request.method === 'PUT' && url.pathname === '/api/internal/admin/deals') {
+    return handleAdminDealsUpdate(request, env)
+  }
+
+  if (request.method === 'PUT' && url.pathname === '/api/internal/admin/reports') {
+    return handleAdminReportsUpdate(request, env)
   }
 
   return json({ error: 'NOT_FOUND' }, { status: 404 })

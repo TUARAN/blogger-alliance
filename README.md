@@ -146,6 +146,7 @@ git push origin feature/add-blogger-你的名字
 - Wrangler 配置：`wrangler.jsonc`
 - 本地开发变量示例：`.dev.vars.example`
 - JSON 导出 D1 SQL：`scripts/export-d1-seed.mjs`
+- 后台录入页：`src/pages/workspace/internal-data-admin.vue`
 
 ### 1) 先创建 D1 数据库
 
@@ -219,7 +220,22 @@ npm run cf:dev
 npm run cf:deploy
 ```
 
-### 6) 字段约定
+### 6) 直接写 D1 的后台录入页
+
+新增内部管理页：
+
+- 路径：`/workspace/internal-data-admin`
+
+当前能力：
+
+- 直接读取 D1 中的 `commercial_deals` 和 `promotion_reports`
+- 在浏览器里编辑 JSON
+- 直接调用 Worker 写回 D1
+- 可查看 `/api/internal/health` 返回的健康状态和当前记录数
+
+这条链路已经能满足“日常维护不再改本地 JSON 文件”的需求。
+
+### 7) 字段约定
 
 商单表 `commercial_deals` 主要字段：
 

@@ -15,6 +15,7 @@ const routes = [
   { path: '/matrix', component: () => import('./pages/matrix/index.vue') },
   { path: '/annual-report-2025', component: () => import('./pages/annual-report/index.vue') },
   { path: '/workspace', component: () => import('./pages/workspace/index.vue') },
+  { path: '/workspace/internal-data-admin', component: () => import('./pages/workspace/internal-data-admin.vue') },
   { path: '/workspace/web-llm', component: () => import('./pages/workspace/web-llm/index.vue') },
   { path: '/ecosystem', component: () => import('./pages/ecosystem-position/index.vue') },
   { path: '/why-us', component: () => import('./pages/why-us/index.vue') },
