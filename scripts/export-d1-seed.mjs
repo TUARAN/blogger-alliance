@@ -99,9 +99,7 @@ async function main() {
     throw new Error('promotionReports.source.json 必须是数组')
   }
 
-  const sql = `BEGIN TRANSACTION;
-
-DELETE FROM commercial_deals;
+  const sql = `DELETE FROM commercial_deals;
 INSERT INTO commercial_deals (
   id,
   brand,
@@ -135,8 +133,6 @@ INSERT INTO promotion_reports (
   sort_order
 ) VALUES
 ${buildReportsInsertRows(reports).join(',\n')};
-
-COMMIT;
 `
 
   await fs.mkdir(path.dirname(outputPath), { recursive: true })

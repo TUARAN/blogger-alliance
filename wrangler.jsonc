@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "blogger-alliance",
   "main": "cloudflare/worker.js",
-  "compatibility_date": "2026-04-19",
+  "compatibility_date": "2026-04-18",
   "assets": {
     "directory": "./dist"
   },
@@ -10,7 +10,7 @@
     {
       "binding": "DB",
       "database_name": "blogger-alliance",
-      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+      "database_id": "587fe4fc-cae3-44c9-a591-9e24670c3337"
     }
   ]
 }

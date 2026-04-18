@@ -13,6 +13,7 @@ dist-ssr
 *.local
 .playwright-metrics-profile/
 tmp/
+.wrangler/
 
 # Editor directories and files
 .vscode/*
