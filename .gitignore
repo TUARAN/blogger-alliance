@@ -11,6 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
+.playwright-metrics-profile/
+tmp/
 
 # Editor directories and files
 .vscode/*
@@ -29,6 +31,8 @@ dist-ssr
 .env.development.local
 .env.test.local
 .env.production.local 
+.dev.vars
+.dev.vars.*
 
 # Internal plaintext business data (do not commit)
 private/

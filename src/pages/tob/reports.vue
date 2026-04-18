@@ -145,7 +145,7 @@
                       <span class="tabular-nums font-medium text-gray-900">{{ formatStatDisplay(filteredReportsAggregate.shares) }}</span> 转发
                     </p>
                     <p class="mt-3 text-xs leading-relaxed text-gray-600">
-                      分项说明：按执行人时，每条报告只计一次，并汇总整稿数据。按推广平台时，优先使用源数据中的 platformStats 分项；未填写时按整稿数据在各已选平台间均分（近似值）。
+                      分项说明：按执行人时，每条报告只计一次，并汇总整稿数据。按推广平台时，优先使用源数据中的 platformStats 分项；未填写时按整稿数据在各已选平台间均分（近似值）。单条报告中的“按博主划分”以报告内博主分项数据或说明为准。
                     </p>
 
                     <div class="mt-4 grid gap-4 lg:grid-cols-2">
@@ -235,6 +235,12 @@
                         复制数据
                       </button>
                       <button
+                        class="inline-flex h-9 items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 px-3 text-sm font-medium text-emerald-700 hover:bg-emerald-100"
+                        @click="toggleReportAuthorBreakdown(report)"
+                      >
+                        {{ isAuthorBreakdownActive(report) ? '查看总报告' : '按博主划分' }}
+                      </button>
+                      <button
                         class="inline-flex h-9 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 px-3 text-sm font-medium text-rose-700 hover:bg-rose-100"
                         @click="exportReportToPdf(report)"
                       >
@@ -314,7 +320,38 @@
                   </div>
                 </div>
                 <div class="rounded-lg bg-white/80 px-3 py-3 md:px-4 md:py-4">
-                  <p class="text-sm md:text-base leading-7 text-gray-700 whitespace-pre-line">{{ report.content }}</p>
+                  <template v-if="isAuthorBreakdownActive(report)">
+                    <div v-if="hasReportAuthorSections(report)" class="space-y-4">
+                      <div
+                        v-if="report.authorSplitNote"
+                        class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-800"
+                      >
+                        {{ report.authorSplitNote }}
+                      </div>
+                      <div
+                        v-for="section in report.authorSections"
+                        :key="`${report.id}-${section.author}`"
+                        class="rounded-xl border border-emerald-100 bg-emerald-50/50 p-4"
+                      >
+                        <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                          <div>
+                            <h4 class="text-sm md:text-base font-semibold text-emerald-900">{{ section.author }}</h4>
+                            <p class="mt-1 text-xs md:text-sm leading-6 text-emerald-800">
+                              {{ formatReportStatsSentence(section.stats) }}
+                            </p>
+                          </div>
+                        </div>
+                        <p class="mt-3 text-sm md:text-base leading-7 text-gray-700 whitespace-pre-line">{{ section.content }}</p>
+                      </div>
+                    </div>
+                    <div
+                      v-else
+                      class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-800"
+                    >
+                      当前报告暂无可展示的博主分项数据。
+                    </div>
+                  </template>
+                  <p v-else class="text-sm md:text-base leading-7 text-gray-700 whitespace-pre-line">{{ report.content }}</p>
                 </div>
               </article>
 
@@ -335,8 +372,6 @@
 <script setup>
 import { computed, onMounted, ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { encryptedPromotionReportsPayload } from '../../data/promotionReports.encrypted'
-import { decryptJsonPayload } from '../../utils/securePayload'
 import {
   REPORTS_CACHE_KEY,
   SECURE_DATA_CACHE_DURATION_MS,
@@ -346,12 +381,10 @@ import {
   clearAllEncryptedInternalCaches
 } from '../../utils/secureDataCaches'
 import { normalizeCredential } from '../../utils/credentialNormalize'
-
-function createPayloadFingerprint(payload) {
-  return [payload?.version, payload?.salt, payload?.iv, (payload?.ciphertext || '').length].join(':')
-}
-
-const REPORTS_CACHE_FINGERPRINT = createPayloadFingerprint(encryptedPromotionReportsPayload)
+import {
+  createInternalDataSession,
+  fetchPromotionReports
+} from '../../utils/internalDataApi'
 
 const route = useRoute()
 const router = useRouter()
@@ -410,12 +443,28 @@ const reportKeyword = ref('')
 const reportCopyFeedback = ref('')
 const reportExportFeedback = ref('')
 const statsSummaryCopyFeedback = ref('')
+const reportBreakdownMode = ref({})
 /** 统计概览：默认折叠，仅展示总阅读量一条主指标；展开后显示全文与分项表 */
 const statsOverviewExpanded = ref(false)
 
 let reportCopyFeedbackTimer = null
 let reportExportFeedbackTimer = null
 let statsSummaryCopyTimer = null
+
+function hasReportAuthorSections(report) {
+  return Array.isArray(report?.authorSections) && report.authorSections.length > 0
+}
+
+function isAuthorBreakdownActive(report) {
+  return reportBreakdownMode.value[report.id] === 'author'
+}
+
+function toggleReportAuthorBreakdown(report) {
+  reportBreakdownMode.value = {
+    ...reportBreakdownMode.value,
+    [report.id]: isAuthorBreakdownActive(report) ? 'summary' : 'author'
+  }
+}
 
 function createReportHash(value) {
   return Array.from(value).reduce((hash, char) => {
@@ -862,7 +911,6 @@ function attachReportCodes(reports) {
 function persistReportsCache(reports) {
   localStorage.setItem(REPORTS_CACHE_KEY, JSON.stringify({
     expiresAt: Date.now() + SECURE_DATA_CACHE_DURATION_MS,
-    fingerprint: REPORTS_CACHE_FINGERPRINT,
     reports
   }))
 }
@@ -882,11 +930,6 @@ function restoreReportsCache() {
     const parsed = JSON.parse(rawCache)
 
     if (!parsed?.expiresAt || !Array.isArray(parsed?.reports)) {
-      clearReportsCache()
-      return
-    }
-
-    if (parsed.fingerprint !== REPORTS_CACHE_FINGERPRINT) {
       clearReportsCache()
       return
     }
@@ -915,19 +958,20 @@ async function unlockReports() {
   isUnlocking.value = true
 
   try {
-    const decryptedReports = await decryptJsonPayload(encryptedPromotionReportsPayload, credential)
+    const session = await createInternalDataSession(credential)
+    const reports = await fetchPromotionReports(session.token)
 
-    if (!Array.isArray(decryptedReports)) {
+    if (!Array.isArray(reports)) {
       throw new Error('INVALID_REPORT_DATA')
     }
 
-    promotionReports.value = attachReportCodes(decryptedReports)
+    promotionReports.value = attachReportCodes(reports)
     isUnlocked.value = true
     credentialInput.value = ''
-    persistReportsCache(decryptedReports)
-    saveSecureUnlockSession(credential)
+    persistReportsCache(reports)
+    saveSecureUnlockSession(session.token)
   } catch {
-    unlockError.value = '凭证错误或数据解密失败，请检查后重试。'
+    unlockError.value = '凭证错误或数据读取失败，请检查后重试。'
     promotionReports.value = []
     isUnlocked.value = false
   } finally {
@@ -948,23 +992,23 @@ function lockReports() {
 }
 
 async function tryUnlockReportsFromSharedSession() {
-  const credential = readSecureUnlockSession()
+  const sessionToken = readSecureUnlockSession()
 
-  if (!credential) {
+  if (!sessionToken) {
     return
   }
 
   try {
-    const decryptedReports = await decryptJsonPayload(encryptedPromotionReportsPayload, credential)
+    const reports = await fetchPromotionReports(sessionToken)
 
-    if (!Array.isArray(decryptedReports)) {
+    if (!Array.isArray(reports)) {
       throw new Error('INVALID_REPORT_DATA')
     }
 
-    promotionReports.value = attachReportCodes(decryptedReports)
+    promotionReports.value = attachReportCodes(reports)
     isUnlocked.value = true
-    persistReportsCache(decryptedReports)
-    saveSecureUnlockSession(credential)
+    persistReportsCache(reports)
+    saveSecureUnlockSession(sessionToken)
   } catch {
     clearSecureUnlockSession()
   }

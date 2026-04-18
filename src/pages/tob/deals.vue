@@ -306,9 +306,6 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { encryptedCommercialDealsPayload } from '../../data/commercialDeals.encrypted'
-import { encryptedPromotionReportsPayload } from '../../data/promotionReports.encrypted'
-import { decryptJsonPayload } from '../../utils/securePayload'
 import {
   DEALS_CACHE_KEY,
   SECURE_DATA_CACHE_DURATION_MS,
@@ -318,12 +315,11 @@ import {
   clearAllEncryptedInternalCaches
 } from '../../utils/secureDataCaches'
 import { normalizeCredential } from '../../utils/credentialNormalize'
-
-function createPayloadFingerprint(payload) {
-  return [payload?.version, payload?.salt, payload?.iv, (payload?.ciphertext || '').length].join(':')
-}
-
-const DEALS_CACHE_FINGERPRINT = createPayloadFingerprint(encryptedCommercialDealsPayload)
+import {
+  createInternalDataSession,
+  fetchCommercialDeals,
+  fetchReportCooperationIds
+} from '../../utils/internalDataApi'
 
 const commercialDeals = ref([])
 const isUnlocked = ref(false)
@@ -353,23 +349,18 @@ const coopIdsWithReports = ref(new Set())
 async function loadCoopIdsWithReports() {
   coopIdsWithReports.value = new Set()
 
-  const credential = readSecureUnlockSession()
+  const sessionToken = readSecureUnlockSession()
 
-  if (!credential) {
+  if (!sessionToken) {
     return
   }
 
   try {
-    const reports = await decryptJsonPayload(encryptedPromotionReportsPayload, credential)
-
-    if (!Array.isArray(reports)) {
-      return
-    }
-
     const next = new Set()
+    const ids = await fetchReportCooperationIds(sessionToken)
 
-    for (const r of reports) {
-      const cid = r?.cooperationId != null ? String(r.cooperationId).trim() : ''
+    for (const id of ids) {
+      const cid = id != null ? String(id).trim() : ''
 
       if (cid) {
         next.add(cid.toLowerCase())
@@ -378,7 +369,7 @@ async function loadCoopIdsWithReports() {
 
     coopIdsWithReports.value = next
   } catch {
-    // 凭证与报告密文不匹配或未同步解密时，不展示报告入口
+    clearSecureUnlockSession()
   }
 }
 
@@ -527,7 +518,6 @@ function displayDealRemark(item) {
 function persistDealsCache(deals) {
   localStorage.setItem(DEALS_CACHE_KEY, JSON.stringify({
     expiresAt: Date.now() + SECURE_DATA_CACHE_DURATION_MS,
-    fingerprint: DEALS_CACHE_FINGERPRINT,
     deals
   }))
 }
@@ -547,11 +537,6 @@ function restoreDealsCache() {
     const parsed = JSON.parse(rawCache)
 
     if (!parsed?.expiresAt || !Array.isArray(parsed?.deals)) {
-      clearDealsCache()
-      return
-    }
-
-    if (parsed.fingerprint !== DEALS_CACHE_FINGERPRINT) {
       clearDealsCache()
       return
     }
@@ -587,19 +572,20 @@ async function unlockDeals() {
   isUnlocking.value = true
 
   try {
-    const decrypted = await decryptJsonPayload(encryptedCommercialDealsPayload, credential)
+    const session = await createInternalDataSession(credential)
+    const deals = await fetchCommercialDeals(session.token)
 
-    if (!Array.isArray(decrypted)) {
+    if (!Array.isArray(deals)) {
       throw new Error('INVALID_DATA')
     }
 
-    commercialDeals.value = decrypted
+    commercialDeals.value = deals
     isUnlocked.value = true
     credentialInput.value = ''
-    persistDealsCache(decrypted)
-    saveSecureUnlockSession(credential)
+    persistDealsCache(deals)
+    saveSecureUnlockSession(session.token)
 
-    const latestYear = decrypted
+    const latestYear = deals
       .map((item) => item.updatedAt?.split('.')?.[0])
       .filter(Boolean)
       .sort((a, b) => b.localeCompare(a))[0]
@@ -607,7 +593,7 @@ async function unlockDeals() {
     dealYearFilter.value = latestYear || 'all'
     await loadCoopIdsWithReports()
   } catch {
-    unlockError.value = '凭证错误或数据解密失败，请检查后重试。'
+    unlockError.value = '凭证错误或数据读取失败，请检查后重试。'
     commercialDeals.value = []
     isUnlocked.value = false
   } finally {
@@ -630,25 +616,25 @@ function lockDeals() {
 }
 
 async function tryUnlockDealsFromSharedSession() {
-  const credential = readSecureUnlockSession()
+  const sessionToken = readSecureUnlockSession()
 
-  if (!credential) {
+  if (!sessionToken) {
     return
   }
 
   try {
-    const decrypted = await decryptJsonPayload(encryptedCommercialDealsPayload, credential)
+    const deals = await fetchCommercialDeals(sessionToken)
 
-    if (!Array.isArray(decrypted)) {
+    if (!Array.isArray(deals)) {
       throw new Error('INVALID_DATA')
     }
 
-    commercialDeals.value = decrypted
+    commercialDeals.value = deals
     isUnlocked.value = true
-    persistDealsCache(decrypted)
-    saveSecureUnlockSession(credential)
+    persistDealsCache(deals)
+    saveSecureUnlockSession(sessionToken)
 
-    const latestYear = decrypted
+    const latestYear = deals
       .map((item) => item.updatedAt?.split('.')?.[0])
       .filter(Boolean)
       .sort((a, b) => b.localeCompare(a))[0]

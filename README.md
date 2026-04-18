@@ -4,6 +4,24 @@
 
 <img src="./src/img/info4.png" alt="网站预览" width="600">
 
+## Visible Metrics Collector
+
+这个仓库现在包含一个本地 `Playwright` 采集脚本，用来读取你在正常登录态下页面里已经显示出来的互动数据。
+
+先登录并保存本地浏览器资料：
+
+```bash
+npm run metrics:login -- --site juejin,csdn,weibo,zhihu,toutiao,wechat
+```
+
+再对表格导出的 `TSV/CSV` 批量采集：
+
+```bash
+npm run metrics:collect -- --input ./links.tsv
+```
+
+支持的表头包括：`文章草稿`、`作者`、`掘金`、`CSDN`、`头条`、`知乎`、`公众号`、`博客园`、`微博`、`51CTO`。
+
 
 > **项目介绍：Blogger Alliance 网站构建说明（对内版）**
 
@@ -113,103 +131,132 @@ git push origin feature/add-blogger-你的名字
 
 欢迎提交 Issue 和 Pull Request！
 
-## 🔐 合作进度查询数据维护（内部协作）
+## ☁️ Cloudflare D1 数据维护（内部协作）
 
-合作进度查询页使用密文文件：
+内部数据已改为 `Cloudflare D1 + Worker API` 方案：
 
-- [src/data/commercialDeals.encrypted.js](src/data/commercialDeals.encrypted.js)
+- 前端页面不再直接导入密文数据
+- 访问凭证只用于向 Worker 换取 30 分钟有效的会话 token
+- Worker 鉴权成功后才会从 D1 读取商单和报告数据
 
-前端「合作进度查询」与「数据报告查询」共用同一访问凭证；在任一页面解密后 **30 分钟内**另一页免重复输入（见 `src/utils/secureDataCaches.js`）。在任一页点击「锁定页面」会同时清空两页的本地缓存与会话。
+相关文件：
 
-### 1) 明文源数据放哪里？
+- D1 表结构：`cloudflare/schema.sql`
+- Worker API：`cloudflare/worker.js`
+- Wrangler 配置：`wrangler.jsonc`
+- 本地开发变量示例：`.dev.vars.example`
+- JSON 导出 D1 SQL：`scripts/export-d1-seed.mjs`
 
-- 本地明文默认路径：`private/commercialDeals.source.json`
-- 该目录已在 `.gitignore` 中忽略，不会进入仓库。
-- 可参考示例结构：`src/data/commercialDeals.source.example.json`
-
-每条合作须有唯一 **`id`（合作编码）**，在「合作进度查询」页第一列以大写展示，并参与关键词检索与复制表格；建议使用可读、稳定的业务编号（如 `品牌缩写-服务类型-序号`）。
-
-### 2) 如何解密到本地（用于新增/编辑）
-
-```bash
-DEALS_CREDENTIAL=你的6位凭证 npm run deals:decrypt
-```
-
-执行后会生成本地明文：`private/commercialDeals.source.json`
-
-### 3) 如何新增商单并重新加密
-
-1. 编辑 `private/commercialDeals.source.json`
-2. 执行：
+### 1) 先创建 D1 数据库
 
 ```bash
-DEALS_CREDENTIAL=你的6位凭证 npm run deals:encrypt
+npx wrangler d1 create blogger-alliance
 ```
 
-3. 提交密文文件变更：`src/data/commercialDeals.encrypted.js`
+创建完成后，把返回的 `database_id` 填到 `wrangler.jsonc` 里的 `d1_databases[0].database_id`。
 
-### 4) 协作建议（推荐）
-
-- 统一由 1~2 位维护人掌管凭证并负责加密发布。
-- 团队成员通过私有表格或内部文档提交新增商单信息。
-- 公开仓库只保留密文，不存明文业务数据。
-
-## 🔐 数据报告维护（内部协作）
-
-数据报告查询页同样使用密文文件：
-
-- [src/data/promotionReports.encrypted.js](src/data/promotionReports.encrypted.js)
-
-### 1) 固定模板在哪里？
-
-- 本地实际数据文件：`private/promotionReports.source.json`
-- 本地固定模板文件：`private/promotionReports.template.json`
-- 仓库示例文件：`src/data/promotionReports.source.example.json`
-
-推荐流程：
-
-1. 复制 `private/promotionReports.template.json` 里的对象结构
-2. 粘贴到 `private/promotionReports.source.json` 数组中
-3. 只改字段值
-4. 执行加密命令
-
-### 2) 字段说明
-
-- `id`：报告唯一业务 ID，建议格式：`report-YYYYMMDD-序号`
-- `title`：**数据报告的固定标题**，当前统一填写 `数据报告`；勿将推广图文的 headline 写进该字段
-- `articleTitle`：（可选）推广图文的标题正文，无需带书名号；页面展示时会自动加上《》；与 `title`（数据报告）区分
-- `project`：合作项目名称（在报告列表中作为主标题展示），例如 `向日葵AI 合作`
-- `author`：执行人姓名
-- `period`：统计周期展示文案
-- `publishedAt`：发布时间戳，使用 ISO 格式，例如 `2026-03-12T10:00:00+08:00`
-- `platforms`：推广平台数组，例如 `[`公众号`, `CSDN`, `知乎`]`
-- `stats`：**推荐必填**的结构化指标对象（不要只写在正文里）。键可用英文或中文，数值为非负整数。英文键：`reads`、`likes`、`favorites`、`comments`、`shares`；亦支持 `阅读量`、`点赞` 等别名
-- `content`：完整报告正文。若某条暂未维护 `stats`，页面会尝试从正文里识别「阅读量：…」「点赞：…」或 Markdown 表格列等片段，**按字段补全仍为 0 的项**；正式数据仍以 `stats` 为准，填好对象后请重新加密发布
-
-### 3) 新增一条数据报告
-
-1. 编辑 `private/promotionReports.source.json`
-2. 按模板新增一个对象
-3. 执行：
+### 2) 初始化表结构
 
 ```bash
-DEALS_CREDENTIAL=你的6位凭证 npm run reports:encrypt
+npx wrangler d1 execute blogger-alliance --file=cloudflare/schema.sql
 ```
 
-4. 提交密文文件变更：`src/data/promotionReports.encrypted.js`
+### 3) 配置 Worker Secrets
 
-### 4) 如需查看当前报告明文
+复制示例文件：
 
 ```bash
-DEALS_CREDENTIAL=你的6位凭证 npm run reports:decrypt
+cp .dev.vars.example .dev.vars
 ```
 
-### 5) 推荐维护方式
+然后填写：
 
-- 先在 `private/promotionReports.source.json` 维护所有报告
-- 每次只新增或修改 JSON，不直接改前端页面
-- 修改完成后只执行一次 `npm run reports:encrypt`
-- 页面会自动读取新的密文数据
+- `INTERNAL_ACCESS_CREDENTIAL`：前端输入的访问凭证
+- `INTERNAL_SESSION_SECRET`：用于签发会话 token 的随机长串
+
+部署前还需要把它们写入 Cloudflare：
+
+```bash
+npx wrangler secret put INTERNAL_ACCESS_CREDENTIAL
+npx wrangler secret put INTERNAL_SESSION_SECRET
+```
+
+### 4) 把现有 JSON 导入 D1
+
+本地源文件仍然使用：
+
+- `private/commercialDeals.source.json`
+- `private/promotionReports.source.json`
+
+生成 SQL：
+
+```bash
+npm run d1:seed:export
+```
+
+默认会产出：
+
+- `tmp/d1-seed.sql`
+
+执行导入：
+
+```bash
+npx wrangler d1 execute blogger-alliance --file=tmp/d1-seed.sql
+```
+
+### 5) 本地联调与部署
+
+本地跑 Cloudflare Worker：
+
+```bash
+npm run build
+npm run cf:dev
+```
+
+正式部署：
+
+```bash
+npm run cf:deploy
+```
+
+### 6) 字段约定
+
+商单表 `commercial_deals` 主要字段：
+
+- `id`：合作编码，唯一主键
+- `brand`：品牌 / 项目
+- `service`：合作内容
+- `progress`：当前进度
+- `remark`：备注
+- `category`：兼容旧数据的分类字段
+- `referrer`：推荐人
+- `updated_at`：最近沟通时间，保持 `YYYY.MM.DD`
+- `muted`：是否置灰
+- `report_cooperation_id`：跳转报告时使用的关联合作编码
+
+报告表 `promotion_reports` 主要字段：
+
+- `id`：报告唯一业务 ID
+- `title`：报告标题，通常固定为 `数据报告`
+- `article_title`：推广图文标题
+- `project`：合作项目名
+- `author`：执行人
+- `period`：统计周期文案
+- `published_at`：ISO 时间
+- `cooperation_id`：与合作进度表关联的合作编码
+- `platforms_json`：平台数组 JSON
+- `stats_json`：统计对象 JSON
+- `platform_stats_json`：按平台统计 JSON
+- `author_sections_json`：按博主拆分的分项 JSON
+- `content`：报告正文
+
+## 🔐 旧版加密脚本
+
+仓库仍保留旧的加解密脚本与密文文件，主要用于历史数据迁移或回滚参考：
+
+- `scripts/deals-crypto.mjs`
+- `src/data/commercialDeals.encrypted.js`
+- `src/data/promotionReports.encrypted.js`
 
 ---
 

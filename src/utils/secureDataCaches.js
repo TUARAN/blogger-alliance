@@ -7,8 +7,8 @@ export const SECURE_UNLOCK_SESSION_KEY = 'blogger-alliance:deals-reports-unlock-
 /** 合作进度查询与数据报告查询共用免密时长 */
 export const SECURE_DATA_CACHE_DURATION_MS = 30 * 60 * 1000
 
-export function saveSecureUnlockSession(credential) {
-  const normalized = normalizeCredential(credential)
+export function saveSecureUnlockSession(sessionToken) {
+  const normalized = normalizeCredential(sessionToken)
 
   if (!normalized) {
     return
@@ -16,7 +16,7 @@ export function saveSecureUnlockSession(credential) {
 
   localStorage.setItem(SECURE_UNLOCK_SESSION_KEY, JSON.stringify({
     expiresAt: Date.now() + SECURE_DATA_CACHE_DURATION_MS,
-    credential: normalized
+    sessionToken: normalized
   }))
 }
 
@@ -30,12 +30,12 @@ export function readSecureUnlockSession() {
   try {
     const parsed = JSON.parse(raw)
 
-    if (!parsed?.expiresAt || typeof parsed.credential !== 'string') {
+    if (!parsed?.expiresAt || typeof parsed.sessionToken !== 'string') {
       clearSecureUnlockSession()
       return null
     }
 
-    const normalized = normalizeCredential(parsed.credential)
+    const normalized = normalizeCredential(parsed.sessionToken)
 
     if (!normalized) {
       clearSecureUnlockSession()
