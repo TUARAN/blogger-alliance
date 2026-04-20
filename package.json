@@ -10,10 +10,6 @@
     "cf:dev": "npx wrangler dev",
     "cf:deploy": "npm run build && npx wrangler deploy",
     "d1:seed:export": "node scripts/export-d1-seed.mjs",
-    "deals:encrypt": "node scripts/deals-crypto.mjs encrypt",
-    "deals:decrypt": "node scripts/deals-crypto.mjs decrypt",
-    "reports:encrypt": "node scripts/deals-crypto.mjs encrypt --type=reports",
-    "reports:decrypt": "node scripts/deals-crypto.mjs decrypt --type=reports",
     "metrics:login": "node scripts/collect-visible-metrics.mjs login",
     "metrics:collect": "node scripts/collect-visible-metrics.mjs collect"
   },

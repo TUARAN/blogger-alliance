@@ -8,11 +8,6 @@
 
 - 商单数据明文：`private/commercialDeals.source.json`
 - 报告数据明文：`private/promotionReports.source.json`
-- 加密脚本：`scripts/deals-crypto.mjs`
-- 前端密文文件：
-  - `src/data/commercialDeals.encrypted.js`
-  - `src/data/promotionReports.encrypted.js`
-- 前端解密工具：`src/utils/securePayload.js`
 - 页面入口：
   - `src/pages/tob/deals.vue`
   - `src/pages/tob/reports.vue`
@@ -214,14 +209,14 @@ Cloudflare D1 远端导入时报错，不接受这类事务语句。报错含义
 
 ## 旧链路是否还保留
 
-保留了，主要用于历史参考、回滚或再次迁移：
+不保留。
 
-- `scripts/deals-crypto.mjs`
-- `src/data/commercialDeals.encrypted.js`
-- `src/data/promotionReports.encrypted.js`
-- `src/utils/securePayload.js`
+旧的前端加解密脚本、密文文件和浏览器端解密工具已经从仓库移除，当前唯一主链路就是：
 
-但当前线上主链路已经不是它们。
+- 前端输入访问密码
+- Worker 校验 `INTERNAL_ACCESS_CREDENTIAL`
+- Worker 签发短期 session token
+- Worker 从 D1 读取并返回数据
 
 ## 后续维护建议
 

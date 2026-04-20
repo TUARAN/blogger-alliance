@@ -171,10 +171,10 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import {
-  clearSecureUnlockSession,
-  readSecureUnlockSession,
-  saveSecureUnlockSession
-} from '../../utils/secureDataCaches'
+  clearInternalAccessSession,
+  readInternalAccessSession,
+  saveInternalAccessSession
+} from '../../utils/internalAccessCache'
 import { normalizeCredential } from '../../utils/credentialNormalize'
 import {
   createInternalDataSession,
@@ -315,7 +315,7 @@ async function unlockAdmin() {
   try {
     const session = await createInternalDataSession(credential)
     sessionToken.value = session.token
-    saveSecureUnlockSession(session.token)
+    saveInternalAccessSession(session.token)
     credentialInput.value = ''
     isUnlocked.value = true
     await Promise.all([loadDeals(), loadReports(), loadHealth()])
@@ -334,7 +334,7 @@ function lockAdmin() {
   credentialInput.value = ''
   unlockError.value = ''
   resetMessages()
-  clearSecureUnlockSession()
+  clearInternalAccessSession()
 }
 
 function formatActiveJson() {
@@ -391,7 +391,7 @@ watch(activeTab, () => {
 onMounted(async () => {
   await loadHealth()
 
-  const cachedToken = readSecureUnlockSession()
+  const cachedToken = readInternalAccessSession()
 
   if (!cachedToken) {
     return
@@ -402,7 +402,7 @@ onMounted(async () => {
   try {
     await Promise.all([loadDeals(), loadReports()])
     isUnlocked.value = true
-    saveSecureUnlockSession(cachedToken)
+    saveInternalAccessSession(cachedToken)
   } catch {
     lockAdmin()
   }

@@ -28,7 +28,7 @@
         <div class="mb-6 md:mb-8">
           <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3">数据报告查询</h1>
           <div class="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800 text-sm md:text-base">
-            当前页信息已加密，仅支持凭证解密查看。与「合作进度查询」共用凭证：任一页解密成功后 30 分钟内，另一页自动可查看（无需重复输入）。
+            当前页数据存放在 D1，仅支持输入访问密码后读取。与「合作进度查询」共用凭证：任一页解锁成功后 30 分钟内，另一页自动可查看（无需重复输入）。
           </div>
         </div>
 
@@ -37,8 +37,8 @@
           class="mb-6 rounded-xl border border-indigo-200 bg-indigo-50 p-4 md:p-5"
         >
           <h2 class="text-base md:text-lg font-semibold text-indigo-900 mb-2">请输入访问凭证</h2>
-          <p class="text-sm text-indigo-700 mb-2">凭证由联盟内部统一发放，输入后可解密展示报告内容。若在「合作进度查询」已解过密，此处通常会自动进入。</p>
-          <p class="text-xs md:text-sm text-indigo-600 mb-4">解密成功后 30 分钟内，两页共用免密；点击「锁定页面」将同时关闭两页访问。若在中文输入法下键入，可能混入全角字符导致与粘贴不一致；请改用英文输入或直接从可靠来源复制。</p>
+          <p class="text-sm text-indigo-700 mb-2">访问密码由联盟内部统一发放，输入后会向 Worker 换取会话并从 D1 读取报告内容。若在「合作进度查询」已解锁，此处通常会自动进入。</p>
+          <p class="text-xs md:text-sm text-indigo-600 mb-4">解锁成功后 30 分钟内，两页共用免密；点击「锁定页面」将同时关闭两页访问。若在中文输入法下键入，可能混入全角字符导致与粘贴不一致；请改用英文输入或直接从可靠来源复制。</p>
 
           <div class="flex flex-col md:flex-row gap-3">
             <input
@@ -53,7 +53,7 @@
               class="h-10 px-4 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed"
               @click="unlockReports"
             >
-              {{ isUnlocking ? '解密中...' : '解密并查看' }}
+              {{ isUnlocking ? '连接中...' : '输入密码并查看' }}
             </button>
           </div>
 
@@ -63,7 +63,7 @@
         <template v-else>
           <div class="mb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div class="rounded-lg border border-green-200 bg-green-50 px-3 py-2">
-              <div class="text-sm text-green-700">✅ 已完成解密，可查看报告内容。</div>
+              <div class="text-sm text-green-700">✅ 已完成解锁，可查看报告内容。</div>
               <div class="mt-1 text-xs text-green-600">30 分钟内「合作进度查询」页也无需再输密码；锁定本页将一并清空两页会话。</div>
             </div>
             <button
@@ -373,13 +373,13 @@
 import { computed, onMounted, ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
-  REPORTS_CACHE_KEY,
-  SECURE_DATA_CACHE_DURATION_MS,
-  saveSecureUnlockSession,
-  readSecureUnlockSession,
-  clearSecureUnlockSession,
-  clearAllEncryptedInternalCaches
-} from '../../utils/secureDataCaches'
+  INTERNAL_REPORTS_CACHE_KEY,
+  INTERNAL_ACCESS_CACHE_DURATION_MS,
+  saveInternalAccessSession,
+  readInternalAccessSession,
+  clearInternalAccessSession,
+  clearInternalAccessCaches
+} from '../../utils/internalAccessCache'
 import { normalizeCredential } from '../../utils/credentialNormalize'
 import {
   createInternalDataSession,
@@ -909,18 +909,18 @@ function attachReportCodes(reports) {
 }
 
 function persistReportsCache(reports) {
-  localStorage.setItem(REPORTS_CACHE_KEY, JSON.stringify({
-    expiresAt: Date.now() + SECURE_DATA_CACHE_DURATION_MS,
+  localStorage.setItem(INTERNAL_REPORTS_CACHE_KEY, JSON.stringify({
+    expiresAt: Date.now() + INTERNAL_ACCESS_CACHE_DURATION_MS,
     reports
   }))
 }
 
 function clearReportsCache() {
-  localStorage.removeItem(REPORTS_CACHE_KEY)
+  localStorage.removeItem(INTERNAL_REPORTS_CACHE_KEY)
 }
 
 function restoreReportsCache() {
-  const rawCache = localStorage.getItem(REPORTS_CACHE_KEY)
+  const rawCache = localStorage.getItem(INTERNAL_REPORTS_CACHE_KEY)
 
   if (!rawCache) {
     return
@@ -969,7 +969,7 @@ async function unlockReports() {
     isUnlocked.value = true
     credentialInput.value = ''
     persistReportsCache(reports)
-    saveSecureUnlockSession(session.token)
+    saveInternalAccessSession(session.token)
   } catch {
     unlockError.value = '凭证错误或数据读取失败，请检查后重试。'
     promotionReports.value = []
@@ -988,11 +988,11 @@ function lockReports() {
   statsSummaryCopyFeedback.value = ''
   statsOverviewExpanded.value = false
   unlockError.value = ''
-  clearAllEncryptedInternalCaches()
+  clearInternalAccessCaches()
 }
 
 async function tryUnlockReportsFromSharedSession() {
-  const sessionToken = readSecureUnlockSession()
+  const sessionToken = readInternalAccessSession()
 
   if (!sessionToken) {
     return
@@ -1008,9 +1008,9 @@ async function tryUnlockReportsFromSharedSession() {
     promotionReports.value = attachReportCodes(reports)
     isUnlocked.value = true
     persistReportsCache(reports)
-    saveSecureUnlockSession(sessionToken)
+    saveInternalAccessSession(sessionToken)
   } catch {
-    clearSecureUnlockSession()
+    clearInternalAccessSession()
   }
 }
 

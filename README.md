@@ -266,13 +266,7 @@ npm run cf:deploy
 - `author_sections_json`：按博主拆分的分项 JSON
 - `content`：报告正文
 
-## 🔐 旧版加密脚本
-
-仓库仍保留旧的加解密脚本与密文文件，主要用于历史数据迁移或回滚参考：
-
-- `scripts/deals-crypto.mjs`
-- `src/data/commercialDeals.encrypted.js`
-- `src/data/promotionReports.encrypted.js`
+当前仓库已经移除前端加解密资产，内部数据统一走 `Worker + D1`。
 
 ---
 
