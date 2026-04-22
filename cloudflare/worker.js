@@ -1,5 +1,9 @@
 const SESSION_TTL_MS = 30 * 60 * 1000
+const ACCESS_FAILURE_WINDOW_MS = 15 * 60 * 1000
+const ACCESS_MAX_FAILURES = 5
+const ACCESS_LOCKOUT_MS = 15 * 60 * 1000
 const jsonEncoder = new TextEncoder()
+const textDecoder = new TextDecoder()
 
 function normalizeCredential(raw) {
   if (raw == null) {
@@ -79,7 +83,7 @@ async function verifySessionToken(token, secret) {
   let payload
 
   try {
-    payload = JSON.parse(new TextDecoder().decode(fromBase64Url(payloadBase64)))
+    payload = JSON.parse(textDecoder.decode(fromBase64Url(payloadBase64)))
   } catch {
     return null
   }
@@ -101,6 +105,99 @@ async function verifySessionToken(token, secret) {
   }
 
   return payload
+}
+
+function getClientFingerprintSource(request) {
+  const ip =
+    request.headers.get('CF-Connecting-IP') ||
+    request.headers.get('x-forwarded-for') ||
+    request.headers.get('x-real-ip') ||
+    'unknown'
+  const userAgent = request.headers.get('User-Agent') || 'unknown'
+
+  return `${String(ip).trim()}|${String(userAgent).trim()}`
+}
+
+function bytesToHex(bytes) {
+  return Array.from(bytes, (value) => value.toString(16).padStart(2, '0')).join('')
+}
+
+async function createClientKey(request) {
+  const source = getClientFingerprintSource(request)
+  const digest = await crypto.subtle.digest('SHA-256', jsonEncoder.encode(source))
+  return bytesToHex(new Uint8Array(digest))
+}
+
+function getRetryAfterSeconds(until) {
+  return Math.max(1, Math.ceil((until - Date.now()) / 1000))
+}
+
+function createLockResponse(lockedUntil) {
+  return json(
+    {
+      error: 'TOO_MANY_ATTEMPTS',
+      lockedUntil,
+      retryAfterSeconds: getRetryAfterSeconds(lockedUntil)
+    },
+    {
+      status: 429,
+      headers: {
+        'Retry-After': String(getRetryAfterSeconds(lockedUntil))
+      }
+    }
+  )
+}
+
+async function readAccessAttempt(env, clientKey) {
+  return env.DB.prepare(`
+    SELECT
+      client_key AS clientKey,
+      failure_count AS failureCount,
+      first_failed_at AS firstFailedAt,
+      last_failed_at AS lastFailedAt,
+      locked_until AS lockedUntil
+    FROM internal_access_attempts
+    WHERE client_key = ?
+  `).bind(clientKey).first()
+}
+
+async function clearAccessAttempt(env, clientKey) {
+  await env.DB.prepare('DELETE FROM internal_access_attempts WHERE client_key = ?')
+    .bind(clientKey)
+    .run()
+}
+
+async function registerFailedAccessAttempt(env, clientKey, previousAttempt) {
+  const now = Date.now()
+  const previousFirst = Number(previousAttempt?.firstFailedAt || 0)
+  const previousCount = Number(previousAttempt?.failureCount || 0)
+  const withinWindow = previousFirst > 0 && now - previousFirst < ACCESS_FAILURE_WINDOW_MS
+
+  const firstFailedAt = withinWindow ? previousFirst : now
+  const failureCount = withinWindow ? previousCount + 1 : 1
+  const lockedUntil = failureCount >= ACCESS_MAX_FAILURES ? now + ACCESS_LOCKOUT_MS : 0
+
+  await env.DB.prepare(`
+    INSERT INTO internal_access_attempts (
+      client_key,
+      failure_count,
+      first_failed_at,
+      last_failed_at,
+      locked_until
+    ) VALUES (?, ?, ?, ?, ?)
+    ON CONFLICT(client_key) DO UPDATE SET
+      failure_count = excluded.failure_count,
+      first_failed_at = excluded.first_failed_at,
+      last_failed_at = excluded.last_failed_at,
+      locked_until = excluded.locked_until
+  `).bind(clientKey, failureCount, firstFailedAt, now, lockedUntil).run()
+
+  return {
+    failureCount,
+    firstFailedAt,
+    lastFailedAt: now,
+    lockedUntil
+  }
 }
 
 function readBearerToken(request) {
@@ -258,9 +355,25 @@ async function handleCreateSession(request, env) {
     return json({ error: 'EMPTY_CREDENTIAL' }, { status: 400 })
   }
 
+  const clientKey = await createClientKey(request)
+  const accessAttempt = await readAccessAttempt(env, clientKey)
+  const lockedUntil = Number(accessAttempt?.lockedUntil || 0)
+
+  if (lockedUntil > Date.now()) {
+    return createLockResponse(lockedUntil)
+  }
+
   if (credential !== normalizeCredential(env.INTERNAL_ACCESS_CREDENTIAL)) {
+    const nextAttempt = await registerFailedAccessAttempt(env, clientKey, accessAttempt)
+
+    if (nextAttempt.lockedUntil > Date.now()) {
+      return createLockResponse(nextAttempt.lockedUntil)
+    }
+
     return json({ error: 'INVALID_CREDENTIAL' }, { status: 401 })
   }
+
+  await clearAccessAttempt(env, clientKey)
 
   const expiresAt = Date.now() + SESSION_TTL_MS
   const token = await signTokenPayload(
@@ -364,6 +477,11 @@ async function handleHealth(_request, env) {
     ok: true,
     service: 'blogger-alliance-internal-api',
     database: 'blogger-alliance',
+    authPolicy: {
+      maxFailures: ACCESS_MAX_FAILURES,
+      windowMinutes: ACCESS_FAILURE_WINDOW_MS / 60000,
+      lockMinutes: ACCESS_LOCKOUT_MS / 60000
+    },
     counts: {
       deals: Number(dealsCount?.count || 0),
       reports: Number(reportsCount?.count || 0)

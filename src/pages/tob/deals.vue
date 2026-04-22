@@ -38,7 +38,7 @@
         >
           <h2 class="text-base md:text-lg font-semibold text-indigo-900 mb-2">请输入访问凭证</h2>
           <p class="text-sm text-indigo-700 mb-2">访问密码由联盟内部统一发放，输入后会向 Worker 换取会话并从 D1 读取合作进度。若在「数据报告查询」已解锁，此处通常会自动进入。</p>
-          <p class="text-xs md:text-sm text-indigo-600 mb-4">解锁成功后 30 分钟内，两页共用免密；点击「锁定页面」将同时关闭两页访问。若在中文输入法下键入，可能混入全角字符导致与粘贴不一致；请改用英文输入或直接从可靠来源复制。</p>
+          <p class="text-xs md:text-sm text-indigo-600 mb-4">解锁成功后 30 分钟内，两页共用免密；点击「锁定页面」将同时关闭两页访问。若在中文输入法下键入，可能混入全角字符导致与粘贴不一致；请改用英文输入或直接从可靠来源复制。服务端采用失败重试锁定：15 分钟内连续输错 5 次，将锁定 15 分钟。</p>
 
           <div class="flex flex-col md:flex-row gap-3">
             <input
@@ -317,6 +317,7 @@ import {
 import { normalizeCredential } from '../../utils/credentialNormalize'
 import {
   createInternalDataSession,
+  explainInternalDataError,
   fetchCommercialDeals,
   fetchReportCooperationIds
 } from '../../utils/internalDataApi'
@@ -592,8 +593,8 @@ async function unlockDeals() {
 
     dealYearFilter.value = latestYear || 'all'
     await loadCoopIdsWithReports()
-  } catch {
-    unlockError.value = '凭证错误或数据读取失败，请检查后重试。'
+  } catch (error) {
+    unlockError.value = explainInternalDataError(error, 'read')
     commercialDeals.value = []
     isUnlocked.value = false
   } finally {

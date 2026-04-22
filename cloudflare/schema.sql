@@ -37,3 +37,14 @@ CREATE INDEX IF NOT EXISTS idx_promotion_reports_published_at
 
 CREATE INDEX IF NOT EXISTS idx_promotion_reports_cooperation_id
   ON promotion_reports(cooperation_id);
+
+CREATE TABLE IF NOT EXISTS internal_access_attempts (
+  client_key TEXT PRIMARY KEY,
+  failure_count INTEGER NOT NULL DEFAULT 0,
+  first_failed_at INTEGER NOT NULL DEFAULT 0,
+  last_failed_at INTEGER NOT NULL DEFAULT 0,
+  locked_until INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE INDEX IF NOT EXISTS idx_internal_access_attempts_locked_until
+  ON internal_access_attempts(locked_until DESC);

@@ -66,7 +66,7 @@
           <div class="rounded-3xl border border-cyan-100 bg-white/90 p-6 shadow-xl shadow-cyan-100/40">
             <h2 class="text-lg font-semibold text-slate-900">访问控制</h2>
             <p class="mt-2 text-sm leading-7 text-slate-600">
-              管理页复用内部查询页相同凭证。成功后会缓存 30 分钟 session token，可连续编辑商单和报告。
+              管理页复用内部查询页相同凭证。成功后会缓存 30 分钟 session token，可连续编辑商单和报告。服务端采用失败重试锁定：15 分钟内连续输错 5 次，将锁定 15 分钟。
             </p>
 
             <div v-if="!isUnlocked" class="mt-5 space-y-3">
@@ -178,6 +178,7 @@ import {
 import { normalizeCredential } from '../../utils/credentialNormalize'
 import {
   createInternalDataSession,
+  explainInternalDataError,
   fetchCommercialDeals,
   fetchInternalHealth,
   fetchPromotionReports,
@@ -319,8 +320,8 @@ async function unlockAdmin() {
     credentialInput.value = ''
     isUnlocked.value = true
     await Promise.all([loadDeals(), loadReports(), loadHealth()])
-  } catch {
-    unlockError.value = '凭证错误或后台连接失败，请检查后重试。'
+  } catch (error) {
+    unlockError.value = explainInternalDataError(error, 'admin')
     isUnlocked.value = false
     sessionToken.value = ''
   } finally {

@@ -25,6 +25,7 @@ async function readJsonResponse(response) {
     const message = payload?.error || `REQUEST_FAILED_${response.status}`
     const error = new Error(message)
     error.status = response.status
+    error.payload = payload
     throw error
   }
 
@@ -82,4 +83,50 @@ export async function updatePromotionReports(token, reports) {
     token,
     body: { reports }
   })
+}
+
+export function explainInternalDataError(error, context = 'read') {
+  const code = error?.message || ''
+
+  if (code === 'INVALID_CREDENTIAL' || code === 'EMPTY_CREDENTIAL') {
+    return '访问密码错误，请重新输入。'
+  }
+
+  if (code === 'UNAUTHORIZED') {
+    return '访问会话已失效，请重新输入密码。'
+  }
+
+  if (code === 'TOO_MANY_ATTEMPTS') {
+    const retryAfterSeconds = Number(error?.payload?.retryAfterSeconds || 0)
+    const retryAfterMinutes = retryAfterSeconds > 0 ? Math.ceil(retryAfterSeconds / 60) : 15
+    return `输入错误次数过多，已临时锁定，请约 ${retryAfterMinutes} 分钟后再试。`
+  }
+
+  if (code === 'D1_NOT_CONFIGURED') {
+    return '服务端未绑定 D1 数据库。'
+  }
+
+  if (code === 'WORKER_SECRETS_MISSING') {
+    return '服务端缺少访问密码或会话密钥配置。'
+  }
+
+  if (code.startsWith('REQUEST_FAILED_5')) {
+    return context === 'admin'
+      ? '服务端读取或写入 D1 失败，请稍后重试。'
+      : '服务端读取 D1 失败，请稍后重试。'
+  }
+
+  if (code.startsWith('REQUEST_FAILED_4')) {
+    return context === 'admin'
+      ? '请求被服务端拒绝，请重新输入密码后再试。'
+      : '请求失败，请重新输入密码后再试。'
+  }
+
+  if (error instanceof TypeError) {
+    return '网络连接失败，请确认当前站点可以访问 Worker API。'
+  }
+
+  return context === 'admin'
+    ? '后台连接失败，请检查服务端状态后重试。'
+    : '读取数据失败，请检查服务端状态后重试。'
 }

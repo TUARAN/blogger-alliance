@@ -73,7 +73,7 @@ Worker 入口：
 
 本地 session 缓存：
 
-- `src/utils/secureDataCaches.js`
+- `src/utils/internalAccessCache.js`
 
 现在缓存的不是旧版“凭证”，而是 Worker 返回的 session token。
 
@@ -131,6 +131,28 @@ Worker 使用两个 secret：
 
 - 不要把真实 secret 写进仓库
 - 如果凭证需要轮换，更新 Cloudflare secret 和本地 `.dev.vars` 即可
+- 当前访问凭证已完成轮换，实际值仅保存在 Cloudflare secret 与本地 `.dev.vars`
+
+## 访问密码风控
+
+当前内部数据访问采用服务端失败重试锁定，策略参考常见后台口令保护做法：
+
+- 统计维度：客户端指纹（基于 IP + User-Agent 的服务端哈希）
+- 失败窗口：15 分钟
+- 最大失败次数：5 次
+- 锁定时长：15 分钟
+
+实现方式：
+
+- D1 表：`internal_access_attempts`
+- Worker 在 `POST /api/internal/session` 中先检查是否处于锁定期
+- 密码错误时写入失败计数
+- 密码正确时清空该客户端失败记录
+
+前端表现：
+
+- 输错未达阈值：返回密码错误
+- 达到阈值：返回“输入错误次数过多，已临时锁定，请约 15 分钟后再试”
 
 ## 数据迁移方式
 
@@ -256,7 +278,7 @@ Cloudflare D1 远端导入时报错，不接受这类事务语句。报错含义
 - Worker：`cloudflare/worker.js`
 - Wrangler 配置：`wrangler.jsonc`
 - 前端 API：`src/utils/internalDataApi.js`
-- 会话缓存：`src/utils/secureDataCaches.js`
+- 会话缓存：`src/utils/internalAccessCache.js`
 - 商单页：`src/pages/tob/deals.vue`
 - 报告页：`src/pages/tob/reports.vue`
 - D1 seed 导出：`scripts/export-d1-seed.mjs`
