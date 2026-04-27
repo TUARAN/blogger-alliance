@@ -85,6 +85,28 @@ export async function updatePromotionReports(token, reports) {
   })
 }
 
+export async function fetchPublicAnnualReport(year) {
+  const path = year ? `/api/public/annual-report?year=${encodeURIComponent(year)}` : '/api/public/annual-report'
+  const payload = await apiRequest(path)
+  if (year) {
+    return payload?.report || null
+  }
+  return Array.isArray(payload?.reports) ? payload.reports : []
+}
+
+export async function fetchAnnualReportsAdmin(token) {
+  const payload = await apiRequest('/api/internal/annual-reports', { token })
+  return Array.isArray(payload?.reports) ? payload.reports : []
+}
+
+export async function updateAnnualReports(token, reports) {
+  return apiRequest('/api/internal/admin/annual-reports', {
+    method: 'PUT',
+    token,
+    body: { reports }
+  })
+}
+
 export function explainInternalDataError(error, context = 'read') {
   const code = error?.message || ''
 

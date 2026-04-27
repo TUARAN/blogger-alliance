@@ -27,23 +27,32 @@
         <div>
           <h1 class="text-2xl md:text-3xl font-bold text-gray-900">内部数据台账</h1>
           <p class="mt-2 text-sm md:text-base text-gray-600">
-            合作进度与数据报告融合为一张台账：既能查进度、查报告，也能新增、修改、删除数据。凭证解锁后 30 分钟内免重复输入。
+            合作进度、数据报告与年度总览融合为一处台账：既能查进度、查报告，也能新增、修改、删除数据。凭证解锁后 30 分钟内免重复输入。
           </p>
         </div>
-        <div v-if="isUnlocked" class="flex flex-wrap gap-2">
-          <button
-            class="h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60"
-            :disabled="isRefreshing"
-            @click="refreshAll"
+        <div class="flex flex-wrap gap-2">
+          <router-link
+            to="/annual-report-2025"
+            class="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg border border-orange-200 bg-orange-50 text-sm font-semibold text-orange-700 hover:bg-orange-100"
           >
-            {{ isRefreshing ? '加载中...' : '刷新数据' }}
-          </button>
-          <button
-            class="h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-            @click="lockAll"
-          >
-            锁定页面
-          </button>
+            <span>📈</span>
+            <span>查看 2025 年度总览</span>
+          </router-link>
+          <template v-if="isUnlocked">
+            <button
+              class="h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+              :disabled="isRefreshing"
+              @click="refreshAll"
+            >
+              {{ isRefreshing ? '加载中...' : '刷新数据' }}
+            </button>
+            <button
+              class="h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+              @click="lockAll"
+            >
+              锁定页面
+            </button>
+          </template>
         </div>
       </div>
 
@@ -273,6 +282,49 @@
           </div>
         </div>
 
+        <!-- Annual reports editor -->
+        <div class="mt-5 rounded-2xl border border-orange-100 bg-white shadow-sm overflow-hidden">
+          <button
+            type="button"
+            class="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-orange-50/60 transition-colors"
+            @click="annualEditorOpen = !annualEditorOpen"
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-lg">📈</span>
+              <span class="text-sm font-semibold text-gray-900">年度总览编辑器</span>
+              <span class="text-xs text-gray-500">{{ annualReports.length }} 份</span>
+            </div>
+            <span class="text-xs text-gray-400">{{ annualEditorOpen ? '收起 ▴' : '展开 ▾' }}</span>
+          </button>
+          <div v-if="annualEditorOpen" class="border-t border-orange-100 p-4 space-y-3">
+            <p class="text-xs text-gray-500 leading-5">
+              直接编辑年度总览数据 JSON 数组，每条对象需要 <code class="px-1 rounded bg-gray-100">year</code>、<code class="px-1 rounded bg-gray-100">partners</code>、<code class="px-1 rounded bg-gray-100">summaryCards</code>、<code class="px-1 rounded bg-gray-100">highlights</code>、<code class="px-1 rounded bg-gray-100">intro</code> 字段。保存后会立即写入 D1，前台 <router-link to="/annual-report-2025" class="text-orange-700 hover:underline">/annual-report-2025</router-link> 公开读取。
+            </p>
+            <textarea
+              v-model="annualEditorJson"
+              rows="14"
+              class="w-full font-mono text-xs p-3 rounded-lg border border-orange-200 bg-orange-50/40 focus:outline-none focus:ring-2 focus:ring-orange-300"
+              spellcheck="false"
+            ></textarea>
+            <div class="flex flex-wrap items-center gap-2">
+              <button
+                class="h-9 px-4 rounded-lg bg-orange-600 text-white text-sm font-semibold hover:bg-orange-700 disabled:opacity-60"
+                :disabled="isSavingAnnual"
+                @click="saveAnnualReports"
+              >
+                {{ isSavingAnnual ? '保存中...' : '保存年度总览' }}
+              </button>
+              <button
+                class="h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                @click="resetAnnualEditor"
+              >
+                重置为最近一次加载
+              </button>
+              <span v-if="annualMessage" class="text-xs" :class="annualMessageIsError ? 'text-red-600' : 'text-emerald-700'">{{ annualMessage }}</span>
+            </div>
+          </div>
+        </div>
+
         <!-- Orphan reports (no matching deal) -->
         <div v-if="orphanReports.length > 0" class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4">
           <h3 class="text-sm font-semibold text-amber-900 mb-2">未匹配合作的报告（{{ orphanReports.length }}）</h3>
@@ -328,7 +380,9 @@ import {
   fetchCommercialDeals,
   fetchPromotionReports,
   updateCommercialDeals,
-  updatePromotionReports
+  updatePromotionReports,
+  fetchAnnualReportsAdmin,
+  updateAnnualReports
 } from '../../utils/internalDataApi'
 import {
   readInternalAccessSession,
@@ -363,6 +417,58 @@ const reportModalOpen = ref(false)
 const editingReport = ref(null)
 const reportModalCoopId = ref('')
 const isSavingReport = ref(false)
+
+const annualReports = ref([])
+const annualEditorOpen = ref(false)
+const annualEditorJson = ref('[]')
+const isSavingAnnual = ref(false)
+const annualMessage = ref('')
+const annualMessageIsError = ref(false)
+let annualMessageTimer = null
+
+function setAnnualMessage(text, isError = false) {
+  if (annualMessageTimer) clearTimeout(annualMessageTimer)
+  annualMessage.value = text
+  annualMessageIsError.value = isError
+  annualMessageTimer = setTimeout(() => {
+    annualMessage.value = ''
+    annualMessageIsError.value = false
+  }, 3500)
+}
+
+function syncAnnualEditorFromState() {
+  annualEditorJson.value = JSON.stringify(annualReports.value, null, 2)
+}
+
+function resetAnnualEditor() {
+  syncAnnualEditorFromState()
+  setAnnualMessage('已重置为最近一次加载的数据。')
+}
+
+async function saveAnnualReports() {
+  let parsed
+  try {
+    parsed = JSON.parse(annualEditorJson.value)
+  } catch {
+    setAnnualMessage('JSON 解析失败，请检查格式。', true)
+    return
+  }
+  if (!Array.isArray(parsed)) {
+    setAnnualMessage('顶层必须是数组。', true)
+    return
+  }
+  isSavingAnnual.value = true
+  try {
+    await updateAnnualReports(sessionToken.value, parsed)
+    annualReports.value = parsed
+    syncAnnualEditorFromState()
+    setAnnualMessage(`已保存，共 ${parsed.length} 份年度总览。`)
+  } catch (error) {
+    setAnnualMessage(explainInternalDataError(error, 'admin'), true)
+  } finally {
+    isSavingAnnual.value = false
+  }
+}
 
 function setToolbarMessage(text, isError = false) {
   if (toolbarTimer) clearTimeout(toolbarTimer)
@@ -404,12 +510,15 @@ async function unlock() {
 }
 
 async function loadAll() {
-  const [d, r] = await Promise.all([
+  const [d, r, a] = await Promise.all([
     fetchCommercialDeals(sessionToken.value),
-    fetchPromotionReports(sessionToken.value)
+    fetchPromotionReports(sessionToken.value),
+    fetchAnnualReportsAdmin(sessionToken.value).catch(() => [])
   ])
   deals.value = Array.isArray(d) ? d : []
   reports.value = Array.isArray(r) ? r : []
+  annualReports.value = Array.isArray(a) ? a : []
+  syncAnnualEditorFromState()
 }
 
 async function refreshAll() {
@@ -430,6 +539,9 @@ function lockAll() {
   sessionToken.value = ''
   deals.value = []
   reports.value = []
+  annualReports.value = []
+  annualEditorJson.value = '[]'
+  annualEditorOpen.value = false
   credentialInput.value = ''
   expanded.clear()
   clearInternalAccessCaches()

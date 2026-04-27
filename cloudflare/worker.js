@@ -314,6 +314,64 @@ function validateDeals(records) {
   })
 }
 
+function mapAnnualRow(row) {
+  return {
+    year: Number(row.year) || 0,
+    partners: parseJsonColumn(row.partnersJson, []),
+    summaryCards: parseJsonColumn(row.summaryCardsJson, []),
+    highlights: parseJsonColumn(row.highlightsJson, []),
+    intro: row.intro || '',
+    updatedAt: row.updatedAt || ''
+  }
+}
+
+function normalizeAnnualReportRecord(record) {
+  const yearNumber = Number(record?.year)
+  return {
+    year: Number.isFinite(yearNumber) ? Math.trunc(yearNumber) : 0,
+    partners: Array.isArray(record?.partners)
+      ? record.partners.map((value) => emptyString(value).trim()).filter(Boolean)
+      : [],
+    summaryCards: Array.isArray(record?.summaryCards)
+      ? record.summaryCards
+          .filter((card) => card && typeof card === 'object')
+          .map((card) => ({
+            label: emptyString(card.label).trim(),
+            value: emptyString(card.value).trim(),
+            accent: emptyString(card.accent).trim()
+          }))
+          .filter((card) => card.label || card.value)
+      : [],
+    highlights: Array.isArray(record?.highlights)
+      ? record.highlights.map((value) => emptyString(value).trim()).filter(Boolean)
+      : [],
+    intro: emptyString(record?.intro).trim(),
+    updatedAt: emptyString(record?.updatedAt).trim()
+  }
+}
+
+function validateAnnualReports(records) {
+  if (!Array.isArray(records)) {
+    throw new Error('ANNUAL_REPORTS_PAYLOAD_MUST_BE_ARRAY')
+  }
+
+  const years = new Set()
+  return records.map((record) => {
+    const next = normalizeAnnualReportRecord(record)
+
+    if (!next.year || next.year < 2000 || next.year > 9999) {
+      throw new Error('ANNUAL_REPORT_YEAR_INVALID')
+    }
+
+    if (years.has(next.year)) {
+      throw new Error('ANNUAL_REPORT_YEAR_DUPLICATED')
+    }
+
+    years.add(next.year)
+    return next
+  })
+}
+
 function validateReports(records) {
   if (!Array.isArray(records)) {
     throw new Error('REPORTS_PAYLOAD_MUST_BE_ARRAY')
@@ -468,9 +526,10 @@ async function handleReportCoopIds(request, env) {
 }
 
 async function handleHealth(_request, env) {
-  const [dealsCount, reportsCount] = await Promise.all([
+  const [dealsCount, reportsCount, annualCount] = await Promise.all([
     env.DB.prepare('SELECT COUNT(*) AS count FROM commercial_deals').first(),
-    env.DB.prepare('SELECT COUNT(*) AS count FROM promotion_reports').first()
+    env.DB.prepare('SELECT COUNT(*) AS count FROM promotion_reports').first(),
+    env.DB.prepare('SELECT COUNT(*) AS count FROM annual_reports').first()
   ])
 
   return json({
@@ -484,9 +543,64 @@ async function handleHealth(_request, env) {
     },
     counts: {
       deals: Number(dealsCount?.count || 0),
-      reports: Number(reportsCount?.count || 0)
+      reports: Number(reportsCount?.count || 0),
+      annualReports: Number(annualCount?.count || 0)
     },
     timestamp: new Date().toISOString()
+  })
+}
+
+async function handlePublicAnnualReport(request, env) {
+  const url = new URL(request.url)
+  const yearParam = url.searchParams.get('year')
+  const yearNumber = Number(yearParam)
+  const sql = `
+    SELECT
+      year,
+      partners_json AS partnersJson,
+      summary_cards_json AS summaryCardsJson,
+      highlights_json AS highlightsJson,
+      intro,
+      updated_at AS updatedAt
+    FROM annual_reports
+  `
+
+  if (yearParam && Number.isFinite(yearNumber)) {
+    const row = await env.DB.prepare(`${sql} WHERE year = ? LIMIT 1`).bind(Math.trunc(yearNumber)).first()
+    if (!row) {
+      return json({ error: 'NOT_FOUND' }, { status: 404 })
+    }
+    return json({ report: mapAnnualRow(row) })
+  }
+
+  const { results } = await env.DB.prepare(`${sql} ORDER BY year DESC`).all()
+  return json({
+    reports: (results || []).map(mapAnnualRow)
+  })
+}
+
+async function handleAnnualReportsAdminList(request, env) {
+  const session = await requireSession(request, env)
+
+  if (!session) {
+    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  }
+
+  const { results } = await env.DB.prepare(`
+    SELECT
+      year,
+      partners_json AS partnersJson,
+      summary_cards_json AS summaryCardsJson,
+      highlights_json AS highlightsJson,
+      intro,
+      updated_at AS updatedAt
+    FROM annual_reports
+    ORDER BY year DESC
+  `).all()
+
+  return json({
+    reports: (results || []).map(mapAnnualRow),
+    expiresAt: session.exp
   })
 }
 
@@ -572,6 +686,52 @@ async function replaceReports(env, reports) {
   await env.DB.batch(statements)
 }
 
+async function replaceAnnualReports(env, reports) {
+  const statements = [env.DB.prepare('DELETE FROM annual_reports')]
+
+  reports.forEach((report) => {
+    statements.push(
+      env.DB.prepare(`
+        INSERT INTO annual_reports (
+          year,
+          partners_json,
+          summary_cards_json,
+          highlights_json,
+          intro,
+          updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?)
+      `).bind(
+        report.year,
+        JSON.stringify(report.partners),
+        JSON.stringify(report.summaryCards),
+        JSON.stringify(report.highlights),
+        report.intro,
+        report.updatedAt
+      )
+    )
+  })
+
+  await env.DB.batch(statements)
+}
+
+async function handleAdminAnnualReportsUpdate(request, env) {
+  const session = await requireSession(request, env)
+
+  if (!session) {
+    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  }
+
+  const body = await request.json().catch(() => null)
+
+  try {
+    const reports = validateAnnualReports(body?.reports)
+    await replaceAnnualReports(env, reports)
+    return json({ ok: true, count: reports.length, expiresAt: session.exp })
+  } catch (error) {
+    return json({ error: error.message || 'INVALID_ANNUAL_REPORTS_PAYLOAD' }, { status: 400 })
+  }
+}
+
 async function handleAdminDealsUpdate(request, env) {
   const session = await requireSession(request, env)
 
@@ -647,6 +807,28 @@ async function handleApi(request, env) {
     return handleAdminReportsUpdate(request, env)
   }
 
+  if (request.method === 'GET' && url.pathname === '/api/internal/annual-reports') {
+    return handleAnnualReportsAdminList(request, env)
+  }
+
+  if (request.method === 'PUT' && url.pathname === '/api/internal/admin/annual-reports') {
+    return handleAdminAnnualReportsUpdate(request, env)
+  }
+
+  return json({ error: 'NOT_FOUND' }, { status: 404 })
+}
+
+async function handlePublic(request, env) {
+  if (!env.DB) {
+    return json({ error: 'D1_NOT_CONFIGURED' }, { status: 500 })
+  }
+
+  const url = new URL(request.url)
+
+  if (request.method === 'GET' && url.pathname === '/api/public/annual-report') {
+    return handlePublicAnnualReport(request, env)
+  }
+
   return json({ error: 'NOT_FOUND' }, { status: 404 })
 }
 
@@ -673,6 +855,10 @@ export default {
 
     if (url.pathname.startsWith('/api/internal/')) {
       return handleApi(request, env)
+    }
+
+    if (url.pathname.startsWith('/api/public/')) {
+      return handlePublic(request, env)
     }
 
     return handleAssets(request, env)

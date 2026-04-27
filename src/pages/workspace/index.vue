@@ -59,7 +59,7 @@
           </div>
           <h2 class="mt-5 text-xl font-bold text-gray-900">内部数据中心</h2>
           <p class="mt-2 text-sm leading-6 text-gray-600">
-            合作进度、数据报告与内部录入三张 sheet 合一，凭证共享。
+            合作进度、数据报告、年度总览统一台账，凭证共享。
           </p>
           <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-indigo-700">
             <span>进入模块</span>
@@ -86,24 +86,6 @@
         </router-link>
 
         <router-link
-          to="/annual-report-2025"
-          class="group rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-orange-100/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-        >
-          <div class="flex items-start justify-between gap-3">
-            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-100 text-2xl">📈</span>
-            <span class="rounded-full bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-700">年度复盘</span>
-          </div>
-          <h2 class="mt-5 text-xl font-bold text-gray-900">25年年度总计</h2>
-          <p class="mt-2 text-sm leading-6 text-gray-600">
-            2025 年合作投放、传播表现与品牌合作总览。
-          </p>
-          <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-orange-700">
-            <span>进入模块</span>
-            <span class="transition-transform group-hover:translate-x-1">→</span>
-          </div>
-        </router-link>
-
-        <router-link
           to="/academy"
           class="group rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-blue-100/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
         >
@@ -121,23 +103,6 @@
           </div>
         </router-link>
 
-        <router-link
-          to="/workspace/web-llm"
-          class="group rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-amber-100/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-        >
-          <div class="flex items-start justify-between gap-3">
-            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-2xl">🧠</span>
-            <span class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">本地推理</span>
-          </div>
-          <h2 class="mt-5 text-xl font-bold text-gray-900">大模型问答</h2>
-          <p class="mt-2 text-sm leading-6 text-gray-600">
-            浏览器端 WebGPU 模型加载、流式问答与本地会话。
-          </p>
-          <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-amber-700">
-            <span>进入模块</span>
-            <span class="transition-transform group-hover:translate-x-1">→</span>
-          </div>
-        </router-link>
       </div>
     </section>
   </div>

@@ -38,6 +38,15 @@ CREATE INDEX IF NOT EXISTS idx_promotion_reports_published_at
 CREATE INDEX IF NOT EXISTS idx_promotion_reports_cooperation_id
   ON promotion_reports(cooperation_id);
 
+CREATE TABLE IF NOT EXISTS annual_reports (
+  year INTEGER PRIMARY KEY,
+  partners_json TEXT NOT NULL DEFAULT '[]',
+  summary_cards_json TEXT NOT NULL DEFAULT '[]',
+  highlights_json TEXT NOT NULL DEFAULT '[]',
+  intro TEXT NOT NULL DEFAULT '',
+  updated_at TEXT NOT NULL DEFAULT ''
+);
+
 CREATE TABLE IF NOT EXISTS internal_access_attempts (
   client_key TEXT PRIMARY KEY,
   failure_count INTEGER NOT NULL DEFAULT 0,

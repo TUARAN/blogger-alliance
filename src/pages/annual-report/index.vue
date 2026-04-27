@@ -1,20 +1,53 @@
 <script setup>
+import { onMounted, ref } from 'vue'
 import annualDashboardImage from '../../img/example/wechat_2026-03-16_104619_761.png'
 import annualCloudImage from '../../img/example/wechat_2026-03-16_104632_010.png'
+import { fetchPublicAnnualReport } from '../../utils/internalDataApi'
 
-const partnerBrands = ['秒哒', 'FinClip', '亚马逊云科技', '火山引擎', '明基', '秦托邦']
-const summaryCards = [
-  { label: '合作品牌', value: '8+', accent: 'from-indigo-500 to-blue-500' },
-  { label: '累计投放', value: '376 篇', accent: 'from-fuchsia-500 to-violet-500' },
-  { label: '覆盖平台', value: '11+', accent: 'from-emerald-500 to-cyan-500' },
-  { label: '社群辐射', value: '20+', accent: 'from-amber-500 to-orange-500' }
-]
+const TARGET_YEAR = 2025
 
-const reportHighlights = [
-  '以技术内容分发为核心，持续帮助品牌建立开发者认知',
-  '合作内容覆盖掘金、CSDN、知乎、公众号、头条、博客园等平台',
-  '配合社群扩散与矩阵号联动，形成更稳定的传播放大效果'
-]
+const FALLBACK_REPORT = {
+  year: TARGET_YEAR,
+  intro: '围绕技术内容分发、平台种草、社群扩散和数据复盘，持续帮助品牌建立开发者认知。',
+  partners: ['秒哒', 'FinClip', '亚马逊云科技', '火山引擎', '明基', '秦托邦'],
+  summaryCards: [
+    { label: '合作品牌', value: '8+', accent: 'from-indigo-500 to-blue-500' },
+    { label: '累计投放', value: '376 篇', accent: 'from-fuchsia-500 to-violet-500' },
+    { label: '覆盖平台', value: '11+', accent: 'from-emerald-500 to-cyan-500' },
+    { label: '社群辐射', value: '20+', accent: 'from-amber-500 to-orange-500' }
+  ],
+  highlights: [
+    '以技术内容分发为核心，持续帮助品牌建立开发者认知',
+    '合作内容覆盖掘金、CSDN、知乎、公众号、头条、博客园等平台',
+    '配合社群扩散与矩阵号联动，形成更稳定的传播放大效果'
+  ]
+}
+
+const partnerBrands = ref(FALLBACK_REPORT.partners)
+const summaryCards = ref(FALLBACK_REPORT.summaryCards)
+const reportHighlights = ref(FALLBACK_REPORT.highlights)
+const introText = ref(FALLBACK_REPORT.intro)
+
+onMounted(async () => {
+  try {
+    const remote = await fetchPublicAnnualReport(TARGET_YEAR)
+    if (!remote) return
+    if (Array.isArray(remote.partners) && remote.partners.length) {
+      partnerBrands.value = remote.partners
+    }
+    if (Array.isArray(remote.summaryCards) && remote.summaryCards.length) {
+      summaryCards.value = remote.summaryCards
+    }
+    if (Array.isArray(remote.highlights) && remote.highlights.length) {
+      reportHighlights.value = remote.highlights
+    }
+    if (typeof remote.intro === 'string' && remote.intro.trim()) {
+      introText.value = remote.intro.trim()
+    }
+  } catch {
+    // 静默兜底，保留硬编码
+  }
+})
 </script>
 
 <template>
@@ -47,7 +80,9 @@ const reportHighlights = [
           <p class="text-sm uppercase tracking-[0.24em] text-indigo-200">Annual Review</p>
           <h1 class="mt-3 text-3xl md:text-4xl font-bold">2025 年报告</h1>
           <p class="mt-3 text-sm md:text-base leading-7 text-slate-300">
-            2025 年，我们与 <span class="font-semibold text-white">{{ partnerBrands.join('、') }}</span> 等品牌完成合作，围绕技术内容分发、平台种草、社群扩散和数据复盘，持续帮助品牌建立开发者认知。
+            <span>2025 年，我们与</span>
+            <span class="font-semibold text-white"> {{ partnerBrands.join('、') }} </span>
+            <span>等品牌完成合作，{{ introText }}</span>
           </p>
         </div>
 

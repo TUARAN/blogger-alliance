@@ -188,6 +188,7 @@ npx wrangler secret put INTERNAL_SESSION_SECRET
 
 - `private/commercialDeals.source.json`
 - `private/promotionReports.source.json`
+- `private/annualReports.source.json`（年度总览，新增）
 
 生成 SQL：
 
@@ -214,11 +215,19 @@ npm run build
 npm run cf:dev
 ```
 
-正式部署：
+手动部署（应急用）：
 
 ```bash
 npm run cf:deploy
 ```
+
+> **生产部署默认走 Cloudflare Workers Builds（Git → 自动部署）**：
+> - 仓库：`TUARAN/blogger-alliance`
+> - 构建命令：`npm install && npm run build`（必须设置，否则 `dist/` 不会生成）
+> - 部署命令：`npx wrangler deploy`
+> - 生产分支：`main`
+> - Secrets 仍通过 `npx wrangler secret put` 一次性写入，无需在 Builds 面板再配
+> - D1 绑定由 `wrangler.jsonc` 控制，自动生效
 
 ### 6) 直接写 D1 的后台录入页
 
@@ -231,7 +240,8 @@ npm run cf:deploy
 - 直接读取 D1 中的 `commercial_deals` 和 `promotion_reports`
 - 在浏览器里编辑 JSON
 - 直接调用 Worker 写回 D1
-- 可查看 `/api/internal/health` 返回的健康状态和当前记录数
+- 可查看 `/api/internal/health` 返回的健康状态和当前记录数（含 `annualReports` 计数）
+- 同页底部「📈 年度总览编辑器」可直接维护 `annual_reports`
 
 这条链路已经能满足“日常维护不再改本地 JSON 文件”的需求。
 
@@ -249,6 +259,18 @@ npm run cf:deploy
 - `updated_at`：最近沟通时间，保持 `YYYY.MM.DD`
 - `muted`：是否置灰
 - `report_cooperation_id`：跳转报告时使用的关联合作编码
+
+年度总览表 `annual_reports` 主要字段：
+
+- `year`：年份，主键
+- `partners_json`：合作品牌名数组 JSON
+- `summary_cards_json`：核心指标卡片数组 JSON（label / value / accent）
+- `highlights_json`：年度重点字符串数组 JSON
+- `intro`：介绍语（接在「我们与 …… 等品牌完成合作，」之后）
+- `updated_at`：维护时间
+
+公开页面 `/annual-report-2025` 通过 `GET /api/public/annual-report?year=2025` 读取（无需鉴权）。
+内部 `/tob/internal` 解锁后可在「年度总览编辑器」直接修改并保存（走 `PUT /api/internal/admin/annual-reports`）。
 
 报告表 `promotion_reports` 主要字段：
 
