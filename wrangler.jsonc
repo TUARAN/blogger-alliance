@@ -4,7 +4,8 @@
   "main": "cloudflare/worker.js",
   "compatibility_date": "2026-04-18",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "binding": "ASSETS"
   },
   "d1_databases": [
     {
