@@ -230,6 +230,13 @@
                     </td>
                     <td class="px-3 py-3 align-top text-center whitespace-nowrap">
                       <button class="text-xs text-indigo-600 hover:text-indigo-800 mr-2" @click="openEditDeal(deal)">编辑</button>
+                      <button
+                        v-if="dealReports(deal).length > 0"
+                        class="text-xs text-violet-600 hover:text-violet-800 mr-2"
+                        @click="openReportList(deal)"
+                      >
+                        查看报告
+                      </button>
                       <button class="text-xs text-emerald-600 hover:text-emerald-800" @click="openCreateReport(deal)">+报告</button>
                     </td>
                   </tr>
@@ -255,6 +262,7 @@
                               </div>
                             </div>
                             <div class="flex shrink-0 gap-2">
+                              <button class="text-xs text-violet-600 hover:text-violet-800" @click="openViewReport(report)">查看</button>
                               <button class="text-xs text-indigo-600 hover:text-indigo-800" @click="openEditReport(report)">编辑</button>
                             </div>
                           </div>
@@ -340,7 +348,10 @@
                 <span class="mx-2 text-slate-400">·</span>
                 <span class="text-slate-700">{{ report.project }} / {{ report.author }}</span>
               </div>
-              <button class="shrink-0 text-indigo-600 hover:text-indigo-800" @click="openEditReport(report)">编辑</button>
+              <div class="shrink-0 flex items-center gap-3">
+                <button class="text-violet-600 hover:text-violet-800" @click="openViewReport(report)">查看</button>
+                <button class="text-indigo-600 hover:text-indigo-800" @click="openEditReport(report)">编辑</button>
+              </div>
             </div>
           </div>
         </div>
@@ -366,6 +377,72 @@
       @cancel="closeReportModal"
       @delete="handleReportDelete"
     />
+
+    <div
+      v-if="reportViewerOpen && viewingReport"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 p-4"
+      @click.self="closeViewReport"
+    >
+      <div class="w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-2xl bg-white shadow-2xl">
+        <div class="sticky top-0 flex items-start justify-between gap-4 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur">
+          <div class="min-w-0">
+            <p class="text-xs font-medium uppercase tracking-wide text-violet-600">数据报告</p>
+            <h3 class="mt-1 text-lg font-bold text-slate-900">{{ viewingReport.project || viewingReport.title || '未命名报告' }}</h3>
+            <p v-if="viewingReport.articleTitle" class="mt-1 text-sm text-slate-500">{{ formatArticleTitle(viewingReport.articleTitle) }}</p>
+          </div>
+          <button class="shrink-0 rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50" @click="closeViewReport">
+            关闭
+          </button>
+        </div>
+
+        <div class="space-y-5 px-5 py-4">
+          <div class="flex flex-wrap gap-4 text-sm text-slate-600">
+            <span>报告 ID：<span class="font-mono text-slate-800">{{ viewingReport.id || '—' }}</span></span>
+            <span>合作编码：<span class="font-mono text-slate-800">{{ viewingReport.cooperationId || '—' }}</span></span>
+            <span>执行人：<span class="text-slate-800">{{ viewingReport.author || '—' }}</span></span>
+            <span v-if="viewingReport.period">周期：<span class="text-slate-800">{{ viewingReport.period }}</span></span>
+          </div>
+
+          <div v-if="viewingReport.platforms?.length" class="flex flex-wrap gap-2">
+            <span
+              v-for="platform in viewingReport.platforms"
+              :key="platform"
+              class="inline-flex items-center rounded-full bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-700"
+            >
+              {{ platform }}
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 md:grid-cols-5">
+            <div class="rounded-xl bg-teal-50 px-3 py-3">
+              <p class="text-xs text-teal-700">阅读</p>
+              <p class="mt-1 text-lg font-semibold text-teal-900">{{ formatNumber(viewingReport.stats?.reads) }}</p>
+            </div>
+            <div class="rounded-xl bg-rose-50 px-3 py-3">
+              <p class="text-xs text-rose-700">点赞</p>
+              <p class="mt-1 text-lg font-semibold text-rose-900">{{ formatNumber(viewingReport.stats?.likes) }}</p>
+            </div>
+            <div class="rounded-xl bg-amber-50 px-3 py-3">
+              <p class="text-xs text-amber-700">收藏</p>
+              <p class="mt-1 text-lg font-semibold text-amber-900">{{ formatNumber(viewingReport.stats?.favorites) }}</p>
+            </div>
+            <div class="rounded-xl bg-sky-50 px-3 py-3">
+              <p class="text-xs text-sky-700">评论</p>
+              <p class="mt-1 text-lg font-semibold text-sky-900">{{ formatNumber(viewingReport.stats?.comments) }}</p>
+            </div>
+            <div class="rounded-xl bg-fuchsia-50 px-3 py-3">
+              <p class="text-xs text-fuchsia-700">转发</p>
+              <p class="mt-1 text-lg font-semibold text-fuchsia-900">{{ formatNumber(viewingReport.stats?.shares) }}</p>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+            <p class="mb-2 text-sm font-semibold text-slate-900">报告正文</p>
+            <p class="whitespace-pre-line text-sm leading-7 text-slate-700">{{ viewingReport.content || '暂无正文。' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -417,6 +494,8 @@ const reportModalOpen = ref(false)
 const editingReport = ref(null)
 const reportModalCoopId = ref('')
 const isSavingReport = ref(false)
+const reportViewerOpen = ref(false)
+const viewingReport = ref(null)
 
 const annualReports = ref([])
 const annualEditorOpen = ref(false)
@@ -783,6 +862,18 @@ function openCreateReport(deal) {
   editingReport.value = null
   reportModalCoopId.value = deal ? (deal.reportCooperationId || deal.id || '') : ''
   reportModalOpen.value = true
+}
+function openReportList(deal) {
+  if (!deal?.id || dealReports(deal).length === 0) return
+  expanded.add(deal.id)
+}
+function openViewReport(report) {
+  viewingReport.value = { ...report }
+  reportViewerOpen.value = true
+}
+function closeViewReport() {
+  reportViewerOpen.value = false
+  viewingReport.value = null
 }
 function openEditReport(report) {
   editingReport.value = { ...report }
