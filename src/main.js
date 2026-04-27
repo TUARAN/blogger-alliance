@@ -9,13 +9,23 @@ const routes = [
   { path: '/about', component: () => import('./views/Home.vue') },
   { path: '/tob', component: () => import('./pages/tob/index.vue') },
   { path: '/cases', component: () => import('./pages/cases/index.vue') },
-  { path: '/tob/deals', component: () => import('./pages/tob/deals.vue') },
-  { path: '/tob/reports', component: () => import('./pages/tob/reports.vue') },
+  { path: '/tob/internal', component: () => import('./pages/tob/internal.vue') },
+  {
+    path: '/tob/deals',
+    redirect: (to) => ({ path: '/tob/internal', query: { ...to.query, tab: 'deals' } })
+  },
+  {
+    path: '/tob/reports',
+    redirect: (to) => ({ path: '/tob/internal', query: { ...to.query, tab: 'reports' } })
+  },
   { path: '/tob/services', component: () => import('./pages/tob/services/index.vue') },
   { path: '/matrix', component: () => import('./pages/matrix/index.vue') },
   { path: '/annual-report-2025', component: () => import('./pages/annual-report/index.vue') },
   { path: '/workspace', component: () => import('./pages/workspace/index.vue') },
-  { path: '/workspace/internal-data-admin', component: () => import('./pages/workspace/internal-data-admin.vue') },
+  {
+    path: '/workspace/internal-data-admin',
+    redirect: (to) => ({ path: '/tob/internal', query: { ...to.query, tab: 'admin' } })
+  },
   { path: '/workspace/web-llm', component: () => import('./pages/workspace/web-llm/index.vue') },
   { path: '/ecosystem', component: () => import('./pages/ecosystem-position/index.vue') },
   { path: '/why-us', component: () => import('./pages/why-us/index.vue') },

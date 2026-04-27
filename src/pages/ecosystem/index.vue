@@ -79,12 +79,12 @@ const layers = [
 
           <div class="flex items-center gap-4 lg:gap-6 overflow-x-auto whitespace-nowrap">
             <router-link
-              to="/tob/deals"
+              to="/tob/internal"
               class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
               active-class="text-gray-700 font-semibold"
             >
-              <span class="text-base leading-none">🧭</span>
-              <span>合作进度查询</span>
+              <span class="text-base leading-none">🗂️</span>
+              <span>内部数据中心</span>
             </router-link>
 
             <router-link

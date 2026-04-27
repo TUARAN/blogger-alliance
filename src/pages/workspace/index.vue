@@ -50,36 +50,18 @@
         </router-link>
 
         <router-link
-          to="/tob/deals"
+          to="/tob/internal"
           class="group rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-indigo-100/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
         >
           <div class="flex items-start justify-between gap-3">
-            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-100 text-2xl">🧭</span>
-            <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700">内部查询</span>
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-100 text-2xl">🗂️</span>
+            <span class="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700">内部数据</span>
           </div>
-          <h2 class="mt-5 text-xl font-bold text-gray-900">合作进度查询</h2>
+          <h2 class="mt-5 text-xl font-bold text-gray-900">内部数据中心</h2>
           <p class="mt-2 text-sm leading-6 text-gray-600">
-            合作记录、项目明细与进度检索。
+            合作进度、数据报告与内部录入三张 sheet 合一，凭证共享。
           </p>
           <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-indigo-700">
-            <span>进入模块</span>
-            <span class="transition-transform group-hover:translate-x-1">→</span>
-          </div>
-        </router-link>
-
-        <router-link
-          to="/tob/reports"
-          class="group rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-rose-100/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-        >
-          <div class="flex items-start justify-between gap-3">
-            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-100 text-2xl">📊</span>
-            <span class="rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700">效果报告</span>
-          </div>
-          <h2 class="mt-5 text-xl font-bold text-gray-900">数据报告查询</h2>
-          <p class="mt-2 text-sm leading-6 text-gray-600">
-            推广数据效果报告、传播表现与互动反馈。
-          </p>
-          <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-rose-700">
             <span>进入模块</span>
             <span class="transition-transform group-hover:translate-x-1">→</span>
           </div>
@@ -134,24 +116,6 @@
             学习资料、工具资源和知识沉淀。
           </p>
           <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-blue-700">
-            <span>进入模块</span>
-            <span class="transition-transform group-hover:translate-x-1">→</span>
-          </div>
-        </router-link>
-
-        <router-link
-          to="/workspace/internal-data-admin"
-          class="group rounded-3xl border border-white/70 bg-white/90 p-6 shadow-lg shadow-cyan-100/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-        >
-          <div class="flex items-start justify-between gap-3">
-            <span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-cyan-100 text-2xl">🗃️</span>
-            <span class="rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-semibold text-cyan-700">D1 后台</span>
-          </div>
-          <h2 class="mt-5 text-xl font-bold text-gray-900">内部数据录入</h2>
-          <p class="mt-2 text-sm leading-6 text-gray-600">
-            直接读取并写入 Cloudflare D1，维护商单与数据报告。
-          </p>
-          <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-700">
             <span>进入模块</span>
             <span class="transition-transform group-hover:translate-x-1">→</span>
           </div>
