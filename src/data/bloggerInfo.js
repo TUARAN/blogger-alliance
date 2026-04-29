@@ -450,18 +450,21 @@ export const bloggersData = [
   },
   {
     id: 32,
-    name: '晓雨',
-    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=xiaoyu&backgroundColor=EAF6FF',
-    introduction: '专注云开发与 AI 应用的创作者，也是多个技术社群的组织者。',
-    followers: '100K+',
+    name: '晓雨的笔记本',
+    avatar: 'https://i-blog.csdnimg.cn/direct/575e9d5073f44046949a6236cc1bbcf3.png',
+    introduction: 'AI安全方向在读博士、CSDN24博客之星Top10、腾讯云创作之星、百度文心导师、文章500+，阅读量590w+。',
+    followers: '120K+',
     socialAccounts: [
-      { platform: 'CSDN', url: 'https://blog.csdn.net/WTYuong', icon: '💻' },
-      { platform: '腾讯云', url: 'https://cloud.tencent.com/developer/user', icon: '☁️' }
+      { platform: 'CSDN', url: 'https://blog.csdn.net/WTYuong', icon: '📝' },
+      { platform: '掘金', url: 'https://juejin.cn/user/952608637602343', icon: '🐙' },
+      { platform: '51CTO', url: 'https://home.51cto.com/space?uid=16641779', icon: '💻' },
+      { platform: '博客园', url: 'https://home.cnblogs.com/u/is-yu-ei', icon: '🌏' },
+      { platform: '知乎', url: 'https://www.zhihu.com/people/yu-hou-wu-tong-85', icon: '📚' },
     ],
     expandedContent: {
-      specialties: ['云开发', 'AIGC', '社群运营'],
-      achievements: ['CSDN 平台优质创作者', '技术社群主理人', '粉丝100K+'],
-      recentPosts: ['企业 AIGC 落地实践', '云原生入门系列', '社群运营的经验复盘']
+      specialties: ['AI', 'Agent', '大模型测评'],
+      achievements: ['粉丝100K+', '开源社区多个贡献被采纳', '可产出视频'],
+      recentPosts: ['追踪前沿AI论文|产品', '擅长挖掘特色', '推广曝光率稳定']
     }
   },
   {
