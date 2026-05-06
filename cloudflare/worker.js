@@ -551,6 +551,12 @@ async function handleHealth(_request, env) {
 }
 
 async function handlePublicAnnualReport(request, env) {
+  const session = await requireSession(request, env)
+
+  if (!session) {
+    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  }
+
   const url = new URL(request.url)
   const yearParam = url.searchParams.get('year')
   const yearNumber = Number(yearParam)
@@ -570,12 +576,13 @@ async function handlePublicAnnualReport(request, env) {
     if (!row) {
       return json({ error: 'NOT_FOUND' }, { status: 404 })
     }
-    return json({ report: mapAnnualRow(row) })
+    return json({ report: mapAnnualRow(row), expiresAt: session.exp })
   }
 
   const { results } = await env.DB.prepare(`${sql} ORDER BY year DESC`).all()
   return json({
-    reports: (results || []).map(mapAnnualRow)
+    reports: (results || []).map(mapAnnualRow),
+    expiresAt: session.exp
   })
 }
 
@@ -821,6 +828,10 @@ async function handleApi(request, env) {
 async function handlePublic(request, env) {
   if (!env.DB) {
     return json({ error: 'D1_NOT_CONFIGURED' }, { status: 500 })
+  }
+
+  if (!env.INTERNAL_SESSION_SECRET) {
+    return json({ error: 'WORKER_SECRETS_MISSING' }, { status: 500 })
   }
 
   const url = new URL(request.url)

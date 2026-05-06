@@ -85,9 +85,9 @@ export async function updatePromotionReports(token, reports) {
   })
 }
 
-export async function fetchPublicAnnualReport(year) {
+export async function fetchPublicAnnualReport(year, token) {
   const path = year ? `/api/public/annual-report?year=${encodeURIComponent(year)}` : '/api/public/annual-report'
-  const payload = await apiRequest(path)
+  const payload = await apiRequest(path, { token })
   if (year) {
     return payload?.report || null
   }

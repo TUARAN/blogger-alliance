@@ -306,7 +306,7 @@
           </button>
           <div v-if="annualEditorOpen" class="border-t border-orange-100 p-4 space-y-3">
             <p class="text-xs text-gray-500 leading-5">
-              直接编辑年度总览数据 JSON 数组，每条对象需要 <code class="px-1 rounded bg-gray-100">year</code>、<code class="px-1 rounded bg-gray-100">partners</code>、<code class="px-1 rounded bg-gray-100">summaryCards</code>、<code class="px-1 rounded bg-gray-100">highlights</code>、<code class="px-1 rounded bg-gray-100">intro</code> 字段。保存后会立即写入 D1，前台 <router-link to="/annual-report-2025" class="text-orange-700 hover:underline">/annual-report-2025</router-link> 公开读取。
+              直接编辑年度总览数据 JSON 数组，每条对象需要 <code class="px-1 rounded bg-gray-100">year</code>、<code class="px-1 rounded bg-gray-100">partners</code>、<code class="px-1 rounded bg-gray-100">summaryCards</code>、<code class="px-1 rounded bg-gray-100">highlights</code>、<code class="px-1 rounded bg-gray-100">intro</code> 字段。保存后会立即写入 D1，前台 <router-link to="/annual-report-2025" class="text-orange-700 hover:underline">/annual-report-2025</router-link> 需要凭证解锁后读取。
             </p>
             <textarea
               v-model="annualEditorJson"

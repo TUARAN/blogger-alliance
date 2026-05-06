@@ -2,7 +2,17 @@
 import { onMounted, ref } from 'vue'
 import annualDashboardImage from '../../img/example/wechat_2026-03-16_104619_761.png'
 import annualCloudImage from '../../img/example/wechat_2026-03-16_104632_010.png'
-import { fetchPublicAnnualReport } from '../../utils/internalDataApi'
+import { normalizeCredential } from '../../utils/credentialNormalize'
+import {
+  createInternalDataSession,
+  explainInternalDataError,
+  fetchAnnualReportsAdmin
+} from '../../utils/internalDataApi'
+import {
+  clearInternalAccessCaches,
+  readInternalAccessSession,
+  saveInternalAccessSession
+} from '../../utils/internalAccessCache'
 
 const TARGET_YEAR = 2025
 
@@ -27,25 +37,87 @@ const partnerBrands = ref(FALLBACK_REPORT.partners)
 const summaryCards = ref(FALLBACK_REPORT.summaryCards)
 const reportHighlights = ref(FALLBACK_REPORT.highlights)
 const introText = ref(FALLBACK_REPORT.intro)
+const sessionToken = ref('')
+const isUnlocked = ref(false)
+const isUnlocking = ref(false)
+const isLoadingReport = ref(false)
+const credentialInput = ref('')
+const unlockError = ref('')
+const loadError = ref('')
+
+function applyReport(remote) {
+  if (!remote) return
+  if (Array.isArray(remote.partners) && remote.partners.length) {
+    partnerBrands.value = remote.partners
+  }
+  if (Array.isArray(remote.summaryCards) && remote.summaryCards.length) {
+    summaryCards.value = remote.summaryCards
+  }
+  if (Array.isArray(remote.highlights) && remote.highlights.length) {
+    reportHighlights.value = remote.highlights
+  }
+  if (typeof remote.intro === 'string' && remote.intro.trim()) {
+    introText.value = remote.intro.trim()
+  }
+}
+
+async function loadAnnualReport(token) {
+  isLoadingReport.value = true
+  loadError.value = ''
+  try {
+    const reports = await fetchAnnualReportsAdmin(token)
+    const remote = reports.find((item) => Number(item?.year) === TARGET_YEAR)
+    applyReport(remote)
+  } catch (error) {
+    loadError.value = explainInternalDataError(error, 'read')
+    throw error
+  } finally {
+    isLoadingReport.value = false
+  }
+}
+
+async function unlockAnnualReport() {
+  const credential = normalizeCredential(credentialInput.value)
+  if (!credential) {
+    unlockError.value = '请输入有效凭证。'
+    return
+  }
+
+  unlockError.value = ''
+  isUnlocking.value = true
+  try {
+    const session = await createInternalDataSession(credential)
+    sessionToken.value = session.token
+    saveInternalAccessSession(session.token)
+    await loadAnnualReport(session.token)
+    credentialInput.value = ''
+    isUnlocked.value = true
+  } catch (error) {
+    unlockError.value = explainInternalDataError(error, 'read')
+    sessionToken.value = ''
+    isUnlocked.value = false
+  } finally {
+    isUnlocking.value = false
+  }
+}
+
+function lockAnnualReport() {
+  sessionToken.value = ''
+  isUnlocked.value = false
+  credentialInput.value = ''
+  clearInternalAccessCaches()
+}
 
 onMounted(async () => {
+  const cached = readInternalAccessSession()
+  if (!cached) return
+  sessionToken.value = cached
   try {
-    const remote = await fetchPublicAnnualReport(TARGET_YEAR)
-    if (!remote) return
-    if (Array.isArray(remote.partners) && remote.partners.length) {
-      partnerBrands.value = remote.partners
-    }
-    if (Array.isArray(remote.summaryCards) && remote.summaryCards.length) {
-      summaryCards.value = remote.summaryCards
-    }
-    if (Array.isArray(remote.highlights) && remote.highlights.length) {
-      reportHighlights.value = remote.highlights
-    }
-    if (typeof remote.intro === 'string' && remote.intro.trim()) {
-      introText.value = remote.intro.trim()
-    }
+    await loadAnnualReport(cached)
+    isUnlocked.value = true
+    saveInternalAccessSession(cached)
   } catch {
-    // 静默兜底，保留硬编码
+    lockAnnualReport()
   }
 })
 </script>
@@ -61,7 +133,7 @@ onMounted(async () => {
             </router-link>
           </div>
 
-          <div class="flex items-center gap-4 lg:gap-6 overflow-x-auto whitespace-nowrap">
+          <div class="flex items-center gap-3 lg:gap-5 overflow-x-auto whitespace-nowrap">
             <router-link
               to="/workspace"
               class="inline-flex items-center gap-1.5 text-gray-700 transition-colors font-semibold text-base"
@@ -69,12 +141,47 @@ onMounted(async () => {
               <span class="text-base leading-none">🗂️</span>
               <span>联盟工作台</span>
             </router-link>
+            <button
+              v-if="isUnlocked"
+              class="h-9 px-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50"
+              @click="lockAnnualReport"
+            >
+              锁定
+            </button>
           </div>
         </div>
       </div>
     </nav>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+      <section
+        v-if="!isUnlocked"
+        class="rounded-2xl border border-indigo-200 bg-indigo-50 p-5 md:p-6"
+      >
+        <h1 class="text-xl font-semibold text-indigo-950">请输入访问凭证</h1>
+        <p class="mt-2 text-sm leading-6 text-indigo-700">
+          2025 年度总览仅面向联盟内部开放；解锁后 30 分钟内免重复输入。15 分钟内连续输错 5 次将被临时锁定。
+        </p>
+        <div class="mt-4 flex flex-col md:flex-row gap-3">
+          <input
+            v-model="credentialInput"
+            type="password"
+            placeholder="请输入访问凭证"
+            class="flex-1 h-10 px-3 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+            @keyup.enter="unlockAnnualReport"
+          >
+          <button
+            :disabled="isUnlocking"
+            class="h-10 px-4 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 disabled:opacity-60"
+            @click="unlockAnnualReport"
+          >
+            {{ isUnlocking ? '连接中...' : '查看年度总览' }}
+          </button>
+        </div>
+        <p v-if="unlockError" class="mt-3 text-sm text-red-600">{{ unlockError }}</p>
+      </section>
+
+      <template v-else>
       <section class="rounded-3xl border border-slate-200 bg-slate-900 px-6 py-8 text-white shadow-xl md:px-8 md:py-10">
         <div class="max-w-3xl">
           <p class="text-sm uppercase tracking-[0.24em] text-indigo-200">Annual Review</p>
@@ -98,6 +205,8 @@ onMounted(async () => {
             <div class="mt-4 text-3xl font-bold text-white">{{ card.value }}</div>
           </article>
         </div>
+        <p v-if="isLoadingReport" class="mt-4 text-sm text-indigo-200">正在加载最新年度数据...</p>
+        <p v-if="loadError" class="mt-4 text-sm text-red-200">{{ loadError }}</p>
       </section>
 
       <section class="mt-8 grid gap-5 xl:grid-cols-[1.35fr_0.65fr]">
@@ -133,6 +242,7 @@ onMounted(async () => {
           <img :src="annualCloudImage" alt="2025 品牌与博主合作词云" class="max-h-[560px] w-full object-contain object-center" />
         </div>
       </section>
+      </template>
     </main>
   </div>
 </template>
