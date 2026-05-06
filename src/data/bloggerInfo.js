@@ -639,6 +639,25 @@ export const bloggersData = [
       achievements: ['小红书创作者', '粉丝1000+'],
       recentPosts: ['学习笔记沉淀', '踩坑记录', '工具使用心得']
     }
+  },
+  {
+    id: 43,
+    name: '一点一木',
+    avatar: 'https://api.dicebear.com/7.x/identicon/svg?seed=yidianyimu_chnjames&backgroundColor=F2F5F9',
+    introduction: '掘金优秀创作者，多平台技术博主；文章200余篇、阅读量150万+；长期分享前端工程与 AI Agent 落地实践',
+    followers: '6K+',
+    socialAccounts: [
+      { platform: '掘金', url: 'https://juejin.cn/user/1063982986187486', icon: '📝' },
+      { platform: 'GitHub', url: 'https://github.com/chnjames', icon: '🐙' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/qq_41865545', icon: '💻' },
+      { platform: '今日头条', url: 'https://www.toutiao.com/c/user/token/Cia8gCKsP1G_GVRQ5VucVNCeiyMUhTGDJbD_CmWU6uNqCKBZYQWq4hpJCjwAAAAAAAAAAAAAUGNC8gvFOx7wvlHFoJUgdNx6UQqc6kdy4vWFLzwTedOtMyoH7sBiWqC8IDIH3pLhIZ0QqdyQDhjDxYPqBCIBAysOtoQ=/?', icon: '📰' },
+      { platform: '个人博客', url: 'https://chnjames.github.io/blogs/', icon: '🌐' }
+    ],
+    expandedContent: {
+      specialties: ['前端开发', '技术写作', '技术分享', 'AI Agent'],
+      achievements: ['掘金优秀创作者', '文章200余篇、阅读量150万+', '多平台技术输出、粉丝6K+'],
+      recentPosts: ['GitHub 热门项目与技术趋势前沿专栏', '零基础部署 n8n：火山引擎 ECS + 轩辕专业版详细教程（2026年最新）', '🎙️ 2025 年主流 AI 语音输入工具测评：解锁高效生产力的关键']
+    }
   }
 ]
 
