@@ -131,7 +131,7 @@
 <script setup>
 import { ref } from 'vue'
 import { partnerBenefits } from '../../data/bloggerInfo.js'
-import { getBloggerStats } from '../../utils/analytics.js'
+import { getBloggerStats } from '../../utils/stats.js'
 
 // 博主统计信息
 const bloggerStats = ref(getBloggerStats())

@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, onBeforeUnmount, ref } from 'vue'
+import { showToast } from '../../../utils/toast.js'
 
 const initialized = ref(false)
 const cleanupFns = []
@@ -415,11 +416,10 @@ onMounted(async () => {
       const diagnosticText =
         diagnostics.length > 0 ? `\n\n环境诊断：${diagnostics.join(' ')}` : ''
 
-      alert(
-        '模型加载失败。请确认浏览器支持 WebGPU，并查看控制台错误信息。\n' +
-          error.message +
-          diagnosticText
-      )
+      showToast(`模型加载失败：${error.message}。请确认浏览器支持 WebGPU。${diagnosticText}`, {
+        type: 'error',
+        duration: 6000
+      })
       setRuntimeNotice(
         'error',
         `模型加载失败: ${error.message}${diagnostics.length > 0 ? ` ${diagnostics.join(' ')}` : ''}`
@@ -468,7 +468,7 @@ onMounted(async () => {
     }
 
     if (!model || !processor) {
-      alert('请先加载模型。')
+      showToast('请先加载模型。', { type: 'error' })
       return
     }
 
@@ -604,7 +604,7 @@ onMounted(async () => {
 
   init().catch((error) => {
     console.error('初始化失败:', error)
-    alert(`应用初始化失败: ${error.message}`)
+    showToast(`应用初始化失败：${error.message}`, { type: 'error', duration: 6000 })
   })
 })
 

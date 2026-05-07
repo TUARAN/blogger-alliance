@@ -198,10 +198,9 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { bloggersData, cooperationHeatOrder } from '../../data/bloggerInfo.js'
-import { trackLinkClick } from '../../utils/hybridStats.js'
-import { getBloggerStats } from '../../utils/analytics.js'
-import { getRealTimeStats, recordPageView } from '../../utils/statsService.js'
+import { trackLinkClick, getBloggerStats, getRealTimeStats, recordPageView } from '../../utils/stats.js'
 import bloggerRosterFile from '../../data/博主联盟花名册v20260106.xlsx?url'
+import { showToast } from '../../utils/toast.js'
 import BrandMarquee from '../../components/BrandMarquee.vue'
 import BloggerCard from '../../components/BloggerCard.vue'
 import BloggerTable from '../../components/BloggerTable.vue'
@@ -383,8 +382,8 @@ const copyTableToClipboard = () => {
 
   navigator.clipboard
     .writeText(finalContent)
-    .then(() => alert('✅ 表格数据已复制！\n\n您现在可以直接在 Excel、飞书或 Notion 中粘贴。'))
-    .catch(() => alert('复制失败，请重试'))
+    .then(() => showToast('✅ 表格数据已复制，可粘贴到 Excel / 飞书 / Notion', { type: 'success' }))
+    .catch(() => showToast('复制失败，请重试', { type: 'error' }))
 }
 
 const filteredAndSortedBloggers = computed(() => {

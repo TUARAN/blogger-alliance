@@ -465,7 +465,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { trackLinkClick } from '../../utils/hybridStats.js'
+import { trackLinkClick } from '../../utils/stats.js'
 import { toolsData } from '../../data/bloggerInfo.js'
 import { matrixAllianceBloggers } from '../../data/matrixAlliance.js'
 
