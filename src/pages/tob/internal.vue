@@ -12,6 +12,7 @@
         </div>
         <div class="flex flex-wrap gap-2">
           <router-link
+            v-if="isUnlocked"
             to="/annual-report-2025"
             class="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg border border-orange-200 bg-orange-50 text-sm font-semibold text-orange-700 hover:bg-orange-100"
           >
