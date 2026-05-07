@@ -141,6 +141,7 @@ onMounted(async () => {
               <span class="text-base leading-none">🗂️</span>
               <span>联盟工作台</span>
             </router-link>
+            <WebLlmNavBot />
             <button
               v-if="isUnlocked"
               class="h-9 px-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50"

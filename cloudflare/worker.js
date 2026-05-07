@@ -843,6 +843,21 @@ async function handlePublic(request, env) {
   return json({ error: 'NOT_FOUND' }, { status: 404 })
 }
 
+function isWebLlmRoute(pathname) {
+  return pathname === '/workspace/web-llm' || pathname.startsWith('/workspace/web-llm/')
+}
+
+function withWebLlmIsolation(response) {
+  const headers = new Headers(response.headers)
+  headers.set('Cross-Origin-Embedder-Policy', 'credentialless')
+  headers.set('Cross-Origin-Opener-Policy', 'same-origin')
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  })
+}
+
 async function handleAssets(request, env) {
   if (!env.ASSETS) {
     return new Response('ASSETS binding not configured', { status: 500 })
@@ -853,11 +868,18 @@ async function handleAssets(request, env) {
   const acceptsHtml = (request.headers.get('Accept') || '').includes('text/html')
 
   if (response.status !== 404 || request.method !== 'GET' || !acceptsHtml) {
+    if (acceptsHtml && isWebLlmRoute(url.pathname)) {
+      return withWebLlmIsolation(response)
+    }
     return response
   }
 
   const indexUrl = new URL('/index.html', url)
-  return env.ASSETS.fetch(new Request(indexUrl.toString(), request))
+  const fallback = await env.ASSETS.fetch(new Request(indexUrl.toString(), request))
+  if (isWebLlmRoute(url.pathname)) {
+    return withWebLlmIsolation(fallback)
+  }
+  return fallback
 }
 
 export default {
