@@ -1,27 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50">
-    <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16 gap-4">
-          <div class="flex items-center min-w-0">
-            <router-link to="/tob" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors truncate">
-              🚀开发者博主联盟
-            </router-link>
-          </div>
-
-          <div class="flex items-center gap-2 overflow-x-auto whitespace-nowrap">
-            <router-link
-              to="/workspace"
-              class="inline-flex items-center gap-1.5 text-gray-700 transition-colors font-semibold text-base"
-            >
-              <span class="text-base leading-none">🗂️</span>
-              <span>联盟工作台</span>
-            </router-link>
-            <WebLlmNavBot />
-          </div>
-        </div>
-      </div>
-    </nav>
+    <AppNav />
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
       <div class="text-center mb-12 sm:mb-16">
@@ -486,7 +465,7 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { trackLinkClick } from '../../utils/hybridStats.js'
+import { trackLinkClick } from '../../utils/stats.js'
 import { toolsData } from '../../data/bloggerInfo.js'
 import { matrixAllianceBloggers } from '../../data/matrixAlliance.js'
 

@@ -661,6 +661,34 @@ export const bloggersData = [
   }
 ]
 
+// 合作热度排序优先级（按列表顺序：越靠前越高）
+// 匹配规则：博主姓名包含此关键词即视为命中
+// 调整这里即可重排首页"合作热度"排序，无需改动页面代码
+export const cooperationHeatOrder = [
+  '安东尼',
+  '主任',
+  '前端之虎',
+  '小包',
+  '中杯可乐',
+  '阿杆',
+  '浪里行舟',
+  'ErpanOmer',
+  '南方者',
+  '万少'
+]
+
+// 首页 hero 区域的合作品牌数据
+export const partnerBrands = [
+  { name: '亚马逊科技', img: '/src/img/brand/aws.png' },
+  { name: '百度文心大模型', img: '/src/img/brand/baidu.png' },
+  { name: '字节火山引擎', img: '/src/img/brand/bytedance.png' },
+  { name: 'Finclip小程序', img: '/src/img/brand/finclip.png' },
+  { name: '明基显示器', img: '/src/img/brand/benq.png' },
+  { name: '秦托邦社区', img: '/src/img/brand/qintopia.png' },
+  { name: 'PaddleOCR', img: '/src/img/brand/paddleocr.png' },
+  { name: '秒哒', img: '/src/img/brand/miao.png' }
+]
+
 // 产品工具数据
 export const toolsData = [
   {

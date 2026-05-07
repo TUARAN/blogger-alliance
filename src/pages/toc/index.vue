@@ -1,25 +1,15 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-green-50 to-blue-100">
-    <!-- 导航栏 -->
-    <nav class="bg-white shadow-sm border-b">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-          <div class="flex items-center min-w-0">
-            <router-link to="/" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
-              🚀开发者博主联盟
-            </router-link>
-          </div>
-          <div class="flex items-center space-x-4">
-            <router-link to="/tob" class="text-gray-600 hover:text-indigo-600 transition-colors">
-              博主联盟
-            </router-link>
-            <router-link :to="{ path: '/academy', query: { tab: 'matrix' } }" class="text-gray-600 hover:text-indigo-600 transition-colors">
-              矩阵看板
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <AppNav logo-to="/">
+      <template #links>
+        <router-link to="/tob" class="text-gray-600 hover:text-indigo-600 transition-colors font-medium text-base">
+          博主联盟
+        </router-link>
+        <router-link :to="{ path: '/academy', query: { tab: 'matrix' } }" class="text-gray-600 hover:text-indigo-600 transition-colors font-medium text-base">
+          矩阵看板
+        </router-link>
+      </template>
+    </AppNav>
 
     <!-- 主要内容 -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -141,7 +131,7 @@
 <script setup>
 import { ref } from 'vue'
 import { partnerBenefits } from '../../data/bloggerInfo.js'
-import { getBloggerStats } from '../../utils/analytics.js'
+import { getBloggerStats } from '../../utils/stats.js'
 
 // 博主统计信息
 const bloggerStats = ref(getBloggerStats())

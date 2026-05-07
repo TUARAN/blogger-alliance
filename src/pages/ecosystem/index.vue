@@ -68,46 +68,36 @@ const layers = [
 
 <template>
   <div class="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-cyan-50">
-    <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16 gap-4">
-          <div class="flex items-center min-w-0">
-            <router-link to="/tob" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors truncate">
-              🚀开发者博主联盟
-            </router-link>
-          </div>
+    <AppNav>
+      <template #links>
+        <router-link
+          to="/tob/internal"
+          class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
+          active-class="text-gray-700 font-semibold"
+        >
+          <span class="text-base leading-none">🗂️</span>
+          <span>内部数据中心</span>
+        </router-link>
 
-          <div class="flex items-center gap-4 lg:gap-6 overflow-x-auto whitespace-nowrap">
-            <router-link
-              to="/tob/internal"
-              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
-              active-class="text-gray-700 font-semibold"
-            >
-              <span class="text-base leading-none">🗂️</span>
-              <span>内部数据中心</span>
-            </router-link>
+        <router-link
+          :to="{ path: '/academy', query: { tab: 'matrix' } }"
+          class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
+          active-class="text-gray-700 font-semibold"
+        >
+          <span class="text-base leading-none">🧩</span>
+          <span>矩阵看板</span>
+        </router-link>
 
-            <router-link
-              :to="{ path: '/academy', query: { tab: 'matrix' } }"
-              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
-              active-class="text-gray-700 font-semibold"
-            >
-              <span class="text-base leading-none">🧩</span>
-              <span>矩阵看板</span>
-            </router-link>
-
-            <router-link
-              :to="{ path: '/academy', query: { tab: 'knowledge' } }"
-              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
-              active-class="text-gray-700 font-semibold"
-            >
-              <span class="text-base leading-none">📚</span>
-              <span>联盟学院</span>
-            </router-link>
-          </div>
-        </div>
-      </div>
-    </nav>
+        <router-link
+          :to="{ path: '/academy', query: { tab: 'knowledge' } }"
+          class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
+          active-class="text-gray-700 font-semibold"
+        >
+          <span class="text-base leading-none">📚</span>
+          <span>联盟学院</span>
+        </router-link>
+      </template>
+    </AppNav>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[calc(100vh-4rem)]">
       <section class="bg-white rounded-2xl border border-indigo-100 shadow-sm px-4 py-3 md:px-5 md:py-4">
