@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
+import WebLlmNavBot from './components/WebLlmFloatingEntry.vue'
 import './style.css'
 
 // 路由配置
@@ -71,4 +72,5 @@ const router = createRouter({
 
 const app = createApp(App)
 app.use(router)
+app.component('WebLlmNavBot', WebLlmNavBot)
 app.mount('#app') 

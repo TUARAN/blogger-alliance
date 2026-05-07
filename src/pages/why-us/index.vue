@@ -20,6 +20,7 @@
               <span class="text-base leading-none">🗂️</span>
               <span>联盟工作台</span>
             </router-link>
+            <WebLlmNavBot />
           </div>
         </div>
       </div>

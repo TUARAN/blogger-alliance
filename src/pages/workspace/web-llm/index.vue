@@ -1,402 +1,1200 @@
 <script setup>
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { RouterLink } from 'vue-router'
-import ChatMessage from '../../../components/workspace/web-llm/ChatMessage.vue'
-import LoadingModal from '../../../components/workspace/web-llm/LoadingModal.vue'
-import SessionList from '../../../components/workspace/web-llm/SessionList.vue'
-import { useWebLlmChat } from '../../../composables/useWebLlmChat'
-import { MODEL_OPTIONS, SUGGESTED_QUESTIONS } from '../../../services/webllm/constants'
+import { onMounted, onBeforeUnmount, ref } from 'vue'
 
-const {
-  activeSession,
-  activeSessionId,
-  applySuggestedQuestion,
-  canSend,
-  composerText,
-  createSession,
-  deleteSession,
-  handleImageSelect,
-  loadModel,
-  selectSession,
-  selectedModel,
-  sendMessage,
-  stopActiveGeneration,
-  sessions,
-  state,
-  uploadInputRef,
-  clearImage
-} = useWebLlmChat()
+const initialized = ref(false)
+const cleanupFns = []
 
-const messagesRef = ref(null)
-const textareaRef = ref(null)
+onMounted(async () => {
+  if (initialized.value) {
+    return
+  }
+  initialized.value = true
 
-const stageMeta = computed(() => {
-  const map = {
-    idle: {
-      label: '空闲',
-      detail: '等待新的提问。'
-    },
-    preparing: {
-      label: '准备中',
-      detail: '正在创建本次请求，并给浏览器一次渲染机会。'
-    },
-    building_prompt: {
-      label: '整理上下文',
-      detail: '正在从站点知识库里裁剪摘要、FAQ 和命中条目。'
-    },
-    encoding: {
-      label: '编码输入',
-      detail: '正在把 prompt 转成模型输入，这一步可能短暂占住主线程。'
-    },
-    generating: {
-      label: '生成中',
-      detail: state.generatedTokens > 0
-        ? '模型已经开始持续输出 token。'
-        : '模型已进入生成阶段，正在等待首个 token。'
-    },
-    complete: {
-      label: '已完成',
-      detail: '本轮回答已经生成完成。'
+  const {
+    AutoProcessor,
+    Qwen3_5ForConditionalGeneration,
+    RawImage,
+    TextStreamer,
+    env
+  } = await import('@huggingface/transformers')
+
+  class DOMTextStreamer extends TextStreamer {
+    constructor(tokenizer, callback) {
+      super(tokenizer, { skip_prompt: true, skip_special_tokens: true })
+      this.callback = callback
+      this.generatedText = ''
+      this.tokenCount = 0
+      this.startTime = null
+      this.firstPutDone = false
+      this.finalTps = 0
+    }
+
+    put(value) {
+      if (!this.firstPutDone) {
+        this.firstPutDone = true
+        this.startTime = performance.now()
+      } else {
+        const count = value.size !== undefined ? value.size : value.length || 1
+        this.tokenCount += count
+      }
+      super.put(value)
+    }
+
+    on_finalized_text(text, streamEnd) {
+      this.generatedText += text
+
+      let tps = 0
+      if (this.tokenCount > 0 && this.startTime) {
+        const elapsed = (performance.now() - this.startTime) / 1000
+        if (elapsed > 0) {
+          tps = Number((this.tokenCount / elapsed).toFixed(2))
+        }
+      }
+
+      this.finalTps = tps
+      this.callback(this.generatedText, streamEnd, tps)
     }
   }
 
-  return map[state.generationStage] || map.idle
-})
+  const DB_NAME = 'QwenChatDB'
+  const STORE_NAME = 'chats'
 
-const diagnostics = computed(() => ([
-  {
-    label: 'WebGPU',
-    ok: state.diagnostics.webgpuSupported,
-    detail: state.diagnostics.webgpuSupported ? 'navigator.gpu 已就绪' : '浏览器未暴露 navigator.gpu'
-  },
-  {
-    label: '安全上下文',
-    ok: state.diagnostics.secureContext,
-    detail: state.diagnostics.secureContext ? '当前处于安全上下文' : '请使用 localhost 或 HTTPS'
-  },
-  {
-    label: 'crossOriginIsolated',
-    ok: state.diagnostics.crossOriginIsolated,
-    detail: state.diagnostics.crossOriginIsolated ? 'COEP/COOP 已生效' : '当前页面未隔离'
+  let db
+  let currentChatId = null
+  let chatHistory = []
+  let processor = null
+  let model = null
+  let isLoading = false
+  let currentImageBase64 = null
+
+  const chatListEl = document.getElementById('chat-list')
+  const chatContainerEl = document.getElementById('chat-container')
+  const textInput = document.getElementById('text-input')
+  const sendBtn = document.getElementById('send-btn')
+  const loadModelBtn = document.getElementById('load-model-btn')
+  const modelSelect = document.getElementById('model-select')
+  const attachBtn = document.getElementById('attach-btn')
+  const fileInput = document.getElementById('file-input')
+  const previewContainer = document.getElementById('preview-container')
+  const previewImg = document.getElementById('preview-img')
+  const removeImgBtn = document.getElementById('remove-img-btn')
+  const loadingModal = document.getElementById('loading-modal')
+  const progressBar = document.getElementById('progress-bar')
+  const progressText = document.getElementById('progress-text')
+  const newChatBtn = document.getElementById('new-chat-btn')
+  const inputForm = document.getElementById('input-form')
+  const runtimeNoticeEl = document.getElementById('runtime-notice')
+
+  const MODEL_OPTIONS = {
+    'onnx-community/Qwen3.5-0.8B-ONNX': {
+      label: 'Qwen3.5-0.8B-ONNX',
+      notes: '推荐首测模型，体积最小，加载成功率最高。'
+    },
+    'onnx-community/Qwen3.5-2B-ONNX': {
+      label: 'Qwen3.5-2B-ONNX',
+      notes: '质量更稳，但对显存和下载体积要求更高。'
+    },
+    'onnx-community/Qwen3.5-4B-ONNX': {
+      label: 'Qwen3.5-4B-ONNX',
+      notes: '仅建议在高显存设备上尝试。'
+    }
   }
-]))
 
-function syncTextareaHeight() {
-  if (!textareaRef.value) {
-    return
+  env.allowLocalModels = false
+
+  function setRuntimeNotice(kind, message) {
+    runtimeNoticeEl.className = kind ? `notice notice-${kind}` : ''
+    runtimeNoticeEl.textContent = message || ''
   }
 
-  textareaRef.value.style.height = 'auto'
-  textareaRef.value.style.height = `${Math.min(textareaRef.value.scrollHeight, 220)}px`
-}
+  function getBrowserDiagnostics() {
+    const notices = []
 
-async function scrollToBottom() {
-  await nextTick()
+    if (!('gpu' in navigator)) {
+      notices.push('当前浏览器未暴露 WebGPU，模型无法在 GPU 上加载。建议使用新版 Chrome/Edge。')
+    }
 
-  if (!messagesRef.value) {
-    return
+    if (!window.isSecureContext) {
+      notices.push('当前页面不是安全上下文，部分浏览器特性可能受限。请通过 localhost 或 HTTPS 访问。')
+    }
+
+    if (!crossOriginIsolated) {
+      notices.push('当前页面未启用 cross-origin isolation，某些 ONNX/WebAssembly 优化可能不可用。')
+    }
+
+    return notices
   }
 
-  messagesRef.value.scrollTop = messagesRef.value.scrollHeight
-}
+  function initDB() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(DB_NAME, 1)
 
-async function handleSubmit() {
-  if (!canSend.value) {
-    return
+      request.onupgradeneeded = (event) => {
+        const instance = event.target.result
+        if (!instance.objectStoreNames.contains(STORE_NAME)) {
+          instance.createObjectStore(STORE_NAME, { keyPath: 'id' })
+        }
+      }
+
+      request.onsuccess = (event) => {
+        db = event.target.result
+        resolve()
+      }
+
+      request.onerror = (event) => reject(event.target.error)
+    })
   }
 
-  await sendMessage()
-  syncTextareaHeight()
-  scrollToBottom()
-}
+  function saveChat(chat) {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite')
+      tx.objectStore(STORE_NAME).put(chat)
+      tx.oncomplete = () => resolve()
+      tx.onerror = (event) => reject(event.target.error)
+    })
+  }
 
-function handleKeydown(event) {
-  if (event.key === 'Enter' && !event.shiftKey) {
+  function getAllChats() {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readonly')
+      const request = tx.objectStore(STORE_NAME).getAll()
+      request.onsuccess = () => resolve(request.result || [])
+      request.onerror = (event) => reject(event.target.error)
+    })
+  }
+
+  function removeChat(id) {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite')
+      tx.objectStore(STORE_NAME).delete(id)
+      tx.oncomplete = () => resolve()
+      tx.onerror = (event) => reject(event.target.error)
+    })
+  }
+
+  function scrollChatToBottom() {
+    chatContainerEl.scrollTop = chatContainerEl.scrollHeight
+  }
+
+  function autoResizeTextarea() {
+    textInput.style.height = 'auto'
+    textInput.style.height = `${Math.min(textInput.scrollHeight, 180)}px`
+  }
+
+  function setLoadingModal(visible) {
+    loadingModal.style.display = visible ? 'flex' : 'none'
+    loadingModal.setAttribute('aria-hidden', String(!visible))
+  }
+
+  function toggleComposer(disabled) {
+    sendBtn.disabled = disabled || !model || !processor
+    textInput.disabled = disabled
+    attachBtn.disabled = disabled
+  }
+
+  function resetPreview() {
+    currentImageBase64 = null
+    previewContainer.style.display = 'none'
+    previewImg.src = ''
+  }
+
+  function updateModelNotice() {
+    const details = MODEL_OPTIONS[modelSelect.value]
+    if (!details) {
+      setRuntimeNotice('', '')
+      return
+    }
+
+    const diagnostics = getBrowserDiagnostics()
+    const baseMessage = `${details.label}: ${details.notes}`
+    setRuntimeNotice(
+      diagnostics.length > 0 ? 'warn' : 'info',
+      diagnostics.length > 0
+        ? `${baseMessage} ${diagnostics.join(' ')}`
+        : baseMessage
+    )
+  }
+
+  function buildChatTitle(messages) {
+    if (messages.length === 0) {
+      return '新对话'
+    }
+
+    const firstText = messages[0].text?.trim()
+    if (firstText) {
+      return firstText.slice(0, 15)
+    }
+
+    return '图片对话'
+  }
+
+  async function updateDB() {
+    await saveChat({
+      id: currentChatId,
+      title: buildChatTitle(chatHistory),
+      messages: chatHistory
+    })
+    await loadSidebar()
+  }
+
+  async function loadSidebar() {
+    const chats = await getAllChats()
+    chats.sort((a, b) => b.id - a.id)
+    chatListEl.innerHTML = ''
+
+    chats.forEach((chat) => {
+      const item = document.createElement('div')
+      item.className = `chat-item ${chat.id === currentChatId ? 'active' : ''}`
+      item.onclick = () => selectChat(chat)
+
+      const title = document.createElement('div')
+      title.className = 'chat-title'
+      title.innerText = chat.title || '新对话'
+
+      const delBtn = document.createElement('button')
+      delBtn.className = 'delete-btn'
+      delBtn.type = 'button'
+      delBtn.innerText = '删除'
+      delBtn.onclick = async (event) => {
+        event.stopPropagation()
+        await removeChat(chat.id)
+
+        if (currentChatId === chat.id) {
+          createNewChat()
+        } else {
+          await loadSidebar()
+        }
+      }
+
+      item.appendChild(title)
+      item.appendChild(delBtn)
+      chatListEl.appendChild(item)
+    })
+  }
+
+  function appendEmptyState() {
+    if (chatHistory.length > 0 || chatContainerEl.children.length > 0) {
+      return
+    }
+
+    const hint = document.createElement('div')
+    hint.className = 'message ai-msg'
+    hint.innerHTML =
+      '<strong>准备就绪</strong><br />先加载模型，然后输入文字或上传图片开始对话。'
+    chatContainerEl.appendChild(hint)
+  }
+
+  function clearChatView() {
+    chatContainerEl.innerHTML = ''
+    appendEmptyState()
+  }
+
+  function createNewChat() {
+    currentChatId = Date.now()
+    chatHistory = []
+    clearChatView()
+    loadSidebar()
+  }
+
+  function appendMessageUI(role, text, imageBase64 = null, msgId = null) {
+    const isAssistant = role === 'assistant'
+    const msgDiv = document.createElement('div')
+    msgDiv.className = `message ${role === 'user' ? 'user-msg' : 'ai-msg'}`
+
+    if (msgId) {
+      msgDiv.id = msgId
+    }
+
+    if (imageBase64) {
+      const img = document.createElement('img')
+      img.src = imageBase64
+      img.alt = '用户上传图片'
+      msgDiv.appendChild(img)
+    }
+
+    const textSpan = document.createElement('span')
+    textSpan.innerText = text
+    msgDiv.appendChild(textSpan)
+
+    let statsDiv = null
+    if (isAssistant) {
+      statsDiv = document.createElement('div')
+      statsDiv.className = 'msg-stats'
+      msgDiv.appendChild(statsDiv)
+    }
+
+    if (chatContainerEl.children.length === 1 && chatHistory.length === 0) {
+      const firstChild = chatContainerEl.firstElementChild
+      if (firstChild && firstChild.innerText.includes('准备就绪')) {
+        chatContainerEl.innerHTML = ''
+      }
+    }
+
+    chatContainerEl.appendChild(msgDiv)
+    scrollChatToBottom()
+
+    return { textSpan, statsDiv }
+  }
+
+  async function selectChat(chat) {
+    currentChatId = chat.id
+    chatHistory = chat.messages || []
+    chatContainerEl.innerHTML = ''
+
+    chatHistory.forEach((msg) => {
+      const { statsDiv } = appendMessageUI(msg.role, msg.text, msg.image)
+      if (msg.tps && statsDiv) {
+        statsDiv.innerText = `速度: ${msg.tps} tokens/s`
+      }
+    })
+
+    appendEmptyState()
+    await loadSidebar()
+  }
+
+  async function loadModel() {
+    if (isLoading) {
+      return
+    }
+
+    const modelId = modelSelect.value
+    isLoading = true
+    loadModelBtn.disabled = true
+    modelSelect.disabled = true
+    progressBar.value = 0
+    progressText.innerText = '正在初始化...'
+    setLoadingModal(true)
+
+    const progressMap = {}
+
+    try {
+      setRuntimeNotice('info', `开始加载 ${MODEL_OPTIONS[modelId]?.label || modelId}。首次下载会较慢。`)
+
+      const progressCallback = (info) => {
+        if (info.status === 'progress') {
+          progressMap[info.file] = {
+            loaded: info.loaded,
+            total: info.total
+          }
+
+          let totalLoaded = 0
+          let totalSize = 0
+          Object.values(progressMap).forEach((entry) => {
+            totalLoaded += entry.loaded
+            totalSize += entry.total
+          })
+
+          const percent = totalSize > 0 ? (totalLoaded / totalSize) * 100 : 0
+          progressBar.value = percent
+          progressText.innerText = `下载中... ${Math.round(percent)}%`
+        } else if (info.status === 'ready') {
+          progressText.innerText = '加载至 WebGPU... 这可能会需要一段时间'
+        }
+      }
+
+      processor = await AutoProcessor.from_pretrained(modelId, {
+        progress_callback: progressCallback
+      })
+
+      model = await Qwen3_5ForConditionalGeneration.from_pretrained(modelId, {
+        dtype: {
+          embed_tokens: 'q4',
+          vision_encoder: 'fp16',
+          decoder_model_merged: 'q4'
+        },
+        device: 'webgpu',
+        progress_callback: progressCallback
+      })
+
+      loadModelBtn.innerText = '模型已加载'
+      setRuntimeNotice('success', `${MODEL_OPTIONS[modelId]?.label || modelId} 已加载，可以开始对话。`)
+      toggleComposer(false)
+    } catch (error) {
+      console.error(error)
+      const diagnostics = getBrowserDiagnostics()
+      const diagnosticText =
+        diagnostics.length > 0 ? `\n\n环境诊断：${diagnostics.join(' ')}` : ''
+
+      alert(
+        '模型加载失败。请确认浏览器支持 WebGPU，并查看控制台错误信息。\n' +
+          error.message +
+          diagnosticText
+      )
+      setRuntimeNotice(
+        'error',
+        `模型加载失败: ${error.message}${diagnostics.length > 0 ? ` ${diagnostics.join(' ')}` : ''}`
+      )
+      loadModelBtn.disabled = false
+      modelSelect.disabled = false
+    } finally {
+      isLoading = false
+      setLoadingModal(false)
+    }
+  }
+
+  async function buildConversationAndImages() {
+    const conversation = []
+    const rawImages = []
+
+    for (const msg of chatHistory) {
+      if (msg.role === 'user') {
+        const content = []
+        if (msg.image) {
+          content.push({ type: 'image' })
+          const rawImage = await RawImage.read(msg.image)
+          const resized = await rawImage.resize(448, 448)
+          rawImages.push(resized)
+        }
+        content.push({ type: 'text', text: msg.text || '' })
+        conversation.push({ role: 'user', content })
+        continue
+      }
+
+      conversation.push({
+        role: 'assistant',
+        content: [{ type: 'text', text: msg.text }]
+      })
+    }
+
+    return { conversation, rawImages }
+  }
+
+  async function handleSubmit(event) {
     event.preventDefault()
-    handleSubmit()
+
+    const text = textInput.value.trim()
+    if (!text && !currentImageBase64) {
+      return
+    }
+
+    if (!model || !processor) {
+      alert('请先加载模型。')
+      return
+    }
+
+    const userText = text
+    const userImg = currentImageBase64
+
+    textInput.value = ''
+    autoResizeTextarea()
+    resetPreview()
+
+    appendMessageUI('user', userText, userImg)
+    chatHistory.push({ role: 'user', text: userText, image: userImg })
+    await updateDB()
+
+    toggleComposer(true)
+
+    const aiMsgId = `ai-msg-${Date.now()}`
+    const { textSpan: aiTextSpan, statsDiv: aiStatsDiv } = appendMessageUI(
+      'assistant',
+      '思考中...',
+      null,
+      aiMsgId
+    )
+
+    try {
+      const { conversation, rawImages } = await buildConversationAndImages()
+      const promptText = processor.apply_chat_template(conversation, {
+        add_generation_prompt: true
+      })
+
+      const inputs =
+        rawImages.length > 0
+          ? await processor(
+              promptText,
+              rawImages.length === 1 ? rawImages[0] : rawImages
+            )
+          : await processor(promptText)
+
+      aiTextSpan.innerText = ''
+
+      const streamer = new DOMTextStreamer(
+        processor.tokenizer,
+        (newText, _isEnd, tps) => {
+          aiTextSpan.innerText = newText
+          if (tps > 0 && aiStatsDiv) {
+            aiStatsDiv.innerText = `速度: ${tps} tokens/s`
+          }
+          scrollChatToBottom()
+        }
+      )
+
+      await model.generate({
+        ...inputs,
+        max_new_tokens: 512,
+        streamer
+      })
+
+      chatHistory.push({
+        role: 'assistant',
+        text: aiTextSpan.innerText,
+        tps: streamer.finalTps
+      })
+      await updateDB()
+    } catch (error) {
+      console.error('生成报错:', error)
+      aiTextSpan.innerText = `生成出错: ${error.message}`
+    } finally {
+      toggleComposer(false)
+      textInput.focus()
+    }
   }
-}
 
-watch(() => composerText.value, () => {
-  syncTextareaHeight()
+  function bindEvents() {
+    const onNewChat = () => createNewChat()
+    const onLoadModel = () => loadModel()
+    const onModelChange = () => updateModelNotice()
+    const onAttach = () => fileInput.click()
+    const onFileChange = (event) => {
+      const file = event.target.files?.[0]
+      if (!file) {
+        return
+      }
+
+      const reader = new FileReader()
+      reader.onload = (loadEvent) => {
+        currentImageBase64 = loadEvent.target.result
+        previewImg.src = currentImageBase64
+        previewContainer.style.display = 'block'
+      }
+      reader.readAsDataURL(file)
+      fileInput.value = ''
+    }
+    const onRemoveImg = () => resetPreview()
+    const onTextInput = () => autoResizeTextarea()
+    const onTextKeydown = (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault()
+        inputForm.requestSubmit()
+      }
+    }
+
+    newChatBtn.addEventListener('click', onNewChat)
+    loadModelBtn.addEventListener('click', onLoadModel)
+    inputForm.addEventListener('submit', handleSubmit)
+    modelSelect.addEventListener('change', onModelChange)
+    attachBtn.addEventListener('click', onAttach)
+    fileInput.addEventListener('change', onFileChange)
+    removeImgBtn.addEventListener('click', onRemoveImg)
+    textInput.addEventListener('input', onTextInput)
+    textInput.addEventListener('keydown', onTextKeydown)
+
+    cleanupFns.push(() => {
+      newChatBtn.removeEventListener('click', onNewChat)
+      loadModelBtn.removeEventListener('click', onLoadModel)
+      inputForm.removeEventListener('submit', handleSubmit)
+      modelSelect.removeEventListener('change', onModelChange)
+      attachBtn.removeEventListener('click', onAttach)
+      fileInput.removeEventListener('change', onFileChange)
+      removeImgBtn.removeEventListener('click', onRemoveImg)
+      textInput.removeEventListener('input', onTextInput)
+      textInput.removeEventListener('keydown', onTextKeydown)
+    })
+  }
+
+  async function init() {
+    await initDB()
+    bindEvents()
+    autoResizeTextarea()
+    updateModelNotice()
+    await loadSidebar()
+    createNewChat()
+  }
+
+  init().catch((error) => {
+    console.error('初始化失败:', error)
+    alert(`应用初始化失败: ${error.message}`)
+  })
 })
 
-watch(() => activeSession.value?.messages.map((message) => `${message.role}:${message.text}:${message.tps}`).join('|'), () => {
-  scrollToBottom()
-})
-
-onMounted(() => {
-  syncTextareaHeight()
+onBeforeUnmount(() => {
+  cleanupFns.forEach((fn) => {
+    try {
+      fn()
+    } catch (error) {
+      console.error('cleanup failed:', error)
+    }
+  })
+  cleanupFns.length = 0
 })
 </script>
 
 <template>
-  <div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(251,191,36,0.18),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(14,165,233,0.12),_transparent_25%),linear-gradient(180deg,_#f8fafc_0%,_#eef2ff_100%)]">
-    <nav class="sticky top-0 z-40 border-b border-white/70 bg-white/80 backdrop-blur-md">
-      <div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-        <div class="min-w-0">
-          <RouterLink to="/workspace" class="text-lg font-bold text-slate-900 transition hover:text-amber-600">
-            联盟工作台 / 大模型问答
-          </RouterLink>
-        </div>
-        <RouterLink to="/workspace" class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900">
-          返回工作台
-        </RouterLink>
+  <div id="web-llm-app-shell">
+    <aside id="sidebar">
+      <div id="sidebar-header">
+        <button id="new-chat-btn" type="button">+ 新建对话</button>
       </div>
-    </nav>
+      <div id="chat-list" />
+    </aside>
 
-    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-      <section class="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
-        <div class="space-y-6">
-          <div class="rounded-[2rem] border border-white/70 bg-white/90 p-5 shadow-xl shadow-slate-200/40">
-            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-amber-600">Model Control</p>
-            <h2 class="mt-2 text-2xl font-bold text-slate-900">模型控制区</h2>
+    <main id="main">
+      <header id="header">
+        <div>
+          <p class="eyebrow">Browser-side Multimodal Chat</p>
+          <h1>Qwen WebGPU Chat</h1>
+        </div>
+        <div id="model-controls">
+          <select id="model-select" aria-label="选择模型">
+            <option value="onnx-community/Qwen3.5-0.8B-ONNX">
+              Qwen3.5-0.8B-ONNX
+            </option>
+            <option value="onnx-community/Qwen3.5-2B-ONNX">
+              Qwen3.5-2B-ONNX
+            </option>
+            <option value="onnx-community/Qwen3.5-4B-ONNX">
+              Qwen3.5-4B-ONNX
+            </option>
+          </select>
+          <button id="load-model-btn" type="button">加载模型</button>
+        </div>
+      </header>
 
-            <label class="mt-5 block text-sm font-semibold text-slate-700">模型选择</label>
-            <select
-              v-model="selectedModel"
-              :disabled="state.isLoadingModel || state.isGenerating"
-              class="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-400"
-            >
-              <option v-for="option in MODEL_OPTIONS" :key="option.id" :value="option.id">
-                {{ option.label }}
-              </option>
-            </select>
-            <p class="mt-2 text-sm leading-6 text-slate-600">
-              {{ MODEL_OPTIONS.find((item) => item.id === selectedModel)?.label }} · {{ MODEL_OPTIONS.find((item) => item.id === selectedModel)?.description }}
-            </p>
+      <section id="runtime-notice" aria-live="polite" />
 
-            <button
-              type="button"
-              :disabled="state.isLoadingModel || state.isGenerating"
-              class="mt-4 w-full rounded-2xl bg-amber-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500"
-              @click="loadModel"
-            >
-              {{ state.modelReady ? '重新加载模型' : '加载模型' }}
-            </button>
+      <section id="chat-container" aria-live="polite" />
 
-            <p class="mt-3 text-xs leading-5 text-slate-500">
-              页面默认不自动加载模型，请手动点击“加载模型”。
-            </p>
-            <p class="mt-1 text-xs leading-5 text-slate-500">
-              如果暂时不加载模型，页面会自动回退到站点知识库检索回答。
-            </p>
-
-            <div class="mt-5 grid gap-2">
-              <article
-                v-for="item in diagnostics"
-                :key="item.label"
-                :class="item.ok ? 'border-emerald-200 bg-emerald-50/70' : 'border-rose-200 bg-rose-50/70'"
-                class="rounded-xl border px-3 py-2"
-              >
-                <div class="flex items-center justify-between gap-2">
-                  <span class="text-[11px] font-semibold text-slate-900">{{ item.label }}</span>
-                  <span :class="item.ok ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'" class="rounded-full px-2 py-0.5 text-[10px] font-semibold">
-                    {{ item.ok ? '满足' : '不满足' }}
-                  </span>
-                </div>
-                <p class="mt-1 text-[11px] leading-4 text-slate-500">{{ item.detail }}</p>
-              </article>
-            </div>
-
-            <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-950 p-4 text-slate-100">
-              <div class="flex flex-wrap items-center gap-3">
-                <span class="rounded-full bg-white/10 px-3 py-1 text-xs font-semibold tracking-[0.2em] text-slate-300">
-                  STATUS
-                </span>
-                <span class="text-xs text-slate-200">{{ state.loadStatus }}</span>
-              </div>
-
-              <p v-if="state.loadError" class="mt-2 whitespace-pre-wrap text-xs leading-5 text-rose-300">
-                模型加载失败：{{ state.loadError }}
-              </p>
-              <p v-else-if="state.diagnostics.issues.length > 0" class="mt-2 text-xs leading-5 text-amber-300">
-                {{ state.diagnostics.issues.join(' ') }}
-              </p>
-            </div>
-          </div>
-
-          <SessionList
-            :active-session-id="activeSessionId"
-            :sessions="sessions"
-            @create="createSession"
-            @select="selectSession"
-            @delete="deleteSession"
+      <section id="input-wrapper">
+        <div id="preview-container">
+          <img id="preview-img" src="" alt="图片预览">
+          <button id="remove-img-btn" type="button" aria-label="移除图片">✕</button>
+        </div>
+        <form id="input-form">
+          <input
+            type="file"
+            id="file-input"
+            accept="image/*"
+            :style="{ display: 'none' }"
+          >
+          <button
+            type="button"
+            class="icon-btn"
+            id="attach-btn"
+            title="上传图片"
+            aria-label="上传图片"
+          >
+            📷
+          </button>
+          <textarea
+            id="text-input"
+            placeholder="输入消息 (Shift + Enter 换行)..."
+            rows="1"
           />
-        </div>
-
-        <div class="rounded-[2rem] border border-white/70 bg-white/90 p-4 shadow-xl shadow-slate-200/40 sm:p-6">
-          <div class="mb-4">
-            <p class="text-xs font-semibold uppercase tracking-[0.25em] text-amber-600">Chat</p>
-            <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">大模型问答</h1>
-          </div>
-
-            <div
-              ref="messagesRef"
-              class="flex h-[52vh] min-h-[420px] flex-col gap-4 overflow-y-auto rounded-[1.5rem] bg-slate-50/80 p-4"
-            >
-              <template v-if="activeSession?.messages.length">
-                <ChatMessage
-                  v-for="(message, index) in activeSession.messages"
-                  :key="`${message.role}-${index}`"
-                  :message="message"
-                />
-              </template>
-              <div v-else class="flex h-full items-center justify-center rounded-[1.5rem] border border-dashed border-slate-200 bg-white text-center">
-                <div class="max-w-md px-6">
-                  <p class="text-base font-semibold text-slate-900">先加载模型，再发起第一条提问。</p>
-                  <p class="mt-2 text-sm leading-6 text-slate-500">
-                    支持文本输入，并预留图片上传、多会话历史和 IndexedDB 本地持久化。
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div v-if="state.imagePreview" class="mt-4 rounded-3xl border border-slate-200 bg-slate-50 p-4">
-              <div class="flex items-start justify-between gap-4">
-                <div class="flex min-w-0 items-center gap-4">
-                  <img :src="state.imagePreview" alt="图片预览" class="h-20 w-20 rounded-2xl object-cover">
-                  <div class="min-w-0">
-                    <p class="truncate text-sm font-semibold text-slate-900">{{ state.imageName }}</p>
-                    <p class="mt-1 text-xs text-slate-500">{{ state.imageMimeType || 'image/*' }}</p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  class="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-900"
-                  @click="clearImage"
-                >
-                  移除
-                </button>
-              </div>
-            </div>
-
-            <p v-if="state.inferenceError" class="mt-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-              推理错误：{{ state.inferenceError }}
-            </p>
-
-            <p
-              v-if="state.fallbackMode === 'knowledge'"
-              class="mt-4 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-700"
-            >
-              当前回答使用知识库兜底：{{ state.fallbackReason || '未使用 WebGPU 推理。' }}
-            </p>
-
-            <div
-              v-if="state.isGenerating"
-              class="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
-            >
-              <div class="flex flex-wrap items-center gap-3">
-                <span class="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold tracking-[0.16em] text-amber-900">
-                  {{ stageMeta.label }}
-                </span>
-                <span class="inline-flex items-center gap-2 text-xs font-medium text-amber-800">
-                  <span class="relative inline-flex h-2.5 w-2.5">
-                    <span class="absolute inset-0 animate-ping rounded-full bg-amber-400/70" />
-                    <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-500" />
-                  </span>
-                  {{ stageMeta.detail }}
-                </span>
-                <span>总耗时 {{ (state.generationElapsedMs / 1000).toFixed(1) }}s</span>
-                <span>Token {{ state.generatedTokens }}</span>
-                <span v-if="state.generationTps">{{ state.generationTps }} tokens/s</span>
-              </div>
-              <div class="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs leading-5 text-amber-900/80">
-                <span>Prompt 处理 {{ (state.promptProcessingMs / 1000).toFixed(2) }}s</span>
-                <span>首 Token {{ state.firstTokenMs !== null ? `${(state.firstTokenMs / 1000).toFixed(2)}s` : '--' }}</span>
-                <span>生成耗时 {{ (state.totalGenerationMs / 1000).toFixed(2) }}s</span>
-                <span>命中条目 {{ state.contextEntryCount }}</span>
-              </div>
-              <p class="mt-2 text-xs leading-5 text-amber-800/80">
-                当前只注入摘要、FAQ 和命中条目，避免每次全量塞入整份知识库。
-              </p>
-              <p class="mt-1 text-xs leading-5 text-amber-900/75">
-                {{ state.generationHint }}
-              </p>
-              <div class="mt-3">
-                <button
-                  type="button"
-                  class="rounded-full border border-amber-300 bg-white px-3 py-1.5 text-xs font-semibold text-amber-900 transition hover:border-amber-400 hover:bg-amber-100"
-                  @click="stopActiveGeneration('已手动停止生成', false)"
-                >
-                  停止生成
-                </button>
-              </div>
-              <div v-if="state.contextSelectedTerms.length > 0" class="mt-2 flex flex-wrap gap-2">
-                <span
-                  v-for="term in state.contextSelectedTerms"
-                  :key="term"
-                  class="rounded-full bg-white/70 px-2.5 py-1 text-[11px] font-medium text-amber-900"
-                >
-                  {{ term }}
-                </span>
-              </div>
-            </div>
-
-            <div class="mt-4 rounded-[1.75rem] border border-slate-200 bg-white p-3 shadow-sm">
-              <div class="flex flex-wrap gap-2 px-2 pb-3">
-                <button
-                  v-for="question in SUGGESTED_QUESTIONS"
-                  :key="question"
-                  type="button"
-                  class="rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-800 transition hover:border-amber-300 hover:bg-amber-100"
-                  @click="applySuggestedQuestion(question)"
-                >
-                  {{ question }}
-                </button>
-              </div>
-
-              <textarea
-                ref="textareaRef"
-                v-model="composerText"
-                :disabled="state.isGenerating"
-                rows="1"
-                class="max-h-[220px] min-h-[56px] w-full resize-none border-0 bg-transparent px-2 py-2 text-sm leading-7 text-slate-900 outline-none placeholder:text-slate-400 disabled:cursor-not-allowed"
-                placeholder="输入你的问题。Enter 发送，Shift + Enter 换行。"
-                @keydown="handleKeydown"
-              />
-
-              <div class="mt-3 flex flex-col gap-3 border-t border-slate-100 pt-3 sm:flex-row sm:items-center sm:justify-between">
-                <div class="flex flex-wrap items-center gap-2">
-                  <input
-                    ref="uploadInputRef"
-                    type="file"
-                    accept="image/*"
-                    class="hidden"
-                    :disabled="state.isGenerating"
-                    @change="handleImageSelect"
-                  >
-                  <button
-                    type="button"
-                    :disabled="state.isGenerating"
-                    class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-white disabled:cursor-not-allowed disabled:text-slate-400"
-                    @click="uploadInputRef?.click()"
-                  >
-                    上传图片
-                  </button>
-                  <span class="text-xs text-slate-400">
-                    {{ state.modelReady ? '模型已就绪，可开始本地推理' : '未加载模型时将自动使用知识库兜底回答' }}
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  :disabled="!canSend"
-                  class="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500"
-                  @click="handleSubmit"
-                >
-                  {{ state.isGenerating ? '生成中...' : '发送' }}
-                </button>
-              </div>
-            </div>
-        </div>
+          <button type="submit" id="send-btn" disabled>发送</button>
+        </form>
       </section>
-    </main>
 
-    <LoadingModal
-      :open="state.isLoadingModel"
-      :progress="state.loadProgress"
-      :status="state.loadStatus"
-    />
+      <div id="loading-modal" aria-hidden="true">
+        <div class="modal-box">
+          <h2>加载模型中</h2>
+          <div id="progress-text">正在初始化...</div>
+          <progress id="progress-bar" value="0" max="100" />
+          <p class="modal-tip">首次加载会自动下载模型文件，请耐心等待。</p>
+        </div>
+      </div>
+    </main>
   </div>
 </template>
+
+<style>
+#web-llm-app-shell {
+  --primary: #14532d;
+  --primary-strong: #0f3f23;
+  --accent: #f59e0b;
+  --sidebar-bg: linear-gradient(180deg, #f4f7f1 0%, #eef3e7 100%);
+  --page-bg: radial-gradient(circle at top, #fff7e8 0%, #f9faf5 38%, #f3f6ef 100%);
+  --panel-bg: rgba(255, 255, 255, 0.82);
+  --panel-border: rgba(15, 63, 35, 0.12);
+  --text-main: #142013;
+  --text-muted: #5d6858;
+  --msg-user: linear-gradient(135deg, #14532d 0%, #1d6b3d 100%);
+  --msg-ai: #f7f1e4;
+  --shadow-soft: 0 24px 60px rgba(20, 32, 19, 0.08);
+
+  display: flex;
+  min-height: 100vh;
+  font-family:
+    "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC",
+    sans-serif;
+  color: var(--text-main);
+  background: var(--page-bg);
+}
+
+#web-llm-app-shell *,
+#web-llm-app-shell *::before,
+#web-llm-app-shell *::after {
+  box-sizing: border-box;
+}
+
+#web-llm-app-shell button,
+#web-llm-app-shell textarea,
+#web-llm-app-shell select,
+#web-llm-app-shell input {
+  font: inherit;
+  margin: 0;
+}
+
+#web-llm-app-shell h1,
+#web-llm-app-shell h2,
+#web-llm-app-shell p {
+  margin: 0;
+}
+
+#web-llm-app-shell #sidebar {
+  width: 280px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid rgba(20, 83, 45, 0.12);
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(14px);
+}
+
+#web-llm-app-shell #sidebar-header {
+  padding: 18px;
+  border-bottom: 1px solid rgba(20, 83, 45, 0.12);
+}
+
+#web-llm-app-shell #new-chat-btn {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+  box-shadow: 0 10px 24px rgba(20, 83, 45, 0.22);
+}
+
+#web-llm-app-shell #new-chat-btn:hover {
+  background: var(--primary-strong);
+  transform: translateY(-1px);
+}
+
+#web-llm-app-shell #chat-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+}
+
+#web-llm-app-shell .chat-item {
+  padding: 12px 12px 12px 14px;
+  margin-bottom: 8px;
+  border-radius: 14px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid transparent;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+#web-llm-app-shell .chat-item:hover {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(20, 83, 45, 0.1);
+  transform: translateX(2px);
+}
+
+#web-llm-app-shell .chat-item.active {
+  background: rgba(20, 83, 45, 0.1);
+  border-color: rgba(20, 83, 45, 0.18);
+  color: var(--primary-strong);
+}
+
+#web-llm-app-shell .chat-title {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+#web-llm-app-shell .delete-btn {
+  color: #b42318;
+  font-size: 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0 4px;
+  display: none;
+}
+
+#web-llm-app-shell .chat-item:hover .delete-btn {
+  display: block;
+}
+
+#web-llm-app-shell #main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 18px;
+}
+
+#web-llm-app-shell #header {
+  padding: 18px 22px;
+  border: 1px solid var(--panel-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--panel-bg);
+  backdrop-filter: blur(18px);
+  border-radius: 22px;
+  box-shadow: var(--shadow-soft);
+}
+
+#web-llm-app-shell .eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+#web-llm-app-shell #header h1 {
+  font-size: 26px;
+  line-height: 1.1;
+}
+
+#web-llm-app-shell #model-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+#web-llm-app-shell select {
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(20, 83, 45, 0.12);
+  min-width: 250px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+#web-llm-app-shell #load-model-btn,
+#web-llm-app-shell #send-btn {
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+#web-llm-app-shell #load-model-btn {
+  padding: 11px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+#web-llm-app-shell #load-model-btn:hover,
+#web-llm-app-shell #send-btn:hover {
+  background: var(--primary-strong);
+  transform: translateY(-1px);
+}
+
+#web-llm-app-shell #load-model-btn:disabled,
+#web-llm-app-shell #send-btn:disabled {
+  background: #93a19a;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#web-llm-app-shell #chat-container {
+  flex: 1;
+  overflow-y: auto;
+  margin: 18px 0;
+  padding: 8px 6px 8px 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#web-llm-app-shell #runtime-notice {
+  margin-top: 16px;
+  border-radius: 16px;
+  padding: 12px 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 21px;
+}
+
+#web-llm-app-shell .notice {
+  border: 1px solid transparent;
+}
+
+#web-llm-app-shell .notice-info {
+  background: rgba(20, 83, 45, 0.06);
+  border-color: rgba(20, 83, 45, 0.1);
+  color: #204529;
+}
+
+#web-llm-app-shell .notice-warn {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.18);
+  color: #7a4a00;
+}
+
+#web-llm-app-shell .notice-error {
+  background: rgba(180, 35, 24, 0.08);
+  border-color: rgba(180, 35, 24, 0.14);
+  color: #8f2419;
+}
+
+#web-llm-app-shell .notice-success {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.18);
+  color: #166534;
+}
+
+#web-llm-app-shell .message {
+  max-width: min(760px, 82%);
+  padding: 14px 16px;
+  border-radius: 18px;
+  line-height: 1.6;
+  font-size: 15px;
+  word-wrap: break-word;
+  box-shadow: 0 14px 30px rgba(20, 32, 19, 0.08);
+  animation: web-llm-rise-in 220ms ease;
+}
+
+#web-llm-app-shell .message img {
+  max-width: 320px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+#web-llm-app-shell .user-msg {
+  background: var(--msg-user);
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+#web-llm-app-shell .ai-msg {
+  background: var(--msg-ai);
+  color: var(--text-main);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+#web-llm-app-shell .msg-stats {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 8px;
+  font-family:
+    ui-monospace, SFMono-Regular, Consolas, "Courier New", monospace;
+}
+
+#web-llm-app-shell #input-wrapper {
+  border: 1px solid var(--panel-border);
+  background: var(--panel-bg);
+  backdrop-filter: blur(18px);
+  border-radius: 22px;
+  padding: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+#web-llm-app-shell #preview-container {
+  display: none;
+  margin-bottom: 12px;
+  position: relative;
+  width: max-content;
+}
+
+#web-llm-app-shell #preview-img {
+  max-height: 110px;
+  border-radius: 12px;
+  border: 1px solid rgba(20, 83, 45, 0.12);
+}
+
+#web-llm-app-shell #remove-img-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #b42318;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#web-llm-app-shell #input-form {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+#web-llm-app-shell #text-input {
+  flex: 1;
+  padding: 12px 14px;
+  border: 1px solid rgba(20, 83, 45, 0.12);
+  border-radius: 16px;
+  resize: none;
+  min-height: 48px;
+  max-height: 180px;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+#web-llm-app-shell #text-input:focus,
+#web-llm-app-shell select:focus {
+  outline: 2px solid rgba(245, 158, 11, 0.35);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+#web-llm-app-shell .icon-btn {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(20, 83, 45, 0.12);
+  border-radius: 14px;
+  padding: 12px;
+  cursor: pointer;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#web-llm-app-shell .icon-btn:hover {
+  background: #fff;
+}
+
+#web-llm-app-shell #send-btn {
+  padding: 0 20px;
+  height: 48px;
+  border-radius: 14px;
+  font-weight: 600;
+}
+
+#web-llm-app-shell #loading-modal {
+  position: absolute;
+  inset: 0;
+  background: rgba(248, 249, 243, 0.85);
+  z-index: 100;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+#web-llm-app-shell .modal-box {
+  background: #fffef9;
+  padding: 28px;
+  border-radius: 24px;
+  box-shadow: var(--shadow-soft);
+  width: min(440px, 100%);
+  text-align: center;
+  border: 1px solid rgba(20, 83, 45, 0.08);
+}
+
+#web-llm-app-shell .modal-box h2 {
+  margin-bottom: 14px;
+}
+
+#web-llm-app-shell #progress-text {
+  margin-bottom: 15px;
+  font-weight: 500;
+  color: #374151;
+}
+
+#web-llm-app-shell progress {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  appearance: none;
+}
+
+#web-llm-app-shell progress::-webkit-progress-bar {
+  background-color: #ece7dc;
+  border-radius: 999px;
+}
+
+#web-llm-app-shell progress::-webkit-progress-value {
+  background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+  border-radius: 999px;
+}
+
+#web-llm-app-shell .modal-tip {
+  margin-top: 15px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+@keyframes web-llm-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 960px) {
+  #web-llm-app-shell {
+    flex-direction: column;
+  }
+
+  #web-llm-app-shell #sidebar {
+    width: 100%;
+    max-height: 220px;
+  }
+
+  #web-llm-app-shell #main {
+    padding: 12px;
+  }
+
+  #web-llm-app-shell #header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  #web-llm-app-shell #model-controls {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #web-llm-app-shell select {
+    min-width: 0;
+    width: 100%;
+  }
+
+  #web-llm-app-shell .message {
+    max-width: 92%;
+  }
+}
+
+@media (max-width: 640px) {
+  #web-llm-app-shell #input-form {
+    flex-wrap: wrap;
+  }
+
+  #web-llm-app-shell .icon-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  #web-llm-app-shell #send-btn {
+    width: 100%;
+  }
+}
+</style>
