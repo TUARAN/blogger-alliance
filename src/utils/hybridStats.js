@@ -37,14 +37,10 @@ export function getHybridStats() {
 
 // 记录用户交互事件
 export function trackUserInteraction(eventName, parameters = {}) {
-  // 发送到 Google Analytics
   trackEvent(eventName, {
     ...parameters,
     timestamp: new Date().toISOString()
   })
-  
-  // 也可以记录到本地存储（可选）
-  console.log('User interaction tracked:', eventName, parameters)
 }
 
 // 记录按钮点击

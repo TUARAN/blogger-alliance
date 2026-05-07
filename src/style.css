@@ -119,4 +119,13 @@
   .animate-scroll:hover {
     animation-play-state: paused;
   }
-} 
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-scroll,
+    .animate-pulse,
+    .animate-float,
+    .animate-nudge-x {
+      animation: none !important;
+    }
+  }
+}
