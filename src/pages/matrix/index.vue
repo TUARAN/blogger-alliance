@@ -186,28 +186,7 @@ function formatNumber(value) {
 
 <template>
   <div class="min-h-screen bg-[#f6f7f8]">
-    <nav class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16 gap-4">
-          <div class="flex items-center min-w-0">
-            <router-link to="/tob" class="text-xl font-bold text-gray-900 hover:text-indigo-700 transition-colors">
-              🚀开发者博主联盟
-            </router-link>
-          </div>
-
-          <div class="flex items-center gap-3 overflow-x-auto whitespace-nowrap">
-            <router-link
-              to="/workspace"
-              class="inline-flex items-center gap-1.5 text-gray-700 transition-colors font-semibold text-base"
-            >
-              <span class="text-base leading-none">🗂️</span>
-              <span>联盟工作台</span>
-            </router-link>
-            <WebLlmNavBot />
-          </div>
-        </div>
-      </div>
-    </nav>
+    <AppNav />
 
     <main class="max-w-[1440px] mx-auto px-4 py-5 sm:px-6 lg:px-8">
       <section class="rounded-[24px] border border-gray-200 bg-white px-6 py-6 md:px-8">

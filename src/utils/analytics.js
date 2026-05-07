@@ -48,37 +48,20 @@ export function formatFollowersCount(count) {
   return count.toString()
 }
 
+// 累计投放推文，非数据可推导，作为业务指标手动维护
+const TOTAL_POSTS = 300
+
 // 获取博主统计信息
 export function getBloggerStats() {
   const totalFollowers = calculateTotalFollowers()
   const bloggerCount = bloggersData.length
-  
-  const computedStats = {
+
+  return {
     totalFollowers,
     formattedFollowers: formatFollowersCount(totalFollowers),
     bloggerCount,
-    averageFollowers: Math.floor(totalFollowers / Math.max(bloggerCount, 1))
-  }
-
-  const manualOverrides = {
-    formattedFollowers: '220w',
-    totalFollowers: 2200000,
-    totalPosts: 300,
-    bloggerCount: 30
-  }
-
-  const merged = {
-    ...computedStats,
-    ...manualOverrides
-  }
-
-  const finalBloggerCount = manualOverrides.bloggerCount ?? bloggersData.length
-  const finalTotalFollowers = manualOverrides.totalFollowers ?? totalFollowers
-
-  return {
-    ...merged,
-    bloggerCount: finalBloggerCount,
-    averageFollowers: Math.floor(finalTotalFollowers / Math.max(finalBloggerCount, 1))
+    averageFollowers: Math.floor(totalFollowers / Math.max(bloggerCount, 1)),
+    totalPosts: TOTAL_POSTS
   }
 }
 

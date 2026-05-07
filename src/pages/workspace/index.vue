@@ -1,27 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-blue-100">
-    <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16 gap-4">
-          <div class="flex items-center min-w-0">
-            <router-link to="/tob" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors truncate">
-              🚀开发者博主联盟
-            </router-link>
-          </div>
-
-          <div class="flex items-center gap-4 lg:gap-6 overflow-x-auto whitespace-nowrap">
-            <router-link
-              to="/workspace"
-              class="inline-flex items-center gap-1.5 text-gray-700 transition-colors font-semibold text-base"
-            >
-              <span class="text-base leading-none">🗂️</span>
-              <span>联盟工作台</span>
-            </router-link>
-            <WebLlmNavBot />
-          </div>
-        </div>
-      </div>
-    </nav>
+    <AppNav workspace-active />
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
       <div class="max-w-3xl">

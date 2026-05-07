@@ -124,35 +124,24 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-blue-100">
-    <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16 gap-4">
-          <div class="flex items-center min-w-0">
-            <router-link to="/tob" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors truncate">
-              🚀开发者博主联盟
-            </router-link>
-          </div>
-
-          <div class="flex items-center gap-3 lg:gap-5 overflow-x-auto whitespace-nowrap">
-            <router-link
-              to="/workspace"
-              class="inline-flex items-center gap-1.5 text-gray-700 transition-colors font-semibold text-base"
-            >
-              <span class="text-base leading-none">🗂️</span>
-              <span>联盟工作台</span>
-            </router-link>
-            <WebLlmNavBot />
-            <button
-              v-if="isUnlocked"
-              class="h-9 px-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50"
-              @click="lockAnnualReport"
-            >
-              锁定
-            </button>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <AppNav>
+      <template #links>
+        <router-link
+          to="/workspace"
+          class="inline-flex items-center gap-1.5 text-gray-700 transition-colors font-semibold text-base"
+        >
+          <span class="text-base leading-none">🗂️</span>
+          <span>联盟工作台</span>
+        </router-link>
+        <button
+          v-if="isUnlocked"
+          class="h-9 px-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50"
+          @click="lockAnnualReport"
+        >
+          锁定
+        </button>
+      </template>
+    </AppNav>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
       <section

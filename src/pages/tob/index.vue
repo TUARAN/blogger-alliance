@@ -1,31 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-    <!-- 导航栏 -->
-    <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16 gap-4">
-          <!-- 左侧：Logo -->
-          <div class="flex items-center min-w-0">
-            <router-link to="/" class="text-xl font-bold text-indigo-600 hover:text-indigo-800 transition-colors">
-              🚀开发者博主联盟
-            </router-link>
-          </div>
-          
-          <!-- 右侧：导航链接 -->
-          <div class="flex items-center gap-4 lg:gap-6">
-            <router-link
-              to="/workspace"
-              class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
-              active-class="text-gray-700 font-semibold"
-            >
-              <span class="text-base leading-none">🗂️</span>
-              <span>联盟工作台</span>
-            </router-link>
-            <WebLlmNavBot />
-          </div>
-        </div>
-      </div>
-    </nav>
+    <AppNav logo-to="/" />
 
     <!-- Hero 区域 -->
     <section class="relative overflow-hidden">

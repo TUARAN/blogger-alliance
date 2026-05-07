@@ -2,12 +2,12 @@ import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
 import WebLlmNavBot from './components/WebLlmFloatingEntry.vue'
+import AppNav from './components/AppNav.vue'
 import './style.css'
 
 // 路由配置
 const routes = [
   { path: '/', component: () => import('./pages/tob/index.vue') },
-  { path: '/about', component: () => import('./views/Home.vue') },
   { path: '/tob', component: () => import('./pages/tob/index.vue') },
   { path: '/cases', component: () => import('./pages/cases/index.vue') },
   { path: '/tob/internal', component: () => import('./pages/tob/internal.vue') },
@@ -31,7 +31,8 @@ const routes = [
   { path: '/ecosystem', component: () => import('./pages/ecosystem-position/index.vue') },
   { path: '/why-us', component: () => import('./pages/why-us/index.vue') },
   { path: '/toc', component: () => import('./pages/toc/index.vue') },
-  { path: '/academy', component: () => import('./pages/academy/index.vue') }
+  { path: '/academy', component: () => import('./pages/academy/index.vue') },
+  { path: '/:pathMatch(.*)*', component: () => import('./pages/not-found/index.vue') }
 ]
 
 const router = createRouter({
@@ -73,4 +74,5 @@ const router = createRouter({
 const app = createApp(App)
 app.use(router)
 app.component('WebLlmNavBot', WebLlmNavBot)
+app.component('AppNav', AppNav)
 app.mount('#app') 
