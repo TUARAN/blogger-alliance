@@ -658,7 +658,26 @@ export const bloggersData = [
       achievements: ['掘金优秀创作者', '文章200余篇、阅读量150万+', '多平台技术输出、粉丝6K+'],
       recentPosts: ['GitHub 热门项目与技术趋势前沿专栏', '零基础部署 n8n：火山引擎 ECS + 轩辕专业版详细教程（2026年最新）', '🎙️ 2025 年主流 AI 语音输入工具测评：解锁高效生产力的关键']
     }
-  }
+  },
+  {
+    id: 44,
+    name: '前端开发爱好者',
+    avatar: 'https://files.seeusercontent.com/2026/05/07/4Pge/gzh_logo.jpg',
+    introduction: '多平台技术博主，公众号「前端开发爱好者」运营者，掘金优秀创作者、CSDN 博客专家，文章 1000 余篇、阅读量 500 万+，专注前端开发技术分享与 AI Agent 落地实践',
+    followers: '50K+',
+    socialAccounts: [
+      { platform: '微信公众号：前端开发爱好者', url: 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUzNTk3MjE2Ng==#wechat_redirect', icon: '🌏' },
+      { platform: '知乎', url: 'https://www.zhihu.com/people/xsp-25', icon: '📚' },
+      { platform: '掘金', url: 'https://juejin.cn/user/1116759545088190', icon: '📝' },
+
+    ],
+    expandedContent: {
+      specialties: ['前端开发', '技术写作', '技术分享', 'AI Agent'],
+      achievements: ['掘金优秀创作者', 'CSDN 博客专家', '文章 1000 余篇、阅读量 500 万+', '多平台技术输出、粉丝 50K+'],
+      recentPosts: ['前端学习笔记', 'Vue.js 实战技巧', 'AI Agent 落地实践']
+    }
+  },
+
 ]
 
 // 产品工具数据
