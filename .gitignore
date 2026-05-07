@@ -39,3 +39,7 @@ tmp/
 private/
 src/data/commercialDeals.source.json
 src/data/promotionReports.source.json
+
+# Claude Code 本地状态（worktree、个人设置）
+.claude/worktrees/
+.claude/settings.local.json
