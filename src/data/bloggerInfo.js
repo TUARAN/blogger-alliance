@@ -1,3 +1,12 @@
+import awsLogo from '../img/brand/aws.png'
+import baiduLogo from '../img/brand/baidu.png'
+import bytedanceLogo from '../img/brand/bytedance.png'
+import finclipLogo from '../img/brand/finclip.png'
+import benqLogo from '../img/brand/benq.png'
+import qintopiaLogo from '../img/brand/qintopia.png'
+import paddleocrLogo from '../img/brand/paddleocr.png'
+import miaoLogo from '../img/brand/miao.png'
+
 // 博主团队数据 - 动态计算博主数量和覆盖粉丝数
 export const bloggersData = [
   {
@@ -698,14 +707,14 @@ export const cooperationHeatOrder = [
 
 // 首页 hero 区域的合作品牌数据
 export const partnerBrands = [
-  { name: '亚马逊科技', img: '/src/img/brand/aws.png' },
-  { name: '百度文心大模型', img: '/src/img/brand/baidu.png' },
-  { name: '字节火山引擎', img: '/src/img/brand/bytedance.png' },
-  { name: 'Finclip小程序', img: '/src/img/brand/finclip.png' },
-  { name: '明基显示器', img: '/src/img/brand/benq.png' },
-  { name: '秦托邦社区', img: '/src/img/brand/qintopia.png' },
-  { name: 'PaddleOCR', img: '/src/img/brand/paddleocr.png' },
-  { name: '秒哒', img: '/src/img/brand/miao.png' }
+  { name: '亚马逊科技', img: awsLogo },
+  { name: '百度文心大模型', img: baiduLogo },
+  { name: '字节火山引擎', img: bytedanceLogo },
+  { name: 'Finclip小程序', img: finclipLogo },
+  { name: '明基显示器', img: benqLogo },
+  { name: '秦托邦社区', img: qintopiaLogo },
+  { name: 'PaddleOCR', img: paddleocrLogo },
+  { name: '秒哒', img: miaoLogo }
 ]
 
 // 产品工具数据
