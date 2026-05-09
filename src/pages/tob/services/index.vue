@@ -4,37 +4,51 @@
 
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:pl-32">
       <div class="hidden lg:block fixed left-6 top-32 z-30">
-        <div class="flex flex-col gap-3 bg-white/90 backdrop-blur-md rounded-xl p-4 shadow-lg border border-gray-200/50">
+        <div class="flex flex-col gap-2 bg-white/90 backdrop-blur-md rounded-xl p-4 shadow-lg border border-gray-200/50">
           <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 mb-1">
             导航
           </div>
           <a
+            href="#overview"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-200 whitespace-nowrap min-w-[140px] text-gray-600 hover:bg-gray-50 hover:text-slate-900"
+          >
+            <span>📊</span>
+            <span>服务总览</span>
+          </a>
+          <a
             href="#tweet"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 whitespace-nowrap min-w-[120px] text-gray-600 hover:bg-gray-50 hover:text-indigo-600"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-200 whitespace-nowrap min-w-[140px] text-gray-600 hover:bg-gray-50 hover:text-indigo-600"
           >
             <span>✍️</span>
             <span>推文服务</span>
           </a>
           <a
             href="#cpc"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 whitespace-nowrap min-w-[120px] text-gray-600 hover:bg-gray-50 hover:text-emerald-600"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-200 whitespace-nowrap min-w-[140px] text-gray-600 hover:bg-gray-50 hover:text-emerald-600"
           >
             <span>🔗</span>
             <span>引流服务</span>
           </a>
           <a
             href="#community"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 whitespace-nowrap min-w-[120px] text-gray-600 hover:bg-gray-50 hover:text-blue-600"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-200 whitespace-nowrap min-w-[140px] text-gray-600 hover:bg-gray-50 hover:text-blue-600"
           >
             <span>👥</span>
             <span>社群服务</span>
           </a>
           <a
             href="#ai-access"
-            class="flex items-center gap-2 px-4 py-3 rounded-lg font-medium transition-all duration-200 whitespace-nowrap min-w-[120px] text-gray-600 hover:bg-gray-50 hover:text-orange-600"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-200 whitespace-nowrap min-w-[140px] text-gray-600 hover:bg-gray-50 hover:text-orange-600"
           >
             <span>🤖</span>
-            <span>AI Access 推广</span>
+            <span>AI Access</span>
+          </a>
+          <a
+            href="#oversea-cloud"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-200 whitespace-nowrap min-w-[140px] text-gray-600 hover:bg-gray-50 hover:text-cyan-600"
+          >
+            <span>🌐</span>
+            <span>出海云访问</span>
           </a>
         </div>
       </div>
@@ -42,9 +56,139 @@
       <header class="mb-8">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900">服务介绍</h1>
         <p class="mt-3 text-gray-600 max-w-3xl">
-          博主联盟目前提供推文、引流、社群 3 类常规合作和 1 类 AI Access 推广专项服务。
+          博主联盟目前提供推文、引流、社群 3 类常规合作，以及 AI Access、出海云访问 2 类专题推广服务。下方先看总览对比，再按方向跳转细则。
         </p>
       </header>
+
+      <section id="overview" class="mb-10 rounded-2xl border border-slate-200 bg-white/85 p-6 shadow-sm backdrop-blur-sm scroll-mt-24">
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">服务总览</div>
+            <h2 class="mt-2 text-2xl font-bold text-gray-900">5 类合作 & 报价对比</h2>
+          </div>
+          <div class="inline-flex items-center rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700">
+            报价为参考区间，最终以合作方案为准
+          </div>
+        </div>
+        <p class="mt-4 max-w-4xl text-sm leading-7 text-gray-600">
+          按合作目标快速选型：要曝光走推文，要可量化点击走引流，要长期私域走社群；要持续内容资产 + 高提成转化，看 AI Access / 出海云访问 两个专题。各服务可单选，也可组合执行。
+        </p>
+
+        <div class="mt-6 overflow-x-auto rounded-xl border border-slate-200 bg-white">
+          <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
+            <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+              <tr>
+                <th class="px-4 py-3 font-semibold whitespace-nowrap">服务</th>
+                <th class="px-4 py-3 font-semibold whitespace-nowrap">类型</th>
+                <th class="px-4 py-3 font-semibold">适合场景</th>
+                <th class="px-4 py-3 font-semibold whitespace-nowrap">参考报价</th>
+                <th class="px-4 py-3 font-semibold">主要效果</th>
+                <th class="px-4 py-3 font-semibold whitespace-nowrap">周期</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr class="hover:bg-slate-50/60">
+                <td class="px-4 py-4 align-top">
+                  <a href="#tweet" class="inline-flex items-center gap-2 font-semibold whitespace-nowrap text-indigo-700 hover:underline">
+                    <span>✍️</span><span>推文服务</span>
+                  </a>
+                </td>
+                <td class="px-4 py-4 align-top">
+                  <span class="inline-flex items-center justify-center min-w-[60px] rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">常规</span>
+                </td>
+                <td class="px-4 py-4 align-top text-gray-700">想要快速曝光、内容种草和品牌心智</td>
+                <td class="px-4 py-4 align-top text-gray-700">
+                  <div>直发 ¥500–3k／条</div>
+                  <div>测评 ¥1.5k–8k／条</div>
+                  <div>深度测评 ¥5k–3w／条</div>
+                </td>
+                <td class="px-4 py-4 align-top text-gray-700">阅读量、关注转化、品牌可信度</td>
+                <td class="px-4 py-4 align-top text-gray-700 whitespace-nowrap">单次 / 排期</td>
+              </tr>
+              <tr class="hover:bg-slate-50/60">
+                <td class="px-4 py-4 align-top">
+                  <a href="#cpc" class="inline-flex items-center gap-2 font-semibold whitespace-nowrap text-emerald-700 hover:underline">
+                    <span>🔗</span><span>引流服务</span>
+                  </a>
+                </td>
+                <td class="px-4 py-4 align-top">
+                  <span class="inline-flex items-center justify-center min-w-[60px] rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">常规</span>
+                </td>
+                <td class="px-4 py-4 align-top text-gray-700">想要可量化点击、注册和试用线索</td>
+                <td class="px-4 py-4 align-top text-gray-700">
+                  <div>CPC ¥1–10／有效点击</div>
+                  <div class="text-xs text-gray-500">依品类与结算口径浮动</div>
+                </td>
+                <td class="px-4 py-4 align-top text-gray-700">点击量、注册量、试用线索</td>
+                <td class="px-4 py-4 align-top text-gray-700 whitespace-nowrap">持续可投</td>
+              </tr>
+              <tr class="hover:bg-slate-50/60">
+                <td class="px-4 py-4 align-top">
+                  <a href="#community" class="inline-flex items-center gap-2 font-semibold whitespace-nowrap text-blue-700 hover:underline">
+                    <span>👥</span><span>社群服务</span>
+                  </a>
+                </td>
+                <td class="px-4 py-4 align-top">
+                  <span class="inline-flex items-center justify-center min-w-[60px] rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">常规</span>
+                </td>
+                <td class="px-4 py-4 align-top text-gray-700">想要长期私域沉淀和稳定开发者关系</td>
+                <td class="px-4 py-4 align-top text-gray-700">
+                  <div>社群宣发 ¥2k–1w／月</div>
+                  <div>建群项目 ¥3w–20w</div>
+                </td>
+                <td class="px-4 py-4 align-top text-gray-700">入群人数、活跃度、长期触达资产</td>
+                <td class="px-4 py-4 align-top text-gray-700 whitespace-nowrap">月度 / 项目制</td>
+              </tr>
+              <tr class="hover:bg-slate-50/60">
+                <td class="px-4 py-4 align-top">
+                  <a href="#ai-access" class="inline-flex items-center gap-2 font-semibold whitespace-nowrap text-orange-700 hover:underline">
+                    <span>🤖</span><span>AI Access</span>
+                  </a>
+                </td>
+                <td class="px-4 py-4 align-top">
+                  <span class="inline-flex items-center justify-center min-w-[60px] rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800">专题</span>
+                </td>
+                <td class="px-4 py-4 align-top text-gray-700">海外大模型 / AI 工具使用需求承接</td>
+                <td class="px-4 py-4 align-top text-gray-700">
+                  <div>高提成分佣</div>
+                  <div class="text-xs text-gray-500">参考 30%–60%，按成交结算</div>
+                </td>
+                <td class="px-4 py-4 align-top text-gray-700">站点 / 仓库 / 社群资产 + 长期转化</td>
+                <td class="px-4 py-4 align-top text-gray-700 whitespace-nowrap">长期合作</td>
+              </tr>
+              <tr class="hover:bg-slate-50/60">
+                <td class="px-4 py-4 align-top">
+                  <a href="#oversea-cloud" class="inline-flex items-center gap-2 font-semibold whitespace-nowrap text-cyan-700 hover:underline">
+                    <span>🌐</span><span>出海云访问</span>
+                  </a>
+                </td>
+                <td class="px-4 py-4 align-top">
+                  <span class="inline-flex items-center justify-center min-w-[60px] rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-800">专题</span>
+                </td>
+                <td class="px-4 py-4 align-top text-gray-700">出海云访问 / 跨境办公工具推广</td>
+                <td class="px-4 py-4 align-top text-gray-700">
+                  <div>高提成分佣</div>
+                  <div class="text-xs text-gray-500">参考 30%–60%，按成交结算</div>
+                </td>
+                <td class="px-4 py-4 align-top text-gray-700">站点 / 导航 / 社群资产 + 长期转化</td>
+                <td class="px-4 py-4 align-top text-gray-700 whitespace-nowrap">长期合作</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-gray-600">
+          <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-3 py-2">
+            <span class="font-semibold text-slate-700">怎么选：</span>一次性发声 → 推文；持续要点击/线索 → 引流；想要长期沉淀 → 社群。
+          </div>
+          <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-3 py-2">
+            <span class="font-semibold text-slate-700">可组合：</span>推文 + 引流追加 UTM 追踪、社群宣发承接专题流量都常见。
+          </div>
+          <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-3 py-2">
+            <span class="font-semibold text-slate-700">专题优势：</span>由我们承担内容、站点、仓库与社群搭建，按成交分佣，零硬性投放预算。
+          </div>
+        </div>
+      </section>
 
       <section id="regular-services" class="mb-8 rounded-2xl border border-slate-200 bg-white/75 p-6 shadow-sm backdrop-blur-sm">
         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -331,11 +475,11 @@
             <h2 class="mt-2 text-2xl font-bold text-gray-900">围绕细分赛道做持续分发与转化</h2>
           </div>
           <div class="inline-flex items-center rounded-full bg-white/80 px-4 py-2 text-sm font-medium text-amber-800 shadow-sm">
-            当前专题：AI Access 推广
+            当前专题：AI Access / 出海云访问
           </div>
         </div>
         <p class="mt-4 max-w-4xl text-sm leading-7 text-gray-700">
-          专题服务更适合持续追踪热点、有明确目标用户、适合长期内容引流和后续转化的方向。相比一次性投放，更强调持续更新、内容节奏和社群承接。
+          专题服务更适合持续追踪热点、有明确目标用户、适合长期内容引流和后续转化的方向。相比一次性投放，更强调持续更新、内容节奏和社群承接，统一按高提成分佣方式合作。
         </p>
       </section>
 
@@ -496,6 +640,89 @@
           <p class="mt-4 text-sm leading-7 text-gray-600">
             我们更看重能不能把内容、站点、文档、仓库、社区和转化链路一起做起来，因此这类合作默认按长期结果协同推进，且要求提成足够高。
           </p>
+        </section>
+
+      </section>
+
+      <section id="oversea-cloud" class="mt-14 space-y-6 scroll-mt-24">
+        <header class="mb-8">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900">出海云访问 推广</h2>
+          <p class="mt-3 text-lg text-gray-600">
+            面向出海团队、跨境电商、海外开发者协作等场景，围绕海外云服务、节点稳定性、客户端体验、出海办公与跨境访问等话题持续做内容分发、专题落地与社群承接，按高提成结果合作。
+          </p>
+        </header>
+
+        <section class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-lg font-semibold text-gray-900">核心说明区</h2>
+          <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
+              <div class="text-sm font-semibold text-gray-900">这项服务在做什么</div>
+              <p class="mt-2 text-sm text-gray-600 leading-relaxed">
+                围绕出海云访问、跨境办公和海外服务的真实使用场景做内容生产，把有访问需求的用户承接到品牌方的官网、文档、教程站点、社群和导航页，形成可持续的转化链路。
+              </p>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
+              <div class="text-sm font-semibold text-gray-900">适合谁</div>
+              <ul class="mt-2 space-y-1.5 text-sm text-gray-600">
+                <li class="flex items-start"><span class="text-cyan-600 mr-2">•</span><span>合规面向出海团队 / 跨境业务的云访问、加速、企业出海工具品牌</span></li>
+                <li class="flex items-start"><span class="text-cyan-600 mr-2">•</span><span>希望在小红书、技术社区、搜索入口持续获取高意向用户</span></li>
+                <li class="flex items-start"><span class="text-cyan-600 mr-2">•</span><span>接受高提成分佣，并愿意把转化链路与内容资产交给联盟一起搭建</span></li>
+              </ul>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
+              <div class="text-sm font-semibold text-gray-900">我们能做什么</div>
+              <ul class="mt-2 space-y-1.5 text-sm text-gray-600">
+                <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>跟进出海赛道动态、产品更新、节点变化与使用场景</span></li>
+                <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>做使用教程、对比测评、场景化案例和踩坑解读</span></li>
+                <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>搭建专题站点、教程文档、导航页和 GitHub 资源仓库</span></li>
+                <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>结合帖子、评论、社群和社区平台形成持续引流</span></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-lg font-semibold text-gray-900">内容方向（示例）</h2>
+          <p class="mt-2 text-sm text-gray-600">围绕真实使用场景规划选题，避免空泛广告，重点放在实用性与可信度。</p>
+          <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div class="rounded-xl border border-gray-200 bg-cyan-50/40 p-4">
+              <div class="text-sm font-semibold text-gray-900">使用教程</div>
+              <p class="mt-1 text-xs text-gray-600 leading-6">客户端配置、出海账号注册、远程办公场景对接</p>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-sky-50/40 p-4">
+              <div class="text-sm font-semibold text-gray-900">对比测评</div>
+              <p class="mt-1 text-xs text-gray-600 leading-6">多产品横评、节点稳定性、跨境延迟与可用性测试</p>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-blue-50/40 p-4">
+              <div class="text-sm font-semibold text-gray-900">场景案例</div>
+              <p class="mt-1 text-xs text-gray-600 leading-6">海外开发者协作、跨境电商、出海团队办公等真实场景</p>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-indigo-50/40 p-4">
+              <div class="text-sm font-semibold text-gray-900">资源沉淀</div>
+              <p class="mt-1 text-xs text-gray-600 leading-6">导航页、教程站、文档仓库与长尾 SEO 入口</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-sm p-6">
+          <h2 class="text-lg font-semibold text-gray-900">合作方式</h2>
+          <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
+              <div class="text-sm font-semibold text-gray-900">内容与分发承接</div>
+              <p class="mt-2 text-sm text-gray-600 leading-relaxed">围绕跨境访问与出海工具方向持续选题、发布内容，并在小红书、技术社区、评论区与导航站完成分发承接。</p>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
+              <div class="text-sm font-semibold text-gray-900">站点与资产搭建</div>
+              <p class="mt-2 text-sm text-gray-600 leading-relaxed">同步搭建教程站点、对比导航页、文档资源库和 GitHub 仓库，把内容流量沉淀成长期可复用的转化资产。</p>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
+              <div class="text-sm font-semibold text-gray-900">高提成合作</div>
+              <p class="mt-2 text-sm text-gray-600 leading-relaxed">这类项目要求提成空间足够高，只有收益空间够大，才值得持续投入内容、人力和整套转化链路建设。</p>
+            </div>
+          </div>
+          <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50/60 p-4 text-sm leading-7 text-amber-900">
+            <span class="font-semibold">合规说明：</span>仅承接面向海外或跨境合规场景的产品推广，不参与任何违反相关地区法律法规的投放，具体合规口径以双方签约前评估为准。
+          </div>
         </section>
 
       </section>
