@@ -9,13 +9,6 @@
             导航
           </div>
           <a
-            href="#overview"
-            class="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-200 whitespace-nowrap min-w-[140px] text-gray-600 hover:bg-gray-50 hover:text-slate-900"
-          >
-            <span>📊</span>
-            <span>服务总览</span>
-          </a>
-          <a
             href="#tweet"
             class="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-200 whitespace-nowrap min-w-[140px] text-gray-600 hover:bg-gray-50 hover:text-indigo-600"
           >
