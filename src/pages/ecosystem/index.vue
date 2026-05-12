@@ -80,7 +80,7 @@ const layers = [
         </router-link>
 
         <router-link
-          :to="{ path: '/academy', query: { tab: 'matrix' } }"
+          to="/matrix"
           class="inline-flex items-center gap-1.5 text-gray-500 hover:text-gray-700 transition-colors font-medium text-base"
           active-class="text-gray-700 font-semibold"
         >
