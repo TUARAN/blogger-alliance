@@ -143,6 +143,10 @@
       />
     </section>
 
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-2">
+      <ServiceOverviewSection detail-base-path="/tob/services" section-id="service-overview" />
+    </div>
+
     <!-- 底部 CTA -->
     <section id="join-cta" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="relative overflow-hidden rounded-[28px] border border-amber-200 bg-[linear-gradient(135deg,#fffdf7_0%,#fff7ed_48%,#fffefb_100%)] px-6 py-6 shadow-[0_20px_60px_rgba(120,53,15,0.08)] md:px-8">
@@ -202,6 +206,7 @@ import { trackLinkClick, getBloggerStats, getRealTimeStats, recordPageView } fro
 import bloggerRosterFile from '../../data/博主联盟花名册v20260106.xlsx?url'
 import { showToast } from '../../utils/toast.js'
 import BrandMarquee from '../../components/BrandMarquee.vue'
+import ServiceOverviewSection from '../../components/ServiceOverviewSection.vue'
 import BloggerCard from '../../components/BloggerCard.vue'
 import BloggerTable from '../../components/BloggerTable.vue'
 import BloggerControls from '../../components/BloggerControls.vue'
