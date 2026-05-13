@@ -528,16 +528,21 @@ export const bloggersData = [
     id: 36,
     name: 'ErpanOmer',
     avatar: "https://res.cloudinary.com/dkh81cvyt/image/upload/w_400/v1766673054/me_kknemi.jpg",
-    introduction: "Web全站工程师🧑‍💻,活跃在掘金技术社区,掘金6级作者、文章170余篇、阅读量90w+。专注于技术分享和社区建设",
-    followers: '1.7K+',
+    introduction: "Web全站工程师🧑‍💻,活跃在掘金技术社区,掘金6级作者、文章200+余篇、阅读量150w+。专注于技术分享和社区建设",
+    followers: '2.5K+',
     socialAccounts: [
-      { platform: 'GitHub', url: 'https://github.com/ErpanOmer', icon: '🐙' },
       { platform: '掘金', url: 'https://juejin.cn/user/3878732754331096', icon: '📝' },
-      { platform: '知乎', url: 'https://www.zhihu.com/people/erpan-30', icon: '📚' }
+      { platform: '微信公众号:前端技术官', url: 'https://mp.weixin.qq.com/s/85s0y49Z3C1-dH7eOHoAKw', icon: '🌏' },
+      { platform: '个人博客', url: 'https://erpanomer.nurverse.com/', icon: '🌐' },
+      { platform: 'GitHub', url: 'https://github.com/ErpanOmer', icon: '🐙' },
+      { platform: '知乎', url: 'https://www.zhihu.com/people/erpan-30', icon: '📚' },
+      { platform: 'CSDN', url: 'https://blog.csdn.net/weixin_38123604', icon: '💻' },
+      { platform: '博客园', url: 'https://www.cnblogs.com/erpanomer', icon: '🌏' },
+      { platform: 'Segmentfault', url: 'https://segmentfault.com/blog/erpanomer', icon: '📝' },
     ],
     expandedContent: {
       specialties: ['全栈开发', 'AI编程', '技术写作', 'Serverless'],
-      achievements: ['掘金6级-优秀创作者', '文章170+余篇', '阅读量90w+', '持续内容创作者'],
+      achievements: ['掘金6级-优秀创作者', '文章200+余篇', '阅读量150w+', '持续内容创作者'],
       recentPosts: ['2025快手直播至暗时刻', '为什么永远不要相信前端输入？', '检测开发者工具是否打开？']
     }
   },
