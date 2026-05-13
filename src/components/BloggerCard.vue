@@ -35,6 +35,8 @@ const emit = defineEmits(['toggle-expanded', 'link-click', 'request-platforms', 
             :src="blogger.avatar"
             :alt="blogger.name"
             :data-fallback-avatar="fallbackAvatar"
+            loading="lazy"
+            decoding="async"
             @error="emit('avatar-error', $event)"
             class="w-14 h-14 rounded-full object-cover border border-indigo-100 group-hover:border-indigo-300 transition-colors"
           />

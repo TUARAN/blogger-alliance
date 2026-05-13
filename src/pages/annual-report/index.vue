@@ -126,13 +126,6 @@ onMounted(async () => {
   <div class="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-blue-100">
     <AppNav>
       <template #links>
-        <router-link
-          to="/workspace"
-          class="inline-flex items-center gap-1.5 text-gray-700 transition-colors font-semibold text-base"
-        >
-          <span class="text-base leading-none">🗂️</span>
-          <span>联盟工作台</span>
-        </router-link>
         <button
           v-if="isUnlocked"
           class="h-9 px-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50"

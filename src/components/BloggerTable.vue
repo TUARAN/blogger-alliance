@@ -49,6 +49,8 @@ const emit = defineEmits(['link-click', 'request-platforms', 'avatar-error'])
                     :src="blogger.avatar"
                     :alt="blogger.name"
                     :data-fallback-avatar="fallbackAvatarFor(blogger.name)"
+                    loading="lazy"
+                    decoding="async"
                     @error="emit('avatar-error', $event)"
                   />
                 </div>

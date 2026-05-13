@@ -1,4 +1,11 @@
 <script setup>
+const navLinks = [
+  { label: '服务介绍', to: '/tob/services' },
+  { label: '矩阵看板', to: '/matrix' },
+  { label: '联盟学院', to: { path: '/academy', query: { tab: 'knowledge' } } },
+  { label: '内部数据', to: '/tob/internal' }
+]
+
 defineProps({
   logoTo: { type: String, default: '/tob' },
   workspaceActive: { type: Boolean, default: false }
@@ -7,7 +14,7 @@ defineProps({
 
 <template>
   <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-[1500px] px-3 sm:px-4 lg:px-5">
       <div class="flex justify-between items-center h-16 gap-4">
         <div class="flex items-center min-w-0">
           <router-link
@@ -18,17 +25,27 @@ defineProps({
           </router-link>
         </div>
 
-        <div class="flex items-center gap-4 lg:gap-6">
-          <slot name="links">
+        <div class="flex min-w-0 items-center gap-4">
+          <div class="hidden items-center gap-6 text-sm font-semibold text-slate-500 md:flex">
             <router-link
-              to="/workspace"
-              class="inline-flex items-center gap-1.5 transition-colors font-medium text-base"
-              :class="workspaceActive ? 'text-gray-700 font-semibold' : 'text-gray-500 hover:text-gray-700'"
+              v-for="item in navLinks"
+              :key="item.label"
+              :to="item.to"
+              class="relative whitespace-nowrap transition-colors hover:text-indigo-700 after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-0 after:bg-indigo-600 after:transition-all hover:after:w-full"
+              active-class="text-indigo-700 after:w-full"
             >
-              <span class="text-base leading-none">🗂️</span>
-              <span>联盟工作台</span>
+              {{ item.label }}
             </router-link>
-          </slot>
+            <a
+              href="https://md.tuaran666.workers.dev/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="relative whitespace-nowrap transition-colors hover:text-indigo-700 after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-0 after:bg-indigo-600 after:transition-all hover:after:w-full"
+            >
+              同步工具
+            </a>
+          </div>
+          <slot name="links"></slot>
           <WebLlmNavBot />
         </div>
       </div>

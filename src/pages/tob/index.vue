@@ -53,6 +53,20 @@
             </div>
           </div>
 
+          <div class="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-gray-600">
+            <span class="text-gray-500">本页导读</span>
+            <span class="hidden sm:inline text-gray-300" aria-hidden="true">·</span>
+            <a
+              href="#blogger-team"
+              class="font-medium text-indigo-700 underline decoration-indigo-200 underline-offset-4 hover:text-indigo-900 hover:decoration-indigo-500"
+            >博主矩阵</a>
+            <span class="text-gray-300" aria-hidden="true">·</span>
+            <a
+              href="#service-overview"
+              class="font-medium text-indigo-700 underline decoration-indigo-200 underline-offset-4 hover:text-indigo-900 hover:decoration-indigo-500"
+            >服务与参考报价</a>
+          </div>
+
           <div class="mt-12 max-w-4xl mx-auto">
             <div class="mb-6 flex items-center justify-center">
               <div class="flex flex-wrap items-center justify-center gap-3">
@@ -91,7 +105,7 @@
     </section>
 
     <!-- 博主团队展示 -->
-    <section id="blogger-team" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16">
+    <section id="blogger-team" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16 scroll-mt-24">
       <div class="text-center mb-10">
         <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">我们的博主团队名单</h2>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -115,7 +129,7 @@
 
       <div v-if="viewMode === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
         <BloggerCard
-          v-for="blogger in filteredAndSortedBloggers"
+          v-for="blogger in bloggersShownInGrid"
           :key="blogger.id"
           :blogger="blogger"
           :expanded="expandedBloggers.includes(blogger.id)"
@@ -130,8 +144,19 @@
         />
       </div>
 
+      <div v-if="showGridExpandToggle" class="mt-8 flex justify-center">
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-white px-5 py-2.5 text-sm font-semibold text-indigo-800 shadow-sm transition-colors hover:border-indigo-300 hover:bg-indigo-50"
+          @click="bloggersGridExpanded = !bloggersGridExpanded"
+        >
+          <span v-if="!bloggersGridExpanded">展开全部 {{ filteredAndSortedBloggers.length }} 位博主</span>
+          <span v-else>收起为预览（前 {{ BLOGGER_GRID_PREVIEW }} 位）</span>
+        </button>
+      </div>
+
       <BloggerTable
-        v-else
+        v-if="viewMode !== 'grid'"
         :bloggers="filteredAndSortedBloggers"
         :available-platforms="availablePlatforms"
         :fallback-avatar-for="getFallbackAvatar"
@@ -158,23 +183,26 @@
             如果你也想一起共创内容、尝试做 AI 项目、打磨开发者工具，或者用兼职方式参与真实合作，欢迎来和我们聊聊。这里既欢迎长期深度协作，也欢迎从一次内容共创、一次项目尝试开始。
           </p>
         </div>
-        <div class="mt-5">
+        <div class="mt-5 flex flex-wrap items-center gap-3">
           <a
             href="https://github.com/TUARAN/blogger-alliance"
             target="_blank"
+            rel="noopener noreferrer"
             class="inline-flex items-center rounded-full border border-amber-300 bg-white/90 px-4 py-2 text-sm font-semibold text-amber-800 transition-colors hover:bg-amber-50"
           >
             <span class="mr-2">🤝</span>
             加入博主联盟
           </a>
+          <router-link
+            to="/workspace"
+            class="inline-flex items-center rounded-full border border-amber-300 bg-white/90 px-4 py-2 text-sm font-semibold text-amber-800 transition-colors hover:bg-amber-50"
+          >
+            工作总览
+            <span class="ml-2 text-base leading-none">→</span>
+          </router-link>
         </div>
       </div>
     </section>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 text-center text-xs text-gray-500">
-      <span v-if="trafficStats.loading">流量统计加载中...</span>
-      <span v-else>总PV {{ trafficStats.pv }} · 总UV {{ trafficStats.uv }} · 本页PV {{ trafficStats.pagePv }}</span>
-    </div>
 
     <QrCorner />
 
@@ -202,7 +230,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { bloggersData, cooperationHeatOrder } from '../../data/bloggerInfo.js'
-import { trackLinkClick, getBloggerStats, getRealTimeStats, recordPageView } from '../../utils/stats.js'
+import { trackLinkClick, getBloggerStats, recordPageView } from '../../utils/stats.js'
 import bloggerRosterFile from '../../data/博主联盟花名册v20260106.xlsx?url'
 import { showToast } from '../../utils/toast.js'
 import BrandMarquee from '../../components/BrandMarquee.vue'
@@ -214,7 +242,10 @@ import QrCorner from '../../components/QrCorner.vue'
 
 const expandedBloggers = ref([])
 const bloggerStats = ref(getBloggerStats())
-const trafficStats = computed(() => getRealTimeStats())
+
+/** 网格视图默认只展示前若干位，降低首屏以下长度与图片请求 */
+const BLOGGER_GRID_PREVIEW = 18
+const bloggersGridExpanded = ref(false)
 
 const moreDataModalOpen = ref(false)
 const openMoreDataModal = () => { moreDataModalOpen.value = true }
@@ -419,6 +450,17 @@ const filteredAndSortedBloggers = computed(() => {
 
   return result
 })
+
+const bloggersShownInGrid = computed(() => {
+  const list = filteredAndSortedBloggers.value
+  if (viewMode.value !== 'grid') return list
+  if (bloggersGridExpanded.value || list.length <= BLOGGER_GRID_PREVIEW) return list
+  return list.slice(0, BLOGGER_GRID_PREVIEW)
+})
+
+const showGridExpandToggle = computed(
+  () => viewMode.value === 'grid' && filteredAndSortedBloggers.value.length > BLOGGER_GRID_PREVIEW
+)
 
 onMounted(() => {
   recordPageView()

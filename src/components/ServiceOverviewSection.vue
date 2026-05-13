@@ -72,11 +72,11 @@
             </td>
             <td class="px-4 py-4 align-top text-gray-700">想要长期私域沉淀和稳定开发者关系</td>
             <td class="px-4 py-4 align-top text-gray-700">
-              <div>社群宣发 ¥2k–1w／月</div>
+              <div>社群宣发 ¥2k–1w／项目</div>
               <div>建群项目 ¥3k–3w</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">入群人数、活跃度、长期触达资产</td>
-            <td class="px-4 py-4 align-top text-gray-700 whitespace-nowrap">月度 / 项目制</td>
+            <td class="px-4 py-4 align-top text-gray-700 whitespace-nowrap">项目制</td>
           </tr>
           <tr class="hover:bg-slate-50/60">
             <td class="px-4 py-4 align-top">

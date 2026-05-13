@@ -1,0 +1,141 @@
+<script setup>
+const modules = [
+  {
+    title: '服务介绍',
+    description: '推文、引流、社群和 AI Access 推广。',
+    tag: '品牌合作',
+    icon: '🔥',
+    to: '/tob/services',
+    theme: {
+      shadow: 'shadow-emerald-100/40',
+      icon: 'bg-emerald-100',
+      tag: 'bg-emerald-50 text-emerald-700',
+      cta: 'text-emerald-700'
+    }
+  },
+  {
+    title: '矩阵看板',
+    description: '按博主查看矩阵账号分布、平台覆盖与阅读／粉丝表现，支撑运营复盘与拓展决策。',
+    tag: '矩阵运营',
+    icon: '🧩',
+    to: '/matrix',
+    theme: {
+      shadow: 'shadow-teal-100/40',
+      icon: 'bg-teal-100',
+      tag: 'bg-teal-50 text-teal-700',
+      cta: 'text-teal-700'
+    }
+  },
+  {
+    title: '联盟学院',
+    description: '学习资料、工具资源和知识沉淀。',
+    tag: '知识资源',
+    icon: '📚',
+    to: { path: '/academy', query: { tab: 'knowledge' } },
+    theme: {
+      shadow: 'shadow-blue-100/40',
+      icon: 'bg-blue-100',
+      tag: 'bg-blue-50 text-blue-700',
+      cta: 'text-blue-700'
+    }
+  },
+  {
+    title: '内部数据中心',
+    description: '合作进度、数据报告、年度总览统一台账，凭证共享。',
+    tag: '内部数据',
+    icon: '🗂️',
+    locked: true,
+    to: '/tob/internal',
+    theme: {
+      shadow: 'shadow-indigo-100/40',
+      icon: 'bg-indigo-100',
+      tag: 'bg-indigo-50 text-indigo-700',
+      cta: 'text-indigo-700'
+    }
+  },
+  {
+    title: '博主联盟同步工具',
+    description: '在浏览器中同步与管理内容，新标签页打开。',
+    tag: '外部工具',
+    icon: '🔄',
+    href: 'https://md.tuaran666.workers.dev/',
+    external: true,
+    theme: {
+      shadow: 'shadow-violet-100/40',
+      icon: 'bg-violet-100',
+      tag: 'bg-violet-50 text-violet-700',
+      cta: 'text-violet-700'
+    }
+  }
+]
+
+defineProps({
+  compact: { type: Boolean, default: false }
+})
+</script>
+
+<template>
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+    <component
+      :is="module.external ? 'a' : 'router-link'"
+      v-for="module in modules"
+      :key="module.title"
+      :to="module.external ? undefined : module.to"
+      :href="module.external ? module.href : undefined"
+      :target="module.external ? '_blank' : undefined"
+      :rel="module.external ? 'noopener noreferrer' : undefined"
+      class="group rounded-3xl border border-white/70 bg-white/90 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+      :class="[module.theme.shadow, compact ? 'p-5' : 'p-6']"
+    >
+      <div class="flex items-start justify-between gap-3">
+        <span
+          class="inline-flex items-center justify-center rounded-2xl text-2xl"
+          :class="[module.theme.icon, compact ? 'h-11 w-11' : 'h-12 w-12']"
+        >
+          {{ module.icon }}
+        </span>
+        <span
+          class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
+          :class="module.theme.tag"
+        >
+          <svg
+            v-if="module.locked"
+            class="h-3.5 w-3.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="4" y="11" width="16" height="9" rx="2" />
+            <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+          </svg>
+          <span>{{ module.tag }}</span>
+        </span>
+      </div>
+
+      <h2 class="mt-5 font-bold text-gray-900" :class="compact ? 'text-lg' : 'text-xl'">{{ module.title }}</h2>
+      <p class="mt-2 text-sm leading-6 text-gray-600">{{ module.description }}</p>
+      <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold" :class="module.theme.cta">
+        <svg
+          v-if="module.locked"
+          class="h-4 w-4 shrink-0"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="4" y="11" width="16" height="9" rx="2" />
+          <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+        </svg>
+        <span>{{ module.external ? '打开工具' : '进入模块' }}</span>
+        <span class="transition-transform group-hover:translate-x-1">→</span>
+      </div>
+    </component>
+  </div>
+</template>

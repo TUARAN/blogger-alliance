@@ -5,9 +5,6 @@
         <router-link to="/tob" class="text-gray-600 hover:text-indigo-600 transition-colors font-medium text-base">
           博主联盟
         </router-link>
-        <router-link to="/matrix" class="text-gray-600 hover:text-indigo-600 transition-colors font-medium text-base">
-          矩阵看板
-        </router-link>
       </template>
     </AppNav>
 
