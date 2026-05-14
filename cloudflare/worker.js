@@ -867,6 +867,32 @@ async function handleAssets(request, env) {
   const url = new URL(request.url)
   const acceptsHtml = (request.headers.get('Accept') || '').includes('text/html')
 
+  /** 少数情况下资产层会对深链返回 30x 到站点根路径，打断 SPA；改为回退 index.html */
+  if (
+    request.method === 'GET' &&
+    acceptsHtml &&
+    response.status >= 300 &&
+    response.status < 400
+  ) {
+    const loc = response.headers.get('Location')
+    if (loc) {
+      try {
+        const locUrl = new URL(loc, url)
+        const path = locUrl.pathname.replace(/\/$/, '') || '/'
+        if ((path === '' || path === '/') && url.pathname !== '/' && url.pathname !== '/index.html') {
+          const indexUrl = new URL('/index.html', url)
+          const fallback = await env.ASSETS.fetch(new Request(indexUrl.toString(), request))
+          if (isWebLlmRoute(url.pathname)) {
+            return withWebLlmIsolation(fallback)
+          }
+          return fallback
+        }
+      } catch {
+        /* ignore malformed Location */
+      }
+    }
+  }
+
   if (response.status !== 404 || request.method !== 'GET' || !acceptsHtml) {
     if (acceptsHtml && isWebLlmRoute(url.pathname)) {
       return withWebLlmIsolation(response)

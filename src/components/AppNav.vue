@@ -25,7 +25,7 @@ defineProps({
           </router-link>
         </div>
 
-        <div class="flex min-w-0 items-center gap-4">
+        <div class="flex min-w-0 items-center gap-4 ml-4 md:ml-8 lg:ml-10">
           <div class="hidden items-center gap-6 text-sm font-semibold text-slate-500 md:flex">
             <router-link
               v-for="item in navLinks"
