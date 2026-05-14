@@ -4,8 +4,13 @@
       <header class="mb-8">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900">出海云访问 推广</h1>
         <p class="mt-3 text-lg text-gray-600">
-          面向出海团队、跨境电商、海外开发者协作等场景，围绕海外云服务、节点稳定性、客户端体验、出海办公与跨境访问等话题持续做内容分发、专题落地与社群承接，按高提成结果合作。
+          聚焦云服务、节点稳定性、客户端体验与跨境办公场景：以真实节点测速、对比测评、踩坑解读形成可信教程站，结合出海团队与跨境开发者社群承接长期分佣联运，按合规出海场景的高 LTV 成交合作。
         </p>
+        <div class="mt-3 flex flex-wrap gap-2 text-xs">
+          <span class="inline-flex items-center rounded-full bg-cyan-50 border border-cyan-200 px-2.5 py-1 text-cyan-700">出海工具 · 真实节点测速</span>
+          <span class="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-2.5 py-1 text-amber-700">分佣 30%–60% / 笔</span>
+          <span class="inline-flex items-center rounded-full bg-blue-50 border border-blue-200 px-2.5 py-1 text-blue-700">仅合规出海 / 跨境场景</span>
+        </div>
       </header>
 
       <section class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-sm p-6">
@@ -14,24 +19,24 @@
           <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
             <div class="text-sm font-semibold text-gray-900">这项服务在做什么</div>
             <p class="mt-2 text-sm text-gray-600 leading-relaxed">
-              围绕出海云访问、跨境办公和海外服务的真实使用场景做内容生产，把有访问需求的用户承接到品牌方的官网、文档、教程站点、社群和导航页，形成可持续的转化链路。
+              围绕真实出海场景（团队协作、跨境电商、海外开发者远程办公）做节点实测、客户端配置教程、对比测评和踩坑解读，把有跨境访问需求的用户承接到品牌方教程站、对比导航与出海社群，形成可持续的高 LTV 转化链路。
             </p>
           </div>
           <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
-            <div class="text-sm font-semibold text-gray-900">适合谁</div>
+            <div class="text-sm font-semibold text-gray-900">适合谁（聚焦出海工具）</div>
             <ul class="mt-2 space-y-1.5 text-sm text-gray-600">
-              <li class="flex items-start"><span class="text-cyan-600 mr-2">•</span><span>合规面向出海团队 / 跨境业务的云访问、加速、企业出海工具品牌</span></li>
-              <li class="flex items-start"><span class="text-cyan-600 mr-2">•</span><span>希望在小红书、技术社区、搜索入口持续获取高意向用户</span></li>
-              <li class="flex items-start"><span class="text-cyan-600 mr-2">•</span><span>接受高提成分佣，并愿意把转化链路与内容资产交给联盟一起搭建</span></li>
+              <li class="flex items-start"><span class="text-cyan-600 mr-2">•</span><span>面向出海团队的云服务 / CDN / 加速 / 跨境办公套件（合规出海场景）</span></li>
+              <li class="flex items-start"><span class="text-cyan-600 mr-2">•</span><span>面向跨境电商、海外开发者协作的 SaaS 与企业工具</span></li>
+              <li class="flex items-start"><span class="text-cyan-600 mr-2">•</span><span>愿意按高 LTV 长期合作（年付订阅 / 企业套餐），并能提供 ≥ 30% 分佣空间</span></li>
             </ul>
           </div>
           <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
-            <div class="text-sm font-semibold text-gray-900">我们能做什么</div>
+            <div class="text-sm font-semibold text-gray-900">我们的现有资产</div>
             <ul class="mt-2 space-y-1.5 text-sm text-gray-600">
-              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>跟进出海赛道动态、产品更新、节点变化与使用场景</span></li>
-              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>做使用教程、对比测评、场景化案例和踩坑解读</span></li>
-              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>搭建专题站点、教程文档、导航页和 GitHub 资源仓库</span></li>
-              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>结合帖子、评论、社群和社区平台形成持续引流</span></li>
+              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>出海主题教程站 + 对比导航页（围绕真实节点 / 客户端实测）</span></li>
+              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>跨境技术社区与出海团队私域社群（B 端 / 技术受众为主）</span></li>
+              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>掘金 / 知乎 / GitHub 等技术平台的出海话题内容矩阵</span></li>
+              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>持续维护的踩坑解读与真实节点测速数据库</span></li>
             </ul>
           </div>
         </div>

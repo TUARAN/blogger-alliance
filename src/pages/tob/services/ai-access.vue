@@ -4,8 +4,13 @@
       <header class="mb-8">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900">AI Access 推广</h1>
         <p class="mt-3 text-lg text-gray-600">
-          面向海外大模型与 AI 工具使用需求，围绕 ChatGPT、Claude 等话题持续做资讯分发、内容二创、建站承接、文档沉淀、仓库搭建和社区扩散，适合按高提成结果长期合作。
+          聚焦境外大模型与 AI SaaS（ChatGPT、Claude、Midjourney 等订阅类工具）的国内承接：以现有 AI 站点矩阵 + GitHub 仓库 SEO + 小红书 / 社群 三位一体做长期分佣联运，按高 LTV 成交结果合作。
         </p>
+        <div class="mt-3 flex flex-wrap gap-2 text-xs">
+          <span class="inline-flex items-center rounded-full bg-orange-50 border border-orange-200 px-2.5 py-1 text-orange-700">订阅类 SaaS · 高复购</span>
+          <span class="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-2.5 py-1 text-amber-700">分佣 30%–60% / 笔</span>
+          <span class="inline-flex items-center rounded-full bg-rose-50 border border-rose-200 px-2.5 py-1 text-rose-700">建议 ≥ 3 个月协同</span>
+        </div>
       </header>
 
       <section class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-sm p-6">
@@ -14,24 +19,24 @@
           <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
             <div class="text-sm font-semibold text-gray-900">这项服务在做什么</div>
             <p class="mt-2 text-sm text-gray-600 leading-relaxed">
-              持续围绕大模型热点、模型使用门槛、账号获取方式、使用技巧与资讯变化发布内容，并把用户承接到站点、文档、仓库、社群或指定落地入口，形成可持续转化链路。
+              围绕大模型热点、模型对比、账号 / 订阅获取路径、Prompt 与使用技巧持续生产内容（资讯流 + 教程 + 测评），把流量沉淀到 AI 工具站点矩阵、GitHub Awesome 仓库和 AI 学习社群，形成可复用的订阅转化链路。
             </p>
           </div>
           <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
-            <div class="text-sm font-semibold text-gray-900">适合谁</div>
+            <div class="text-sm font-semibold text-gray-900">适合谁（聚焦订阅类）</div>
             <ul class="mt-2 space-y-1.5 text-sm text-gray-600">
-              <li class="flex items-start"><span class="text-orange-600 mr-2">•</span><span>面向国内用户提供海外 AI 模型使用支持、账号服务或配套工具的团队</span></li>
-              <li class="flex items-start"><span class="text-orange-600 mr-2">•</span><span>希望在小红书、社区、搜索入口持续获取高意向 AI 用户</span></li>
-              <li class="flex items-start"><span class="text-orange-600 mr-2">•</span><span>接受高提成合作方式，并愿意把转化链路交给我们一起搭建的合作方</span></li>
+              <li class="flex items-start"><span class="text-orange-600 mr-2">•</span><span>境外 AI SaaS / API 服务：账号代订阅、API 中转、Prompt 平台等</span></li>
+              <li class="flex items-start"><span class="text-orange-600 mr-2">•</span><span>面向 C 端 / 创作者的 AI 工具（写作、绘画、视频、Agent）</span></li>
+              <li class="flex items-start"><span class="text-orange-600 mr-2">•</span><span>客单价 ≥ ¥20 / 月、有复购或包月订阅模型，且能给出 ≥ 30% 分佣空间</span></li>
             </ul>
           </div>
           <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
-            <div class="text-sm font-semibold text-gray-900">我们能做什么</div>
+            <div class="text-sm font-semibold text-gray-900">我们的现有资产</div>
             <ul class="mt-2 space-y-1.5 text-sm text-gray-600">
-              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>跟踪 Twitter/X、海外 AI 社区、产品更新和热点事件</span></li>
-              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>做资讯整理、新闻转发、观点二创、实用教程和专题内容</span></li>
-              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>搭建门户站点、文档页、导航页、GitHub 仓库和专题落地页</span></li>
-              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>结合帖子、评论、社群和社区平台形成持续引流</span></li>
+              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>AI 主题站点矩阵 + 长尾 SEO 入口（持续承接搜索意图）</span></li>
+              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>GitHub Awesome / 教程类仓库（带 star 与 fork 沉淀）</span></li>
+              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>小红书 / 公众号 / 掘金 等 AI 话题账号矩阵</span></li>
+              <li class="flex items-start"><span class="text-gray-500 mr-2">•</span><span>AI 学习与体验类社群，便于二次触达与复购转化</span></li>
             </ul>
           </div>
         </div>
