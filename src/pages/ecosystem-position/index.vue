@@ -1,4 +1,6 @@
 <script setup>
+import PositioningStoryNav from '../../components/PositioningStoryNav.vue'
+
 const layers = [
   {
     title: '上游：基础能力层',
@@ -71,6 +73,8 @@ const layers = [
     <AppNav />
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5 min-h-[calc(100vh-4rem)]">
+      <PositioningStoryNav />
+
       <section class="bg-white rounded-2xl border border-indigo-100 shadow-sm px-4 py-3 md:px-5 md:py-4">
         <div class="max-w-5xl">
           <div class="inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700">
@@ -80,6 +84,14 @@ const layers = [
           <h1 class="mt-2 text-2xl md:text-3xl font-bold text-gray-900">博主联盟生态定位</h1>
           <p class="mt-2 text-sm md:text-base text-gray-600 leading-relaxed">
             这张图把 AI 生态分成基础能力、产品工具、传播渠道和商业转化四层。开发者博主联盟位于“开发者传播网络”这一关键通道，承担内容分发、信任建立与线索转化前置教育的角色。
+          </p>
+          <p class="mt-3 text-sm">
+            <router-link
+              to="/why-us"
+              class="font-medium text-indigo-700 underline-offset-4 hover:text-indigo-900 hover:underline"
+            >
+              为什么选择博主联盟？继续读六层优势结构 →
+            </router-link>
           </p>
         </div>
       </section>

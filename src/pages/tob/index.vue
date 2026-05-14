@@ -16,25 +16,9 @@
           </h1>
           <p class="text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-8">
             我们聚合一批专业技术博主，把技术品牌带到开发者 / AI 爱好者 / 科技爱好者真正会讨论的地方，并持续沉淀真实有效的 GEO 结果
-            <span class="mt-3 inline-flex flex-wrap items-center justify-center gap-4">
-              <router-link
-                to="/ecosystem"
-                class="inline-flex items-center gap-1 text-sm md:text-base font-medium text-indigo-700 transition-colors hover:text-indigo-800"
-              >
-                <span class="leading-none no-underline">📍</span>
-                <span class="underline decoration-indigo-300 underline-offset-4 hover:decoration-indigo-500">生态定位</span>
-              </router-link>
-              <router-link
-                to="/why-us"
-                class="inline-flex items-center gap-1 text-sm md:text-base font-medium text-indigo-700 transition-colors hover:text-indigo-800"
-              >
-                <span class="leading-none no-underline">✨</span>
-                <span class="underline decoration-indigo-300 underline-offset-4 hover:decoration-indigo-500">为什么选择博主联盟？</span>
-              </router-link>
-            </span>
           </p>
 
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 sm:gap-6 max-w-6xl mx-auto">
             <div class="text-center">
               <div class="text-3xl font-bold text-indigo-600 mb-2">{{ bloggerStats.bloggerCount }} 位+</div>
               <div class="text-gray-600">技术博主</div>
@@ -48,49 +32,86 @@
               <div class="text-gray-600">累计投放推文</div>
             </div>
             <div class="text-center">
+              <div class="text-3xl font-bold text-rose-600 mb-2">{{ bloggerStats.formattedExposure }}+</div>
+              <div class="text-gray-600">累计曝光</div>
+            </div>
+            <div class="text-center">
               <div class="text-3xl font-bold text-orange-600 mb-2">20 个+</div>
               <div class="text-gray-600">辐射社群</div>
             </div>
           </div>
 
-          <div class="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-gray-600">
-            <span class="text-gray-500">本页导读</span>
-            <span class="hidden sm:inline text-gray-300" aria-hidden="true">·</span>
-            <a
-              href="#blogger-team"
-              class="font-medium text-indigo-700 underline decoration-indigo-200 underline-offset-4 hover:text-indigo-900 hover:decoration-indigo-500"
-            >博主矩阵</a>
-            <span class="text-gray-300" aria-hidden="true">·</span>
-            <a
-              href="#service-overview"
-              class="font-medium text-indigo-700 underline decoration-indigo-200 underline-offset-4 hover:text-indigo-900 hover:decoration-indigo-500"
-            >服务与参考报价</a>
-          </div>
-
-          <div class="mt-12 max-w-4xl mx-auto">
-            <div class="mb-6 flex items-center justify-center">
-              <div class="flex flex-wrap items-center justify-center gap-3">
-                <router-link
-                  to="/cases"
-                  class="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm md:text-base font-bold text-indigo-700 bg-white border border-indigo-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  <span class="text-base leading-none">📘</span>
-                  <span>案例介绍</span>
-                </router-link>
-
-                <router-link
-                  to="/tob/services"
-                  class="group relative inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm md:text-base font-extrabold text-white bg-gradient-to-r from-indigo-600 to-purple-600 border border-indigo-400/30 shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
-                >
-                  <span class="text-base leading-none">🔥</span>
-                  <span>我要合作</span>
-                  <span class="text-base leading-none transition-transform group-hover:translate-x-1">→</span>
-                  <span class="pointer-events-none absolute right-0 top-0 -translate-y-[calc(100%+10px)] whitespace-nowrap rounded-lg bg-gray-900 px-2.5 py-1.5 text-xs text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
-                    进入服务介绍
-                  </span>
-                </router-link>
+          <nav
+            class="mx-auto mt-10 max-w-5xl rounded-xl border border-slate-200/70 bg-white/50 px-4 py-4 sm:px-6 backdrop-blur-sm"
+            aria-label="站内导航"
+          >
+            <div class="grid gap-5 sm:gap-6 md:grid-cols-2 md:gap-0">
+              <div class="border-b border-slate-200/70 pb-5 text-center md:border-b-0 md:pb-0 md:text-left md:pr-6 md:border-r md:border-slate-200/70">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-indigo-700/85 mb-2.5 md:mb-3">
+                  合作入口
+                </p>
+                <ul class="flex flex-wrap items-center justify-center gap-x-1 gap-y-2 md:justify-start text-sm sm:text-[15px]">
+                  <li>
+                    <a
+                      href="#service-overview"
+                      class="group inline-flex items-center gap-1.5 py-1 font-medium text-slate-600 transition-colors hover:text-indigo-700"
+                    >
+                      <span class="text-base leading-none opacity-90 select-none" aria-hidden="true">📋</span>
+                      <span class="underline-offset-4 decoration-indigo-200/80 group-hover:underline">服务与参考报价</span>
+                    </a>
+                  </li>
+                  <li class="hidden sm:flex items-center px-2 text-slate-300 select-none" aria-hidden="true">·</li>
+                  <li>
+                    <router-link
+                      to="/cases"
+                      class="group inline-flex items-center gap-1.5 py-1 font-medium text-slate-600 transition-colors hover:text-indigo-700"
+                    >
+                      <span class="text-base leading-none opacity-90 select-none" aria-hidden="true">📘</span>
+                      <span class="underline-offset-4 decoration-indigo-200/80 group-hover:underline">案例介绍</span>
+                    </router-link>
+                  </li>
+                  <li class="hidden sm:flex items-center px-2 text-slate-300 select-none" aria-hidden="true">·</li>
+                  <li>
+                    <a
+                      href="#blogger-team"
+                      class="group inline-flex items-center gap-1.5 py-1 font-medium text-slate-600 transition-colors hover:text-indigo-700"
+                    >
+                      <span class="text-base leading-none opacity-90 select-none" aria-hidden="true">👥</span>
+                      <span class="underline-offset-4 decoration-indigo-200/80 group-hover:underline">博主矩阵</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="text-center md:text-left md:pl-6">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 mb-2.5 md:mb-3">
+                  关于博主联盟
+                </p>
+                <ul class="flex flex-wrap items-center justify-center gap-x-1 gap-y-2 md:justify-start text-sm sm:text-[15px]">
+                  <li>
+                    <router-link
+                      to="/ecosystem"
+                      class="group inline-flex items-center gap-1.5 py-1 font-medium text-slate-600 transition-colors hover:text-indigo-700"
+                    >
+                      <span class="text-base leading-none select-none" aria-hidden="true">📍</span>
+                      <span class="underline-offset-4 decoration-indigo-200/80 group-hover:underline">生态定位</span>
+                    </router-link>
+                  </li>
+                  <li class="hidden sm:flex items-center px-2 text-slate-300 select-none" aria-hidden="true">·</li>
+                  <li>
+                    <router-link
+                      to="/why-us"
+                      class="group inline-flex items-center gap-1.5 py-1 font-medium text-slate-600 transition-colors hover:text-indigo-700"
+                    >
+                      <span class="text-base leading-none select-none" aria-hidden="true">✨</span>
+                      <span class="text-left underline-offset-4 decoration-indigo-200/80 group-hover:underline">为什么选择博主联盟？</span>
+                    </router-link>
+                  </li>
+                </ul>
               </div>
             </div>
+          </nav>
+
+          <div class="mt-12 max-w-4xl mx-auto">
             <h3 class="mb-4 text-center text-sm md:text-base font-semibold text-gray-600">已合作品牌</h3>
             <BrandMarquee />
           </div>
@@ -169,7 +190,7 @@
     </section>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-2">
-      <ServiceOverviewSection detail-base-path="/tob/services" section-id="service-overview" />
+      <ServiceOverviewSection section-id="service-overview" />
     </div>
 
     <!-- 底部 CTA -->
@@ -193,13 +214,6 @@
             <span class="mr-2">🤝</span>
             加入博主联盟
           </a>
-          <router-link
-            to="/workspace"
-            class="inline-flex items-center rounded-full border border-amber-300 bg-white/90 px-4 py-2 text-sm font-semibold text-amber-800 transition-colors hover:bg-amber-50"
-          >
-            工作总览
-            <span class="ml-2 text-base leading-none">→</span>
-          </router-link>
         </div>
       </div>
     </section>

@@ -7,6 +7,22 @@ import { busuanziStats } from './busuanzi.js'
 // 累计投放推文，非数据可推导，作为业务指标手动维护
 const TOTAL_POSTS = 300
 
+/** 单条合作推广内容在全平台的保守触达人次估算（含推荐流曝光+阅读，非「去重人数」） */
+const EST_AVG_IMPRESSIONS_PER_POST = 22000
+
+function formatExposureImpressions(count) {
+  if (count >= 100_000_000) {
+    const yi = count / 100_000_000
+    return yi >= 10 ? `${Math.round(yi)}亿` : `${yi.toFixed(1).replace(/\.0$/, '')}亿`
+  }
+  if (count >= 10_000) {
+    const wan = count / 10_000
+    return wan >= 100 ? `${Math.round(wan)}万` : `${wan.toFixed(0)}万`
+  }
+  if (count >= 1_000) return `${(count / 1_000).toFixed(0)}K`
+  return String(Math.round(count))
+}
+
 // ---------- 博主聚合数据 ----------
 
 function parseFollowers(followersStr) {
@@ -28,12 +44,15 @@ function formatFollowersCount(count) {
 export function getBloggerStats() {
   const totalFollowers = bloggersData.reduce((sum, b) => sum + parseFollowers(b.followers), 0)
   const bloggerCount = bloggersData.length
+  const estimatedExposureImpressions = TOTAL_POSTS * EST_AVG_IMPRESSIONS_PER_POST
   return {
     totalFollowers,
     formattedFollowers: formatFollowersCount(totalFollowers),
     bloggerCount,
     averageFollowers: Math.floor(totalFollowers / Math.max(bloggerCount, 1)),
-    totalPosts: TOTAL_POSTS
+    totalPosts: TOTAL_POSTS,
+    estimatedExposureImpressions,
+    formattedExposure: formatExposureImpressions(estimatedExposureImpressions)
   }
 }
 

@@ -10,6 +10,11 @@ const routes = [
   { path: '/', component: () => import('./pages/tob/index.vue') },
   { path: '/tob', component: () => import('./pages/tob/index.vue') },
   { path: '/cases', component: () => import('./pages/cases/index.vue') },
+  { path: '/cases/tweet', component: () => import('./pages/cases/tweet.vue') },
+  { path: '/cases/cpc', component: () => import('./pages/cases/cpc.vue') },
+  { path: '/cases/community', component: () => import('./pages/cases/community.vue') },
+  { path: '/cases/ai-access', component: () => import('./pages/cases/ai-access.vue') },
+  { path: '/cases/oversea-cloud', component: () => import('./pages/cases/oversea-cloud.vue') },
   { path: '/tob/internal', component: () => import('./pages/tob/internal.vue') },
   {
     path: '/tob/deals',
@@ -20,6 +25,11 @@ const routes = [
     redirect: (to) => ({ path: '/tob/internal', query: { ...to.query, tab: 'reports' } })
   },
   { path: '/tob/services', component: () => import('./pages/tob/services/index.vue') },
+  { path: '/tob/services/tweet', component: () => import('./pages/tob/services/tweet.vue') },
+  { path: '/tob/services/cpc', component: () => import('./pages/tob/services/cpc.vue') },
+  { path: '/tob/services/community', component: () => import('./pages/tob/services/community.vue') },
+  { path: '/tob/services/ai-access', component: () => import('./pages/tob/services/ai-access.vue') },
+  { path: '/tob/services/oversea-cloud', component: () => import('./pages/tob/services/oversea-cloud.vue') },
   { path: '/matrix', component: () => import('./pages/matrix/index.vue') },
   { path: '/annual-report-2025', component: () => import('./pages/annual-report/index.vue') },
   { path: '/workspace', component: () => import('./pages/workspace/index.vue') },

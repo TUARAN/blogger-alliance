@@ -134,7 +134,21 @@ defineProps({
           <path d="M8 11V8a4 4 0 0 1 8 0v3" />
         </svg>
         <span>{{ module.external ? '打开工具' : '进入模块' }}</span>
-        <span class="transition-transform group-hover:translate-x-1">→</span>
+        <svg
+          v-if="module.external"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          class="h-4 w-4 shrink-0 opacity-80 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M4.25 5.5a.75.75 0 01.75-.75h8a.75.75 0 01.75.75v8a.75.75 0 01-1.5 0V7.56l-6.22 6.22a.75.75 0 11-1.06-1.06l6.22-6.22H5a.75.75 0 010-1.5z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <span v-else class="transition-transform group-hover:translate-x-1">→</span>
       </div>
     </component>
   </div>

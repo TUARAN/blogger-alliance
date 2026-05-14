@@ -36,13 +36,33 @@ defineProps({
             >
               {{ item.label }}
             </router-link>
+            <router-link
+              to="/workspace"
+              class="relative whitespace-nowrap transition-colors hover:text-indigo-700 after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-0 after:bg-indigo-600 after:transition-all hover:after:w-full"
+              active-class="text-indigo-700 after:w-full"
+            >
+              工作总览
+            </router-link>
             <a
               href="https://md.tuaran666.workers.dev/"
               target="_blank"
               rel="noopener noreferrer"
-              class="relative whitespace-nowrap transition-colors hover:text-indigo-700 after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-0 after:bg-indigo-600 after:transition-all hover:after:w-full"
+              class="relative inline-flex items-center gap-1 whitespace-nowrap transition-colors hover:text-indigo-700 after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-0 after:bg-indigo-600 after:transition-all hover:after:w-full"
             >
               同步工具
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="h-3.5 w-3.5 shrink-0 opacity-70"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.25 5.5a.75.75 0 01.75-.75h8a.75.75 0 01.75.75v8a.75.75 0 01-1.5 0V7.56l-6.22 6.22a.75.75 0 11-1.06-1.06l6.22-6.22H5a.75.75 0 010-1.5z"
+                  clip-rule="evenodd"
+                />
+              </svg>
             </a>
           </div>
           <slot name="links"></slot>
