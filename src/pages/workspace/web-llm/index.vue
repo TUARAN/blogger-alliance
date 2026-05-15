@@ -699,18 +699,18 @@ onBeforeUnmount(() => {
 
 <style>
 #web-llm-app-shell {
-  --primary: #14532d;
-  --primary-strong: #0f3f23;
-  --accent: #f59e0b;
-  --sidebar-bg: linear-gradient(180deg, #f4f7f1 0%, #eef3e7 100%);
-  --page-bg: radial-gradient(circle at top, #fff7e8 0%, #f9faf5 38%, #f3f6ef 100%);
-  --panel-bg: rgba(255, 255, 255, 0.82);
-  --panel-border: rgba(15, 63, 35, 0.12);
-  --text-main: #142013;
-  --text-muted: #5d6858;
-  --msg-user: linear-gradient(135deg, #14532d 0%, #1d6b3d 100%);
-  --msg-ai: #f7f1e4;
-  --shadow-soft: 0 24px 60px rgba(20, 32, 19, 0.08);
+  --primary: #4f46e5;
+  --primary-strong: #4338ca;
+  --accent: #7c3aed;
+  --sidebar-bg: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+  --page-bg: linear-gradient(180deg, rgba(238, 242, 255, 0.55) 0%, #ffffff 55%, #ffffff 100%);
+  --panel-bg: rgba(255, 255, 255, 0.85);
+  --panel-border: rgba(99, 102, 241, 0.14);
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --msg-user: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c026d3 100%);
+  --msg-ai: #f8fafc;
+  --shadow-soft: 0 24px 60px rgba(79, 70, 229, 0.10);
 
   display: flex;
   min-height: 100vh;
@@ -744,7 +744,7 @@ onBeforeUnmount(() => {
 #web-llm-app-shell #sidebar {
   width: 280px;
   background: var(--sidebar-bg);
-  border-right: 1px solid rgba(20, 83, 45, 0.12);
+  border-right: 1px solid rgba(99, 102, 241, 0.12);
   display: flex;
   flex-direction: column;
   backdrop-filter: blur(14px);
@@ -752,7 +752,7 @@ onBeforeUnmount(() => {
 
 #web-llm-app-shell #sidebar-header {
   padding: 18px;
-  border-bottom: 1px solid rgba(20, 83, 45, 0.12);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.12);
 }
 
 #web-llm-app-shell #new-chat-btn {
@@ -769,7 +769,7 @@ onBeforeUnmount(() => {
     transform 180ms ease,
     background 180ms ease,
     box-shadow 180ms ease;
-  box-shadow: 0 10px 24px rgba(20, 83, 45, 0.22);
+  box-shadow: 0 10px 24px rgba(79, 70, 229, 0.22);
 }
 
 #web-llm-app-shell #new-chat-btn:hover {
@@ -801,13 +801,13 @@ onBeforeUnmount(() => {
 
 #web-llm-app-shell .chat-item:hover {
   background: rgba(255, 255, 255, 0.75);
-  border-color: rgba(20, 83, 45, 0.1);
+  border-color: rgba(99, 102, 241, 0.1);
   transform: translateX(2px);
 }
 
 #web-llm-app-shell .chat-item.active {
-  background: rgba(20, 83, 45, 0.1);
-  border-color: rgba(20, 83, 45, 0.18);
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.18);
   color: var(--primary-strong);
 }
 
@@ -862,8 +862,14 @@ onBeforeUnmount(() => {
 }
 
 #web-llm-app-shell #header h1 {
-  font-size: 26px;
+  font-size: 28px;
   line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 50%, #c026d3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 #web-llm-app-shell #model-controls {
@@ -875,7 +881,7 @@ onBeforeUnmount(() => {
 #web-llm-app-shell select {
   padding: 11px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(20, 83, 45, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.12);
   min-width: 250px;
   background: rgba(255, 255, 255, 0.92);
 }
@@ -934,9 +940,9 @@ onBeforeUnmount(() => {
 }
 
 #web-llm-app-shell .notice-info {
-  background: rgba(20, 83, 45, 0.06);
-  border-color: rgba(20, 83, 45, 0.1);
-  color: #204529;
+  background: rgba(99, 102, 241, 0.06);
+  border-color: rgba(99, 102, 241, 0.1);
+  color: #3730a3;
 }
 
 #web-llm-app-shell .notice-warn {
@@ -964,7 +970,7 @@ onBeforeUnmount(() => {
   line-height: 1.6;
   font-size: 15px;
   word-wrap: break-word;
-  box-shadow: 0 14px 30px rgba(20, 32, 19, 0.08);
+  box-shadow: 0 14px 30px rgba(79, 70, 229, 0.08);
   animation: web-llm-rise-in 220ms ease;
 }
 
@@ -1016,7 +1022,7 @@ onBeforeUnmount(() => {
 #web-llm-app-shell #preview-img {
   max-height: 110px;
   border-radius: 12px;
-  border: 1px solid rgba(20, 83, 45, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.12);
 }
 
 #web-llm-app-shell #remove-img-btn {
@@ -1044,7 +1050,7 @@ onBeforeUnmount(() => {
 #web-llm-app-shell #text-input {
   flex: 1;
   padding: 12px 14px;
-  border: 1px solid rgba(20, 83, 45, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.12);
   border-radius: 16px;
   resize: none;
   min-height: 48px;
@@ -1054,13 +1060,13 @@ onBeforeUnmount(() => {
 
 #web-llm-app-shell #text-input:focus,
 #web-llm-app-shell select:focus {
-  outline: 2px solid rgba(245, 158, 11, 0.35);
-  border-color: rgba(245, 158, 11, 0.4);
+  outline: 2px solid rgba(99, 102, 241, 0.35);
+  border-color: rgba(99, 102, 241, 0.4);
 }
 
 #web-llm-app-shell .icon-btn {
   background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(20, 83, 45, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.12);
   border-radius: 14px;
   padding: 12px;
   cursor: pointer;
@@ -1084,7 +1090,7 @@ onBeforeUnmount(() => {
 #web-llm-app-shell #loading-modal {
   position: absolute;
   inset: 0;
-  background: rgba(248, 249, 243, 0.85);
+  background: rgba(238, 242, 255, 0.85);
   z-index: 100;
   display: none;
   justify-content: center;
@@ -1093,13 +1099,13 @@ onBeforeUnmount(() => {
 }
 
 #web-llm-app-shell .modal-box {
-  background: #fffef9;
+  background: #ffffff;
   padding: 28px;
   border-radius: 24px;
   box-shadow: var(--shadow-soft);
   width: min(440px, 100%);
   text-align: center;
-  border: 1px solid rgba(20, 83, 45, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.08);
 }
 
 #web-llm-app-shell .modal-box h2 {
@@ -1120,7 +1126,7 @@ onBeforeUnmount(() => {
 }
 
 #web-llm-app-shell progress::-webkit-progress-bar {
-  background-color: #ece7dc;
+  background-color: #e0e7ff;
   border-radius: 999px;
 }
 
