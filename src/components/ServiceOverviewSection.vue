@@ -15,117 +15,119 @@
 
     <!-- Desktop table (md+) -->
     <div class="mt-6 hidden md:block overflow-x-auto rounded-xl border border-slate-200 bg-white">
-      <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
+      <table class="min-w-full divide-y divide-slate-200 text-left text-sm table-fixed">
+        <colgroup>
+          <col class="w-[17%]" />
+          <col class="w-[22%]" />
+          <col class="w-[27%]" />
+          <col class="w-[22%]" />
+          <col class="w-[12%]" />
+        </colgroup>
         <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
           <tr>
-            <th class="px-4 py-3 font-semibold whitespace-nowrap">服务</th>
-            <th class="px-4 py-3 font-semibold whitespace-nowrap">合作模式</th>
+            <th class="px-4 py-3 font-semibold">服务</th>
             <th class="px-4 py-3 font-semibold">适合场景</th>
-            <th class="px-4 py-3 font-semibold whitespace-nowrap">报价 & 起步</th>
+            <th class="px-4 py-3 font-semibold">报价 & 起步</th>
             <th class="px-4 py-3 font-semibold">核心指标 / 资产</th>
-            <th class="px-4 py-3 font-semibold whitespace-nowrap">起投周期</th>
-            <th class="px-4 py-3 font-semibold whitespace-nowrap">专项介绍</th>
-            <th class="px-4 py-3 font-semibold whitespace-nowrap">案例参考</th>
+            <th class="px-4 py-3 font-semibold whitespace-nowrap">操作</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-200">
           <!-- 推文 -->
           <tr class="hover:bg-slate-50/60">
             <td class="px-4 py-4 align-top">
-              <div class="inline-flex items-center gap-2 font-semibold whitespace-nowrap text-gray-900">
+              <div class="inline-flex items-center gap-2 font-semibold text-gray-900">
                 <span>✍️</span><span>推文服务</span>
               </div>
-              <div class="mt-1 text-xs text-gray-500 whitespace-nowrap">最多 20 位博主 · 多平台同发</div>
-            </td>
-            <td class="px-4 py-4 align-top">
-              <span class="inline-flex items-center justify-center rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700 whitespace-nowrap">单次交付</span>
+              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium text-slate-700">单次交付</span></div>
+              <div class="mt-1.5 text-xs text-gray-500">最多 20 位 · 多平台同发</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div>想要快速曝光、内容种草和品牌心智</div>
-              <div class="mt-1 text-xs text-gray-500">单次最多调动 20 位博主，掘金 / 知乎 / 小红书 / 公众号 / X 等多平台同时分发</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">单次最多调动 20 位博主，掘金 / 知乎 / 小红书 / 公众号 / X 等多平台同时分发</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div class="font-semibold text-gray-900">起步 ¥500 / 篇</div>
-              <div class="mt-1">直发 ¥500–3k／篇</div>
-              <div>测评 ¥1.5k–8k／篇</div>
-              <div>深度测评 ¥5k–3w／篇</div>
-              <div class="mt-1 text-xs text-gray-500">按博主层级 / 粉丝量浮动</div>
+              <div class="mt-1.5 space-y-0.5">
+                <div>直发 ¥500–3k／篇</div>
+                <div>测评 ¥1.5k–8k／篇</div>
+                <div>深度测评 ¥5k–3w／篇</div>
+              </div>
+              <div class="mt-1.5 text-xs text-gray-500">按博主层级 / 粉丝量浮动</div>
+              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>单篇起 / 可排期</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div>阅读量、关注转化、品牌可信度</div>
-              <div class="mt-1 text-xs text-gray-500">沉淀：原帖链接 + 平台权重</div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700 whitespace-nowrap">单篇起 / 可排期</td>
-            <td class="px-4 py-4 align-top">
-              <router-link to="/tob/services/tweet" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍</router-link>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">沉淀：原帖链接 + 平台权重</div>
             </td>
             <td class="px-4 py-4 align-top">
-              <router-link to="/cases/tweet" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">查看案例</router-link>
+              <div class="flex flex-col gap-1.5 text-sm">
+                <router-link to="/tob/services/tweet" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍 →</router-link>
+                <router-link to="/cases/tweet" class="font-medium text-slate-600 hover:text-indigo-700 hover:underline whitespace-nowrap">查看案例 →</router-link>
+              </div>
             </td>
           </tr>
 
           <!-- 引流 -->
           <tr class="hover:bg-slate-50/60">
             <td class="px-4 py-4 align-top">
-              <span class="inline-flex items-center gap-2 font-semibold whitespace-nowrap text-gray-900">
+              <div class="inline-flex items-center gap-2 font-semibold text-gray-900">
                 <span>🔗</span><span>引流服务</span>
-              </span>
-            </td>
-            <td class="px-4 py-4 align-top">
-              <span class="inline-flex items-center justify-center rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-medium text-emerald-700 whitespace-nowrap">按效果 · CPC</span>
+              </div>
+              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-[11px] font-medium text-emerald-700">按效果 · CPC</span></div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">想要可量化点击、注册和试用线索</td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div class="font-semibold text-gray-900">起步 ¥1 / 有效点击</div>
-              <div class="mt-1">CPC ¥1–10 / 有效点击</div>
-              <div class="mt-1 text-xs text-gray-500">AI / 出海类偏高，国内通用工具偏低；按品类与结算口径浮动</div>
+              <div class="mt-1.5">CPC ¥1–10 / 有效点击</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">AI / 出海类偏高，国内通用工具偏低；按品类与结算口径浮动</div>
+              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>建议 ≥ 2 周</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div>点击量、注册量、试用线索</div>
-              <div class="mt-1 text-xs text-gray-500">沉淀：UTM 追踪数据</div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700 whitespace-nowrap">建议 ≥ 2 周</td>
-            <td class="px-4 py-4 align-top">
-              <router-link to="/tob/services/cpc" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍</router-link>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">沉淀：UTM 追踪数据</div>
             </td>
             <td class="px-4 py-4 align-top">
-              <router-link to="/cases/cpc" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">查看案例</router-link>
+              <div class="flex flex-col gap-1.5 text-sm">
+                <router-link to="/tob/services/cpc" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍 →</router-link>
+                <router-link to="/cases/cpc" class="font-medium text-slate-600 hover:text-indigo-700 hover:underline whitespace-nowrap">查看案例 →</router-link>
+              </div>
             </td>
           </tr>
 
           <!-- 社群 -->
           <tr class="hover:bg-slate-50/60">
             <td class="px-4 py-4 align-top">
-              <span class="inline-flex items-center gap-2 font-semibold whitespace-nowrap text-gray-900">
+              <div class="inline-flex items-center gap-2 font-semibold text-gray-900">
                 <span>👥</span><span>社群服务</span>
-              </span>
-            </td>
-            <td class="px-4 py-4 align-top">
-              <span class="inline-flex items-center justify-center rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-medium text-blue-700 whitespace-nowrap">月度运营</span>
+              </div>
+              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-blue-50 border border-blue-200 px-2.5 py-0.5 text-[11px] font-medium text-blue-700">月度运营</span></div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">想要长期私域沉淀和稳定开发者关系</td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div class="font-semibold text-gray-900">起步 ¥2k / 月</div>
-              <div class="mt-1">社群宣发 ¥2k–1w／月</div>
-              <div>建群项目 ¥3k–3w</div>
-              <div class="mt-1 text-xs text-gray-500">按社群规模、活跃节奏与运营深度浮动</div>
+              <div class="mt-1.5 space-y-0.5">
+                <div>社群宣发 ¥2k–1w／月</div>
+                <div>建群项目 ¥3k–3w</div>
+              </div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">按社群规模、活跃节奏与运营深度浮动</div>
+              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>月度起 · 建群 ≥ 1 月</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div>入群人数、活跃度、长期触达资产</div>
-              <div class="mt-1 text-xs text-gray-500">沉淀：专属社群 / 私域用户池</div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700 whitespace-nowrap">月度起 · 建群 ≥ 1 月</td>
-            <td class="px-4 py-4 align-top">
-              <router-link to="/tob/services/community" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍</router-link>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">沉淀：专属社群 / 私域用户池</div>
             </td>
             <td class="px-4 py-4 align-top">
-              <router-link to="/cases/community" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">查看案例</router-link>
+              <div class="flex flex-col gap-1.5 text-sm">
+                <router-link to="/tob/services/community" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍 →</router-link>
+                <router-link to="/cases/community" class="font-medium text-slate-600 hover:text-indigo-700 hover:underline whitespace-nowrap">查看案例 →</router-link>
+              </div>
             </td>
           </tr>
 
           <!-- 分组分隔行：长期联运专题 -->
           <tr class="bg-amber-50/40">
-            <td colspan="8" class="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-amber-800">
+            <td colspan="5" class="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-amber-800">
               <span class="inline-flex items-center gap-2">
                 <span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-500"></span>
                 以下为长期联运专题 · 由联盟方搭建内容 / 站点 / 仓库 / 社群资产，按成交分佣
@@ -136,64 +138,60 @@
           <!-- AI Access -->
           <tr class="hover:bg-slate-50/60">
             <td class="px-4 py-4 align-top">
-              <span class="inline-flex items-center gap-2 font-semibold whitespace-nowrap text-gray-900">
+              <div class="inline-flex items-center gap-2 font-semibold text-gray-900">
                 <span>🤖</span><span>AI Access</span>
-              </span>
-            </td>
-            <td class="px-4 py-4 align-top">
-              <span class="inline-flex items-center justify-center rounded-full bg-amber-100 border border-amber-200 px-3 py-1 text-xs font-medium text-amber-800 whitespace-nowrap">联运分佣</span>
+              </div>
+              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-amber-100 border border-amber-200 px-2.5 py-0.5 text-[11px] font-medium text-amber-800">联运分佣</span></div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div>境外大模型 / AI SaaS 订阅承接</div>
-              <div class="mt-1 text-xs text-gray-500">聚焦 ChatGPT / Claude 等订阅类工具</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">聚焦 ChatGPT / Claude 等订阅类工具</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div class="font-semibold text-gray-900">零硬投入 · 按成交分佣</div>
-              <div class="mt-1">参考 30%–60% / 笔</div>
-              <div class="mt-1 text-xs text-gray-500">按品类、客单价、复购周期浮动</div>
+              <div class="mt-1.5">参考 30%–60% / 笔</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">按品类、客单价、复购周期浮动</div>
+              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>建议 ≥ 3 个月</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div>高 LTV 长期转化</div>
-              <div class="mt-1 text-xs text-gray-500">沉淀：AI 站点矩阵 + 仓库 SEO + 社群</div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700 whitespace-nowrap">建议 ≥ 3 个月</td>
-            <td class="px-4 py-4 align-top">
-              <router-link to="/tob/services/ai-access" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍</router-link>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">沉淀：AI 站点矩阵 + 仓库 SEO + 社群</div>
             </td>
             <td class="px-4 py-4 align-top">
-              <router-link to="/cases/ai-access" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">查看案例</router-link>
+              <div class="flex flex-col gap-1.5 text-sm">
+                <router-link to="/tob/services/ai-access" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍 →</router-link>
+                <router-link to="/cases/ai-access" class="font-medium text-slate-600 hover:text-indigo-700 hover:underline whitespace-nowrap">查看案例 →</router-link>
+              </div>
             </td>
           </tr>
 
           <!-- 出海云访问 -->
           <tr class="hover:bg-slate-50/60">
             <td class="px-4 py-4 align-top">
-              <span class="inline-flex items-center gap-2 font-semibold whitespace-nowrap text-gray-900">
+              <div class="inline-flex items-center gap-2 font-semibold text-gray-900">
                 <span>🌐</span><span>出海云访问</span>
-              </span>
-            </td>
-            <td class="px-4 py-4 align-top">
-              <span class="inline-flex items-center justify-center rounded-full bg-amber-100 border border-amber-200 px-3 py-1 text-xs font-medium text-amber-800 whitespace-nowrap">联运分佣</span>
+              </div>
+              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-amber-100 border border-amber-200 px-2.5 py-0.5 text-[11px] font-medium text-amber-800">联运分佣</span></div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div>云服务 / 节点 / 跨境办公出海推广</div>
-              <div class="mt-1 text-xs text-gray-500">聚焦真实节点测速 + 出海团队场景教程</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">聚焦真实节点测速 + 出海团队场景教程</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div class="font-semibold text-gray-900">零硬投入 · 按成交分佣</div>
-              <div class="mt-1">参考 30%–60% / 笔</div>
-              <div class="mt-1 text-xs text-gray-500">仅承接合规面向出海 / 跨境场景</div>
+              <div class="mt-1.5">参考 30%–60% / 笔</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">仅承接合规面向出海 / 跨境场景</div>
+              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>建议 ≥ 3 个月</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div>高 LTV 长期转化</div>
-              <div class="mt-1 text-xs text-gray-500">沉淀：教程站 + 对比导航 + 出海社群</div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700 whitespace-nowrap">建议 ≥ 3 个月</td>
-            <td class="px-4 py-4 align-top">
-              <router-link to="/tob/services/oversea-cloud" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍</router-link>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">沉淀：教程站 + 对比导航 + 出海社群</div>
             </td>
             <td class="px-4 py-4 align-top">
-              <router-link to="/cases/oversea-cloud" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">查看案例</router-link>
+              <div class="flex flex-col gap-1.5 text-sm">
+                <router-link to="/tob/services/oversea-cloud" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍 →</router-link>
+                <router-link to="/cases/oversea-cloud" class="font-medium text-slate-600 hover:text-indigo-700 hover:underline whitespace-nowrap">查看案例 →</router-link>
+              </div>
             </td>
           </tr>
         </tbody>

@@ -9,7 +9,7 @@ const navLinks = [
 ]
 
 const workspaceMenu = [
-  { label: '工作总览', to: '/workspace', kind: 'router' },
+  { label: '总览', to: '/workspace', kind: 'router' },
   { label: '矩阵看板', to: '/matrix', kind: 'router' },
   { label: '内部数据', to: '/tob/internal', kind: 'router' },
   { label: '同步工具', href: 'https://md.tuaran666.workers.dev/', kind: 'external' }
@@ -69,7 +69,7 @@ defineProps({
                 :class="workspaceActiveRoute ? 'text-slate-900' : ''"
                 @click.stop="workspaceOpen = !workspaceOpen"
               >
-                工作台
+                后台
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
