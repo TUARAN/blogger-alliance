@@ -14,16 +14,16 @@ const modules = [
     }
   },
   {
-    title: '矩阵看板',
-    description: '按博主查看矩阵账号分布、平台覆盖与阅读／粉丝表现，支撑运营复盘与拓展决策。',
-    tag: '矩阵运营',
-    icon: '🧩',
-    to: '/matrix',
+    title: '案例',
+    description: '查看已整理的合作案例、服务样例和交付展示。',
+    tag: '案例沉淀',
+    icon: '📌',
+    to: '/cases',
     theme: {
-      shadow: 'shadow-teal-100/40',
-      icon: 'bg-teal-100',
-      tag: 'bg-teal-50 text-teal-700',
-      cta: 'text-teal-700'
+      shadow: 'shadow-amber-100/40',
+      icon: 'bg-amber-100',
+      tag: 'bg-amber-50 text-amber-700',
+      cta: 'text-amber-700'
     }
   },
   {
@@ -40,9 +40,9 @@ const modules = [
     }
   },
   {
-    title: '内部数据中心',
+    title: '数据报告',
     description: '合作进度、数据报告、年度总览统一台账，凭证共享。',
-    tag: '内部数据',
+    tag: '数据报告',
     icon: '🗂️',
     locked: true,
     to: '/tob/internal',
@@ -51,20 +51,6 @@ const modules = [
       icon: 'bg-indigo-100',
       tag: 'bg-indigo-50 text-indigo-700',
       cta: 'text-indigo-700'
-    }
-  },
-  {
-    title: '博主联盟同步工具',
-    description: '在浏览器中同步与管理内容，新标签页打开。',
-    tag: '外部工具',
-    icon: '🔄',
-    href: 'https://md.tuaran666.workers.dev/',
-    external: true,
-    theme: {
-      shadow: 'shadow-violet-100/40',
-      icon: 'bg-violet-100',
-      tag: 'bg-violet-50 text-violet-700',
-      cta: 'text-violet-700'
     }
   }
 ]

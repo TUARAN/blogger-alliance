@@ -30,7 +30,7 @@ const routes = [
   { path: '/tob/services/community', component: () => import('./pages/tob/services/community.vue') },
   { path: '/tob/services/ai-access', component: () => import('./pages/tob/services/ai-access.vue') },
   { path: '/tob/services/oversea-cloud', component: () => import('./pages/tob/services/oversea-cloud.vue') },
-  { path: '/matrix', component: () => import('./pages/matrix/index.vue') },
+  { path: '/matrix', redirect: '/workspace' },
   { path: '/annual-report-2025', component: () => import('./pages/annual-report/index.vue') },
   { path: '/workspace', component: () => import('./pages/workspace/index.vue') },
   {

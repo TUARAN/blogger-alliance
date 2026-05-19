@@ -58,7 +58,7 @@ export function clearInternalAccessSession() {
   localStorage.removeItem(INTERNAL_ACCESS_SESSION_KEY)
 }
 
-/** 在「锁定」时任一内部数据页调用：清空两页本地缓存与访问会话 */
+/** 在「锁定」时任一数据报告页调用：清空两页本地缓存与访问会话 */
 export function clearInternalAccessCaches() {
   localStorage.removeItem(INTERNAL_DEALS_CACHE_KEY)
   localStorage.removeItem(INTERNAL_REPORTS_CACHE_KEY)

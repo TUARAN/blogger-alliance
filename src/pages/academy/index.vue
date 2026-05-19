@@ -106,7 +106,7 @@ import { trackLinkClick } from '../../utils/stats.js'
 const route = useRoute()
 const router = useRouter()
 
-/** Legacy `tab=matrix` and other unknown values normalize to learning content; `/academy` without `tab` is unchanged. */
+/** Legacy tab values normalize to learning content; `/academy` without `tab` is unchanged. */
 const validAcademyTabs = ['knowledge']
 
 const needsAcademyTabNormalize = (tab) => {

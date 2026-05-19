@@ -5,7 +5,7 @@
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
       <div class="mb-5 md:mb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-3">
         <div>
-          <h1 class="text-2xl md:text-3xl font-bold text-gray-900">内部数据台账</h1>
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-900">数据报告</h1>
           <p class="mt-2 text-sm md:text-base text-gray-600">
             合作进度、数据报告与年度总览融合为一处台账：既能查进度、查报告，也能新增、修改、删除数据。凭证解锁后 30 分钟内免重复输入。
           </p>
