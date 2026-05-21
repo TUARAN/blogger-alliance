@@ -16,6 +16,9 @@ const PLATFORM_HEADER_MAP = new Map([
   ["公众号", "wechat"],
   ["微信", "wechat"],
   ["博客园", "cnblogs"],
+  ["小红书", "xiaohongshu"],
+  ["Segmentfault", "segmentfault"],
+  ["SegmentFault", "segmentfault"],
   ["微博", "weibo"],
   ["51cto", "51cto"],
   ["51CTO", "51cto"],
@@ -28,6 +31,8 @@ const LOGIN_URLS = {
   zhihu: "https://www.zhihu.com/",
   wechat: "https://mp.weixin.qq.com/",
   cnblogs: "https://www.cnblogs.com/",
+  xiaohongshu: "https://www.xiaohongshu.com/",
+  segmentfault: "https://segmentfault.com/",
   weibo: "https://weibo.com/",
   "51cto": "https://blog.51cto.com/",
 };
@@ -93,6 +98,8 @@ function platformFromUrl(url) {
     if (hostname.includes("zhihu.com")) return "zhihu";
     if (hostname.includes("mp.weixin.qq.com")) return "wechat";
     if (hostname.includes("cnblogs.com")) return "cnblogs";
+    if (hostname.includes("xhslink.com") || hostname.includes("xiaohongshu.com")) return "xiaohongshu";
+    if (hostname.includes("segmentfault.com")) return "segmentfault";
     if (hostname.includes("weibo.com") && pathname.includes("/ttarticle/")) return "weibo";
     if (hostname.includes("51cto.com")) return "51cto";
     return "unknown";
@@ -365,6 +372,17 @@ async function extractVisibleMetrics(page, platform) {
       result.likes = countNearLabel("赞");
       result.watching = countNearLabel("在看");
       result.comments = countNearLabel("留言");
+    } else if (currentPlatform === "xiaohongshu") {
+      result.likes = countNearLabel("点赞") || countNearLabel("赞");
+      result.collects = countNearLabel("收藏");
+      result.comments = countNearLabel("评论");
+    } else if (currentPlatform === "segmentfault") {
+      const articleFooter = bodyText.match(/赞\s*收藏\s*分享\s*阅读\s*(\d+(?:\.\d+)?[kKmMwW万]?)/);
+      result.views = articleFooter ? parseCompactNumber(articleFooter[1]) : null;
+      // SegmentFault shows "赞 收藏 分享" without counts when counts are zero or hidden.
+      result.likes = null;
+      result.collects = null;
+      result.comments = null;
     }
 
     return result;

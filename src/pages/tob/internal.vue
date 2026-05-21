@@ -244,6 +244,7 @@
                             </div>
                             <div class="flex shrink-0 gap-2">
                               <button class="text-xs text-violet-600 hover:text-violet-800" @click="openViewReport(report)">查看</button>
+                              <router-link class="text-xs text-slate-600 hover:text-slate-800" :to="reportSharePath(report)">分享页</router-link>
                               <button class="text-xs text-indigo-600 hover:text-indigo-800" @click="openEditReport(report)">编辑</button>
                             </div>
                           </div>
@@ -331,6 +332,7 @@
               </div>
               <div class="shrink-0 flex items-center gap-3">
                 <button class="text-violet-600 hover:text-violet-800" @click="openViewReport(report)">查看</button>
+                <router-link class="text-slate-600 hover:text-slate-800" :to="reportSharePath(report)">分享页</router-link>
                 <button class="text-indigo-600 hover:text-indigo-800" @click="openEditReport(report)">编辑</button>
               </div>
             </div>
@@ -371,9 +373,14 @@
             <h3 class="mt-1 text-lg font-bold text-slate-900">{{ viewingReport.project || viewingReport.title || '未命名报告' }}</h3>
             <p v-if="viewingReport.articleTitle" class="mt-1 text-sm text-slate-500">{{ formatArticleTitle(viewingReport.articleTitle) }}</p>
           </div>
-          <button class="shrink-0 rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50" @click="closeViewReport">
-            关闭
-          </button>
+          <div class="shrink-0 flex items-center gap-2">
+            <button class="rounded-lg border border-violet-200 bg-violet-50 px-3 py-1.5 text-sm font-medium text-violet-700 hover:bg-violet-100" @click="exportViewingReportPdf">
+              导出 PDF
+            </button>
+            <button class="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50" @click="closeViewReport">
+              关闭
+            </button>
+          </div>
         </div>
 
         <div class="space-y-5 px-5 py-4">
@@ -852,9 +859,101 @@ function openViewReport(report) {
   viewingReport.value = { ...report }
   reportViewerOpen.value = true
 }
+function reportSharePath(report) {
+  return `/tob/reports/${encodeURIComponent(report?.id || '')}`
+}
 function closeViewReport() {
   reportViewerOpen.value = false
   viewingReport.value = null
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function renderMetricCard(label, value) {
+  return `<div class="metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(formatNumber(value))}</strong></div>`
+}
+
+function buildReportPrintHtml(report) {
+  const platforms = Array.isArray(report.platforms) ? report.platforms : []
+  const title = report.project || report.title || '数据报告'
+  const articleTitle = report.articleTitle ? formatArticleTitle(report.articleTitle) : ''
+  const stats = report.stats || {}
+  const contentBlocks = String(report.content || '暂无正文。')
+    .split(/\n{2,}/)
+    .map((block) => `<p>${escapeHtml(block).replace(/\n/g, '<br>')}</p>`)
+    .join('')
+
+  return `<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>${escapeHtml(title)} - PDF</title>
+  <style>
+    @page { size: A4; margin: 18mm 16mm; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.72; }
+    .page { max-width: 760px; margin: 0 auto; }
+    .eyebrow { color: #6d28d9; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { margin: 8px 0 4px; font-size: 26px; line-height: 1.25; }
+    .article-title { margin: 0 0 14px; color: #64748b; font-size: 14px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 14px 0; color: #475569; font-size: 12px; }
+    .platforms { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 18px; }
+    .platform { border: 1px solid #ddd6fe; border-radius: 999px; padding: 3px 9px; color: #6d28d9; background: #f5f3ff; font-size: 12px; }
+    .metrics { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 18px 0; }
+    .metric { border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; background: #f8fafc; }
+    .metric span { display: block; color: #64748b; font-size: 12px; }
+    .metric strong { display: block; margin-top: 4px; color: #0f172a; font-size: 18px; }
+    .content { margin-top: 18px; border-top: 1px solid #e2e8f0; padding-top: 14px; font-size: 14px; }
+    .content p { margin: 0 0 12px; }
+    @media print { .page { max-width: none; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="eyebrow">数据报告</div>
+    <h1>${escapeHtml(title)}</h1>
+    ${articleTitle ? `<p class="article-title">${escapeHtml(articleTitle)}</p>` : ''}
+    <div class="meta">
+      <span>报告 ID：${escapeHtml(report.id || '-')}</span>
+      <span>合作编码：${escapeHtml(report.cooperationId || '-')}</span>
+      <span>执行人：${escapeHtml(report.author || '-')}</span>
+      ${report.period ? `<span>周期：${escapeHtml(report.period)}</span>` : ''}
+    </div>
+    ${platforms.length ? `<div class="platforms">${platforms.map((platform) => `<span class="platform">${escapeHtml(platform)}</span>`).join('')}</div>` : ''}
+    <section class="metrics">
+      ${renderMetricCard('阅读', stats.reads)}
+      ${renderMetricCard('点赞', stats.likes)}
+      ${renderMetricCard('收藏', stats.favorites)}
+      ${renderMetricCard('评论', stats.comments)}
+      ${renderMetricCard('转发', stats.shares)}
+    </section>
+    <section class="content">${contentBlocks}</section>
+  </main>
+</body>
+</html>`
+}
+
+function exportViewingReportPdf() {
+  if (!viewingReport.value) return
+  const printWindow = window.open('', '_blank', 'width=960,height=720')
+  if (!printWindow) {
+    setToolbarMessage('无法打开 PDF 导出窗口，请允许浏览器弹窗后重试。', true)
+    return
+  }
+  printWindow.document.open()
+  printWindow.document.write(buildReportPrintHtml(viewingReport.value))
+  printWindow.document.close()
+  printWindow.focus()
+  printWindow.setTimeout(() => {
+    printWindow.print()
+  }, 250)
 }
 function openEditReport(report) {
   editingReport.value = { ...report }

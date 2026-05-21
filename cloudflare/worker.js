@@ -506,6 +506,80 @@ async function handleReports(request, env) {
   })
 }
 
+async function handleClientReport(request, env, reportId) {
+  const body = await request.json().catch(() => null)
+  const credential = normalizeCredential(body?.credential)
+
+  if (!credential) {
+    return json({ error: 'EMPTY_CREDENTIAL' }, { status: 400 })
+  }
+
+  const clientKey = await createClientKey(request)
+  const accessAttempt = await readAccessAttempt(env, clientKey)
+  const lockedUntil = Number(accessAttempt?.lockedUntil || 0)
+
+  if (lockedUntil > Date.now()) {
+    return createLockResponse(lockedUntil)
+  }
+
+  if (credential !== normalizeCredential(env.INTERNAL_ACCESS_CREDENTIAL)) {
+    const nextAttempt = await registerFailedAccessAttempt(env, clientKey, accessAttempt)
+
+    if (nextAttempt.lockedUntil > Date.now()) {
+      return createLockResponse(nextAttempt.lockedUntil)
+    }
+
+    return json({ error: 'INVALID_CREDENTIAL' }, { status: 401 })
+  }
+
+  await clearAccessAttempt(env, clientKey)
+
+  const row = await env.DB.prepare(`
+    SELECT
+      id,
+      title,
+      article_title AS articleTitle,
+      project,
+      author,
+      period,
+      published_at AS publishedAt,
+      platforms_json AS platformsJson,
+      stats_json AS statsJson,
+      platform_stats_json AS platformStatsJson,
+      author_sections_json AS authorSectionsJson,
+      content,
+      cooperation_id AS cooperationId
+    FROM promotion_reports
+    WHERE id = ?
+    LIMIT 1
+  `).bind(reportId).first()
+
+  if (!row) {
+    return json({ error: 'NOT_FOUND' }, { status: 404 })
+  }
+
+  return json({ report: mapReportRow(row) })
+}
+
+async function handleClientApi(request, env) {
+  if (!env.DB) {
+    return json({ error: 'D1_NOT_CONFIGURED' }, { status: 500 })
+  }
+
+  if (!env.INTERNAL_ACCESS_CREDENTIAL) {
+    return json({ error: 'WORKER_SECRETS_MISSING' }, { status: 500 })
+  }
+
+  const url = new URL(request.url)
+  const reportMatch = url.pathname.match(/^\/api\/client\/reports\/([^/]+)$/)
+
+  if (request.method === 'POST' && reportMatch) {
+    return handleClientReport(request, env, decodeURIComponent(reportMatch[1]))
+  }
+
+  return json({ error: 'NOT_FOUND' }, { status: 404 })
+}
+
 async function handleReportCoopIds(request, env) {
   const session = await requireSession(request, env)
 
@@ -918,6 +992,10 @@ export default {
 
     if (url.pathname.startsWith('/api/public/')) {
       return handlePublic(request, env)
+    }
+
+    if (url.pathname.startsWith('/api/client/')) {
+      return handleClientApi(request, env)
     }
 
     return handleAssets(request, env)

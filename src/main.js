@@ -24,6 +24,7 @@ const routes = [
     path: '/tob/reports',
     redirect: (to) => ({ path: '/tob/internal', query: { ...to.query, tab: 'reports' } })
   },
+  { path: '/tob/reports/:id', component: () => import('./pages/tob/report-detail.vue') },
   { path: '/tob/services', component: () => import('./pages/tob/services/index.vue') },
   { path: '/tob/services/tweet', component: () => import('./pages/tob/services/tweet.vue') },
   { path: '/tob/services/cpc', component: () => import('./pages/tob/services/cpc.vue') },

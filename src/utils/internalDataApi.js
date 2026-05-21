@@ -60,6 +60,14 @@ export async function fetchPromotionReports(token) {
   return Array.isArray(payload?.reports) ? payload.reports : []
 }
 
+export async function fetchSinglePromotionReport(reportId, credential) {
+  const payload = await apiRequest(`/api/client/reports/${encodeURIComponent(reportId)}`, {
+    method: 'POST',
+    body: { credential }
+  })
+  return payload?.report || null
+}
+
 export async function fetchReportCooperationIds(token) {
   const payload = await apiRequest('/api/internal/reports/coop-ids', { token })
   return Array.isArray(payload?.cooperationIds) ? payload.cooperationIds : []
