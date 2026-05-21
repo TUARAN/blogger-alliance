@@ -1,4 +1,5 @@
 <script setup>
+import reportClosedLoopImage from '../../img/example/wechat_2026-05-21_092344_150.png'
 import reportExplanationImage from '../../img/example/wechat_2026-03-16_113829_555.png'
 import distributionFormImage from '../../img/example/image.png'
 import geoShowcaseImage from '../../img/example/微信图片_2026-03-16_145503_945.png'
@@ -88,13 +89,29 @@ const writingFlow = [
         <p class="text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">Report Sample</p>
         <h2 class="mt-3 text-2xl md:text-3xl font-bold text-gray-900">数据报告案例展示</h2>
         <p class="mt-3 text-sm md:text-base leading-7 text-gray-600">
-          在合作收尾阶段，我们会输出结构化的数据报告，统一汇总发布时间、投放平台、阅读与互动反馈，帮助品牌快速理解本轮内容传播效果，并为下一轮合作提供复盘依据。
+          在合作收尾阶段，我们会基于分发表单中的已发布链接，由大模型批量抓取各平台阅读与互动数据，并按统一模版生成结构化报告。整个过程具备闭环能力：自动识别抓取异常、修正提取逻辑并重试，最终汇总发布时间、投放平台与关键反馈，供品牌复盘与下一轮合作参考。
         </p>
+      </div>
+
+      <div class="mt-6 overflow-hidden rounded-2xl border border-violet-100 bg-violet-50/40 shadow-sm">
+        <div class="border-b border-violet-100 px-5 py-4">
+          <h3 class="text-lg font-semibold text-gray-900">闭环抓取过程示意</h3>
+          <p class="mt-1 text-sm text-gray-500">
+            展示大模型读取分发表单、批量访问已发布链接、发现异常后自我修正并重新抓取，最终按模版形成报告的完整闭环。
+          </p>
+        </div>
+        <div class="flex items-center justify-center bg-white p-4 md:p-6">
+          <img
+            :src="reportClosedLoopImage"
+            alt="大模型批量抓取已发布链接并按模版形成报告的闭环过程示意"
+            class="max-h-[680px] w-full rounded-xl object-contain object-center"
+          />
+        </div>
       </div>
 
       <div class="mt-6 overflow-hidden rounded-2xl border border-violet-100 bg-slate-50 shadow-sm">
         <div class="border-b border-violet-100 px-5 py-4">
-          <h3 class="text-lg font-semibold text-gray-900">报告示意图</h3>
+          <h3 class="text-lg font-semibold text-gray-900">报告输出示意</h3>
           <p class="mt-1 text-sm text-gray-500">补充展示数据报告在实际合作中的呈现方式。</p>
         </div>
         <div class="flex items-center justify-center bg-white p-4 md:p-6">
