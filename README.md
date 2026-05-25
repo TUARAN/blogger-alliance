@@ -146,7 +146,8 @@ git push origin feature/add-blogger-你的名字
 - Wrangler 配置：`wrangler.jsonc`
 - 本地开发变量示例：`.dev.vars.example`
 - JSON 导出 D1 SQL：`scripts/export-d1-seed.mjs`
-- 后台录入页：`src/pages/workspace/internal-data-admin.vue`
+- Excel 导入 D1：`scripts/import-ledger-excel-to-d1.mjs`
+- 后台录入页：`src/pages/tob/internal.vue`
 
 ### 1) 先创建 D1 数据库
 
@@ -182,9 +183,11 @@ npx wrangler secret put INTERNAL_ACCESS_CREDENTIAL
 npx wrangler secret put INTERNAL_SESSION_SECRET
 ```
 
-### 4) 把现有 JSON 导入 D1
+### 4) 一次性初始化 / 灾备导入
 
-本地源文件仍然使用：
+生产数据以 Cloudflare D1 为唯一真实来源。`private/*.json` 只用于新环境初始化或灾备恢复，不作为日常维护入口，也不要把私密业务数据提交到仓库。
+
+如需从本地灾备文件重建 D1，可使用：
 
 - `private/commercialDeals.source.json`
 - `private/promotionReports.source.json`
@@ -204,6 +207,12 @@ npm run d1:seed:export
 
 ```bash
 npx wrangler d1 execute blogger-alliance --file=tmp/d1-seed.sql
+```
+
+导入远端生产 D1 时必须显式加 `--remote`：
+
+```bash
+npx wrangler d1 execute blogger-alliance --remote --file=tmp/d1-seed.sql
 ```
 
 ### 5) 本地联调与部署
@@ -229,23 +238,51 @@ npm run cf:deploy
 > - Secrets 仍通过 `npx wrangler secret put` 一次性写入，无需在 Builds 面板再配
 > - D1 绑定由 `wrangler.jsonc` 控制，自动生效
 
-### 6) 直接写 D1 的后台录入页
+### 6) D1 唯一数据源与后台维护
 
-新增内部管理页：
+日常新增、编辑、删除台账和报告时，以 D1 为准，通过内部页面直接写数据库：
 
-- 路径：`/workspace/internal-data-admin`
+- 路径：`/tob/internal`
 
 当前能力：
 
 - 直接读取 D1 中的 `commercial_deals` 和 `promotion_reports`
-- 在浏览器里编辑 JSON
-- 直接调用 Worker 写回 D1
+- 在浏览器里新增、编辑、删除合作进度和数据报告
+- 通过 Worker 鉴权接口写回 D1
 - 可查看 `/api/internal/health` 返回的健康状态和当前记录数（含 `annualReports` 计数）
 - 同页底部「📈 年度总览编辑器」可直接维护 `annual_reports`
 
-这条链路已经能满足“日常维护不再改本地 JSON 文件”的需求。
+这条链路是日常维护入口；不要再通过修改本地 JSON 维护生产数据。
 
-### 7) 字段约定
+### 7) 从 Excel 导入合作进度台账
+
+Excel 导入也走 Worker 鉴权接口：`Excel -> /api/internal/admin/deals -> D1`，不会把业务数据写入前端包。
+
+先只解析 Excel，检查字段映射：
+
+```bash
+npm run ledger:import:excel -- --parse-only --excel="/path/to/草稿（含报价结算）.xlsx"
+```
+
+导入到本地 Worker：
+
+```bash
+INTERNAL_ACCESS_CREDENTIAL='访问凭证' \
+INTERNAL_API_BASE='http://127.0.0.1:8787' \
+npm run ledger:import:excel -- --excel="/path/to/草稿（含报价结算）.xlsx"
+```
+
+导入到线上 Worker：
+
+```bash
+INTERNAL_ACCESS_CREDENTIAL='访问凭证' \
+INTERNAL_API_BASE='https://你的线上域名' \
+npm run ledger:import:excel -- --excel="/path/to/草稿（含报价结算）.xlsx"
+```
+
+脚本会先读取当前 D1 台账，再按品牌、服务和期数尽量匹配旧记录，保留 `muted`、`category`、`reportCooperationId` 等 Excel 没有的字段，并把 Excel 的「承接（进度）」写入 `owner` 字段，最后整体写回 `commercial_deals`。
+
+### 8) 字段约定
 
 商单表 `commercial_deals` 主要字段：
 
@@ -256,6 +293,7 @@ npm run cf:deploy
 - `remark`：备注
 - `category`：兼容旧数据的分类字段
 - `referrer`：推荐人
+- `owner`：承接人
 - `updated_at`：最近沟通时间，保持 `YYYY.MM.DD`
 - `muted`：是否置灰
 - `report_cooperation_id`：跳转报告时使用的关联合作编码
@@ -269,7 +307,7 @@ npm run cf:deploy
 - `intro`：介绍语（接在「我们与 …… 等品牌完成合作，」之后）
 - `updated_at`：维护时间
 
-公开页面 `/annual-report-2025` 通过 `GET /api/public/annual-report?year=2025` 读取（无需鉴权）。
+页面 `/annual-report-2025` 在凭证会话有效时通过 `GET /api/public/annual-report?year=2025` 读取。
 内部 `/tob/internal` 解锁后可在「年度总览编辑器」直接修改并保存（走 `PUT /api/internal/admin/annual-reports`）。
 
 报告表 `promotion_reports` 主要字段：

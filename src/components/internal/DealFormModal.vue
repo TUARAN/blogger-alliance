@@ -47,6 +47,10 @@
               <input v-model.trim="form.referrer" type="text" class="mt-1 w-full h-10 px-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </label>
             <label class="block">
+              <span class="text-xs font-semibold text-slate-600">承接人</span>
+              <input v-model.trim="form.owner" type="text" placeholder="安东尼、浪里行舟、erpan" class="mt-1 w-full h-10 px-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </label>
+            <label class="block">
               <span class="text-xs font-semibold text-slate-600">最近沟通时间</span>
               <input v-model.trim="form.updatedAt" type="text" placeholder="2026.04.24" class="mt-1 w-full h-10 px-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm">
               <span class="block mt-1 text-[11px] text-slate-400">格式 YYYY.MM.DD，用于按年份筛选与排序。</span>
@@ -113,6 +117,7 @@ function buildForm(source) {
     progress: source?.progress ?? '',
     remark: source?.remark ?? '',
     referrer: source?.referrer ?? '',
+    owner: source?.owner ?? '',
     updatedAt: source?.updatedAt ?? '',
     reportCooperationId: source?.reportCooperationId ?? '',
     category: source?.category ?? '',
@@ -150,6 +155,7 @@ function onSave() {
     progress: String(form.progress || '').trim(),
     remark: String(form.remark || '').trim(),
     referrer: String(form.referrer || '').trim(),
+    owner: String(form.owner || '').trim(),
     updatedAt: String(form.updatedAt || '').trim()
   }
 

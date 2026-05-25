@@ -10,12 +10,14 @@
     "cf:dev": "npx wrangler dev",
     "cf:deploy": "npm run build && npx wrangler deploy",
     "d1:seed:export": "node scripts/export-d1-seed.mjs",
+    "ledger:import:excel": "node scripts/import-ledger-excel-to-d1.mjs",
     "metrics:login": "node scripts/collect-visible-metrics.mjs login",
     "metrics:collect": "node scripts/collect-visible-metrics.mjs collect"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.0.0",
     "@vueuse/core": "^10.7.0",
+    "adm-zip": "^0.5.17",
     "idb": "^8.0.3",
     "vue": "^3.4.0",
     "vue-router": "^4.2.5"

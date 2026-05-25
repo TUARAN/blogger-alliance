@@ -105,7 +105,7 @@
               <label class="block text-xs text-gray-500 mb-1">当前进度</label>
               <select v-model="progressFilter" class="w-full h-9 px-2 rounded-lg border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="all">全部状态</option>
-                <option v-for="item in progressOptions" :key="item" :value="item">{{ item }}</option>
+                <option v-for="item in progressOptions" :key="item.value" :value="item.value">{{ item.label }}</option>
               </select>
             </div>
             <div>
@@ -162,6 +162,7 @@
                   <th class="px-3 py-3 text-left text-xs font-semibold">合作内容</th>
                   <th class="px-3 py-3 text-left text-xs font-semibold">当前进度</th>
                   <th class="px-3 py-3 text-left text-xs font-semibold">推荐人</th>
+                  <th class="px-3 py-3 text-left text-xs font-semibold">承接人</th>
                   <th class="px-3 py-3 text-left text-xs font-semibold">最近沟通</th>
                   <th class="px-3 py-3 text-center text-xs font-semibold">报告</th>
                   <th class="px-3 py-3 text-center text-xs font-semibold">操作</th>
@@ -169,12 +170,7 @@
               </thead>
               <tbody>
                 <template v-for="(deal, idx) in filteredDeals" :key="deal.id || `deal-${idx}`">
-                  <tr
-                    :class="[
-                      'border-t border-gray-100',
-                      deal.muted ? 'bg-gray-100/70' : 'hover:bg-gray-50/70'
-                    ]"
-                  >
+                  <tr class="border-t border-gray-100 hover:bg-gray-50/70">
                     <td class="px-2 py-3 text-center align-top">
                       <button
                         v-if="dealReports(deal).length > 0"
@@ -203,6 +199,7 @@
                       <p v-if="deal.remark" class="mt-1 text-xs text-slate-500 leading-5">{{ deal.remark }}</p>
                     </td>
                     <td class="px-3 py-3 align-top text-slate-600 whitespace-nowrap">{{ deal.referrer || '—' }}</td>
+                    <td class="px-3 py-3 align-top text-slate-600">{{ deal.owner || '—' }}</td>
                     <td class="px-3 py-3 align-top text-slate-600 font-mono text-xs whitespace-nowrap">{{ deal.updatedAt || '—' }}</td>
                     <td class="px-3 py-3 align-top text-center">
                       <span class="inline-flex items-center rounded-full bg-violet-50 px-2 py-0.5 text-xs font-semibold text-violet-700">
@@ -214,7 +211,7 @@
                       <button
                         v-if="dealReports(deal).length > 0"
                         class="text-xs text-violet-600 hover:text-violet-800 mr-2"
-                        @click="openReportList(deal)"
+                        @click="openDealReports(deal)"
                       >
                         查看报告
                       </button>
@@ -225,7 +222,7 @@
                   <!-- Expanded reports row -->
                   <tr v-if="isExpanded(deal.id) && dealReports(deal).length > 0" class="bg-indigo-50/30 border-t border-indigo-100">
                     <td></td>
-                    <td colspan="8" class="px-3 py-4">
+                    <td colspan="9" class="px-3 py-4">
                       <div class="space-y-3">
                         <div
                           v-for="report in dealReports(deal)"
@@ -263,7 +260,7 @@
                 </template>
 
                 <tr v-if="filteredDeals.length === 0">
-                  <td colspan="9" class="px-4 py-10 text-center text-sm text-gray-500">
+                  <td colspan="10" class="px-4 py-10 text-center text-sm text-gray-500">
                     未找到匹配合作，请调整筛选条件或新增合作。
                   </td>
                 </tr>
@@ -362,19 +359,23 @@
     />
 
     <div
-      v-if="reportViewerOpen && viewingReport"
+      v-if="reportViewerOpen && viewingReports.length"
       class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 p-4"
       @click.self="closeViewReport"
     >
-      <div class="w-full max-w-3xl max-h-[85vh] overflow-y-auto rounded-2xl bg-white shadow-2xl">
+      <div class="w-full max-w-4xl max-h-[85vh] overflow-y-auto rounded-2xl bg-white shadow-2xl">
         <div class="sticky top-0 flex items-start justify-between gap-4 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur">
           <div class="min-w-0">
             <p class="text-xs font-medium uppercase tracking-wide text-violet-600">数据报告</p>
-            <h3 class="mt-1 text-lg font-bold text-slate-900">{{ viewingReport.project || viewingReport.title || '未命名报告' }}</h3>
-            <p v-if="viewingReport.articleTitle" class="mt-1 text-sm text-slate-500">{{ formatArticleTitle(viewingReport.articleTitle) }}</p>
+            <h3 class="mt-1 text-lg font-bold text-slate-900">{{ viewingReportsTitle }}</h3>
+            <p v-if="viewingReports.length === 1 && viewingReports[0].articleTitle" class="mt-1 text-sm text-slate-500">{{ formatArticleTitle(viewingReports[0].articleTitle) }}</p>
           </div>
           <div class="shrink-0 flex items-center gap-2">
-            <button class="rounded-lg border border-violet-200 bg-violet-50 px-3 py-1.5 text-sm font-medium text-violet-700 hover:bg-violet-100" @click="exportViewingReportPdf">
+            <button
+              v-if="viewingReports.length === 1"
+              class="rounded-lg border border-violet-200 bg-violet-50 px-3 py-1.5 text-sm font-medium text-violet-700 hover:bg-violet-100"
+              @click="exportViewingReportPdf"
+            >
               导出 PDF
             </button>
             <button class="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50" @click="closeViewReport">
@@ -383,51 +384,63 @@
           </div>
         </div>
 
-        <div class="space-y-5 px-5 py-4">
-          <div class="flex flex-wrap gap-4 text-sm text-slate-600">
-            <span>报告 ID：<span class="font-mono text-slate-800">{{ viewingReport.id || '—' }}</span></span>
-            <span>合作编码：<span class="font-mono text-slate-800">{{ viewingReport.cooperationId || '—' }}</span></span>
-            <span>执行人：<span class="text-slate-800">{{ viewingReport.author || '—' }}</span></span>
-            <span v-if="viewingReport.period">周期：<span class="text-slate-800">{{ viewingReport.period }}</span></span>
-          </div>
+        <div class="space-y-4 px-5 py-4">
+          <section
+            v-for="(report, index) in viewingReports"
+            :key="report.id || index"
+            class="rounded-2xl border border-slate-200 bg-white px-4 py-4"
+          >
+            <div v-if="viewingReports.length > 1" class="mb-4 border-b border-slate-100 pb-3">
+              <p class="text-xs font-medium text-violet-600">报告 {{ index + 1 }}</p>
+              <h4 class="mt-1 text-base font-bold text-slate-900">{{ report.project || report.title || '未命名报告' }}</h4>
+              <p v-if="report.articleTitle" class="mt-1 text-sm text-slate-500">{{ formatArticleTitle(report.articleTitle) }}</p>
+            </div>
 
-          <div v-if="viewingReport.platforms?.length" class="flex flex-wrap gap-2">
-            <span
-              v-for="platform in viewingReport.platforms"
-              :key="platform"
-              class="inline-flex items-center rounded-full bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-700"
-            >
-              {{ platform }}
-            </span>
-          </div>
+            <div class="flex flex-wrap gap-4 text-sm text-slate-600">
+              <span>报告 ID：<span class="font-mono text-slate-800">{{ report.id || '—' }}</span></span>
+              <span>合作编码：<span class="font-mono text-slate-800">{{ report.cooperationId || '—' }}</span></span>
+              <span>执行人：<span class="text-slate-800">{{ report.author || '—' }}</span></span>
+              <span v-if="report.period">周期：<span class="text-slate-800">{{ report.period }}</span></span>
+            </div>
 
-          <div class="grid grid-cols-2 gap-3 md:grid-cols-5">
-            <div class="rounded-xl bg-teal-50 px-3 py-3">
-              <p class="text-xs text-teal-700">阅读</p>
-              <p class="mt-1 text-lg font-semibold text-teal-900">{{ formatNumber(viewingReport.stats?.reads) }}</p>
+            <div v-if="report.platforms?.length" class="mt-4 flex flex-wrap gap-2">
+              <span
+                v-for="platform in report.platforms"
+                :key="`${report.id || index}-${platform}`"
+                class="inline-flex items-center rounded-full bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-700"
+              >
+                {{ platform }}
+              </span>
             </div>
-            <div class="rounded-xl bg-rose-50 px-3 py-3">
-              <p class="text-xs text-rose-700">点赞</p>
-              <p class="mt-1 text-lg font-semibold text-rose-900">{{ formatNumber(viewingReport.stats?.likes) }}</p>
-            </div>
-            <div class="rounded-xl bg-amber-50 px-3 py-3">
-              <p class="text-xs text-amber-700">收藏</p>
-              <p class="mt-1 text-lg font-semibold text-amber-900">{{ formatNumber(viewingReport.stats?.favorites) }}</p>
-            </div>
-            <div class="rounded-xl bg-sky-50 px-3 py-3">
-              <p class="text-xs text-sky-700">评论</p>
-              <p class="mt-1 text-lg font-semibold text-sky-900">{{ formatNumber(viewingReport.stats?.comments) }}</p>
-            </div>
-            <div class="rounded-xl bg-fuchsia-50 px-3 py-3">
-              <p class="text-xs text-fuchsia-700">转发</p>
-              <p class="mt-1 text-lg font-semibold text-fuchsia-900">{{ formatNumber(viewingReport.stats?.shares) }}</p>
-            </div>
-          </div>
 
-          <div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
-            <p class="mb-2 text-sm font-semibold text-slate-900">报告正文</p>
-            <p class="whitespace-pre-line text-sm leading-7 text-slate-700">{{ viewingReport.content || '暂无正文。' }}</p>
-          </div>
+            <div class="mt-4 grid grid-cols-2 gap-3 md:grid-cols-5">
+              <div class="rounded-xl bg-teal-50 px-3 py-3">
+                <p class="text-xs text-teal-700">阅读</p>
+                <p class="mt-1 text-lg font-semibold text-teal-900">{{ formatNumber(report.stats?.reads) }}</p>
+              </div>
+              <div class="rounded-xl bg-rose-50 px-3 py-3">
+                <p class="text-xs text-rose-700">点赞</p>
+                <p class="mt-1 text-lg font-semibold text-rose-900">{{ formatNumber(report.stats?.likes) }}</p>
+              </div>
+              <div class="rounded-xl bg-amber-50 px-3 py-3">
+                <p class="text-xs text-amber-700">收藏</p>
+                <p class="mt-1 text-lg font-semibold text-amber-900">{{ formatNumber(report.stats?.favorites) }}</p>
+              </div>
+              <div class="rounded-xl bg-sky-50 px-3 py-3">
+                <p class="text-xs text-sky-700">评论</p>
+                <p class="mt-1 text-lg font-semibold text-sky-900">{{ formatNumber(report.stats?.comments) }}</p>
+              </div>
+              <div class="rounded-xl bg-fuchsia-50 px-3 py-3">
+                <p class="text-xs text-fuchsia-700">转发</p>
+                <p class="mt-1 text-lg font-semibold text-fuchsia-900">{{ formatNumber(report.stats?.shares) }}</p>
+              </div>
+            </div>
+
+            <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+              <p class="mb-2 text-sm font-semibold text-slate-900">报告正文</p>
+              <p class="whitespace-pre-line text-sm leading-7 text-slate-700">{{ report.content || '暂无正文。' }}</p>
+            </div>
+          </section>
         </div>
       </div>
     </div>
@@ -484,6 +497,7 @@ const reportModalCoopId = ref('')
 const isSavingReport = ref(false)
 const reportViewerOpen = ref(false)
 const viewingReport = ref(null)
+const viewingReports = ref([])
 
 const annualReports = ref([])
 const annualEditorOpen = ref(false)
@@ -492,6 +506,21 @@ const isSavingAnnual = ref(false)
 const annualMessage = ref('')
 const annualMessageIsError = ref(false)
 let annualMessageTimer = null
+
+const viewingReportsTitle = computed(() => {
+  if (viewingReports.value.length === 1) {
+    const report = viewingReports.value[0]
+    return report.project || report.title || '未命名报告'
+  }
+
+  if (viewingReports.value.length > 1) {
+    const first = viewingReports.value[0]
+    const project = first?.project || first?.title || '数据报告'
+    return `${project} 等 ${viewingReports.value.length} 份报告`
+  }
+
+  return '数据报告'
+})
 
 function setAnnualMessage(text, isError = false) {
   if (annualMessageTimer) clearTimeout(annualMessageTimer)
@@ -623,13 +652,35 @@ const serviceOptions = computed(() => {
   return Array.from(s).filter(Boolean).sort()
 })
 
-const progressOptions = computed(() => {
-  const s = new Set()
-  for (const d of deals.value) {
-    if (d.progress) s.add(String(d.progress).trim())
-  }
-  return Array.from(s).filter(Boolean).sort()
-})
+const progressOptions = [
+  { label: '已闭环', value: 'closed' },
+  { label: '待结算', value: 'settlement' },
+  { label: '沟通中', value: 'communicating' },
+  { label: '执行中', value: 'executing' },
+  { label: '持续计费', value: 'billing' },
+  { label: '已完成', value: 'completed' },
+  { label: '暂不推进', value: 'paused' },
+  { label: '测试单', value: 'test' }
+]
+
+function dealMatchesProgressFilter(deal, filter) {
+  if (filter === 'all') return true
+
+  const progress = String(deal.progress || '').trim()
+  const remark = String(deal.remark || '').trim()
+  const text = `${progress} ${remark}`
+
+  if (filter === 'closed') return text.includes('已闭环')
+  if (filter === 'settlement') return text.includes('待结算')
+  if (filter === 'communicating') return text.includes('沟通')
+  if (filter === 'executing') return text.includes('执行中') || text.includes('待执行') || text.includes('已发布-待出数据')
+  if (filter === 'billing') return text.includes('持续计费')
+  if (filter === 'completed') return text.includes('已完成')
+  if (filter === 'paused') return text.includes('暂不推进') || progress === '/'
+  if (filter === 'test') return text.includes('测试')
+
+  return progress === filter
+}
 
 const yearOptions = computed(() => {
   const s = new Set()
@@ -681,7 +732,7 @@ const orphanReports = computed(() => {
 // Filters
 function dealMatchesKeyword(deal, kw) {
   if (!kw) return true
-  const blob = [deal.id, deal.brand, deal.service, deal.progress, deal.remark, deal.referrer, deal.reportCooperationId, deal.updatedAt]
+  const blob = [deal.id, deal.brand, deal.service, deal.progress, deal.remark, deal.referrer, deal.owner, deal.reportCooperationId, deal.updatedAt]
     .filter(Boolean).join(' ').toLowerCase()
   if (blob.includes(kw)) return true
   // Also match if any linked report matches keyword
@@ -698,7 +749,7 @@ const filteredDeals = computed(() => {
   const kw = keyword.value.trim().toLowerCase()
   return deals.value.filter((d) => {
     if (serviceFilter.value !== 'all' && d.service !== serviceFilter.value) return false
-    if (progressFilter.value !== 'all' && d.progress !== progressFilter.value) return false
+    if (!dealMatchesProgressFilter(d, progressFilter.value)) return false
     if (yearFilter.value !== 'all') {
       const m = String(d.updatedAt || '').match(/(\d{4})/)
       if (!m || m[1] !== yearFilter.value) return false
@@ -768,10 +819,10 @@ function progressBadgeClass(progress) {
 
 // Copy as table
 async function copyAsTable() {
-  const headers = ['合作编码', '品牌/项目', '合作内容', '当前进度', '备注', '推荐人', '最近沟通', '报告数']
+  const headers = ['合作编码', '品牌/项目', '合作内容', '当前进度', '备注', '推荐人', '承接人', '最近沟通', '报告数']
   const rows = filteredDeals.value.map((d) => [
     d.id || '', d.brand || '', d.service || '', d.progress || '', d.remark || '',
-    d.referrer || '', d.updatedAt || '', String(dealReports(d).length)
+    d.referrer || '', d.owner || '', d.updatedAt || '', String(dealReports(d).length)
   ])
   const tsv = [headers, ...rows].map((r) => r.map((c) => String(c).replace(/\t/g, ' ')).join('\t')).join('\n')
   try {
@@ -851,12 +902,18 @@ function openCreateReport(deal) {
   reportModalCoopId.value = deal ? (deal.reportCooperationId || deal.id || '') : ''
   reportModalOpen.value = true
 }
-function openReportList(deal) {
-  if (!deal?.id || dealReports(deal).length === 0) return
-  expanded.add(deal.id)
+function openDealReports(deal) {
+  const list = dealReports(deal)
+  if (list.length === 0) return
+  openViewReports(list)
 }
 function openViewReport(report) {
-  viewingReport.value = { ...report }
+  openViewReports([report])
+}
+function openViewReports(reportList) {
+  viewingReports.value = reportList.filter(Boolean).map((report) => ({ ...report }))
+  viewingReport.value = viewingReports.value[0] || null
+  if (!viewingReport.value) return
   reportViewerOpen.value = true
 }
 function reportSharePath(report) {
@@ -865,6 +922,7 @@ function reportSharePath(report) {
 function closeViewReport() {
   reportViewerOpen.value = false
   viewingReport.value = null
+  viewingReports.value = []
 }
 
 function escapeHtml(value) {

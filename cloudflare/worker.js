@@ -219,6 +219,7 @@ function mapDealRow(row) {
     remark: row.remark || '',
     category: row.category || '',
     referrer: row.referrer || '',
+    owner: row.owner || '',
     updatedAt: row.updatedAt || '',
     muted: Number(row.muted) === 1,
     reportCooperationId: row.reportCooperationId || ''
@@ -268,6 +269,7 @@ function normalizeDealRecord(record) {
     remark: emptyString(record?.remark).trim(),
     category: emptyString(record?.category).trim(),
     referrer: emptyString(record?.referrer).trim(),
+    owner: emptyString(record?.owner).trim(),
     updatedAt: emptyString(record?.updatedAt).trim(),
     muted: record?.muted === true,
     reportCooperationId: emptyString(record?.reportCooperationId).trim()
@@ -461,6 +463,7 @@ async function handleDeals(request, env) {
       remark,
       category,
       referrer,
+      owner,
       updated_at AS updatedAt,
       muted,
       report_cooperation_id AS reportCooperationId
@@ -699,11 +702,12 @@ async function replaceDeals(env, deals) {
           remark,
           category,
           referrer,
+          owner,
           updated_at,
           muted,
           report_cooperation_id,
           sort_order
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `).bind(
         deal.id,
         deal.brand,
@@ -712,6 +716,7 @@ async function replaceDeals(env, deals) {
         deal.remark,
         deal.category,
         deal.referrer,
+        deal.owner,
         deal.updatedAt,
         deal.muted ? 1 : 0,
         deal.reportCooperationId,

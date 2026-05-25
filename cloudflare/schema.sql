@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS commercial_deals (
   remark TEXT DEFAULT '',
   category TEXT DEFAULT '',
   referrer TEXT DEFAULT '',
+  owner TEXT DEFAULT '',
   updated_at TEXT DEFAULT '',
   muted INTEGER NOT NULL DEFAULT 0,
   report_cooperation_id TEXT DEFAULT '',
