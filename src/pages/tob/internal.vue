@@ -653,33 +653,31 @@ const serviceOptions = computed(() => {
 })
 
 const progressOptions = [
-  { label: '已闭环', value: 'closed' },
-  { label: '待结算', value: 'settlement' },
   { label: '沟通中', value: 'communicating' },
   { label: '执行中', value: 'executing' },
-  { label: '持续计费', value: 'billing' },
+  { label: '待结算', value: 'settlement' },
   { label: '已完成', value: 'completed' },
-  { label: '暂不推进', value: 'paused' },
-  { label: '测试单', value: 'test' }
+  { label: '暂停/作废', value: 'inactive' }
 ]
 
-function dealMatchesProgressFilter(deal, filter) {
-  if (filter === 'all') return true
-
+function progressGroup(deal) {
   const progress = String(deal.progress || '').trim()
   const remark = String(deal.remark || '').trim()
   const text = `${progress} ${remark}`
 
-  if (filter === 'closed') return text.includes('已闭环')
-  if (filter === 'settlement') return text.includes('待结算')
-  if (filter === 'communicating') return text.includes('沟通')
-  if (filter === 'executing') return text.includes('执行中') || text.includes('待执行') || text.includes('已发布-待出数据')
-  if (filter === 'billing') return text.includes('持续计费')
-  if (filter === 'completed') return text.includes('已完成')
-  if (filter === 'paused') return text.includes('暂不推进') || progress === '/'
-  if (filter === 'test') return text.includes('测试')
+  if (!progress || progress === '/') return 'inactive'
+  if (text.includes('暂不推进') || text.includes('暂停') || text.includes('取消') || text.includes('作废') || text.includes('无效') || text.includes('测试')) return 'inactive'
+  if (text.includes('待结算') || text.includes('待付款') || text.includes('待支付') || text.includes('开票') || text.includes('结算中')) return 'settlement'
+  if (text.includes('已完成') || text.includes('已闭环') || text.includes('已结算') || text.includes('已收款')) return 'completed'
+  if (text.includes('执行') || text.includes('待执行') || text.includes('已发布') || text.includes('待出数据') || text.includes('持续计费') || text.includes('投放中')) return 'executing'
+  if (text.includes('沟通') || text.includes('需求') || text.includes('报价') || text.includes('待确认') || text.includes('确认中')) return 'communicating'
 
-  return progress === filter
+  return 'communicating'
+}
+
+function dealMatchesProgressFilter(deal, filter) {
+  if (filter === 'all') return true
+  return progressGroup(deal) === filter
 }
 
 const yearOptions = computed(() => {
@@ -807,14 +805,12 @@ function formatArticleTitle(raw) {
 }
 
 function progressBadgeClass(progress) {
-  const p = String(progress || '').trim()
-  if (!p) return 'bg-gray-100 text-gray-600'
-  if (p.includes('已闭环')) return 'bg-emerald-50 text-emerald-700'
-  if (p.includes('待结算')) return 'bg-amber-50 text-amber-800'
-  if (p.includes('持续计费')) return 'bg-sky-50 text-sky-700'
-  if (p.includes('测试')) return 'bg-slate-100 text-slate-700'
-  if (p.includes('沟通')) return 'bg-indigo-50 text-indigo-700'
-  return 'bg-violet-50 text-violet-700'
+  const group = progressGroup({ progress })
+  if (group === 'inactive') return 'bg-slate-100 text-slate-700'
+  if (group === 'settlement') return 'bg-amber-50 text-amber-800'
+  if (group === 'completed') return 'bg-emerald-50 text-emerald-700'
+  if (group === 'executing') return 'bg-sky-50 text-sky-700'
+  return 'bg-indigo-50 text-indigo-700'
 }
 
 // Copy as table

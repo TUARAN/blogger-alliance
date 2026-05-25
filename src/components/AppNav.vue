@@ -1,7 +1,7 @@
 <script setup>
 
 const navLinks = [
-  { label: '服务介绍', to: '/tob/services' },
+  { label: '介绍', to: '/tob/services' },
   { label: '案例', to: '/cases' },
   { label: '后台', to: '/workspace' }
 ]

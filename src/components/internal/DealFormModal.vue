@@ -33,13 +33,13 @@
             </label>
             <label class="block">
               <span class="text-xs font-semibold text-slate-600">当前进度</span>
-              <input v-model.trim="form.progress" type="text" placeholder="需求沟通中 / 已闭环 / 待结算 / 持续计费 / 测试单" class="mt-1 w-full h-10 px-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" list="progress-options">
+              <input v-model.trim="form.progress" type="text" placeholder="沟通中 / 执行中 / 待结算 / 已完成 / 暂停/作废" class="mt-1 w-full h-10 px-3 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" list="progress-options">
               <datalist id="progress-options">
-                <option value="需求沟通中"></option>
-                <option value="已闭环"></option>
+                <option value="沟通中"></option>
+                <option value="执行中"></option>
                 <option value="待结算"></option>
-                <option value="持续计费"></option>
-                <option value="测试单"></option>
+                <option value="已完成"></option>
+                <option value="暂停/作废"></option>
               </datalist>
             </label>
             <label class="block">
