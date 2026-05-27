@@ -418,6 +418,27 @@
               <p v-if="report.articleTitle" class="mt-1 text-sm text-slate-500">{{ formatArticleTitle(report.articleTitle) }}</p>
             </div>
 
+            <div class="mb-4 flex flex-wrap items-center gap-2">
+              <button
+                class="min-h-10 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                @click="copyReportShareLink(report)"
+              >
+                分享链接
+              </button>
+              <router-link
+                class="inline-flex min-h-10 items-center rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+                :to="reportSharePath(report)"
+              >
+                打开分享页
+              </router-link>
+              <button
+                class="min-h-10 rounded-lg border border-violet-200 bg-violet-50 px-3 py-1.5 text-sm font-medium text-violet-700 hover:bg-violet-100"
+                @click="exportReportPdf(report)"
+              >
+                导出 PDF
+              </button>
+            </div>
+
             <div class="flex flex-wrap gap-4 text-sm text-slate-600">
               <span>报告 ID：<span class="font-mono text-slate-800">{{ report.id || '—' }}</span></span>
               <span>合作编码：<span class="font-mono text-slate-800">{{ report.cooperationId || '—' }}</span></span>
@@ -978,8 +999,12 @@ function reportShareUrl(report) {
 }
 async function copyViewingReportShareLink() {
   if (viewingReports.value.length !== 1) return
+  await copyReportShareLink(viewingReports.value[0])
+}
+async function copyReportShareLink(report) {
+  if (!report) return
   try {
-    await navigator.clipboard.writeText(reportShareUrl(viewingReports.value[0]))
+    await navigator.clipboard.writeText(reportShareUrl(report))
     setToolbarMessage('已复制分享链接。')
   } catch {
     setToolbarMessage('复制失败，请检查剪贴板权限。', true)
@@ -1080,13 +1105,17 @@ function buildReportPrintHtml(report) {
 
 function exportViewingReportPdf() {
   if (!viewingReport.value) return
+  exportReportPdf(viewingReport.value)
+}
+function exportReportPdf(report) {
+  if (!report) return
   const printWindow = window.open('', '_blank', 'width=960,height=720')
   if (!printWindow) {
     setToolbarMessage('无法打开 PDF 导出窗口，请允许浏览器弹窗后重试。', true)
     return
   }
   printWindow.document.open()
-  printWindow.document.write(buildReportPrintHtml(viewingReport.value))
+  printWindow.document.write(buildReportPrintHtml(report))
   printWindow.document.close()
   printWindow.focus()
   printWindow.setTimeout(() => {
