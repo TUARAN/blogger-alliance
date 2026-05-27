@@ -86,6 +86,7 @@
           <a
             href="https://github.com/TUARAN/blogger-alliance"
             target="_blank"
+            rel="noopener noreferrer"
             class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
           >
             <span class="mr-2">🚀</span>

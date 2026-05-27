@@ -19,7 +19,8 @@
 
     <button
       type="button"
-      class="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full bg-gray-900 px-5 py-3 text-sm font-semibold text-white shadow-xl transition-transform hover:-translate-y-0.5 hover:bg-gray-800"
+      class="fixed right-4 z-40 inline-flex min-h-11 items-center gap-2 rounded-full bg-gray-900 px-5 py-3 text-sm font-semibold text-white shadow-xl transition-transform hover:-translate-y-0.5 hover:bg-gray-800 sm:right-6"
+      style="bottom: max(1rem, env(safe-area-inset-bottom));"
       @click="qrModalOpen = true"
     >
       <span class="text-base leading-none">🤝</span>
@@ -31,8 +32,9 @@
       <div class="relative w-full max-w-sm rounded-3xl border border-white/60 bg-white/95 p-5 shadow-2xl">
         <button
           type="button"
-          class="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+          class="absolute right-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
           @click="qrModalOpen = false"
+          aria-label="关闭二维码弹窗"
         >
           <span class="text-lg leading-none">×</span>
         </button>
@@ -42,7 +44,7 @@
         </div>
         <div class="mt-5 rounded-2xl bg-gray-50 p-3">
           <img
-            src="/src/img/qrcode1.jpg"
+            :src="qrcodeImage"
             alt="微信二维码"
             class="w-full h-auto rounded-xl object-contain"
             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
@@ -63,6 +65,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import ServiceOverviewSection from '../../../components/ServiceOverviewSection.vue'
+import qrcodeImage from '../../../img/qrcode1.jpg'
 
 const qrModalOpen = ref(false)
 

@@ -4,7 +4,10 @@ import { toastState } from '../utils/toast.js'
 
 <template>
   <Teleport to="body">
-    <div class="pointer-events-none fixed top-5 left-1/2 -translate-x-1/2 z-[100] flex w-full max-w-sm flex-col gap-2 px-4">
+    <div
+      class="pointer-events-none fixed left-1/2 z-[100] flex w-full max-w-sm -translate-x-1/2 flex-col gap-2 px-4"
+      style="top: max(1rem, env(safe-area-inset-top));"
+    >
       <transition-group name="toast" tag="div" class="flex flex-col gap-2">
         <div
           v-for="t in toastState.items"

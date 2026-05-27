@@ -1,13 +1,21 @@
 <template>
   <Teleport to="body">
     <div class="fixed inset-0 z-[120] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4" @click.self="$emit('cancel')">
-      <div class="w-full max-w-2xl max-h-[calc(100vh-2rem)] overflow-hidden rounded-2xl bg-white shadow-2xl flex flex-col">
+      <div
+        ref="dialogRef"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="mode === 'create' ? '新增合作' : '编辑合作'"
+        tabindex="-1"
+        class="w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-hidden rounded-2xl bg-white shadow-2xl flex flex-col"
+        @keydown.esc="$emit('cancel')"
+      >
         <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
           <div>
             <h3 class="text-lg font-bold text-slate-900">{{ mode === 'create' ? '新增合作' : '编辑合作' }}</h3>
             <p class="text-xs text-slate-500 mt-0.5">合作编码 ID 将用于在报告中做关联，保存后无法轻易改动，请谨慎填写。</p>
           </div>
-          <button class="text-slate-400 hover:text-slate-600" @click="$emit('cancel')">✕</button>
+          <button class="inline-flex h-11 w-11 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600" aria-label="关闭弹窗" @click="$emit('cancel')">✕</button>
         </div>
 
         <div class="overflow-y-auto px-6 py-5 space-y-4">
@@ -77,17 +85,17 @@
           <p v-if="validationError" class="text-sm text-red-600">{{ validationError }}</p>
         </div>
 
-        <div class="flex items-center justify-end gap-2 border-t border-slate-200 bg-slate-50 px-6 py-3">
+        <div class="flex flex-wrap items-center justify-end gap-2 border-t border-slate-200 bg-slate-50 px-6 py-3">
           <button
             v-if="mode === 'edit'"
-            class="mr-auto h-9 px-3 rounded-lg border border-red-200 bg-white text-sm font-medium text-red-600 hover:bg-red-50"
+            class="mr-auto min-h-11 px-3 rounded-lg border border-red-200 bg-white text-sm font-medium text-red-600 hover:bg-red-50"
             :disabled="isSaving"
             @click="$emit('delete')"
           >
             删除合作
           </button>
-          <button class="h-9 px-4 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-100" :disabled="isSaving" @click="$emit('cancel')">取消</button>
-          <button class="h-9 px-4 rounded-lg bg-indigo-600 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60" :disabled="isSaving" @click="onSave">
+          <button class="min-h-11 px-4 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-100" :disabled="isSaving" @click="$emit('cancel')">取消</button>
+          <button class="min-h-11 px-4 rounded-lg bg-indigo-600 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60" :disabled="isSaving" @click="onSave">
             {{ isSaving ? '保存中...' : '保存' }}
           </button>
         </div>
@@ -97,7 +105,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, watch } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 
 const props = defineProps({
   deal: { type: Object, default: null },
@@ -108,6 +116,18 @@ const emit = defineEmits(['save', 'cancel', 'delete'])
 
 const mode = ref(props.deal?.id ? 'edit' : 'create')
 const validationError = ref('')
+const dialogRef = ref(null)
+const previousBodyOverflow = document.body.style.overflow
+
+onMounted(async () => {
+  document.body.style.overflow = 'hidden'
+  await nextTick()
+  dialogRef.value?.focus()
+})
+
+onBeforeUnmount(() => {
+  document.body.style.overflow = previousBodyOverflow
+})
 
 function buildForm(source) {
   return {

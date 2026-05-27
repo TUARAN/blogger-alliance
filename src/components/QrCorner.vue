@@ -17,12 +17,16 @@ onMounted(() => {
     enter-from-class="opacity-0 translate-y-2"
     enter-to-class="opacity-100 translate-y-0"
   >
-    <div v-if="mounted && !hidden" class="fixed bottom-5 right-5 z-50">
+    <div
+      v-if="mounted && !hidden"
+      class="fixed right-4 z-50 sm:right-5"
+      style="bottom: max(1rem, env(safe-area-inset-bottom));"
+    >
       <!-- Collapsed pill -->
       <button
         v-if="collapsed"
         type="button"
-        class="group inline-flex items-center gap-2 rounded-full bg-slate-900 text-white pl-3.5 pr-4 py-2.5 text-sm font-medium shadow-lg hover:bg-slate-800 transition-colors"
+        class="group inline-flex min-h-11 items-center gap-2 rounded-full bg-slate-900 text-white pl-3.5 pr-4 py-2.5 text-sm font-medium shadow-lg hover:bg-slate-800 transition-colors"
         @click="collapsed = false"
         aria-label="展开二维码"
       >
@@ -43,16 +47,18 @@ onMounted(() => {
           <div class="flex items-center gap-0.5">
             <button
               type="button"
-              class="inline-flex items-center justify-center w-5 h-5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+              class="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
               title="收起"
+              aria-label="收起二维码"
               @click.stop="collapsed = true"
             >
               <span class="text-base leading-none">−</span>
             </button>
             <button
               type="button"
-              class="inline-flex items-center justify-center w-5 h-5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+              class="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
               title="关闭"
+              aria-label="关闭二维码"
               @click.stop="hidden = true"
             >
               <span class="text-sm leading-none">×</span>

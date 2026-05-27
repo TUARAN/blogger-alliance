@@ -289,6 +289,7 @@
 
       <BloggerTable
         v-if="viewMode !== 'grid'"
+        class="hidden md:block"
         :bloggers="filteredAndSortedBloggers"
         :available-platforms="availablePlatforms"
         :fallback-avatar-for="getFallbackAvatar"

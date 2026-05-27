@@ -62,7 +62,7 @@ const emit = defineEmits(['toggle-expanded', 'link-click', 'request-platforms', 
             :href="account.url"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] text-slate-600 border border-slate-200 whitespace-nowrap hover:border-slate-400 hover:text-slate-900 transition-colors cursor-pointer"
+            class="inline-flex min-h-8 items-center px-2 py-0.5 rounded-md text-[11px] text-slate-600 border border-slate-200 whitespace-nowrap hover:border-slate-400 hover:text-slate-900 transition-colors cursor-pointer"
             @click="emit('link-click', { platform: account.platform, url: account.url, bloggerName: blogger.name })"
           >
             <span class="mr-1 opacity-80">{{ account.icon }}</span>
@@ -80,7 +80,7 @@ const emit = defineEmits(['toggle-expanded', 'link-click', 'request-platforms', 
         <button
           v-if="hasOnlyOnePlatform"
           type="button"
-          class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] text-slate-500 border border-dashed border-slate-300 whitespace-nowrap hover:border-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+          class="inline-flex min-h-8 items-center px-2 py-0.5 rounded-md text-[11px] text-slate-500 border border-dashed border-slate-300 whitespace-nowrap hover:border-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
           @click.stop="emit('request-platforms', blogger)"
         >
           平台补全中
@@ -89,7 +89,7 @@ const emit = defineEmits(['toggle-expanded', 'link-click', 'request-platforms', 
 
       <button
         @click="emit('toggle-expanded', blogger.id)"
-        class="mt-4 w-full py-2 px-3 text-sm text-slate-600 rounded-lg border border-slate-200 hover:border-slate-400 hover:text-slate-900 transition-colors flex items-center justify-center"
+        class="mt-4 flex min-h-11 w-full items-center justify-center rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-600 transition-colors hover:border-slate-400 hover:text-slate-900"
       >
         <span>{{ expanded ? '收起详情' : '查看更多' }}</span>
         <svg

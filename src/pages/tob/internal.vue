@@ -363,7 +363,15 @@
       class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 p-4"
       @click.self="closeViewReport"
     >
-      <div class="w-full max-w-4xl max-h-[85vh] overflow-y-auto rounded-2xl bg-white shadow-2xl">
+      <div
+        ref="reportViewerDialogRef"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="viewingReportsTitle"
+        tabindex="-1"
+        class="w-full max-w-4xl max-h-[85dvh] overflow-y-auto rounded-2xl bg-white shadow-2xl"
+        @keydown.esc="closeViewReport"
+      >
         <div class="sticky top-0 flex items-start justify-between gap-4 border-b border-slate-200 bg-white/95 px-5 py-4 backdrop-blur">
           <div class="min-w-0">
             <p class="text-xs font-medium uppercase tracking-wide text-violet-600">数据报告</p>
@@ -373,12 +381,12 @@
           <div class="shrink-0 flex items-center gap-2">
             <button
               v-if="viewingReports.length === 1"
-              class="rounded-lg border border-violet-200 bg-violet-50 px-3 py-1.5 text-sm font-medium text-violet-700 hover:bg-violet-100"
+              class="min-h-11 rounded-lg border border-violet-200 bg-violet-50 px-3 py-1.5 text-sm font-medium text-violet-700 hover:bg-violet-100"
               @click="exportViewingReportPdf"
             >
               导出 PDF
             </button>
-            <button class="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50" @click="closeViewReport">
+            <button class="min-h-11 rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50" @click="closeViewReport">
               关闭
             </button>
           </div>
@@ -448,7 +456,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import DealFormModal from '../../components/internal/DealFormModal.vue'
 import ReportFormModal from '../../components/internal/ReportFormModal.vue'
 import { normalizeCredential } from '../../utils/credentialNormalize'
@@ -498,6 +506,8 @@ const isSavingReport = ref(false)
 const reportViewerOpen = ref(false)
 const viewingReport = ref(null)
 const viewingReports = ref([])
+const reportViewerDialogRef = ref(null)
+let previousBodyOverflow = ''
 
 const annualReports = ref([])
 const annualEditorOpen = ref(false)
@@ -520,6 +530,24 @@ const viewingReportsTitle = computed(() => {
   }
 
   return '数据报告'
+})
+
+watch(reportViewerOpen, async (open) => {
+  if (open) {
+    previousBodyOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    await nextTick()
+    reportViewerDialogRef.value?.focus()
+    return
+  }
+
+  document.body.style.overflow = previousBodyOverflow
+})
+
+onBeforeUnmount(() => {
+  if (reportViewerOpen.value) {
+    document.body.style.overflow = previousBodyOverflow
+  }
 })
 
 function setAnnualMessage(text, isError = false) {

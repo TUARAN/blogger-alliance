@@ -79,6 +79,7 @@
               <a
                 :href="doc.url"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="block w-full py-2 sm:py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-center transition-colors"
                 @click="handleDocClick(doc.title, doc.url)"
               >

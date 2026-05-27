@@ -88,6 +88,7 @@ const emit = defineEmits(['link-click', 'request-platforms', 'avatar-error'])
                   <a
                     :href="getAccountByPlatform(blogger, platform).url"
                     target="_blank"
+                    rel="noopener noreferrer"
                     class="text-sm text-indigo-400 hover:text-indigo-600 underline truncate max-w-[120px] transition-colors"
                     :title="getAccountByPlatform(blogger, platform).url"
                     @click="emit('link-click', {

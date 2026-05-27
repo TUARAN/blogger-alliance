@@ -55,8 +55,9 @@ const toggleOrder = (current) => emit('update:sortOrder', current === 'asc' ? 'd
         <button
           v-if="!['cooperationHeat', 'recommended'].includes(sortField)"
           @click="toggleOrder(sortOrder)"
-          class="flex items-center justify-center w-9 h-9 text-slate-500 hover:text-slate-900 border border-slate-200 rounded-md transition-colors bg-white"
+          class="flex h-11 w-11 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 transition-colors hover:text-slate-900 md:h-9 md:w-9"
           title="切换升序/降序"
+          aria-label="切换排序方向"
         >
           <span class="text-sm leading-none">{{ sortOrder === 'asc' ? '↑' : '↓' }}</span>
         </button>
@@ -65,10 +66,10 @@ const toggleOrder = (current) => emit('update:sortOrder', current === 'asc' ? 'd
 
     <div class="flex items-center gap-2 w-full md:w-auto justify-between md:justify-end">
       <!-- 视图切换 (icon-only) -->
-      <div class="flex border border-slate-200 rounded-md p-0.5 shrink-0 bg-white">
+      <div class="hidden border border-slate-200 rounded-md p-0.5 shrink-0 bg-white md:flex">
         <button
           @click="emit('update:viewMode', 'grid')"
-          class="w-8 h-8 rounded transition-colors flex items-center justify-center"
+          class="flex h-10 w-10 items-center justify-center rounded transition-colors md:h-8 md:w-8"
           :class="viewMode === 'grid' ? 'bg-slate-900 text-white' : 'text-slate-500 hover:text-slate-900'"
           title="卡片视图"
           aria-label="卡片视图"
@@ -77,7 +78,7 @@ const toggleOrder = (current) => emit('update:sortOrder', current === 'asc' ? 'd
         </button>
         <button
           @click="emit('update:viewMode', 'table')"
-          class="w-8 h-8 rounded transition-colors flex items-center justify-center"
+          class="flex h-10 w-10 items-center justify-center rounded transition-colors md:h-8 md:w-8"
           :class="viewMode === 'table' ? 'bg-slate-900 text-white' : 'text-slate-500 hover:text-slate-900'"
           title="表格视图"
           aria-label="表格视图"
@@ -90,7 +91,7 @@ const toggleOrder = (current) => emit('update:sortOrder', current === 'asc' ? 'd
       <a
         :href="rosterFile"
         download="博主联盟花名册v20260106.xlsx"
-        class="flex items-center justify-center w-9 h-9 text-slate-500 hover:text-slate-900 border border-slate-200 rounded-md bg-white transition-colors"
+        class="flex h-11 w-11 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 transition-colors hover:text-slate-900 md:h-9 md:w-9"
         title="下载博主联盟花名册"
         aria-label="下载花名册"
       >
@@ -99,7 +100,7 @@ const toggleOrder = (current) => emit('update:sortOrder', current === 'asc' ? 'd
       <button
         v-if="viewMode === 'table'"
         @click="emit('copy-table')"
-        class="flex items-center justify-center w-9 h-9 text-slate-500 hover:text-slate-900 border border-slate-200 rounded-md bg-white transition-colors"
+        class="hidden h-11 w-11 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-500 transition-colors hover:text-slate-900 md:flex md:h-9 md:w-9"
         title="复制表格数据到剪贴板"
         aria-label="复制表格"
       >

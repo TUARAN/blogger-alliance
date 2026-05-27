@@ -1,4 +1,6 @@
 <script setup>
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
 const navLinks = [
   { label: '介绍', to: '/tob/services' },
@@ -9,6 +11,13 @@ const navLinks = [
 defineProps({
   logoTo: { type: String, default: '/tob' },
   workspaceActive: { type: Boolean, default: false }
+})
+
+const route = useRoute()
+const mobileMenuOpen = ref(false)
+
+watch(() => route.fullPath, () => {
+  mobileMenuOpen.value = false
 })
 </script>
 
@@ -39,7 +48,41 @@ defineProps({
           </div>
           <slot name="links"></slot>
           <WebLlmNavBot />
+          <button
+            type="button"
+            class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition-colors hover:bg-slate-50 md:hidden"
+            :aria-expanded="mobileMenuOpen"
+            aria-controls="mobile-nav-panel"
+            aria-label="打开导航菜单"
+            @click="mobileMenuOpen = !mobileMenuOpen"
+          >
+            <svg v-if="!mobileMenuOpen" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+              <path d="M4 7h16" />
+              <path d="M4 12h16" />
+              <path d="M4 17h16" />
+            </svg>
+            <svg v-else class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+              <path d="M6 6l12 12" />
+              <path d="M18 6L6 18" />
+            </svg>
+          </button>
         </div>
+      </div>
+
+      <div
+        v-if="mobileMenuOpen"
+        id="mobile-nav-panel"
+        class="border-t border-slate-200/70 py-2 md:hidden"
+      >
+        <router-link
+          v-for="item in navLinks"
+          :key="item.label"
+          :to="item.to"
+          class="flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-950"
+          active-class="bg-slate-100 text-slate-950"
+        >
+          {{ item.label }}
+        </router-link>
       </div>
     </div>
   </nav>

@@ -11,52 +11,6 @@ onMounted(async () => {
   }
   initialized.value = true
 
-  const {
-    AutoProcessor,
-    Qwen3_5ForConditionalGeneration,
-    RawImage,
-    TextStreamer,
-    env
-  } = await import('@huggingface/transformers')
-
-  class DOMTextStreamer extends TextStreamer {
-    constructor(tokenizer, callback) {
-      super(tokenizer, { skip_prompt: true, skip_special_tokens: true })
-      this.callback = callback
-      this.generatedText = ''
-      this.tokenCount = 0
-      this.startTime = null
-      this.firstPutDone = false
-      this.finalTps = 0
-    }
-
-    put(value) {
-      if (!this.firstPutDone) {
-        this.firstPutDone = true
-        this.startTime = performance.now()
-      } else {
-        const count = value.size !== undefined ? value.size : value.length || 1
-        this.tokenCount += count
-      }
-      super.put(value)
-    }
-
-    on_finalized_text(text, streamEnd) {
-      this.generatedText += text
-
-      let tps = 0
-      if (this.tokenCount > 0 && this.startTime) {
-        const elapsed = (performance.now() - this.startTime) / 1000
-        if (elapsed > 0) {
-          tps = Number((this.tokenCount / elapsed).toFixed(2))
-        }
-      }
-
-      this.finalTps = tps
-      this.callback(this.generatedText, streamEnd, tps)
-    }
-  }
-
   const DB_NAME = 'QwenChatDB'
   const STORE_NAME = 'chats'
 
@@ -67,6 +21,8 @@ onMounted(async () => {
   let model = null
   let isLoading = false
   let currentImageBase64 = null
+  let transformersRuntime = null
+  let mobileLoadConfirmed = false
 
   const chatListEl = document.getElementById('chat-list')
   const chatContainerEl = document.getElementById('chat-container')
@@ -101,7 +57,70 @@ onMounted(async () => {
     }
   }
 
-  env.allowLocalModels = false
+  function isMobileViewport() {
+    return window.matchMedia('(max-width: 640px), (pointer: coarse)').matches
+  }
+
+  async function ensureTransformersRuntime() {
+    if (transformersRuntime) {
+      return transformersRuntime
+    }
+
+    const {
+      AutoProcessor,
+      Qwen3_5ForConditionalGeneration,
+      RawImage,
+      TextStreamer,
+      env
+    } = await import('@huggingface/transformers')
+
+    class DOMTextStreamer extends TextStreamer {
+      constructor(tokenizer, callback) {
+        super(tokenizer, { skip_prompt: true, skip_special_tokens: true })
+        this.callback = callback
+        this.generatedText = ''
+        this.tokenCount = 0
+        this.startTime = null
+        this.firstPutDone = false
+        this.finalTps = 0
+      }
+
+      put(value) {
+        if (!this.firstPutDone) {
+          this.firstPutDone = true
+          this.startTime = performance.now()
+        } else {
+          const count = value.size !== undefined ? value.size : value.length || 1
+          this.tokenCount += count
+        }
+        super.put(value)
+      }
+
+      on_finalized_text(text, streamEnd) {
+        this.generatedText += text
+
+        let tps = 0
+        if (this.tokenCount > 0 && this.startTime) {
+          const elapsed = (performance.now() - this.startTime) / 1000
+          if (elapsed > 0) {
+            tps = Number((this.tokenCount / elapsed).toFixed(2))
+          }
+        }
+
+        this.finalTps = tps
+        this.callback(this.generatedText, streamEnd, tps)
+      }
+    }
+
+    env.allowLocalModels = false
+    transformersRuntime = {
+      AutoProcessor,
+      Qwen3_5ForConditionalGeneration,
+      RawImage,
+      DOMTextStreamer
+    }
+    return transformersRuntime
+  }
 
   function setRuntimeNotice(kind, message) {
     runtimeNoticeEl.className = kind ? `notice notice-${kind}` : ''
@@ -207,6 +226,9 @@ onMounted(async () => {
     }
 
     const diagnostics = getBrowserDiagnostics()
+    if (isMobileViewport()) {
+      diagnostics.push('移动端会在确认后才下载模型文件，避免误触发大包加载。')
+    }
     const baseMessage = `${details.label}: ${details.notes}`
     setRuntimeNotice(
       diagnostics.length > 0 ? 'warn' : 'info',
@@ -358,6 +380,16 @@ onMounted(async () => {
       return
     }
 
+    if (isMobileViewport() && !mobileLoadConfirmed) {
+      mobileLoadConfirmed = true
+      loadModelBtn.innerText = '确认加载模型'
+      setRuntimeNotice(
+        'warn',
+        '移动端加载本地大模型会下载较大的模型与运行文件，并可能导致发热或卡顿。确认设备和网络条件后，再点一次继续。'
+      )
+      return
+    }
+
     const modelId = modelSelect.value
     isLoading = true
     loadModelBtn.disabled = true
@@ -370,6 +402,7 @@ onMounted(async () => {
 
     try {
       setRuntimeNotice('info', `开始加载 ${MODEL_OPTIONS[modelId]?.label || modelId}。首次下载会较慢。`)
+      const runtime = await ensureTransformersRuntime()
 
       const progressCallback = (info) => {
         if (info.status === 'progress') {
@@ -393,11 +426,11 @@ onMounted(async () => {
         }
       }
 
-      processor = await AutoProcessor.from_pretrained(modelId, {
+      processor = await runtime.AutoProcessor.from_pretrained(modelId, {
         progress_callback: progressCallback
       })
 
-      model = await Qwen3_5ForConditionalGeneration.from_pretrained(modelId, {
+      model = await runtime.Qwen3_5ForConditionalGeneration.from_pretrained(modelId, {
         dtype: {
           embed_tokens: 'q4',
           vision_encoder: 'fp16',
@@ -441,7 +474,8 @@ onMounted(async () => {
         const content = []
         if (msg.image) {
           content.push({ type: 'image' })
-          const rawImage = await RawImage.read(msg.image)
+          const runtime = await ensureTransformersRuntime()
+          const rawImage = await runtime.RawImage.read(msg.image)
           const resized = await rawImage.resize(448, 448)
           rawImages.push(resized)
         }
@@ -509,7 +543,8 @@ onMounted(async () => {
 
       aiTextSpan.innerText = ''
 
-      const streamer = new DOMTextStreamer(
+      const runtime = await ensureTransformersRuntime()
+      const streamer = new runtime.DOMTextStreamer(
         processor.tokenizer,
         (newText, _isEnd, tps) => {
           aiTextSpan.innerText = newText
@@ -825,7 +860,9 @@ onBeforeUnmount(() => {
   border: none;
   background: none;
   cursor: pointer;
-  padding: 0 4px;
+  min-width: 44px;
+  min-height: 36px;
+  padding: 0 8px;
   display: none;
 }
 
@@ -1201,6 +1238,12 @@ onBeforeUnmount(() => {
 
   #web-llm-app-shell #send-btn {
     width: 100%;
+  }
+}
+
+@media (pointer: coarse) {
+  #web-llm-app-shell .delete-btn {
+    display: block;
   }
 }
 </style>
