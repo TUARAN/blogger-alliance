@@ -381,6 +381,20 @@
           <div class="shrink-0 flex items-center gap-2">
             <button
               v-if="viewingReports.length === 1"
+              class="min-h-11 rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              @click="copyViewingReportShareLink"
+            >
+              分享链接
+            </button>
+            <router-link
+              v-if="viewingReports.length === 1"
+              class="inline-flex min-h-11 items-center rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
+              :to="reportSharePath(viewingReports[0])"
+            >
+              打开分享页
+            </router-link>
+            <button
+              v-if="viewingReports.length === 1"
               class="min-h-11 rounded-lg border border-violet-200 bg-violet-50 px-3 py-1.5 text-sm font-medium text-violet-700 hover:bg-violet-100"
               @click="exportViewingReportPdf"
             >
@@ -958,6 +972,18 @@ function openViewReports(reportList) {
 }
 function reportSharePath(report) {
   return `/tob/reports/${encodeURIComponent(report?.id || '')}`
+}
+function reportShareUrl(report) {
+  return new URL(reportSharePath(report), window.location.origin).href
+}
+async function copyViewingReportShareLink() {
+  if (viewingReports.value.length !== 1) return
+  try {
+    await navigator.clipboard.writeText(reportShareUrl(viewingReports.value[0]))
+    setToolbarMessage('已复制分享链接。')
+  } catch {
+    setToolbarMessage('复制失败，请检查剪贴板权限。', true)
+  }
 }
 function closeViewReport() {
   reportViewerOpen.value = false
