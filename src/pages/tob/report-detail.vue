@@ -68,6 +68,14 @@
 
         <div class="border-t border-slate-200 px-5 py-5 md:px-7">
           <div class="whitespace-pre-line text-sm leading-7 text-slate-700">{{ report.content || '暂无正文。' }}</div>
+          <figure v-if="reportEvidenceImage" class="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+            <img
+              :src="reportEvidenceImage.src"
+              :alt="reportEvidenceImage.alt"
+              class="w-full object-contain"
+            >
+            <figcaption class="border-t border-slate-200 px-4 py-2 text-xs text-slate-500">{{ reportEvidenceImage.caption }}</figcaption>
+          </figure>
         </div>
       </article>
     </section>
@@ -87,6 +95,16 @@ const report = ref(null)
 const isLoading = ref(false)
 const message = ref('')
 const messageIsError = ref(false)
+
+const reportEvidenceImages = {
+  'report-20260527-buildsom-tweet': {
+    src: '/report-assets/buildsom-geo-effect-20260527.png',
+    alt: 'BuildSOM GEO 效果截图',
+    caption: 'GEO 效果截图：BuildSOM 已在 AI 回答引用内容中形成品牌露出。'
+  }
+}
+
+const reportEvidenceImage = computed(() => getReportEvidenceImage(report.value))
 
 const toneClasses = {
   teal: 'bg-teal-50 text-teal-900',
@@ -170,11 +188,21 @@ function renderMetricCard(label, value) {
   return `<div class="metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(formatNumber(value))}</strong></div>`
 }
 
+function getReportEvidenceImage(currentReport) {
+  const image = reportEvidenceImages[currentReport?.id || '']
+  if (!image) return null
+  return {
+    ...image,
+    src: new URL(image.src, window.location.origin).href
+  }
+}
+
 function buildReportPrintHtml(currentReport) {
   const platforms = Array.isArray(currentReport.platforms) ? currentReport.platforms : []
   const title = currentReport.project || currentReport.title || '数据报告'
   const articleTitle = currentReport.articleTitle ? formatArticleTitle(currentReport.articleTitle) : ''
   const stats = currentReport.stats || {}
+  const evidenceImage = getReportEvidenceImage(currentReport)
   const contentBlocks = String(currentReport.content || '暂无正文。')
     .split(/\n{2,}/)
     .map((block) => `<p>${escapeHtml(block).replace(/\n/g, '<br>')}</p>`)
@@ -197,6 +225,9 @@ function buildReportPrintHtml(currentReport) {
     .metric strong { display: block; margin-top: 4px; color: #0f172a; font-size: 18px; }
     .content { margin-top: 18px; border-top: 1px solid #e2e8f0; padding-top: 14px; font-size: 14px; }
     .content p { margin: 0 0 12px; }
+    .evidence { break-inside: avoid; margin-top: 18px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: #f8fafc; }
+    .evidence img { display: block; width: 100%; height: auto; }
+    .evidence figcaption { margin: 0; border-top: 1px solid #e2e8f0; padding: 8px 12px; color: #64748b; font-size: 12px; }
     @media print { .page { max-width: none; } }
   </style></head><body><main class="page">
     <div class="eyebrow">数据报告</div>
@@ -216,6 +247,7 @@ function buildReportPrintHtml(currentReport) {
       ${renderMetricCard('转发', stats.shares)}
     </section>
     <section class="content">${contentBlocks}</section>
+    ${evidenceImage ? `<figure class="evidence"><img src="${escapeHtml(evidenceImage.src)}" alt="${escapeHtml(evidenceImage.alt)}"><figcaption>${escapeHtml(evidenceImage.caption)}</figcaption></figure>` : ''}
   </main></body></html>`
 }
 
