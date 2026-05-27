@@ -133,12 +133,14 @@
             >
               ➕ 新增合作
             </button>
-            <button
-              class="h-9 px-4 rounded-lg border border-indigo-300 bg-white text-sm font-medium text-indigo-700 hover:bg-indigo-50"
-              @click="openCreateReport(null)"
+            <a
+              href="https://syncblog.cn/stats"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex h-9 items-center rounded-lg border border-indigo-300 bg-white px-4 text-sm font-medium text-indigo-700 hover:bg-indigo-50"
             >
               ➕ 新增独立报告
-            </button>
+            </a>
             <button
               class="h-9 px-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50"
               @click="copyAsTable"
@@ -215,7 +217,6 @@
                       >
                         查看报告
                       </button>
-                      <button class="text-xs text-emerald-600 hover:text-emerald-800" @click="openCreateReport(deal)">+报告</button>
                     </td>
                   </tr>
 
@@ -972,11 +973,6 @@ async function handleDealDelete() {
 }
 
 // Report CRUD
-function openCreateReport(deal) {
-  editingReport.value = null
-  reportModalCoopId.value = deal ? (deal.reportCooperationId || deal.id || '') : ''
-  reportModalOpen.value = true
-}
 function openDealReports(deal) {
   const list = dealReports(deal)
   if (list.length === 0) return
