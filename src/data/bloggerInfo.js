@@ -719,7 +719,10 @@ export const partnerBrands = [
   { name: '明基显示器', img: benqLogo },
   { name: '秦托邦社区', img: qintopiaLogo },
   { name: 'PaddleOCR', img: paddleocrLogo },
-  { name: '秒哒', img: miaoLogo }
+  { name: '秒哒', img: miaoLogo },
+  { name: 'BuildSOM', img: '/partners/buildsom.png' },
+  { name: '向日葵AI', img: '/partners/sunflower-ai.png' },
+  { name: 'Rollcode', img: '/partners/rollcode.png' }
 ]
 
 // 产品工具数据
