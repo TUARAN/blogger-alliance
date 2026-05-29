@@ -152,12 +152,12 @@
             </div>
           </div>
 
-          <!-- 六层优势（首行） -->
+          <!-- 六层优势 -->
           <div class="lg:col-span-7">
             <div class="text-xs font-medium uppercase tracking-[0.22em] text-violet-600 mb-3">
               <span aria-hidden="true">✨</span> Why Us · 六层核心能力
             </div>
-            <div class="grid sm:grid-cols-2 gap-3">
+            <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-3">
               <!-- 优势 1 -->
               <div class="group rounded-2xl border border-slate-200 bg-white p-5 hover:border-sky-300 hover:shadow-md transition-all">
                 <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-sky-50 text-sky-600 text-lg">
@@ -189,12 +189,7 @@
                   <span class="rounded-md bg-indigo-50 text-indigo-700 px-2 py-0.5">产品视角</span>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <!-- 六层优势（第二行，铺满） -->
-          <div class="lg:col-span-12">
-            <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-3">
               <!-- 优势 3 -->
               <div class="group rounded-2xl border border-slate-200 bg-white p-5 hover:border-emerald-300 hover:shadow-md transition-all">
                 <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 text-lg">
@@ -259,6 +254,7 @@
                 </div>
               </div>
             </div>
+
             <router-link
               to="/why-us"
               class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-violet-700 hover:text-violet-900 underline-offset-4 hover:underline"
