@@ -152,12 +152,28 @@
             </div>
           </div>
 
-          <!-- 4 优势 (7 cols) -->
+          <!-- 6 层优势 (7 cols) -->
           <div class="lg:col-span-7">
             <div class="text-xs font-medium uppercase tracking-[0.22em] text-violet-600 mb-3">
-              <span aria-hidden="true">✨</span> Why Us · 四项核心能力
+              <span aria-hidden="true">✨</span> Why Us · 六层核心能力
             </div>
             <div class="grid sm:grid-cols-2 gap-4">
+              <!-- 优势 1 -->
+              <div class="group rounded-2xl border border-slate-200 bg-white p-6 hover:border-sky-300 hover:shadow-md transition-all">
+                <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-sky-50 text-sky-600 text-lg">
+                  <span aria-hidden="true">🧠</span>
+                </div>
+                <div class="mt-4 text-base font-semibold text-slate-900">技术认知壁垒</div>
+                <p class="mt-2 text-sm leading-6 text-slate-600">
+                  我们懂技术产品的真实价值，能把产品能力拆成开发者看得懂、愿意讨论的技术语境。
+                </p>
+                <div class="mt-3 flex flex-wrap gap-1.5 text-[11px]">
+                  <span class="rounded-md bg-sky-50 text-sky-700 px-2 py-0.5">技术理解</span>
+                  <span class="rounded-md bg-sky-50 text-sky-700 px-2 py-0.5">产品拆解</span>
+                  <span class="rounded-md bg-sky-50 text-sky-700 px-2 py-0.5">开发者语境</span>
+                </div>
+              </div>
+
               <!-- 优势 1 -->
               <div class="group rounded-2xl border border-slate-200 bg-white p-6 hover:border-indigo-300 hover:shadow-md transition-all">
                 <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 text-lg">
@@ -174,7 +190,7 @@
                 </div>
               </div>
 
-              <!-- 优势 2 -->
+              <!-- 优势 3 -->
               <div class="group rounded-2xl border border-slate-200 bg-white p-6 hover:border-emerald-300 hover:shadow-md transition-all">
                 <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 text-lg">
                   <span aria-hidden="true">🧑‍💻</span>
@@ -190,7 +206,23 @@
                 </div>
               </div>
 
-              <!-- 优势 3 -->
+              <!-- 优势 2 -->
+              <div class="group rounded-2xl border border-slate-200 bg-white p-6 hover:border-cyan-300 hover:shadow-md transition-all">
+                <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-50 text-cyan-600 text-lg">
+                  <span aria-hidden="true">🤝</span>
+                </div>
+                <div class="mt-4 text-base font-semibold text-slate-900">信任网络</div>
+                <p class="mt-2 text-sm leading-6 text-slate-600">
+                  长期合作沉淀的博主关系与履约口碑，让品牌需求能被稳定承接、持续执行，而不是一次性合作。
+                </p>
+                <div class="mt-3 flex flex-wrap gap-1.5 text-[11px]">
+                  <span class="rounded-md bg-cyan-50 text-cyan-700 px-2 py-0.5">长期协作</span>
+                  <span class="rounded-md bg-cyan-50 text-cyan-700 px-2 py-0.5">稳定履约</span>
+                  <span class="rounded-md bg-cyan-50 text-cyan-700 px-2 py-0.5">口碑网络</span>
+                </div>
+              </div>
+
+              <!-- 优势 4 -->
               <div class="group rounded-2xl border border-slate-200 bg-white p-6 hover:border-violet-300 hover:shadow-md transition-all">
                 <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-violet-50 text-violet-600 text-lg">
                   <span aria-hidden="true">🔍</span>
@@ -206,10 +238,10 @@
                 </div>
               </div>
 
-              <!-- 优势 4 -->
+              <!-- 优势 6 -->
               <div class="group rounded-2xl border border-slate-200 bg-white p-6 hover:border-amber-300 hover:shadow-md transition-all">
                 <div class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-amber-50 text-amber-700 text-lg">
-                  <span aria-hidden="true">🤝</span>
+                  <span aria-hidden="true">🧭</span>
                 </div>
                 <div class="mt-4 text-base font-semibold text-slate-900">流程清晰可履约</div>
                 <p class="mt-2 text-sm leading-6 text-slate-600">

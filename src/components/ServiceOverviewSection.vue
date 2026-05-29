@@ -6,7 +6,7 @@
         <h2 class="mt-2 text-2xl font-bold text-gray-900">5 类合作 & 报价对比</h2>
       </div>
       <div class="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-4 py-2 text-xs md:text-sm font-medium text-amber-800">
-        报价口径混合（单篇 / 单价 / 月费 / 分佣），起步预算见各行
+        报价口径混合（单篇 / 单价 / 项目费 / 分佣），起步预算见各行
       </div>
     </div>
     <p class="mt-4 max-w-4xl text-sm leading-7 text-gray-600">
@@ -101,17 +101,17 @@
               <div class="inline-flex items-center gap-2 font-semibold text-gray-900">
                 <span>👥</span><span>社群服务</span>
               </div>
-              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-blue-50 border border-blue-200 px-2.5 py-0.5 text-[11px] font-medium text-blue-700">月度运营</span></div>
+              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-blue-50 border border-blue-200 px-2.5 py-0.5 text-[11px] font-medium text-blue-700">项目制交付</span></div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">想要长期私域沉淀和稳定开发者关系</td>
             <td class="px-4 py-4 align-top text-gray-700">
-              <div class="font-semibold text-gray-900">起步 ¥2k / 月</div>
+              <div class="font-semibold text-gray-900">起步 ¥2k / 项目</div>
               <div class="mt-1.5 space-y-0.5">
-                <div>社群宣发 ¥2k–1w／月</div>
+                <div>社群宣发 ¥2k–1w／项目</div>
                 <div>建群项目 ¥3k–3w</div>
               </div>
               <div class="mt-1.5 text-xs text-gray-500 leading-5">按社群规模、活跃节奏与运营深度浮动</div>
-              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>月度起 · 建群 ≥ 1 月</div>
+              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>按项目排期 · 建群项目一般 2–6 周</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div>入群人数、活跃度、长期触达资产</div>
@@ -259,7 +259,7 @@
       </div>
       <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-3 py-2.5">
         <div class="font-semibold text-slate-700 mb-1">按预算选</div>
-        零硬投入 → 专题分佣；月度可控 → 社群 / CPC；单次预算 → 推文。推文 + 引流可叠加 UTM 追踪。
+        零硬投入 → 专题分佣；项目预算可控 → 社群；效果结算 → CPC；单次预算 → 推文。
       </div>
       <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-3 py-2.5">
         <div class="font-semibold text-slate-700 mb-1">按周期选</div>
@@ -294,7 +294,7 @@ defineProps({
 const modeClassMap = {
   regular: 'bg-slate-100 text-slate-700',
   effect: 'bg-emerald-50 border border-emerald-200 text-emerald-700',
-  monthly: 'bg-blue-50 border border-blue-200 text-blue-700',
+  project: 'bg-blue-50 border border-blue-200 text-blue-700',
   affiliate: 'bg-amber-100 border border-amber-200 text-amber-800'
 }
 
@@ -340,14 +340,14 @@ const mobileRows = [
   {
     icon: '👥',
     title: '社群服务',
-    mode: '月度运营',
-    modeClass: modeClassMap.monthly,
+    mode: '项目制交付',
+    modeClass: modeClassMap.project,
     theme: 'regular',
     scene: '想要长期私域沉淀和稳定开发者关系',
-    startsAt: '¥2k / 月',
-    cycle: '月度起 · 建群 ≥ 1 月',
+    startsAt: '¥2k / 项目',
+    cycle: '按项目排期 · 建群项目一般 2–6 周',
     priceLines: [
-      '社群宣发 ¥2k–1w／月',
+      '社群宣发 ¥2k–1w／项目',
       '建群项目 ¥3k–3w'
     ],
     priceNote: '按社群规模、活跃节奏与运营深度浮动',
