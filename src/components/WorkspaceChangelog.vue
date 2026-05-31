@@ -53,8 +53,257 @@ const releases = [
     version: 'v0.8.0',
     period: '2026-05-06 至 2026-05-29',
     title: '后台化、报告分享与首页改版',
-    summary: '同步 WebLLM 视觉，抽取 AppNav 与服务组件，增强专项服务和分类案例，上线安全报告分享、商单 owner、Excel 导入、移动端交互与合作品牌轮播。',
-    commits: ['e3ff76c WebLLM', '2b11eda cases', '5beb46c sharing', '0be662c ledger', '7957550 carousel']
+    summary:
+      '同步 WebLLM 视觉，抽取 AppNav 与服务组件，增强专项服务和分类案例，上线安全报告分享、商单 owner、Excel 导入、移动端交互，并将合作品牌轮播拆分为独立页面后接入后台入口。',
+    commits: ['e3ff76c WebLLM', '2b11eda cases', '5beb46c sharing', '0be662c ledger', '7957550 carousel page']
+  }
+]
+
+const weeklyProgress = [
+  {
+    week: '2025 W25',
+    period: '06-16 至 06-22',
+    focus: '项目启动与静态部署打底',
+    highlights: ['初始化 Vue3 + Tailwind 工程并完成静态部署基线。', '补齐 README 愿景说明，建立项目定位与协作方向。'],
+    commits: ['05dab57 init', '404f1fb static base', '249f82c README']
+  },
+  {
+    week: '2025 W27',
+    period: '06-30 至 07-06',
+    focus: '品牌切换、统计与贡献流程落地',
+    highlights: ['品牌统一为开发者博主联盟，首页统计与 PV/UV 能力上线。', '明确 Fork + PR 加入流程，首页和 TOC 文案同步重构。'],
+    commits: ['8cf781d brand', '8f9224a analytics', '978c07b workflow', 'cc92877 stats']
+  },
+  {
+    week: '2025 W28',
+    period: '07-07 至 07-13',
+    focus: '数据结构重构与名录持续补充',
+    highlights: ['新增博主内容并继续合并社区贡献。', '完成数据文件与项目结构重构，降低后续维护成本。'],
+    commits: ['2f49a98 blogger', 'ce13c50 contents', 'c97d521 data refactor']
+  },
+  {
+    week: '2025 W29',
+    period: '07-14 至 07-20',
+    focus: '生态扩容启动',
+    highlights: ['新增博主并开启 v0.3.x 的持续扩容节奏。'],
+    commits: ['bd5b9cc blogger']
+  },
+  {
+    week: '2025 W30',
+    period: '07-21 至 07-27',
+    focus: '社区新增与合并协作',
+    highlights: ['继续接入博主并合并社区 PR，扩容流程稳定化。'],
+    commits: ['0c40396 blogger', '58ad7cd merge']
+  },
+  {
+    week: '2025 W31',
+    period: '07-28 至 08-03',
+    focus: '资料与展示信息补齐',
+    highlights: ['README 展示信息补充，继续新增并修正博主头像资料。'],
+    commits: ['eb0ee36 blogger', 'ecbcae4 README', 'cf98cb9 avatar']
+  },
+  {
+    week: '2025 W32',
+    period: '08-04 至 08-10',
+    focus: '名录质量修复',
+    highlights: ['集中修复语法/构建问题，更新多位博主信息与头像。'],
+    commits: ['38b00cf Alex', 'e5d61fa fix build', 'd7b9caa Alex avatar']
+  },
+  {
+    week: '2025 W33',
+    period: '08-11 至 08-17',
+    focus: 'TOB 页面信息增强',
+    highlights: ['完善 TOB 合作伙伴、群体数据说明与浮窗体验。'],
+    commits: ['c3c1cf3 TOB', 'd19d5a6 TOB tip']
+  },
+  {
+    week: '2025 W36',
+    period: '09-01 至 09-07',
+    focus: '生态扩容收口',
+    highlights: ['补充新博主条目，完成 v0.3.x 阶段收尾。'],
+    commits: ['2dc4eee blogger']
+  },
+  {
+    week: '2025 W45',
+    period: '11-03 至 11-09',
+    focus: '品牌与名录体系刷新',
+    highlights: ['刷新统计和品牌展示，扩展名录并引入 KOL/KOC 标识。'],
+    commits: ['82adcd0 stats', 'a36d845 roster', 'ca46967 badges']
+  },
+  {
+    week: '2025 W46',
+    period: '11-10 至 11-16',
+    focus: '首页内容微调',
+    highlights: ['调整首页内容组织，承接品牌刷新后的展示风格。'],
+    commits: ['145d6e6 index']
+  },
+  {
+    week: '2025 W48',
+    period: '11-24 至 11-30',
+    focus: '导航与学院重构',
+    highlights: ['完成导航与联盟学院重构，学院内容转向真实工具和知识资源。', '品牌命名口径回收统一。'],
+    commits: ['93d0a57 academy', '55dabab academy content', '7ef26a3 brand']
+  },
+  {
+    week: '2025 W49',
+    period: '12-01 至 12-07',
+    focus: '首页统计交互优化',
+    highlights: ['优化首页加载与统计卡片，提升二维码交互体验。'],
+    commits: ['e0e476c perf', 'e2a00db stats card', 'd93b151 qrcode']
+  },
+  {
+    week: '2025 W50',
+    period: '12-08 至 12-14',
+    focus: 'PV/UV 统计体系接入',
+    highlights: ['接入 Busuanzi 统计，为首页提供统一 PV/UV 数据来源。'],
+    commits: ['b686170 busuanzi']
+  },
+  {
+    week: '2025 W51',
+    period: '12-15 至 12-21',
+    focus: '名录持续更新',
+    highlights: ['新增博主并保持社区贡献节奏。'],
+    commits: ['b60c766 blogger']
+  },
+  {
+    week: '2025 W52',
+    period: '12-22 至 12-28',
+    focus: '年底扩容补充',
+    highlights: ['继续新增博主条目，补强名录广度。'],
+    commits: ['8192c0d blogger']
+  },
+  {
+    week: '2025 W53',
+    period: '12-29 至 01-04',
+    focus: '年度收尾清理',
+    highlights: ['品牌文案刷新并清理统计口径，为新年阶段迭代打底。'],
+    commits: ['dbeeeb6 brand cleanup']
+  },
+  {
+    week: '2026 W03',
+    period: '01-12 至 01-18',
+    focus: '服务页表格化',
+    highlights: ['上线表格视图、筛选和排序，服务展示进入结构化阶段。'],
+    commits: ['8e7441a table', '9332e22 docs']
+  },
+  {
+    week: '2026 W04',
+    period: '01-19 至 01-25',
+    focus: '博主信息修正',
+    highlights: ['修正博主资料与链接，完善“更多数据”及展示文案。'],
+    commits: ['9b72703 info', '67efbea more data', 'c0bcfc8 copy']
+  },
+  {
+    week: '2026 W06',
+    period: '02-02 至 02-08',
+    focus: 'TOB 子页面扩展',
+    highlights: ['新增 TOB 服务子页面与 CPC 详情，服务结构进一步拆分。'],
+    commits: ['4c0c445 services']
+  },
+  {
+    week: '2026 W07',
+    period: '02-09 至 02-15',
+    focus: '服务展示细节优化',
+    highlights: ['优化博主卡片头像与名称布局，提升服务页一致性。'],
+    commits: ['ff66d41 layout', 'c773a1e copy']
+  },
+  {
+    week: '2026 W09',
+    period: '02-23 至 03-01',
+    focus: '商业化口径统一',
+    highlights: ['统一受众定位、结算与报告流程，并补充花名册下载。'],
+    commits: ['f186f61 audience', '654e914 roster download']
+  },
+  {
+    week: '2026 W11',
+    period: '03-09 至 03-15',
+    focus: '商单与矩阵能力集中上线',
+    highlights: ['上线合作进度页与凭证解密流程，商单链路可控。', '接入矩阵联盟模块与 Why Us 页面，首页入口同步更新。'],
+    commits: ['97ca696 deals', '8e3f88e decrypt', 'f98c6c1 matrix', 'e33ef5f why-us']
+  },
+  {
+    week: '2026 W12',
+    period: '03-16 至 03-22',
+    focus: '案例与报告闭环建立',
+    highlights: ['新增案例页、GEO 文案与加密推广报告流程。', '优化工作台与服务页布局，形成“案例-报告-服务”闭环。'],
+    commits: ['70edb35 reports', 'dad1064 cases', 'f5b07cc GEO', 'a85535f workspace']
+  },
+  {
+    week: '2026 W13',
+    period: '03-23 至 03-29',
+    focus: '年度报告入口补齐',
+    highlights: ['更新加密商单与报告数据，补上年度报告模块入口。'],
+    commits: ['f221fce data', '4985352 annual']
+  },
+  {
+    week: '2026 W14',
+    period: '03-30 至 04-05',
+    focus: 'WebLLM 首次上线',
+    highlights: ['工作台 WebGPU LLM 上线并完善知识库、生成流程与容错。'],
+    commits: ['c7e139f WebLLM', 'a1c2d7a kb', 'daeb2ed flow fix', '9f4922a chat fix']
+  },
+  {
+    week: '2026 W15',
+    period: '04-06 至 04-12',
+    focus: '加密链路与运行配置修复',
+    highlights: ['完善 TOB 报告与加密载荷体验，并修复 WebLLM 运行配置。'],
+    commits: ['dbaa5de tob', 'a616058 coep', '501a640 deps']
+  },
+  {
+    week: '2026 W16',
+    period: '04-13 至 04-19',
+    focus: 'D1 迁移落地',
+    highlights: ['完成 D1 迁移文档与实施收尾，新增 D1 管理页和健康检查。'],
+    commits: ['55e0241 D1', 'f6c1f68 admin']
+  },
+  {
+    week: '2026 W17',
+    period: '04-20 至 04-26',
+    focus: '内部访问安全加固',
+    highlights: ['移除前端加密流程并增加访问锁定策略，收敛内部页安全边界。'],
+    commits: ['3fa6496 remove frontend encrypt', '894a39c lockout']
+  },
+  {
+    week: '2026 W18',
+    period: '04-27 至 05-03',
+    focus: '后台入口与结构整理',
+    highlights: ['修复 Cloudflare worker 配置，调整内部页并合并矩阵入口到学院。'],
+    commits: ['fb34966 worker fix', 'f4be231 internal', 'e7ef403 matrix entry']
+  },
+  {
+    week: '2026 W19',
+    period: '05-04 至 05-10',
+    focus: '后台化改造启动',
+    highlights: ['年报访问增加凭证保护，同步 WebLLM 视觉并新增后台入口。', '抽取 AppNav、清理死路由并推进服务页组件化拆分。'],
+    commits: ['b05cb1c annual auth', 'e3ff76c WebLLM sync', 'cb3d50f AppNav', '5f5e10c split services']
+  },
+  {
+    week: '2026 W20',
+    period: '05-11 至 05-17',
+    focus: '服务与案例信息架构升级',
+    highlights: ['独立 /matrix 路由并优化后台入口卡片顺序。', '抽取服务总览组件，统一首页与服务页报价呈现。', '按类案例与服务专项页增强，导航与统计联动更新。'],
+    commits: ['2f78c1b matrix route', 'c21d84e service overview', '2b11eda cases by category', '2159bad nav rename']
+  },
+  {
+    week: '2026 W21',
+    period: '05-18 至 05-24',
+    focus: '报告分享能力上线',
+    highlights: ['精简工作台导航并补充闭环报告抓取案例。', '上线安全报告分享页，支持更稳定的外部展示路径。'],
+    commits: ['48e2030 nav', '809a307 showcase', '5beb46c sharing']
+  },
+  {
+    week: '2026 W22',
+    period: '05-25 至 05-31',
+    focus: '后台经营能力与移动端交互增强',
+    highlights: ['新增商单 owner、Excel 导入与进度状态简化，运营流程后台化。', '移动端交互优化，补齐 GEO 报告证据与分享动作。', '合作品牌轮播先上线，再单独拆页并接入后台入口。'],
+    commits: ['0be662c ledger', 'c02551e mobile', '435b0c1 GEO evidence', '5583c98 share action', '7957550 carousel page']
+  },
+  {
+    week: '2026 W23',
+    period: '06-01 至 06-07',
+    focus: '里程碑可视化沉淀',
+    highlights: ['新增工作台更新日志，开始将版本演进结构化沉淀为长期资产。'],
+    commits: ['0a801bb changelog']
   }
 ]
 </script>
@@ -105,5 +354,40 @@ const releases = [
         </div>
       </li>
     </ol>
+
+    <section class="mt-10 rounded-xl border border-slate-200 bg-white/80 p-5 shadow-sm sm:p-6">
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <h3 class="text-lg font-semibold text-slate-950">按周进度（结合 git 记录）</h3>
+        <p class="text-xs text-slate-500">按自然周归并，聚合关键提交与主题演进</p>
+      </div>
+
+      <ol class="mt-5 space-y-3">
+        <li
+          v-for="item in weeklyProgress"
+          :key="item.week"
+          class="rounded-lg border border-slate-200 bg-slate-50/70 p-4"
+        >
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex items-center gap-2">
+              <span class="rounded bg-slate-900 px-2 py-1 font-mono text-xs text-white">{{ item.week }}</span>
+              <span class="text-xs text-slate-500">{{ item.period }}</span>
+            </div>
+            <p class="text-sm font-medium text-slate-800">{{ item.focus }}</p>
+          </div>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-600">
+            <li v-for="point in item.highlights" :key="point">{{ point }}</li>
+          </ul>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <span
+              v-for="commit in item.commits"
+              :key="commit"
+              class="rounded-md border border-slate-200 bg-white px-2 py-1 font-mono text-xs text-slate-600"
+            >
+              {{ commit }}
+            </span>
+          </div>
+        </li>
+      </ol>
+    </section>
   </section>
 </template>
