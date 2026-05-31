@@ -306,6 +306,85 @@ const weeklyProgress = [
     commits: ['0a801bb changelog']
   }
 ]
+
+const releaseMap = Object.fromEntries(releases.map((item) => [item.version, item]))
+const weeklyMap = Object.fromEntries(weeklyProgress.map((item) => [item.week, item]))
+
+const timelineOrder = [
+  { type: 'minor', key: '2025 W25' },
+  { type: 'major', key: 'v0.1.0' },
+  { type: 'minor', key: '2025 W27' },
+  { type: 'minor', key: '2025 W28' },
+  { type: 'major', key: 'v0.2.0' },
+  { type: 'minor', key: '2025 W29' },
+  { type: 'minor', key: '2025 W30' },
+  { type: 'minor', key: '2025 W31' },
+  { type: 'minor', key: '2025 W32' },
+  { type: 'minor', key: '2025 W33' },
+  { type: 'minor', key: '2025 W36' },
+  { type: 'major', key: 'v0.3.0' },
+  { type: 'minor', key: '2025 W45' },
+  { type: 'minor', key: '2025 W46' },
+  { type: 'minor', key: '2025 W48' },
+  { type: 'minor', key: '2025 W49' },
+  { type: 'minor', key: '2025 W50' },
+  { type: 'minor', key: '2025 W51' },
+  { type: 'minor', key: '2025 W52' },
+  { type: 'minor', key: '2025 W53' },
+  { type: 'major', key: 'v0.4.0' },
+  { type: 'minor', key: '2026 W03' },
+  { type: 'minor', key: '2026 W04' },
+  { type: 'minor', key: '2026 W06' },
+  { type: 'minor', key: '2026 W07' },
+  { type: 'minor', key: '2026 W09' },
+  { type: 'major', key: 'v0.5.0' },
+  { type: 'minor', key: '2026 W11' },
+  { type: 'minor', key: '2026 W12' },
+  { type: 'minor', key: '2026 W13' },
+  { type: 'major', key: 'v0.6.0' },
+  { type: 'minor', key: '2026 W14' },
+  { type: 'minor', key: '2026 W15' },
+  { type: 'minor', key: '2026 W16' },
+  { type: 'minor', key: '2026 W17' },
+  { type: 'minor', key: '2026 W18' },
+  { type: 'major', key: 'v0.7.0' },
+  { type: 'minor', key: '2026 W19' },
+  { type: 'minor', key: '2026 W20' },
+  { type: 'minor', key: '2026 W21' },
+  { type: 'minor', key: '2026 W22' },
+  { type: 'major', key: 'v0.8.0' },
+  { type: 'minor', key: '2026 W23' }
+]
+
+const timelineItems = timelineOrder
+  .map((item) => {
+    if (item.type === 'major') {
+      const release = releaseMap[item.key]
+      return release
+        ? {
+            type: 'major',
+            marker: release.version,
+            period: release.period,
+            title: release.title,
+            summary: release.summary,
+            commits: release.commits
+          }
+        : null
+    }
+
+    const week = weeklyMap[item.key]
+    return week
+      ? {
+          type: 'minor',
+          marker: week.week,
+          period: week.period,
+          title: week.focus,
+          highlights: week.highlights,
+          commits: week.commits
+        }
+      : null
+  })
+  .filter(Boolean)
 </script>
 
 <template>
@@ -317,33 +396,39 @@ const weeklyProgress = [
           更新日志
         </h2>
         <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-          基于 git 提交历史整理的里程碑版本，按时间线记录联盟工作台、服务页、案例、报告与数据底座的关键演进。
+          基于 git 提交历史，将大版本里程碑与周进度统一到一条时间线，记录联盟工作台、服务页、案例、报告与数据底座的关键演进。
         </p>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-600 shadow-sm">
-        最近同步：2026-05-29
+        最近同步：2026-06-01
       </div>
     </div>
 
     <ol class="mt-8 space-y-4">
       <li
-        v-for="release in releases"
-        :key="release.version"
+        v-for="item in timelineItems"
+        :key="`${item.type}-${item.marker}`"
         class="relative rounded-lg border border-white/80 bg-white/90 p-5 shadow-sm transition-shadow hover:shadow-md sm:p-6"
       >
         <div class="grid gap-4 lg:grid-cols-[12rem_1fr] lg:gap-6">
           <div>
-            <div class="inline-flex items-center rounded-lg bg-slate-950 px-3 py-1.5 text-sm font-semibold text-white">
-              {{ release.version }}
+            <div
+              class="inline-flex items-center rounded-lg px-3 py-1.5 text-sm font-semibold"
+              :class="item.type === 'major' ? 'bg-slate-950 text-white' : 'bg-indigo-100 text-indigo-700'"
+            >
+              {{ item.marker }}
             </div>
-            <p class="mt-3 text-sm font-medium text-slate-500">{{ release.period }}</p>
+            <p class="mt-3 text-sm font-medium text-slate-500">{{ item.period }}</p>
           </div>
           <div>
-            <h3 class="text-lg font-semibold text-slate-950">{{ release.title }}</h3>
-            <p class="mt-2 text-sm leading-6 text-slate-600">{{ release.summary }}</p>
+            <h3 class="text-lg font-semibold text-slate-950">{{ item.title }}</h3>
+            <p v-if="item.type === 'major'" class="mt-2 text-sm leading-6 text-slate-600">{{ item.summary }}</p>
+            <ul v-else class="mt-2 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-600">
+              <li v-for="point in item.highlights" :key="point">{{ point }}</li>
+            </ul>
             <div class="mt-4 flex flex-wrap gap-2">
               <span
-                v-for="commit in release.commits"
+                v-for="commit in item.commits"
                 :key="commit"
                 class="rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 font-mono text-xs text-slate-600"
               >
@@ -354,40 +439,5 @@ const weeklyProgress = [
         </div>
       </li>
     </ol>
-
-    <section class="mt-10 rounded-xl border border-slate-200 bg-white/80 p-5 shadow-sm sm:p-6">
-      <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <h3 class="text-lg font-semibold text-slate-950">按周进度（结合 git 记录）</h3>
-        <p class="text-xs text-slate-500">按自然周归并，聚合关键提交与主题演进</p>
-      </div>
-
-      <ol class="mt-5 space-y-3">
-        <li
-          v-for="item in weeklyProgress"
-          :key="item.week"
-          class="rounded-lg border border-slate-200 bg-slate-50/70 p-4"
-        >
-          <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div class="flex items-center gap-2">
-              <span class="rounded bg-slate-900 px-2 py-1 font-mono text-xs text-white">{{ item.week }}</span>
-              <span class="text-xs text-slate-500">{{ item.period }}</span>
-            </div>
-            <p class="text-sm font-medium text-slate-800">{{ item.focus }}</p>
-          </div>
-          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-600">
-            <li v-for="point in item.highlights" :key="point">{{ point }}</li>
-          </ul>
-          <div class="mt-3 flex flex-wrap gap-2">
-            <span
-              v-for="commit in item.commits"
-              :key="commit"
-              class="rounded-md border border-slate-200 bg-white px-2 py-1 font-mono text-xs text-slate-600"
-            >
-              {{ commit }}
-            </span>
-          </div>
-        </li>
-      </ol>
-    </section>
   </section>
 </template>
