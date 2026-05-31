@@ -34,6 +34,7 @@ const routes = [
   { path: '/matrix', redirect: '/workspace' },
   { path: '/annual-report-2025', component: () => import('./pages/annual-report/index.vue') },
   { path: '/workspace', component: () => import('./pages/workspace/index.vue') },
+  { path: '/workspace/changelog', component: () => import('./pages/workspace/changelog.vue') },
   {
     path: '/workspace/internal-data-admin',
     redirect: (to) => ({ path: '/tob/internal', query: { ...to.query, tab: 'admin' } })

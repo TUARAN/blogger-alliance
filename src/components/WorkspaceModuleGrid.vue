@@ -52,6 +52,19 @@ const modules = [
       tag: 'bg-indigo-50 text-indigo-700',
       cta: 'text-indigo-700'
     }
+  },
+  {
+    title: '更新日志',
+    description: '按版本与周维度回看联盟工作台、服务页、案例与数据底座演进。',
+    tag: '版本里程碑',
+    icon: '📝',
+    to: '/workspace/changelog',
+    theme: {
+      shadow: 'shadow-slate-100/40',
+      icon: 'bg-slate-100',
+      tag: 'bg-slate-100 text-slate-700',
+      cta: 'text-slate-700'
+    }
   }
 ]
 

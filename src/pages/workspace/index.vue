@@ -11,12 +11,10 @@
       </div>
 
       <WorkspaceModuleGrid class="mt-10" />
-      <WorkspaceChangelog />
     </section>
   </div>
 </template>
 
 <script setup>
 import WorkspaceModuleGrid from '../../components/WorkspaceModuleGrid.vue'
-import WorkspaceChangelog from '../../components/WorkspaceChangelog.vue'
 </script>
