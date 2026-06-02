@@ -71,7 +71,7 @@ const badgeBg = {
           class="inline-flex shrink-0 items-center rounded-full px-3 py-1 text-xs font-semibold"
           :class="badgeBg[theme]"
         >
-          示意案例
+          交付样张
         </span>
       </div>
 

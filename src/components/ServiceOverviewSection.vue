@@ -13,6 +13,47 @@
       按合作目标快速选型：要曝光走推文，要可量化点击走引流，要长期私域走社群；要持续内容资产 + 高提成转化，看 AI Access / 出海云访问 两个联运专题。各服务可单选，也可组合执行。点击「专项介绍」查看完整说明，「查看案例」浏览合作呈现方式。
     </p>
 
+    <div class="mt-6 grid gap-4 lg:grid-cols-3">
+      <article class="rounded-xl border border-indigo-200 bg-indigo-50/60 p-5">
+        <div class="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-indigo-700">方案 01</div>
+        <h3 class="mt-3 text-lg font-bold text-gray-900">冷启动曝光包</h3>
+        <p class="mt-2 text-sm leading-6 text-gray-700">
+          适合新品发布、开发者工具首轮声量、融资后品牌露出。先让目标用户知道产品，再用可信内容解释产品为什么值得试。
+        </p>
+        <div class="mt-4 space-y-2 text-sm text-gray-700">
+          <div><span class="font-semibold text-gray-900">组合：</span>推文服务 + 多平台分发 + 基础数据回传</div>
+          <div><span class="font-semibold text-gray-900">指标：</span>曝光、阅读、互动、原帖链接、平台权重</div>
+          <div><span class="font-semibold text-gray-900">适合周期：</span>单次排期 / 1-2 周集中发声</div>
+        </div>
+      </article>
+
+      <article class="rounded-xl border border-emerald-200 bg-emerald-50/60 p-5">
+        <div class="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-emerald-700">方案 02</div>
+        <h3 class="mt-3 text-lg font-bold text-gray-900">线索增长包</h3>
+        <p class="mt-2 text-sm leading-6 text-gray-700">
+          适合已经有落地页、注册路径或试用入口的 SaaS / AI 产品。用内容种草承接点击，再通过 UTM 和对账口径评估效果。
+        </p>
+        <div class="mt-4 space-y-2 text-sm text-gray-700">
+          <div><span class="font-semibold text-gray-900">组合：</span>CPC 引流 + 测评推文 + UTM 追踪 + 数据对账</div>
+          <div><span class="font-semibold text-gray-900">指标：</span>有效点击、注册、试用线索、渠道表现</div>
+          <div><span class="font-semibold text-gray-900">适合周期：</span>2 周起跑 / 可持续调优</div>
+        </div>
+      </article>
+
+      <article class="rounded-xl border border-amber-200 bg-amber-50/70 p-5">
+        <div class="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-amber-800">方案 03</div>
+        <h3 class="mt-3 text-lg font-bold text-gray-900">长期资产包</h3>
+        <p class="mt-2 text-sm leading-6 text-gray-700">
+          适合高 LTV、订阅、分佣或出海场景。把内容、站点、社群和搜索占位做成长期可复用的转化资产。
+        </p>
+        <div class="mt-4 space-y-2 text-sm text-gray-700">
+          <div><span class="font-semibold text-gray-900">组合：</span>专题内容站 + 社群承接 + GEO / SEO + 分佣联运</div>
+          <div><span class="font-semibold text-gray-900">指标：</span>自然流量、咨询、成交归因、复购线索</div>
+          <div><span class="font-semibold text-gray-900">适合周期：</span>3 个月以上长期协同</div>
+        </div>
+      </article>
+    </div>
+
     <!-- Desktop table (md+) -->
     <div class="mt-6 hidden md:block overflow-x-auto rounded-xl border border-slate-200 bg-white">
       <table class="min-w-full divide-y divide-slate-200 text-left text-sm table-fixed">

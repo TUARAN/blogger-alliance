@@ -17,19 +17,19 @@
             博主联盟
           </h1>
           <p class="mt-5 max-w-5xl mx-auto text-3xl md:text-5xl font-bold tracking-tight leading-tight bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            连接 AI 产品与技术影响力
+            让 AI / 开发者产品被技术用户看见、理解并试用
           </p>
           <p class="mt-6 max-w-3xl mx-auto text-base md:text-lg text-slate-600 leading-relaxed">
-            我们聚合一批专业技术博主，把技术品牌带到开发者 / AI 爱好者 / 科技爱好者真正会讨论的地方，并持续沉淀真实有效的 GEO 结果。
+            我们聚合专业技术博主、开发者社群与内容资产，把产品能力讲进真实技术语境，帮助品牌完成冷启动曝光、可信测评、线索获取和长期 GEO / 搜索占位。
           </p>
 
           <!-- Feature chips -->
           <div class="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs md:text-sm text-slate-600">
-            <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-indigo-500"></span>5 类合作可组合</span>
+            <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-indigo-500"></span>3 类增长方案</span>
             <span class="text-slate-300">/</span>
             <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>单次最多 20 位博主</span>
             <span class="text-slate-300">/</span>
-            <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-violet-500"></span>高提成专题分佣</span>
+            <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-violet-500"></span>推文 / CPC / 社群 / 联运可组合</span>
             <span class="text-slate-300">/</span>
             <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>1 工作日响应</span>
           </div>
@@ -40,14 +40,14 @@
               href="#service-overview"
               class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-indigo-200/60 hover:shadow-xl hover:shadow-indigo-200 hover:from-indigo-700 hover:to-violet-700 transition-all"
             >
-              查看服务与报价
+              按目标选方案
               <span aria-hidden="true">→</span>
             </a>
             <router-link
               to="/cases"
               class="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white/80 backdrop-blur px-6 py-3 text-sm font-medium text-slate-700 hover:border-indigo-300 hover:text-indigo-700 transition-colors"
             >
-              浏览合作案例
+              查看案例与样张
             </router-link>
             <a
               href="#positioning"
@@ -55,6 +55,24 @@
             >
               生态定位 & 我们的优势 ↓
             </a>
+          </div>
+
+          <div class="mt-12 grid gap-3 text-left md:grid-cols-3">
+            <div class="rounded-2xl border border-indigo-100 bg-white/85 p-4 shadow-sm">
+              <div class="text-2xl font-bold text-indigo-700 tabular-nums">84%</div>
+              <p class="mt-1 text-sm font-medium text-slate-900">开发者已在用或计划用 AI 工具</p>
+              <p class="mt-2 text-xs leading-5 text-slate-500">Stack Overflow Developer Survey 2025：AI 工具进入开发工作流，但技术人仍需要可信解释和真实体验。</p>
+            </div>
+            <div class="rounded-2xl border border-rose-100 bg-white/85 p-4 shadow-sm">
+              <div class="text-2xl font-bold text-rose-600 tabular-nums">46%</div>
+              <p class="mt-1 text-sm font-medium text-slate-900">开发者明确不信任 AI 输出准确性</p>
+              <p class="mt-2 text-xs leading-5 text-slate-500">同一调研显示信任仍是关键阻力，技术测评、接入示例和真实讨论能降低试用门槛。</p>
+            </div>
+            <div class="rounded-2xl border border-emerald-100 bg-white/85 p-4 shadow-sm">
+              <div class="text-2xl font-bold text-emerald-600 tabular-nums">88%</div>
+              <p class="mt-1 text-sm font-medium text-slate-900">组织已在至少一个业务功能使用 AI</p>
+              <p class="mt-2 text-xs leading-5 text-slate-500">McKinsey State of AI 2025：AI 采用已进入规模化阶段，产品需要持续内容触点来争夺搜索、口碑和线索。</p>
+            </div>
           </div>
 
           <!-- Stats strip -->
