@@ -57,24 +57,6 @@
             </a>
           </div>
 
-          <div class="mt-12 grid gap-3 text-left md:grid-cols-3">
-            <div class="rounded-2xl border border-indigo-100 bg-white/85 p-4 shadow-sm">
-              <div class="text-2xl font-bold text-indigo-700 tabular-nums">84%</div>
-              <p class="mt-1 text-sm font-medium text-slate-900">开发者已在用或计划用 AI 工具</p>
-              <p class="mt-2 text-xs leading-5 text-slate-500">Stack Overflow Developer Survey 2025：AI 工具进入开发工作流，但技术人仍需要可信解释和真实体验。</p>
-            </div>
-            <div class="rounded-2xl border border-rose-100 bg-white/85 p-4 shadow-sm">
-              <div class="text-2xl font-bold text-rose-600 tabular-nums">46%</div>
-              <p class="mt-1 text-sm font-medium text-slate-900">开发者明确不信任 AI 输出准确性</p>
-              <p class="mt-2 text-xs leading-5 text-slate-500">同一调研显示信任仍是关键阻力，技术测评、接入示例和真实讨论能降低试用门槛。</p>
-            </div>
-            <div class="rounded-2xl border border-emerald-100 bg-white/85 p-4 shadow-sm">
-              <div class="text-2xl font-bold text-emerald-600 tabular-nums">88%</div>
-              <p class="mt-1 text-sm font-medium text-slate-900">组织已在至少一个业务功能使用 AI</p>
-              <p class="mt-2 text-xs leading-5 text-slate-500">McKinsey State of AI 2025：AI 采用已进入规模化阶段，产品需要持续内容触点来争夺搜索、口碑和线索。</p>
-            </div>
-          </div>
-
           <!-- Stats strip -->
           <div class="mt-14 mx-auto max-w-5xl">
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
