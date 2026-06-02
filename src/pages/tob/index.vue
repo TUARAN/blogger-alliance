@@ -17,7 +17,7 @@
             博主联盟
           </h1>
           <p class="mt-5 max-w-5xl mx-auto text-3xl md:text-5xl font-bold tracking-tight leading-tight bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            让 AI / 开发者产品被技术用户看见、理解并试用
+            连接 AI 产品与技术影响力
           </p>
           <p class="mt-6 max-w-3xl mx-auto text-base md:text-lg text-slate-600 leading-relaxed">
             我们聚合专业技术博主、开发者社群与内容资产，把产品能力讲进真实技术语境，帮助品牌完成冷启动曝光、可信测评、线索获取和长期 GEO / 搜索占位。
