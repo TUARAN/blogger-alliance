@@ -27,7 +27,7 @@
           <div class="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs md:text-sm text-slate-600">
             <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-indigo-500"></span>3 类增长方案</span>
             <span class="text-slate-300">/</span>
-            <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>单次最多 20 位博主</span>
+            <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>多平台同步分发</span>
             <span class="text-slate-300">/</span>
             <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-violet-500"></span>推文 / CPC / 社群 / 联运可组合</span>
             <span class="text-slate-300">/</span>

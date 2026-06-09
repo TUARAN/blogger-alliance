@@ -81,11 +81,11 @@
                 <span>✍️</span><span>推文服务</span>
               </div>
               <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium text-slate-700">单次交付</span></div>
-              <div class="mt-1.5 text-xs text-gray-500">最多 20 位 · 多平台同发</div>
+              <div class="mt-1.5 text-xs text-gray-500">多平台同发</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div>想要快速曝光、内容种草和品牌心智</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">单次最多调动 20 位博主，掘金 / 知乎 / 小红书 / 公众号 / X 等多平台同时分发</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">掘金 / 知乎 / 小红书 / 公众号 / X 等多平台同时分发</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div class="font-semibold text-gray-900">起步 ¥500 / 篇</div>
@@ -343,12 +343,12 @@ const mobileRows = [
   {
     icon: '✍️',
     title: '推文服务',
-    subtitle: '最多 20 位博主 · 多平台同发',
+    subtitle: '多平台同发',
     mode: '单次交付',
     modeClass: modeClassMap.regular,
     theme: 'regular',
     scene: '想要快速曝光、内容种草和品牌心智',
-    sceneNote: '单次最多调动 20 位博主，掘金 / 知乎 / 小红书 / 公众号 / X 等多平台同时分发',
+    sceneNote: '掘金 / 知乎 / 小红书 / 公众号 / X 等多平台同时分发',
     startsAt: '¥500 / 篇',
     cycle: '单篇起 / 可排期',
     priceLines: [

@@ -4,10 +4,9 @@
       <header class="mb-8">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900">推文服务</h1>
         <p class="mt-3 text-gray-600">
-          面向技术受众的内容分发合作，提供从「直发」到「深度测评」的不同强度推文方案，兼顾速度、可信度与转化质量。<strong class="text-gray-900">单次最多可调动 20 位博主</strong>在掘金 / 知乎 / 小红书 / 公众号 / X 等多平台同时分发，快速形成话题密度。
+          面向技术受众的内容分发合作，提供从「直发」到「深度测评」的不同强度推文方案，兼顾速度、可信度与转化质量。可在掘金 / 知乎 / 小红书 / 公众号 / X 等多平台同时分发，快速形成话题密度。
         </p>
         <div class="mt-3 flex flex-wrap gap-2 text-xs">
-          <span class="inline-flex items-center rounded-full bg-indigo-50 border border-indigo-200 px-2.5 py-1 text-indigo-700">最多 20 位 / 单次</span>
           <span class="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-1 text-emerald-700">5 大平台同发</span>
           <span class="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-2.5 py-1 text-amber-700">直发 / 测评 / 深度测评 三档可选</span>
         </div>
