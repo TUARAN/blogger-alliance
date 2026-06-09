@@ -10,7 +10,7 @@
       </div>
     </div>
     <p class="mt-4 max-w-4xl text-sm leading-7 text-gray-600">
-      按合作目标快速选型：要曝光走推文，要可量化点击走引流，要长期私域走社群；要持续内容资产 + 高提成转化，看 AI Access / 出海云访问 两个联运专题。各服务可单选，也可组合执行。点击「专项介绍」查看完整说明，「查看案例」浏览合作呈现方式。
+      按合作目标快速选型：要曝光走推文，要可量化点击走引流，要长期私域走社群；要持续内容资产 + 高提成转化，看 AI Access / 出海云访问 / 大厂云服务 三个联运专题。各服务可单选，也可组合执行。点击「专项介绍」查看完整说明，「查看案例」浏览合作呈现方式。
     </p>
 
     <div class="mt-6 grid gap-4 lg:grid-cols-3">
@@ -235,6 +235,36 @@
               </div>
             </td>
           </tr>
+
+          <!-- 大厂云服务 -->
+          <tr class="hover:bg-slate-50/60">
+            <td class="px-4 py-4 align-top">
+              <div class="inline-flex items-center gap-2 font-semibold text-gray-900">
+                <span>☁️</span><span>大厂云服务</span>
+              </div>
+              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-amber-100 border border-amber-200 px-2.5 py-0.5 text-[11px] font-medium text-amber-800">联运分佣</span></div>
+            </td>
+            <td class="px-4 py-4 align-top text-gray-700">
+              <div>阿里云 / 腾讯云 / 华为云 / 火山引擎渠道推广</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">多云选型 + 账单优化 + 专属充值归因链接</div>
+            </td>
+            <td class="px-4 py-4 align-top text-gray-700">
+              <div class="font-semibold text-gray-900">零硬投入 · 按成交分佣</div>
+              <div class="mt-1.5">渠道折扣 + 联运分成</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">建议月云消费 ≥ ¥3k 的企业 / 技术团队</div>
+              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>建议 ≥ 3 个月</div>
+            </td>
+            <td class="px-4 py-4 align-top text-gray-700">
+              <div>咨询线索 + 专属链接转化</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">沉淀：联运落地页 + 选型内容 + 账单体检</div>
+            </td>
+            <td class="px-4 py-4 align-top">
+              <div class="flex flex-col gap-1.5 text-sm">
+                <router-link to="/tob/services/cloud-cost" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍 →</router-link>
+                <router-link to="/cases/enterprise-cloud" class="font-medium text-slate-600 hover:text-indigo-700 hover:underline whitespace-nowrap">查看案例 →</router-link>
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -287,7 +317,14 @@
 
         <div class="mt-4 flex flex-wrap gap-3 text-sm">
           <router-link :to="row.detailTo" class="font-medium text-indigo-700 hover:underline">专项介绍 →</router-link>
-          <router-link :to="row.caseTo" class="font-medium text-indigo-700 hover:underline">查看案例 →</router-link>
+          <a
+            v-if="row.caseTo?.startsWith('http')"
+            :href="row.caseTo"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-medium text-emerald-700 hover:underline"
+          >联运落地页 →</a>
+          <router-link v-else :to="row.caseTo" class="font-medium text-indigo-700 hover:underline">查看案例 →</router-link>
         </div>
       </div>
     </div>
@@ -430,6 +467,23 @@ const mobileRows = [
     asset: '教程站 + 对比导航 + 出海社群',
     detailTo: '/tob/services/oversea-cloud',
     caseTo: '/cases/oversea-cloud'
+  },
+  {
+    icon: '☁️',
+    title: '大厂云服务',
+    mode: '联运分佣',
+    modeClass: modeClassMap.affiliate,
+    theme: 'special',
+    scene: '阿里云 / 腾讯云 / 华为云 / 火山引擎渠道推广',
+    sceneNote: '多云选型 + 账单优化 + 专属充值归因链接',
+    startsAt: '零硬投入',
+    cycle: '建议 ≥ 3 个月',
+    priceLines: ['渠道折扣 + 联运分成', '按成交结算'],
+    priceNote: '建议月云消费 ≥ ¥3k 的企业 / 技术团队',
+    metrics: '咨询线索 + 专属链接转化',
+    asset: '联运落地页 + 选型内容 + 账单体检',
+    detailTo: '/tob/services/cloud-cost',
+    caseTo: '/cases/enterprise-cloud'
   }
 ]
 </script>

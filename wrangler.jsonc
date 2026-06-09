@@ -3,6 +3,7 @@
   "name": "blogger-alliance",
   "main": "cloudflare/worker.js",
   "compatibility_date": "2026-04-18",
+  "workers_dev": true,
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
@@ -14,6 +15,16 @@
       "binding": "DB",
       "database_name": "blogger-alliance",
       "database_id": "587fe4fc-cae3-44c9-a591-9e24670c3337"
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "blogger-alliance.cn",
+      "custom_domain": true
+    },
+    {
+      "pattern": "cloudcost.blogger-alliance.cn",
+      "custom_domain": true
     }
   ]
 }

@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
 import WebLlmNavBot from './components/WebLlmFloatingEntry.vue'
 import AppNav from './components/AppNav.vue'
+import { CLOUDCOST_PATH, isCloudCostHost } from './utils/cloudcostHost.js'
 import './style.css'
 
 // 路由配置
@@ -15,6 +16,7 @@ const routes = [
   { path: '/cases/community', component: () => import('./pages/cases/community.vue') },
   { path: '/cases/ai-access', component: () => import('./pages/cases/ai-access.vue') },
   { path: '/cases/oversea-cloud', component: () => import('./pages/cases/oversea-cloud.vue') },
+  { path: '/cases/enterprise-cloud', component: () => import('./pages/cases/enterprise-cloud.vue') },
   { path: '/tob/internal', component: () => import('./pages/tob/internal.vue') },
   {
     path: '/tob/deals',
@@ -31,6 +33,9 @@ const routes = [
   { path: '/tob/services/community', component: () => import('./pages/tob/services/community.vue') },
   { path: '/tob/services/ai-access', component: () => import('./pages/tob/services/ai-access.vue') },
   { path: '/tob/services/oversea-cloud', component: () => import('./pages/tob/services/oversea-cloud.vue') },
+  { path: '/tob/services/cloud-cost', component: () => import('./pages/tob/services/cloud-cost.vue') },
+  { path: '/tob/services/enterprise-cloud', redirect: '/tob/services/cloud-cost' },
+  { path: '/cloudcost', component: () => import('./pages/cloudcost/index.vue') },
   { path: '/matrix', redirect: '/workspace' },
   { path: '/annual-report-2025', component: () => import('./pages/annual-report/index.vue') },
   { path: '/workspace', component: () => import('./pages/workspace/index.vue') },
@@ -81,6 +86,23 @@ const router = createRouter({
       behavior: 'auto'
     }
   }
+})
+
+router.beforeEach((to) => {
+  if (!isCloudCostHost()) {
+    return true
+  }
+
+  if (to.path === '/') {
+    return CLOUDCOST_PATH
+  }
+
+  if (to.path === '/tob' || to.path.startsWith('/tob/')) {
+    window.location.assign(`https://blogger-alliance.cn${to.fullPath}`)
+    return false
+  }
+
+  return true
 })
 
 const app = createApp(App)

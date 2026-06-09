@@ -987,8 +987,24 @@ async function handleAssets(request, env) {
   return fallback
 }
 
+const CLOUDCOST_HOST = 'cloudcost.blogger-alliance.cn'
+
+function normalizeSiteRequest(request) {
+  const url = new URL(request.url)
+
+  if (url.hostname === CLOUDCOST_HOST || url.hostname === `www.${CLOUDCOST_HOST}`) {
+    if (url.pathname === '/' || url.pathname === '') {
+      url.pathname = '/cloudcost'
+      return new Request(url.toString(), request)
+    }
+  }
+
+  return request
+}
+
 export default {
   async fetch(request, env) {
+    request = normalizeSiteRequest(request)
     const url = new URL(request.url)
 
     if (url.pathname.startsWith('/api/internal/')) {

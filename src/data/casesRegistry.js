@@ -1,11 +1,12 @@
-/** 案例与 5 类服务一一对应；非推文为交付样张，便于后续替换为脱敏真实素材 */
+/** 案例与服务一一对应；非推文为交付样张，便于后续替换为脱敏真实素材 */
 
 export const caseServicePaths = {
   tweet: '/tob/services/tweet',
   cpc: '/tob/services/cpc',
   community: '/tob/services/community',
   'ai-access': '/tob/services/ai-access',
-  'oversea-cloud': '/tob/services/oversea-cloud'
+  'oversea-cloud': '/tob/services/oversea-cloud',
+  'enterprise-cloud': '/tob/services/cloud-cost'
 }
 
 export const casesHubItems = [
@@ -68,6 +69,18 @@ export const casesHubItems = [
     blurb: '导航页、访问指引与长尾转化链路的交付样张。',
     proofPoints: ['合规口径', '教程站资产', '长尾转化路径'],
     scenario: '出海工具 / 长期资产'
+  },
+  {
+    slug: 'enterprise-cloud',
+    title: '大厂云服务',
+    emoji: '☁️',
+    path: '/cases/enterprise-cloud',
+    servicePath: caseServicePaths['enterprise-cloud'],
+    isMock: true,
+    badge: '联运模板',
+    blurb: '多云选型落地页、账单体检钩子与专属充值链接归因链路的交付样张。',
+    proofPoints: ['联运落地页', '需求表单', '专属链接流程'],
+    scenario: '云渠道 / 企业采购'
   }
 ]
 
@@ -207,5 +220,38 @@ export const mockCaseModels = {
       }
     ],
     theme: 'sky'
+  },
+  'enterprise-cloud': {
+    eyebrow: 'Enterprise Cloud Delivery Sample',
+    headline: '大厂云服务：落地页与专属链接转化样张',
+    intro:
+      '以下为大厂云服务类合作交付样张：通过联运落地页承接咨询线索，由顾问生成云厂商官方归因链接后完成充值。正式合作可替换为真实品牌脱敏案例与订单回传数据。',
+    steps: [
+      { title: '联运落地页', description: 'cloudcost.blogger-alliance.cn 承接选型、账单体检与需求提交。' },
+      { title: '线索收集', description: '结构化表单 + 微信联系，记录云厂商、月消费与需求类型。' },
+      { title: '专属链接生成', description: '渠道顾问按账号情况生成阿里云 / 腾讯云等官方充值归因链接。' },
+      { title: '官方下单', description: '客户通过专属链接充值，发票与售后由云厂商官方提供。' },
+      { title: '账单优化', description: '可选免费账单体检，输出脱敏优化建议报告。' },
+      { title: '分佣结算', description: '按成交与续费规则结算渠道分成，附明细与争议处理 SLA。' }
+    ],
+    panels: [
+      {
+        kicker: 'Landing · Sample',
+        title: '联运落地页摘要',
+        subtitle: '需求表单、三步流程说明与微信承接模块。下方数字为样张口径。',
+        metrics: [
+          { label: '支持云厂商', value: '4 家' },
+          { label: '建议月消费门槛', value: '≥ ¥3k' },
+          { label: '链接生成 SLA', value: '1 工作日' }
+        ]
+      },
+      {
+        kicker: 'Flow · Sample',
+        title: '专属链接转化路径',
+        subtitle: '联系 → 生成链接 → 官方充值的标准闭环。',
+        lines: ['提交需求 / 微信联系', '顾问生成归因链接', '客户官方页面充值', '渠道折扣 + 分佣结算']
+      }
+    ],
+    theme: 'emerald'
   }
 }
