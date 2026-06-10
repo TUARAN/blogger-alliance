@@ -9,16 +9,19 @@ const model = mockCaseModels['enterprise-cloud']
 <template>
   <CasePageShell>
     <MockCaseBody v-bind="model" />
-    <div class="mt-6 flex flex-wrap gap-3">
+    <div class="mt-6 flex flex-wrap items-center gap-3">
       <a
         href="https://cloudcost.blogger-alliance.cn"
         target="_blank"
         rel="noopener noreferrer"
-        class="inline-flex items-center justify-center rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-800"
+        class="inline-flex min-h-10 items-center justify-center rounded-full bg-emerald-700 px-5 text-sm font-medium text-white hover:bg-emerald-800"
       >
         打开渠道咨询页 →
       </a>
-      <router-link to="/tob/services/cloud-cost" class="text-sm font-medium text-indigo-700 underline-offset-4 hover:underline">
+      <router-link
+        to="/tob/services/cloud-cost"
+        class="inline-flex min-h-10 items-center text-sm font-medium text-indigo-700 underline-offset-4 hover:underline"
+      >
         渠道服务说明 →
       </router-link>
     </div>
