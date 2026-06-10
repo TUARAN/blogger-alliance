@@ -11,7 +11,7 @@ defineProps({
 })
 
 const router = useRouter()
-const { isAuthenticated, displayName, signOut, loading } = useAuth()
+const { isAuthenticated, displayName, signOut, loading, isSupabaseConfigured } = useAuth()
 const menuOpen = ref(false)
 
 async function handleSignOut() {
@@ -22,7 +22,7 @@ async function handleSignOut() {
 </script>
 
 <template>
-  <div v-if="loading" class="h-9 w-16 animate-pulse rounded-lg bg-slate-100" />
+  <div v-if="loading && isSupabaseConfigured" class="h-9 w-16 animate-pulse rounded-lg bg-slate-100" />
 
   <template v-else-if="isAuthenticated">
     <div v-if="variant === 'desktop'" class="relative">

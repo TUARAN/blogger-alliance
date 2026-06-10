@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import { useAuth } from '../../composables/useAuth.js'
 import { AUTH_COPY } from '../../utils/authMessages.js'
 import WorkspaceModuleGrid from '../../components/WorkspaceModuleGrid.vue'
+import { INTERNAL_MODULE_TITLES, PUBLIC_MODULE_TITLES } from '../../data/workspaceRegistry.js'
 
 const route = useRoute()
 const { initAuth, isAuthenticated, isInternal, displayName, loading } = useAuth()
@@ -15,15 +16,18 @@ onMounted(() => {
 const showInternalNotice = computed(() => route.query.notice === 'internal-required')
 
 const welcomeText = computed(() => {
+  const publicList = PUBLIC_MODULE_TITLES.join('、')
+  const internalList = INTERNAL_MODULE_TITLES.join('、')
+
   if (!isAuthenticated.value) {
-    return '聚合联盟核心板块入口。介绍、案例、学院等公开内容可直接访问；数据报告需登录并由管理员开通权限。'
+    return `工作台分为公开板块与内部板块。${publicList} 可直接访问；${internalList} 需登录并由管理员开通内部权限。`
   }
 
   if (!isInternal.value) {
-    return `${displayName.value}，欢迎回来。你可以浏览公开模块；如需查看数据报告，请联系管理员开通内部权限。`
+    return `${displayName.value}，欢迎回来。公开板块（${publicList}）可直接使用；如需 ${internalList}，请联系管理员开通内部权限。`
   }
 
-  return `${displayName.value}，欢迎回来。你可以访问公开模块，也可以进入数据报告查看内部台账。`
+  return `${displayName.value}，欢迎回来。公开板块与内部板块均已可用，包括 ${internalList}。`
 })
 </script>
 
@@ -52,7 +56,7 @@ const welcomeText = computed(() => {
         class="mt-6 max-w-3xl rounded-2xl border border-indigo-100 bg-white/90 p-5 shadow-sm"
       >
         <p class="text-sm text-slate-700">
-          登录后可使用账号中心；如需查看数据报告、年度总览，还需管理员为你开通内部权限。
+          登录后可使用账号中心。公开板块无需额外权限；内部板块需管理员开通内部权限。
         </p>
         <div class="mt-4 flex flex-wrap gap-3">
           <router-link

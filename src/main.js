@@ -151,4 +151,8 @@ const app = createApp(App)
 app.use(router)
 app.component('AppNav', AppNav)
 app.component('AuthNavActions', AuthNavActions)
-app.mount('#app')
+
+const { initAuth } = useAuth()
+initAuth().finally(() => {
+  app.mount('#app')
+})

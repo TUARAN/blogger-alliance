@@ -90,13 +90,13 @@ async function handleSignOut() {
               class="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm text-slate-500"
             >
             <p v-if="role === 'member'" class="mt-1.5 text-xs leading-5 text-slate-500">
-              当前为普通成员。如需查看数据报告，请联系管理员开通内部权限。
+              当前为普通成员。如需使用数据台账，请联系管理员开通内部权限。
             </p>
             <p v-else-if="role === 'internal'" class="mt-1.5 text-xs leading-5 text-slate-500">
-              已开通内部数据查看权限，可访问数据报告与年度总览。
+              已开通内部权限，可访问数据台账与年度总览。
             </p>
             <p v-else class="mt-1.5 text-xs leading-5 text-slate-500">
-              已开通管理员权限，可查看并管理内部数据。
+              已开通管理员权限，可查看并管理内部板块数据。
             </p>
           </div>
 

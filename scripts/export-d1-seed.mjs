@@ -1,6 +1,14 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
+/**
+ * Export private JSON backups to D1 seed SQL.
+ *
+ * Usage:
+ *   npm run d1:export-seed
+ *   npm run d1:export-seed -- --output ./tmp/d1-seed.sql
+ */
+
 const cwd = process.cwd()
 const DEFAULT_DEALS_PATH = path.resolve(cwd, 'private/commercialDeals.source.json')
 const DEFAULT_REPORTS_PATH = path.resolve(cwd, 'private/promotionReports.source.json')

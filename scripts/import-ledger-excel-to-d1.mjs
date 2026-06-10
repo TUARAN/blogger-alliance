@@ -3,6 +3,14 @@ import path from 'node:path'
 import process from 'node:process'
 import AdmZip from 'adm-zip'
 
+/**
+ * Import commercial ledger rows from Excel into D1 via Worker admin API.
+ *
+ * Usage:
+ *   npm run d1:import-ledger -- --parse-only --excel="/path/to/file.xlsx"
+ *   INTERNAL_ACCESS_CREDENTIAL='...' npm run d1:import-ledger -- --excel="/path/to/file.xlsx"
+ */
+
 const DEFAULT_EXCEL_PATH = '/Users/tuaran/Downloads/运营支撑台账26/草稿（含报价结算）.xlsx'
 const DEFAULT_API_BASE = 'http://127.0.0.1:8787'
 

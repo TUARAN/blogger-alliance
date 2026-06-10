@@ -4,6 +4,24 @@
 
 <img src="./src/img/info4.png" alt="网站预览" width="600">
 
+## 开发命令
+
+命名约定：`{范围}:{动作}`，动作为 kebab-case。前端三件套不加前缀。
+
+| 范围 | 命令 | 说明 |
+| --- | --- | --- |
+| 前端 | `npm run dev` | 本地 Vite 开发 |
+| 前端 | `npm run build` | 构建静态资源到 `dist/` |
+| 前端 | `npm run preview` | 预览构建结果 |
+| Cloudflare | `npm run cf:dev` | 本地 Worker（需先 `build`） |
+| Cloudflare | `npm run cf:deploy` | 构建并部署 Worker + 静态资源 |
+| D1 | `npm run d1:export-seed` | 从 `private/*.json` 导出 `tmp/d1-seed.sql` |
+| D1 | `npm run d1:import-ledger` | 从 Excel 导入合作台账到 D1 |
+| Supabase | `npm run supabase:migrate` | 执行 `supabase/migrations/` SQL |
+| Supabase | `npm run supabase:auth-urls` | 配置 Auth Site URL / Redirect URLs |
+| 采集 | `npm run metrics:login` | Playwright 登录各平台并保存会话 |
+| 采集 | `npm run metrics:collect` | 批量采集页面可见互动数据 |
+
 ## Visible Metrics Collector
 
 这个仓库现在包含一个本地 `Playwright` 采集脚本，用来读取你在正常登录态下页面里已经显示出来的互动数据。
@@ -196,7 +214,7 @@ npx wrangler secret put INTERNAL_SESSION_SECRET
 生成 SQL：
 
 ```bash
-npm run d1:seed:export
+npm run d1:export-seed
 ```
 
 默认会产出：
@@ -261,7 +279,7 @@ Excel 导入也走 Worker 鉴权接口：`Excel -> /api/internal/admin/deals -> 
 先只解析 Excel，检查字段映射：
 
 ```bash
-npm run ledger:import:excel -- --parse-only --excel="/path/to/草稿（含报价结算）.xlsx"
+npm run d1:import-ledger -- --parse-only --excel="/path/to/草稿（含报价结算）.xlsx"
 ```
 
 导入到本地 Worker：
@@ -269,7 +287,7 @@ npm run ledger:import:excel -- --parse-only --excel="/path/to/草稿（含报价
 ```bash
 INTERNAL_ACCESS_CREDENTIAL='访问凭证' \
 INTERNAL_API_BASE='http://127.0.0.1:8787' \
-npm run ledger:import:excel -- --excel="/path/to/草稿（含报价结算）.xlsx"
+npm run d1:import-ledger -- --excel="/path/to/草稿（含报价结算）.xlsx"
 ```
 
 导入到线上 Worker：
@@ -277,7 +295,7 @@ npm run ledger:import:excel -- --excel="/path/to/草稿（含报价结算）.xls
 ```bash
 INTERNAL_ACCESS_CREDENTIAL='访问凭证' \
 INTERNAL_API_BASE='https://你的线上域名' \
-npm run ledger:import:excel -- --excel="/path/to/草稿（含报价结算）.xlsx"
+npm run d1:import-ledger -- --excel="/path/to/草稿（含报价结算）.xlsx"
 ```
 
 脚本会先读取当前 D1 台账，再按品牌、服务和期数尽量匹配旧记录，保留 `muted`、`category`、`reportCooperationId` 等 Excel 没有的字段，并把 Excel 的「承接（进度）」写入 `owner` 字段，最后整体写回 `commercial_deals`。

@@ -2,6 +2,13 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import pg from 'pg'
 
+/**
+ * Apply SQL files under supabase/migrations/ to the linked Supabase project.
+ *
+ * Usage:
+ *   npm run supabase:migrate
+ */
+
 const { Client } = pg
 
 function loadEnvLocal() {

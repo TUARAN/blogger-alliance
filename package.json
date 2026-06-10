@@ -9,11 +9,12 @@
     "preview": "vite preview",
     "cf:dev": "npx wrangler dev",
     "cf:deploy": "npm run build && npx wrangler deploy",
-    "d1:seed:export": "node scripts/export-d1-seed.mjs",
-    "ledger:import:excel": "node scripts/import-ledger-excel-to-d1.mjs",
+    "d1:export-seed": "node scripts/export-d1-seed.mjs",
+    "d1:import-ledger": "node scripts/import-ledger-excel-to-d1.mjs",
+    "supabase:migrate": "node scripts/run-supabase-migration.mjs",
+    "supabase:auth-urls": "node scripts/configure-supabase-auth-urls.mjs",
     "metrics:login": "node scripts/collect-visible-metrics.mjs login",
-    "metrics:collect": "node scripts/collect-visible-metrics.mjs collect",
-    "supabase:migrate": "node scripts/run-supabase-migration.mjs"
+    "metrics:collect": "node scripts/collect-visible-metrics.mjs collect"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.0.0",

@@ -172,7 +172,7 @@ Worker 使用两个 secret：
 命令：
 
 ```bash
-npm run d1:seed:export
+npm run d1:export-seed
 ```
 
 输出文件：
@@ -247,7 +247,7 @@ Cloudflare D1 远端导入时报错，不接受这类事务语句。报错含义
 如果还是继续用本地 JSON 维护数据，推荐流程：
 
 1. 修改 `private/*.json`
-2. 执行 `npm run d1:seed:export`
+2. 执行 `npm run d1:export-seed`
 3. 执行 `wrangler d1 execute --remote --file=tmp/d1-seed.sql`
 4. 如有前端或 Worker 代码变化，再执行 `npm run cf:deploy`
 
