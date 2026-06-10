@@ -55,6 +55,8 @@ const releases = [
     title: '后台化、报告分享与首页改版',
     summary:
       '同步 WebLLM 视觉，抽取 AppNav 与服务组件，增强专项服务和分类案例，上线安全报告分享、商单 owner、Excel 导入、移动端交互，并将合作品牌轮播拆分为独立页面后接入后台入口。',
+    commits: ['e3ff76c WebLLM', '2b11eda cases', '5beb46c sharing', '0be662c ledger', '7957550 carousel page']
+  },
   {
     version: 'v0.9.0',
     period: '2026-06-02 至 2026-06-10',
