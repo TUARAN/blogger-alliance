@@ -411,7 +411,10 @@ const timelineOrder = [
   { type: 'major', key: 'v0.11.0' }
 ]
 
+// 时间线倒序展示：最新的版本 / 周条目放最前面
 const timelineItems = timelineOrder
+  .slice()
+  .reverse()
   .map((item) => {
     if (item.type === 'major') {
       const release = releaseMap[item.key]
