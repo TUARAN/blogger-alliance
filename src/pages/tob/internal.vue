@@ -7,7 +7,7 @@
         <div>
           <h1 class="text-2xl md:text-3xl font-bold text-gray-900">数据报告</h1>
           <p class="mt-2 text-sm md:text-base text-gray-600">
-            合作进度、数据报告与年度总览融合为一处台账：既能查进度、查报告，也能新增、修改、删除数据。凭证解锁后 30 分钟内免重复输入。
+            合作进度、数据报告与年度总览统一台账。登录且具备内部权限后可查看与管理。
           </p>
         </div>
         <div class="flex flex-wrap gap-2">
@@ -27,44 +27,43 @@
             >
               {{ isRefreshing ? '加载中...' : '刷新数据' }}
             </button>
-            <button
-              class="h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-              @click="lockAll"
-            >
-              锁定页面
-            </button>
           </template>
         </div>
       </div>
 
-      <!-- Credential gate -->
       <div
-        v-if="!isUnlocked"
-        class="rounded-2xl border border-indigo-200 bg-indigo-50 p-5 md:p-6"
+        v-if="authLoading || isBootstrapping"
+        class="rounded-2xl border border-indigo-100 bg-white p-6 text-sm text-slate-600"
       >
-        <h2 class="text-lg font-semibold text-indigo-900 mb-2">请输入访问凭证</h2>
-        <p class="text-sm text-indigo-700 mb-3">凭证由联盟内部统一发放；解锁后即可查询、新增、修改、删除。15 分钟内连续输错 5 次将被临时锁定。</p>
-        <div class="flex flex-col md:flex-row gap-3">
-          <input
-            v-model="credentialInput"
-            type="password"
-            placeholder="请输入访问凭证"
-            class="flex-1 h-10 px-3 border border-indigo-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
-            @keyup.enter="unlock"
-          >
-          <button
-            :disabled="isUnlocking"
-            class="h-10 px-4 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 disabled:opacity-60"
-            @click="unlock"
-          >
-            {{ isUnlocking ? '连接中...' : '解锁台账' }}
-          </button>
-        </div>
-        <p v-if="unlockError" class="mt-3 text-sm text-red-600">{{ unlockError }}</p>
+        正在验证账号权限并加载台账...
+      </div>
+
+      <div
+        v-else-if="!isInternal"
+        class="rounded-2xl border border-amber-200 bg-amber-50 p-5 md:p-6"
+      >
+        <h2 class="text-lg font-semibold text-amber-950 mb-2">{{ AUTH_COPY.internalAccessDeniedTitle }}</h2>
+        <p class="text-sm text-amber-800 mb-3">
+          {{ AUTH_COPY.internalAccessDeniedBody }}
+        </p>
+        <router-link
+          to="/workspace"
+          class="inline-flex h-10 items-center rounded-lg bg-amber-700 px-4 text-sm font-semibold text-white hover:bg-amber-800"
+        >
+          返回工作台
+        </router-link>
+      </div>
+
+      <div
+        v-else-if="bootstrapError"
+        class="rounded-2xl border border-red-200 bg-red-50 p-5 md:p-6"
+      >
+        <h2 class="text-lg font-semibold text-red-900 mb-2">加载失败</h2>
+        <p class="text-sm text-red-700">{{ bootstrapError }}</p>
       </div>
 
       <!-- Unified ledger -->
-      <template v-else>
+      <template v-else-if="isUnlocked">
         <!-- Stats summary -->
         <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
           <div class="rounded-xl border border-indigo-100 bg-white px-4 py-3">
@@ -128,6 +127,7 @@
 
           <div class="mt-4 flex flex-wrap items-center gap-2">
             <button
+              v-if="isAdmin"
               class="h-9 px-4 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700"
               @click="openCreateDeal"
             >
@@ -209,7 +209,7 @@
                       </span>
                     </td>
                     <td class="px-3 py-3 align-top text-center whitespace-nowrap">
-                      <button class="text-xs text-indigo-600 hover:text-indigo-800 mr-2" @click="openEditDeal(deal)">编辑</button>
+                      <button v-if="isAdmin" class="text-xs text-indigo-600 hover:text-indigo-800 mr-2" @click="openEditDeal(deal)">编辑</button>
                       <button
                         v-if="dealReports(deal).length > 0"
                         class="text-xs text-violet-600 hover:text-violet-800 mr-2"
@@ -243,7 +243,7 @@
                             <div class="flex shrink-0 gap-2">
                               <button class="text-xs text-violet-600 hover:text-violet-800" @click="openViewReport(report)">查看</button>
                               <router-link class="text-xs text-slate-600 hover:text-slate-800" :to="reportSharePath(report)">分享页</router-link>
-                              <button class="text-xs text-indigo-600 hover:text-indigo-800" @click="openEditReport(report)">编辑</button>
+                              <button v-if="isAdmin" class="text-xs text-indigo-600 hover:text-indigo-800" @click="openEditReport(report)">编辑</button>
                             </div>
                           </div>
                           <div class="rounded-lg bg-teal-50/70 px-3 py-2 text-xs text-teal-900">
@@ -271,7 +271,7 @@
         </div>
 
         <!-- Annual reports editor -->
-        <div class="mt-5 rounded-2xl border border-orange-100 bg-white shadow-sm overflow-hidden">
+        <div v-if="isAdmin" class="mt-5 rounded-2xl border border-orange-100 bg-white shadow-sm overflow-hidden">
           <button
             type="button"
             class="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-orange-50/60 transition-colors"
@@ -286,7 +286,7 @@
           </button>
           <div v-if="annualEditorOpen" class="border-t border-orange-100 p-4 space-y-3">
             <p class="text-xs text-gray-500 leading-5">
-              直接编辑年度总览数据 JSON 数组，每条对象需要 <code class="px-1 rounded bg-gray-100">year</code>、<code class="px-1 rounded bg-gray-100">partners</code>、<code class="px-1 rounded bg-gray-100">summaryCards</code>、<code class="px-1 rounded bg-gray-100">highlights</code>、<code class="px-1 rounded bg-gray-100">intro</code> 字段。保存后会立即写入 D1，前台 <router-link to="/annual-report-2025" class="text-orange-700 hover:underline">/annual-report-2025</router-link> 需要凭证解锁后读取。
+              直接编辑年度总览数据 JSON 数组，每条对象需要 <code class="px-1 rounded bg-gray-100">year</code>、<code class="px-1 rounded bg-gray-100">partners</code>、<code class="px-1 rounded bg-gray-100">summaryCards</code>、<code class="px-1 rounded bg-gray-100">highlights</code>、<code class="px-1 rounded bg-gray-100">intro</code> 字段。保存后会立即生效，前台 <router-link to="/annual-report-2025" class="text-orange-700 hover:underline">/annual-report-2025</router-link> 对具备内部权限的账号开放。
             </p>
             <textarea
               v-model="annualEditorJson"
@@ -331,7 +331,7 @@
               <div class="shrink-0 flex items-center gap-3">
                 <button class="text-violet-600 hover:text-violet-800" @click="openViewReport(report)">查看</button>
                 <router-link class="text-slate-600 hover:text-slate-800" :to="reportSharePath(report)">分享页</router-link>
-                <button class="text-indigo-600 hover:text-indigo-800" @click="openEditReport(report)">编辑</button>
+                <button v-if="isAdmin" class="text-indigo-600 hover:text-indigo-800" @click="openEditReport(report)">编辑</button>
               </div>
             </div>
           </div>
@@ -503,9 +503,9 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import DealFormModal from '../../components/internal/DealFormModal.vue'
 import ReportFormModal from '../../components/internal/ReportFormModal.vue'
-import { normalizeCredential } from '../../utils/credentialNormalize'
+import { useAuth } from '../../composables/useAuth.js'
+import { AUTH_COPY } from '../../utils/authMessages.js'
 import {
-  createInternalDataSession,
   explainInternalDataError,
   fetchCommercialDeals,
   fetchPromotionReports,
@@ -514,20 +514,16 @@ import {
   fetchAnnualReportsAdmin,
   updateAnnualReports
 } from '../../utils/internalDataApi'
-import {
-  readInternalAccessSession,
-  saveInternalAccessSession,
-  clearInternalAccessCaches
-} from '../../utils/internalAccessCache'
+
+const { initAuth, isInternal, isAdmin, getAccessToken, loading: authLoading } = useAuth()
 
 const deals = ref([])
 const reports = ref([])
-const sessionToken = ref('')
+const accessToken = ref('')
 const isUnlocked = ref(false)
-const isUnlocking = ref(false)
+const isBootstrapping = ref(false)
+const bootstrapError = ref('')
 const isRefreshing = ref(false)
-const credentialInput = ref('')
-const unlockError = ref('')
 
 const serviceFilter = ref('all')
 const progressFilter = ref('all')
@@ -635,7 +631,7 @@ async function saveAnnualReports() {
   }
   isSavingAnnual.value = true
   try {
-    await updateAnnualReports(sessionToken.value, parsed)
+    await updateAnnualReports(accessToken.value, parsed)
     annualReports.value = parsed
     syncAnnualEditorFromState()
     setAnnualMessage(`已保存，共 ${parsed.length} 份年度总览。`)
@@ -661,35 +657,11 @@ function setToolbarMessage(text, isError = false) {
   }, 3200)
 }
 
-async function unlock() {
-  const credential = normalizeCredential(credentialInput.value)
-  if (!credential) {
-    unlockError.value = '请输入有效凭证。'
-    return
-  }
-  unlockError.value = ''
-  isUnlocking.value = true
-  try {
-    const session = await createInternalDataSession(credential)
-    sessionToken.value = session.token
-    saveInternalAccessSession(session.token)
-    credentialInput.value = ''
-    await loadAll()
-    isUnlocked.value = true
-  } catch (error) {
-    unlockError.value = explainInternalDataError(error, 'admin')
-    isUnlocked.value = false
-    sessionToken.value = ''
-  } finally {
-    isUnlocking.value = false
-  }
-}
-
 async function loadAll() {
   const [d, r, a] = await Promise.all([
-    fetchCommercialDeals(sessionToken.value),
-    fetchPromotionReports(sessionToken.value),
-    fetchAnnualReportsAdmin(sessionToken.value).catch(() => [])
+    fetchCommercialDeals(accessToken.value),
+    fetchPromotionReports(accessToken.value),
+    fetchAnnualReportsAdmin(accessToken.value).catch(() => [])
   ])
   deals.value = Array.isArray(d) ? d : []
   reports.value = Array.isArray(r) ? r : []
@@ -697,10 +669,42 @@ async function loadAll() {
   syncAnnualEditorFromState()
 }
 
+async function bootstrapInternalPage() {
+  bootstrapError.value = ''
+  isBootstrapping.value = true
+
+  try {
+    await initAuth()
+
+    if (!isInternal.value) {
+      isUnlocked.value = false
+      return
+    }
+
+    const token = await getAccessToken()
+    if (!token) {
+      bootstrapError.value = AUTH_COPY.sessionMissing
+      isUnlocked.value = false
+      return
+    }
+
+    accessToken.value = token
+    await loadAll()
+    isUnlocked.value = true
+  } catch (error) {
+    bootstrapError.value = explainInternalDataError(error, 'read')
+    isUnlocked.value = false
+    accessToken.value = ''
+  } finally {
+    isBootstrapping.value = false
+  }
+}
+
 async function refreshAll() {
-  if (!sessionToken.value) return
+  if (!accessToken.value) return
   isRefreshing.value = true
   try {
+    accessToken.value = await getAccessToken() || accessToken.value
     await loadAll()
     setToolbarMessage('已刷新最新数据。')
   } catch (error) {
@@ -708,19 +712,6 @@ async function refreshAll() {
   } finally {
     isRefreshing.value = false
   }
-}
-
-function lockAll() {
-  isUnlocked.value = false
-  sessionToken.value = ''
-  deals.value = []
-  reports.value = []
-  annualReports.value = []
-  annualEditorJson.value = '[]'
-  annualEditorOpen.value = false
-  credentialInput.value = ''
-  expanded.clear()
-  clearInternalAccessCaches()
 }
 
 // Filter options
@@ -938,7 +929,7 @@ async function handleDealSave(payload) {
       if (idx === -1) throw new Error('DEAL_NOT_FOUND')
       current[idx] = { ...current[idx], ...deal, id: current[idx].id }
     }
-    await updateCommercialDeals(sessionToken.value, current)
+    await updateCommercialDeals(accessToken.value, current)
     deals.value = current
     closeDealModal()
     setToolbarMessage(mode === 'create' ? '合作已创建。' : '合作已更新。')
@@ -961,7 +952,7 @@ async function handleDealDelete() {
   isSavingDeal.value = true
   try {
     const next = deals.value.filter((d) => d.id !== dealId)
-    await updateCommercialDeals(sessionToken.value, next)
+    await updateCommercialDeals(accessToken.value, next)
     deals.value = next
     closeDealModal()
     setToolbarMessage('合作已删除。')
@@ -1144,7 +1135,7 @@ async function handleReportSave(payload) {
       if (idx === -1) throw new Error('REPORT_NOT_FOUND')
       current[idx] = { ...current[idx], ...report, id: current[idx].id }
     }
-    await updatePromotionReports(sessionToken.value, current)
+    await updatePromotionReports(accessToken.value, current)
     reports.value = current
     // Ensure the related deal row is expanded to show change
     const coopKey = String(report.cooperationId || '').toUpperCase()
@@ -1170,7 +1161,7 @@ async function handleReportDelete() {
   isSavingReport.value = true
   try {
     const next = reports.value.filter((r) => r.id !== reportId)
-    await updatePromotionReports(sessionToken.value, next)
+    await updatePromotionReports(accessToken.value, next)
     reports.value = next
     closeReportModal()
     setToolbarMessage('报告已删除。')
@@ -1181,16 +1172,7 @@ async function handleReportDelete() {
   }
 }
 
-onMounted(async () => {
-  const cached = readInternalAccessSession()
-  if (!cached) return
-  sessionToken.value = cached
-  try {
-    await loadAll()
-    isUnlocked.value = true
-    saveInternalAccessSession(cached)
-  } catch {
-    lockAll()
-  }
+onMounted(() => {
+  bootstrapInternalPage()
 })
 </script>

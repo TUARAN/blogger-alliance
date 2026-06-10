@@ -9,7 +9,6 @@
         <div class="mt-3 flex flex-wrap gap-2 text-xs">
           <span class="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-1 text-emerald-700">四大云厂商 · 中立选型</span>
           <span class="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-2.5 py-1 text-amber-700">按成交分佣</span>
-          <span class="inline-flex items-center rounded-full bg-sky-50 border border-sky-200 px-2.5 py-1 text-sky-700">建议月消费 ≥ ¥3k</span>
         </div>
       </header>
 
@@ -26,7 +25,7 @@
             <div class="text-sm font-semibold text-gray-900">适合谁</div>
             <ul class="mt-2 space-y-1.5 text-sm text-gray-600">
               <li class="flex items-start"><span class="text-emerald-600 mr-2">•</span><span>头部云厂商渠道代理 / 云 MSP：需技术信任背书与内容获客</span></li>
-              <li class="flex items-start"><span class="text-emerald-600 mr-2">•</span><span>月云消费 ≥ ¥3,000 的企业 / 创业技术团队</span></li>
+              <li class="flex items-start"><span class="text-emerald-600 mr-2">•</span><span>有上云需求的企业 / 创业技术团队</span></li>
               <li class="flex items-start"><span class="text-emerald-600 mr-2">•</span><span>愿意按长期成交分佣合作，而非一次性硬广</span></li>
             </ul>
           </div>

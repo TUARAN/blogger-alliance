@@ -4,7 +4,7 @@ import CloudCostContactFab from '../../components/CloudCostContactFab.vue'
 import { showToast } from '../../utils/toast.js'
 
 const form = reactive({
-  company: '',
+  nickname: '',
   contactName: '',
   wechatOrPhone: '',
   cloudProvider: '',
@@ -21,83 +21,79 @@ const cloudProviders = [
   { value: 'tencent', label: '腾讯云' },
   { value: 'huawei', label: '华为云' },
   { value: 'volcengine', label: '火山引擎' },
-  { value: 'multi', label: '多云 / 正在选型' },
-  { value: 'none', label: '尚未上云' }
+  { value: 'multi', label: '还没想好，想对比看看' },
+  { value: 'none', label: '还没用过云' }
 ]
 
 const monthlySpendOptions = [
-  { value: 'lt3k', label: '暂无或低于 ¥3,000 / 月' },
-  { value: '3k-10k', label: '¥3,000 – ¥10,000 / 月' },
-  { value: '10k-50k', label: '¥10,000 – ¥50,000 / 月' },
-  { value: '50k-200k', label: '¥50,000 – ¥200,000 / 月' },
-  { value: 'gt200k', label: '¥200,000+ / 月' }
+  { value: 'none', label: '还没开始花钱 / 刚注册试用' },
+  { value: 'lt500', label: '每月大概 ¥500 以内' },
+  { value: '500-3k', label: '每月大概 ¥500 – ¥3,000' },
+  { value: '3k-10k', label: '每月大概 ¥3,000 – ¥1 万' },
+  { value: 'gt10k', label: '每月 ¥1 万以上' }
 ]
 
 const needTypes = [
-  { value: 'audit', label: '免费云账单体检 / 成本优化' },
-  { value: 'new', label: '创业团队首次上云' },
-  { value: 'migrate', label: '自建机房 / 托管迁移上云' },
-  { value: 'ai', label: '大模型 API / GPU 算力接入' },
-  { value: 'other', label: '其他架构咨询' }
+  { value: 'new', label: '想买服务器 / 建站 / 部署项目' },
+  { value: 'recharge', label: '已有账号，续费想便宜点' },
+  { value: 'audit', label: '账单太贵，想帮看看哪里能省' },
+  { value: 'ai', label: '想用 AI / GPU 跑模型' },
+  { value: 'chat', label: '还没想好，想先聊聊' }
 ]
 
 const steps = [
   {
-    title: '提交需求',
-    desc: '填写公司信息与当前云消费情况，或直接微信联系我们。',
+    title: '告诉我们你的情况',
+    desc: '填个简单表单，或直接微信说一声：用什么云、大概花多少。',
     icon: '📝'
   },
   {
-    title: '生成专属链接',
-    desc: '由渠道顾问为你生成带归因的阿里云 / 腾讯云等官方充值链接。',
+    title: '拿到专属优惠链接',
+    desc: '顾问会根据你的云厂商和账号，生成一条官方充值 / 新购链接。',
     icon: '🔗'
   },
   {
-    title: '官方下单享优惠',
-    desc: '通过专属链接充值或新购，享受渠道折扣；发票、售后均由云厂商官方提供。',
+    title: '去官网下单就行',
+    desc: '用这条链接充值或购买，价格和售后跟云厂商官网一样正规，只是更省一点。',
     icon: '✅'
   }
 ]
 
 const benefits = [
   {
-    title: '免费账单体检',
-    desc: '月消费 ≥ ¥3,000 的团队可提交账单，技术侧出具优化建议报告（脱敏）。',
-    tone: 'emerald'
+    title: '比官网直充更省一点',
+    desc: '走合作渠道价，具体能省多少看云厂商和产品，买之前可以先问清楚。'
   },
   {
-    title: '多云中立选型',
-    desc: '同时覆盖阿里云、腾讯云、华为云、火山引擎，不绑定单一厂商。',
-    tone: 'sky'
+    title: '四家大厂云都能问',
+    desc: '阿里云、腾讯云、华为云、火山引擎都支持，不知道选哪家可以先聊。'
   },
   {
-    title: '开发者视角',
-    desc: '博主联盟技术内容背书，用真实场景讲清选型与成本，不做「比官网便宜 50%」硬广。',
-    tone: 'cyan'
+    title: '账单贵可以帮你看',
+    desc: '觉得每月扣费太多，可以把账单发给顾问，免费帮你看有没有买多了、买错了。'
   },
   {
-    title: '官方合规链路',
-    desc: '专属链接跳转云厂商官方页面；充值、合同、6% 增值税专票均由原厂开具。',
-    tone: 'teal'
+    title: '还是官方那一套',
+    desc: '充值、开发票、找客服都在云厂商官网完成，不是第三方代充。'
   }
 ]
 
 const faqs = [
   {
-    q: '为什么不能直接点链接购买？',
-    a: '云渠道返利需要绑定你的账号与合伙人归因。联系顾问后，我们会按你的云厂商与账号情况生成专属链接，确保折扣生效且后续可追踪续费。'
+    q: '为什么不能直接在这里付款？',
+    a: '优惠要绑在你的云账号上。你先联系我们，顾问会按你的情况生成一条专属链接，再用这条链接去云厂商官网充值或购买，优惠才会生效。'
   },
   {
-    q: '和官网直购有什么区别？',
-    a: '资源、发票、售后与官网一致；差异在于渠道侧可叠加折扣与顾问式账单优化建议。建议小单试水后逐步放大。'
+    q: '和自己去官网买有什么区别？',
+    a: '买的还是同一家云、同样的服务，发票和售后也找官方。区别是我们可以帮你拿到渠道折扣，有人帮你看账单、选型。'
   },
   {
-    q: '适合个人开发者吗？',
-    a: '本专题聚焦企业 / 团队采购（建议月云消费 ≥ ¥3,000）。个人轻量需求更适合直接在官网按量付费。'
+    q: '个人开发者 / 学生能用吗？',
+    a: '可以。自己建站、跑 side project、小团队创业都能用，用量不大也可以先问清楚再决定。'
   },
   {
-    q: '账单体检真的免费吗？',
-    a: '是的。提交脱敏账单后由合作渠道技术侧出具优化建议，不强制签约；是否采购由你自行决定。'
+    q: '帮看账单真的免费吗？',
+    a: '是的，不收费。你看完建议自己决定要不要调整，没有强制消费。'
   }
 ]
 
@@ -107,28 +103,27 @@ function labelOf(options, value) {
 
 function buildLeadMessage() {
   return [
-    '【大厂云服务 · CloudCost Lab 咨询】',
-    `公司：${form.company.trim()}`,
-    `联系人：${form.contactName.trim()}`,
+    '【大厂云服务咨询】',
+    form.nickname.trim() ? `称呼/项目：${form.nickname.trim()}` : '',
+    `怎么称呼：${form.contactName.trim()}`,
     `微信/手机：${form.wechatOrPhone.trim()}`,
-    `当前云厂商：${labelOf(cloudProviders, form.cloudProvider)}`,
-    `月消费区间：${labelOf(monthlySpendOptions, form.monthlySpend)}`,
-    `需求类型：${labelOf(needTypes, form.needType)}`,
-    form.note.trim() ? `补充说明：${form.note.trim()}` : '',
+    `用的云：${labelOf(cloudProviders, form.cloudProvider)}`,
+    `大概花费：${labelOf(monthlySpendOptions, form.monthlySpend)}`,
+    `想了解：${labelOf(needTypes, form.needType)}`,
+    form.note.trim() ? `补充：${form.note.trim()}` : '',
     '',
-    '请协助生成专属渠道链接，谢谢。'
+    '麻烦帮我生成专属优惠链接，谢谢～'
   ]
     .filter(Boolean)
     .join('\n')
 }
 
 function validateForm() {
-  if (!form.company.trim()) return '请填写公司名称'
-  if (!form.contactName.trim()) return '请填写联系人'
+  if (!form.contactName.trim()) return '请填写怎么称呼您'
   if (!form.wechatOrPhone.trim()) return '请填写微信或手机'
-  if (!form.cloudProvider) return '请选择当前使用的云厂商'
-  if (!form.monthlySpend) return '请选择月消费区间'
-  if (!form.needType) return '请选择需求类型'
+  if (!form.cloudProvider) return '请选择用的哪家云'
+  if (!form.monthlySpend) return '请选择大概每月花费'
+  if (!form.needType) return '请选择想了解什么'
   return ''
 }
 
@@ -165,8 +160,8 @@ async function handleSubmit() {
     submitted.value = true
     showToast(
       copied
-        ? '需求已复制到剪贴板，请微信发送给顾问'
-        : '提交成功，请滚动至底部扫码联系顾问',
+        ? '已复制到剪贴板，微信发给 atar24 即可'
+        : '好了，往下滚动扫码加微信',
       { type: 'info', duration: 4500 }
     )
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -180,9 +175,9 @@ function scrollTo(id) {
 }
 
 onMounted(() => {
-  document.title = '大厂云服务 · CloudCost Lab | 博主联盟联运'
+  document.title = '大厂云服务 · 云服务器更划算 | 博主联盟'
   const description =
-    '面向技术团队的大厂云服务联运专题。阿里云 / 腾讯云 / 华为云 / 火山引擎多云选型、账单优化与专属充值归因链接。'
+    '个人开发者和小团队也能用的大厂云优惠通道。阿里云、腾讯云、华为云、火山引擎，联系顾问拿专属链接，官网充值更省钱。'
 
   let meta = document.querySelector('meta[name="description"]')
   if (!meta) {
@@ -207,12 +202,12 @@ onMounted(() => {
           </div>
           <div>
             <div class="text-sm font-semibold tracking-tight">大厂云服务</div>
-            <div class="text-[11px] text-slate-500">CloudCost Lab · 博主联盟联运</div>
+            <div class="text-[11px] text-slate-500">博主联盟 · 帮你省点云钱</div>
           </div>
         </div>
         <nav class="hidden items-center gap-5 text-sm text-slate-600 md:flex">
-          <button type="button" class="hover:text-emerald-700" @click="scrollTo('flow')">合作流程</button>
-          <button type="button" class="hover:text-emerald-700" @click="scrollTo('apply')">提交需求</button>
+          <button type="button" class="hover:text-emerald-700" @click="scrollTo('flow')">怎么用</button>
+          <button type="button" class="hover:text-emerald-700" @click="scrollTo('apply')">我要咨询</button>
           <button type="button" class="hover:text-emerald-700" @click="scrollTo('faq')">常见问题</button>
         </nav>
         <button
@@ -220,7 +215,7 @@ onMounted(() => {
           class="inline-flex min-h-10 items-center rounded-full bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800"
           @click="scrollTo('apply')"
         >
-          获取专属链接
+          领优惠链接
         </button>
       </div>
     </header>
@@ -235,26 +230,25 @@ onMounted(() => {
         <div class="relative mx-auto max-w-6xl">
           <div class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-800">
             <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-            博主联盟 × 多云渠道联运专题
+            博主联盟帮你对接大厂云优惠
           </div>
 
           <h1 class="mt-5 max-w-4xl text-4xl font-bold tracking-tight text-slate-900 md:text-5xl lg:text-6xl">
-            技术团队的
-            <span class="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">云账单优化</span>
-            与专属充值通道
+            买
+            <span class="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">阿里云 / 腾讯云</span>
+            更划算一点
           </h1>
 
           <p class="mt-5 max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
-            已有云账号的企业团队，可先免费做账单体检；确认合作后，由顾问生成
-            <strong class="font-semibold text-slate-800">阿里云 / 腾讯云 / 华为云 / 火山引擎</strong>
-            专属渠道链接，官方充值、官方发票、官方售后不变。
+            不管你是个人开发者、学生党 side project，还是小团队创业——先联系我们，拿到一条
+            <strong class="font-semibold text-slate-800">专属优惠链接</strong>，
+            再去官网充值或买服务器。还是官方账号、官方发票、官方客服，只是价格更友好。
           </p>
 
           <div class="mt-6 flex flex-wrap gap-2 text-xs">
-            <span class="rounded-full border border-emerald-200 bg-white px-2.5 py-1 text-emerald-700">免费账单体检</span>
-            <span class="rounded-full border border-sky-200 bg-white px-2.5 py-1 text-sky-700">专属链接归因</span>
-            <span class="rounded-full border border-teal-200 bg-white px-2.5 py-1 text-teal-700">多云中立选型</span>
-            <span class="rounded-full border border-amber-200 bg-white px-2.5 py-1 text-amber-700">建议月消费 ≥ ¥3k</span>
+            <span class="rounded-full border border-emerald-200 bg-white px-2.5 py-1 text-emerald-700">个人也能用</span>
+            <span class="rounded-full border border-sky-200 bg-white px-2.5 py-1 text-sky-700">免费帮看账单</span>
+            <span class="rounded-full border border-teal-200 bg-white px-2.5 py-1 text-teal-700">四家云都能问</span>
           </div>
 
           <div class="mt-8 flex flex-wrap items-center gap-3">
@@ -263,7 +257,7 @@ onMounted(() => {
               class="inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-700 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200/50 hover:bg-emerald-800"
               @click="scrollTo('apply')"
             >
-              提交需求，获取专属链接
+              我要领优惠链接
               <span aria-hidden="true">→</span>
             </button>
             <button
@@ -271,21 +265,21 @@ onMounted(() => {
               class="inline-flex min-h-11 items-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-medium text-slate-700 hover:border-emerald-300 hover:text-emerald-800"
               @click="scrollTo('flow')"
             >
-              了解合作流程
+              看看怎么用
             </button>
           </div>
 
           <p class="mt-4 text-xs leading-6 text-slate-500">
-            渠道折扣因云厂商、产品与消费量级而异，一般为官网净让利约 5%–15%；不承诺「躺赚续费」或固定 50% 优惠。
+            具体能省多少，看云厂商和产品而定，买之前可以先问清楚。
           </p>
         </div>
       </section>
 
       <section id="flow" class="scroll-mt-24 border-y border-emerald-100/80 bg-white/70 px-4 py-14 sm:px-6">
         <div class="mx-auto max-w-6xl">
-          <h2 class="text-2xl font-bold text-slate-900 md:text-3xl">三步完成专属链接开通</h2>
+          <h2 class="text-2xl font-bold text-slate-900 md:text-3xl">三步搞定，很简单</h2>
           <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-            返利归因必须在充值前绑定。请先联系我们，不要自行在官网大额充值后再来补链。
+            优惠要在你充值之前绑定账号。所以请先找我们拿链接，再去官网购买服务。
           </p>
 
           <div class="mt-8 grid gap-4 md:grid-cols-3">
@@ -304,15 +298,15 @@ onMounted(() => {
           </div>
 
           <div class="mt-8 rounded-2xl border border-amber-200 bg-amber-50/70 px-5 py-4 text-sm leading-7 text-amber-950">
-            <span class="font-semibold">重要：</span>
-            专属链接由渠道顾问人工生成，通常 1 个工作日内完成。生成后请使用该链接完成首次充值或新购，方可计入渠道优惠与归因。
+            <span class="font-semibold">小提示：</span>
+            链接需要顾问手动生成，一般 1 个工作日内发你。拿到后用它去充值或新购，优惠才会生效。
           </div>
         </div>
       </section>
 
       <section class="px-4 py-14 sm:px-6">
         <div class="mx-auto max-w-6xl">
-          <h2 class="text-2xl font-bold text-slate-900 md:text-3xl">为什么选择这条链路</h2>
+          <h2 class="text-2xl font-bold text-slate-900 md:text-3xl">为什么要走这里</h2>
           <div class="mt-8 grid gap-4 sm:grid-cols-2">
             <article
               v-for="item in benefits"
@@ -340,32 +334,32 @@ onMounted(() => {
         <div class="mx-auto max-w-6xl">
           <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
             <div>
-              <h2 class="text-2xl font-bold text-slate-900 md:text-3xl">提交需求 · 获取专属链接</h2>
+              <h2 class="text-2xl font-bold text-slate-900 md:text-3xl">填个表，领优惠链接</h2>
               <p class="mt-3 text-sm leading-7 text-slate-600">
-                填写后系统会生成结构化咨询信息并复制到剪贴板，请微信发送给顾问
-                <span class="font-medium text-slate-800">atar24</span>，或直接扫码联系。
+                填好后会自动复制一段话，你微信发给
+                <span class="font-medium text-slate-800">atar24</span>
+                就行。嫌麻烦也可以直接扫码聊。
               </p>
 
               <form class="mt-6 space-y-4" @submit.prevent="handleSubmit">
                 <div class="grid gap-4 sm:grid-cols-2">
                   <label class="block text-sm">
-                    <span class="mb-1.5 block font-medium text-slate-700">公司名称 *</span>
-                    <input
-                      v-model="form.company"
-                      type="text"
-                      required
-                      class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none ring-emerald-500/0 transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
-                      placeholder="例：深圳某某科技有限公司"
-                    />
-                  </label>
-                  <label class="block text-sm">
-                    <span class="mb-1.5 block font-medium text-slate-700">联系人 *</span>
+                    <span class="mb-1.5 block font-medium text-slate-700">怎么称呼您 *</span>
                     <input
                       v-model="form.contactName"
                       type="text"
                       required
                       class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
-                      placeholder="您的姓名或称呼"
+                      placeholder="例：阿燃 / 小王"
+                    />
+                  </label>
+                  <label class="block text-sm">
+                    <span class="mb-1.5 block font-medium text-slate-700">称呼 / 项目名（选填）</span>
+                    <input
+                      v-model="form.nickname"
+                      type="text"
+                      class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none ring-emerald-500/0 transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+                      placeholder="例：个人博客 / XX 工作室"
                     />
                   </label>
                 </div>
@@ -377,13 +371,13 @@ onMounted(() => {
                     type="text"
                     required
                     class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
-                    placeholder="方便顾问回访与发送专属链接"
+                    placeholder="方便发你优惠链接"
                   />
                 </label>
 
                 <div class="grid gap-4 sm:grid-cols-2">
                   <label class="block text-sm">
-                    <span class="mb-1.5 block font-medium text-slate-700">当前云厂商 *</span>
+                    <span class="mb-1.5 block font-medium text-slate-700">用的哪家云 *</span>
                     <select
                       v-model="form.cloudProvider"
                       required
@@ -394,7 +388,7 @@ onMounted(() => {
                     </select>
                   </label>
                   <label class="block text-sm">
-                    <span class="mb-1.5 block font-medium text-slate-700">月消费区间 *</span>
+                    <span class="mb-1.5 block font-medium text-slate-700">大概每月花多少 *</span>
                     <select
                       v-model="form.monthlySpend"
                       required
@@ -407,7 +401,7 @@ onMounted(() => {
                 </div>
 
                 <label class="block text-sm">
-                  <span class="mb-1.5 block font-medium text-slate-700">需求类型 *</span>
+                  <span class="mb-1.5 block font-medium text-slate-700">想了解什么 *</span>
                   <select
                     v-model="form.needType"
                     required
@@ -419,12 +413,12 @@ onMounted(() => {
                 </label>
 
                 <label class="block text-sm">
-                  <span class="mb-1.5 block font-medium text-slate-700">补充说明（选填）</span>
+                  <span class="mb-1.5 block font-medium text-slate-700">还想补充一句（选填）</span>
                   <textarea
                     v-model="form.note"
                     rows="3"
                     class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
-                    placeholder="例如：主要跑 K8s + RDS，想先做账单体检；或计划下月新购 GPU 实例"
+                    placeholder="例如：想买个 2 核 4G 服务器建站；或者账单每月 200 多觉得贵"
                   ></textarea>
                 </label>
 
@@ -433,19 +427,19 @@ onMounted(() => {
                   class="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-800 disabled:opacity-60 sm:w-auto"
                   :disabled="submitting"
                 >
-                  {{ submitting ? '处理中…' : '生成咨询信息并复制' }}
+                  {{ submitting ? '处理中…' : '复制咨询内容' }}
                 </button>
 
                 <p v-if="submitted" class="text-sm text-emerald-700">
-                  已复制咨询模板，请微信发送给顾问；若需账单体检，可一并说明方便提交账单的格式。
+                  已复制好啦，微信发给 atar24 即可；想帮看账单的话，可以顺便说一下。
                 </p>
               </form>
             </div>
 
             <div id="contact" class="scroll-mt-24 rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm">
-              <h3 class="text-lg font-semibold text-slate-900">微信联系顾问</h3>
+              <h3 class="text-lg font-semibold text-slate-900">直接微信聊</h3>
               <p class="mt-2 text-sm leading-7 text-slate-600">
-                说明你的云厂商、账号 UID（如有）与月消费区间，我们会生成专属充值链接发给你。
+                扫码加微信，说一下用的哪家云、大概花多少，我们发你优惠链接。
               </p>
               <div class="mt-4 rounded-xl bg-slate-50 p-3">
                 <img
@@ -485,8 +479,8 @@ onMounted(() => {
     <footer class="border-t border-slate-200 bg-slate-900 px-4 py-10 text-slate-300 sm:px-6">
       <div class="mx-auto flex max-w-6xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <div class="text-sm font-semibold text-white">大厂云服务 · CloudCost Lab</div>
-          <div class="mt-1 text-xs text-slate-400">博主联盟联运专题 · 阿里云 / 腾讯云 / 华为云 / 火山引擎</div>
+          <div class="text-sm font-semibold text-white">大厂云服务</div>
+          <div class="mt-1 text-xs text-slate-400">阿里云 · 腾讯云 · 华为云 · 火山引擎</div>
         </div>
         <div class="text-sm">
           <a

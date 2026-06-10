@@ -1,10 +1,14 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
-import WebLlmNavBot from './components/WebLlmFloatingEntry.vue'
 import AppNav from './components/AppNav.vue'
+import AuthNavActions from './components/AuthNavActions.vue'
+import { useAuth } from './composables/useAuth.js'
+import { isSupabaseConfigured } from './lib/supabase.js'
 import { CLOUDCOST_PATH, isCloudCostHost } from './utils/cloudcostHost.js'
 import './style.css'
+
+const AUTH_REQUIRED_PREFIXES = ['/account', '/tob/internal', '/annual-report-2025', '/tob/reports']
 
 // 路由配置
 const routes = [
@@ -45,6 +49,9 @@ const routes = [
     redirect: (to) => ({ path: '/tob/internal', query: { ...to.query, tab: 'admin' } })
   },
   { path: '/workspace/web-llm', component: () => import('./pages/workspace/web-llm/index.vue') },
+  { path: '/auth/login', component: () => import('./pages/auth/login.vue'), meta: { guestOnly: true } },
+  { path: '/auth/register', component: () => import('./pages/auth/register.vue'), meta: { guestOnly: true } },
+  { path: '/account', component: () => import('./pages/account/index.vue'), meta: { requiresAuth: true } },
   { path: '/ecosystem', component: () => import('./pages/ecosystem-position/index.vue') },
   { path: '/why-us', component: () => import('./pages/why-us/index.vue') },
   { path: '/toc', component: () => import('./pages/toc/index.vue') },
@@ -88,18 +95,53 @@ const router = createRouter({
   }
 })
 
-router.beforeEach((to) => {
-  if (!isCloudCostHost()) {
+function requiresAuth(path) {
+  return AUTH_REQUIRED_PREFIXES.some((prefix) => path === prefix || path.startsWith(`${prefix}/`))
+}
+
+function requiresInternalRole(path) {
+  return ['/tob/internal', '/annual-report-2025', '/tob/reports'].some(
+    (prefix) => path === prefix || path.startsWith(`${prefix}/`)
+  )
+}
+
+router.beforeEach(async (to) => {
+  if (isCloudCostHost()) {
+    if (to.path === '/') {
+      return CLOUDCOST_PATH
+    }
+
+    if (to.path === '/tob' || to.path.startsWith('/tob/')) {
+      window.location.assign(`https://blogger-alliance.cn${to.fullPath}`)
+      return false
+    }
+  }
+
+  if (!isSupabaseConfigured) {
     return true
   }
 
-  if (to.path === '/') {
-    return CLOUDCOST_PATH
+  const { initAuth, isAuthenticated, isInternal, isAdmin, getAccessToken } = useAuth()
+  await initAuth()
+
+  if (to.meta.requiresAuth || requiresAuth(to.path)) {
+    if (!isAuthenticated.value) {
+      return {
+        path: '/auth/login',
+        query: { redirect: to.fullPath }
+      }
+    }
   }
 
-  if (to.path === '/tob' || to.path.startsWith('/tob/')) {
-    window.location.assign(`https://blogger-alliance.cn${to.fullPath}`)
-    return false
+  if (requiresInternalRole(to.path) && isAuthenticated.value && !isInternal.value) {
+    return {
+      path: '/workspace',
+      query: { notice: 'internal-required' }
+    }
+  }
+
+  if (to.meta.guestOnly && isAuthenticated.value) {
+    return '/workspace'
   }
 
   return true
@@ -107,6 +149,6 @@ router.beforeEach((to) => {
 
 const app = createApp(App)
 app.use(router)
-app.component('WebLlmNavBot', WebLlmNavBot)
 app.component('AppNav', AppNav)
-app.mount('#app') 
+app.component('AuthNavActions', AuthNavActions)
+app.mount('#app')

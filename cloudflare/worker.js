@@ -210,6 +210,79 @@ function readBearerToken(request) {
   return header.slice('Bearer '.length).trim()
 }
 
+const ROLE_RANK = {
+  member: 0,
+  internal: 1,
+  admin: 2
+}
+
+function hasMinimumRole(role, minimumRole) {
+  return (ROLE_RANK[role] ?? 0) >= (ROLE_RANK[minimumRole] ?? 0)
+}
+
+function missingSupabaseConfig(env) {
+  return !env.SUPABASE_URL || !env.SUPABASE_ANON_KEY
+}
+
+async function verifySupabaseAccess(request, env, minimumRole = 'internal') {
+  const token = readBearerToken(request)
+
+  if (!token || missingSupabaseConfig(env)) {
+    return { ok: false, status: 401, error: 'UNAUTHORIZED' }
+  }
+
+  const userResponse = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      apikey: env.SUPABASE_ANON_KEY
+    }
+  })
+
+  if (!userResponse.ok) {
+    return { ok: false, status: 401, error: 'UNAUTHORIZED' }
+  }
+
+  const user = await userResponse.json()
+  const profileResponse = await fetch(
+    `${env.SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(user.id)}&select=role`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        apikey: env.SUPABASE_ANON_KEY,
+        Accept: 'application/json'
+      }
+    }
+  )
+
+  if (!profileResponse.ok) {
+    return { ok: false, status: 401, error: 'UNAUTHORIZED' }
+  }
+
+  const profiles = await profileResponse.json()
+  const role = profiles[0]?.role || 'member'
+
+  if (!hasMinimumRole(role, minimumRole)) {
+    return { ok: false, status: 403, error: 'FORBIDDEN' }
+  }
+
+  return {
+    ok: true,
+    user,
+    role,
+    token
+  }
+}
+
+async function requireSupabaseAccess(request, env, minimumRole = 'internal') {
+  const access = await verifySupabaseAccess(request, env, minimumRole)
+
+  if (!access.ok) {
+    return json({ error: access.error }, { status: access.status })
+  }
+
+  return access
+}
+
 function mapDealRow(row) {
   return {
     id: row.id || '',
@@ -396,62 +469,22 @@ function validateReports(records) {
   })
 }
 
-async function requireSession(request, env) {
-  const token = readBearerToken(request)
-  const session = await verifySessionToken(token, env.INTERNAL_SESSION_SECRET)
-
-  if (!session) {
-    return null
-  }
-
-  return session
+async function requireSession(request, env, minimumRole = 'internal') {
+  return verifySupabaseAccess(request, env, minimumRole)
 }
 
-async function handleCreateSession(request, env) {
-  const body = await request.json().catch(() => null)
-  const credential = normalizeCredential(body?.credential)
-
-  if (!credential) {
-    return json({ error: 'EMPTY_CREDENTIAL' }, { status: 400 })
-  }
-
-  const clientKey = await createClientKey(request)
-  const accessAttempt = await readAccessAttempt(env, clientKey)
-  const lockedUntil = Number(accessAttempt?.lockedUntil || 0)
-
-  if (lockedUntil > Date.now()) {
-    return createLockResponse(lockedUntil)
-  }
-
-  if (credential !== normalizeCredential(env.INTERNAL_ACCESS_CREDENTIAL)) {
-    const nextAttempt = await registerFailedAccessAttempt(env, clientKey, accessAttempt)
-
-    if (nextAttempt.lockedUntil > Date.now()) {
-      return createLockResponse(nextAttempt.lockedUntil)
-    }
-
-    return json({ error: 'INVALID_CREDENTIAL' }, { status: 401 })
-  }
-
-  await clearAccessAttempt(env, clientKey)
-
-  const expiresAt = Date.now() + SESSION_TTL_MS
-  const token = await signTokenPayload(
-    {
-      scope: 'internal-data',
-      exp: expiresAt
-    },
-    env.INTERNAL_SESSION_SECRET
+function authFailureResponse(access) {
+  return json(
+    { error: access?.error || 'UNAUTHORIZED' },
+    { status: access?.status || 401 }
   )
-
-  return json({ token, expiresAt })
 }
 
 async function handleDeals(request, env) {
-  const session = await requireSession(request, env)
+  const session = await requireSession(request, env, 'internal')
 
-  if (!session) {
-    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  if (!session.ok) {
+    return authFailureResponse(session)
   }
 
   const { results } = await env.DB.prepare(`
@@ -472,16 +505,15 @@ async function handleDeals(request, env) {
   `).all()
 
   return json({
-    deals: (results || []).map(mapDealRow),
-    expiresAt: session.exp
+    deals: (results || []).map(mapDealRow)
   })
 }
 
 async function handleReports(request, env) {
-  const session = await requireSession(request, env)
+  const session = await requireSession(request, env, 'internal')
 
-  if (!session) {
-    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  if (!session.ok) {
+    return authFailureResponse(session)
   }
 
   const { results } = await env.DB.prepare(`
@@ -504,38 +536,16 @@ async function handleReports(request, env) {
   `).all()
 
   return json({
-    reports: (results || []).map(mapReportRow),
-    expiresAt: session.exp
+    reports: (results || []).map(mapReportRow)
   })
 }
 
 async function handleClientReport(request, env, reportId) {
-  const body = await request.json().catch(() => null)
-  const credential = normalizeCredential(body?.credential)
+  const session = await requireSession(request, env, 'internal')
 
-  if (!credential) {
-    return json({ error: 'EMPTY_CREDENTIAL' }, { status: 400 })
+  if (!session.ok) {
+    return authFailureResponse(session)
   }
-
-  const clientKey = await createClientKey(request)
-  const accessAttempt = await readAccessAttempt(env, clientKey)
-  const lockedUntil = Number(accessAttempt?.lockedUntil || 0)
-
-  if (lockedUntil > Date.now()) {
-    return createLockResponse(lockedUntil)
-  }
-
-  if (credential !== normalizeCredential(env.INTERNAL_ACCESS_CREDENTIAL)) {
-    const nextAttempt = await registerFailedAccessAttempt(env, clientKey, accessAttempt)
-
-    if (nextAttempt.lockedUntil > Date.now()) {
-      return createLockResponse(nextAttempt.lockedUntil)
-    }
-
-    return json({ error: 'INVALID_CREDENTIAL' }, { status: 401 })
-  }
-
-  await clearAccessAttempt(env, clientKey)
 
   const row = await env.DB.prepare(`
     SELECT
@@ -569,14 +579,14 @@ async function handleClientApi(request, env) {
     return json({ error: 'D1_NOT_CONFIGURED' }, { status: 500 })
   }
 
-  if (!env.INTERNAL_ACCESS_CREDENTIAL) {
-    return json({ error: 'WORKER_SECRETS_MISSING' }, { status: 500 })
+  if (missingSupabaseConfig(env)) {
+    return json({ error: 'SUPABASE_NOT_CONFIGURED' }, { status: 500 })
   }
 
   const url = new URL(request.url)
   const reportMatch = url.pathname.match(/^\/api\/client\/reports\/([^/]+)$/)
 
-  if (request.method === 'POST' && reportMatch) {
+  if (request.method === 'GET' && reportMatch) {
     return handleClientReport(request, env, decodeURIComponent(reportMatch[1]))
   }
 
@@ -584,10 +594,10 @@ async function handleClientApi(request, env) {
 }
 
 async function handleReportCoopIds(request, env) {
-  const session = await requireSession(request, env)
+  const session = await requireSession(request, env, 'internal')
 
-  if (!session) {
-    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  if (!session.ok) {
+    return authFailureResponse(session)
   }
 
   const { results } = await env.DB.prepare(`
@@ -597,8 +607,7 @@ async function handleReportCoopIds(request, env) {
   `).all()
 
   return json({
-    cooperationIds: (results || []).map((row) => row.cooperationId).filter(Boolean),
-    expiresAt: session.exp
+    cooperationIds: (results || []).map((row) => row.cooperationId).filter(Boolean)
   })
 }
 
@@ -614,9 +623,8 @@ async function handleHealth(_request, env) {
     service: 'blogger-alliance-internal-api',
     database: 'blogger-alliance',
     authPolicy: {
-      maxFailures: ACCESS_MAX_FAILURES,
-      windowMinutes: ACCESS_FAILURE_WINDOW_MS / 60000,
-      lockMinutes: ACCESS_LOCKOUT_MS / 60000
+      provider: 'supabase',
+      roles: ['member', 'internal', 'admin']
     },
     counts: {
       deals: Number(dealsCount?.count || 0),
@@ -628,10 +636,10 @@ async function handleHealth(_request, env) {
 }
 
 async function handlePublicAnnualReport(request, env) {
-  const session = await requireSession(request, env)
+  const session = await requireSession(request, env, 'internal')
 
-  if (!session) {
-    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  if (!session.ok) {
+    return authFailureResponse(session)
   }
 
   const url = new URL(request.url)
@@ -653,21 +661,20 @@ async function handlePublicAnnualReport(request, env) {
     if (!row) {
       return json({ error: 'NOT_FOUND' }, { status: 404 })
     }
-    return json({ report: mapAnnualRow(row), expiresAt: session.exp })
+    return json({ report: mapAnnualRow(row) })
   }
 
   const { results } = await env.DB.prepare(`${sql} ORDER BY year DESC`).all()
   return json({
-    reports: (results || []).map(mapAnnualRow),
-    expiresAt: session.exp
+    reports: (results || []).map(mapAnnualRow)
   })
 }
 
 async function handleAnnualReportsAdminList(request, env) {
-  const session = await requireSession(request, env)
+  const session = await requireSession(request, env, 'internal')
 
-  if (!session) {
-    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  if (!session.ok) {
+    return authFailureResponse(session)
   }
 
   const { results } = await env.DB.prepare(`
@@ -683,8 +690,7 @@ async function handleAnnualReportsAdminList(request, env) {
   `).all()
 
   return json({
-    reports: (results || []).map(mapAnnualRow),
-    expiresAt: session.exp
+    reports: (results || []).map(mapAnnualRow)
   })
 }
 
@@ -801,10 +807,10 @@ async function replaceAnnualReports(env, reports) {
 }
 
 async function handleAdminAnnualReportsUpdate(request, env) {
-  const session = await requireSession(request, env)
+  const session = await requireSession(request, env, 'admin')
 
-  if (!session) {
-    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  if (!session.ok) {
+    return authFailureResponse(session)
   }
 
   const body = await request.json().catch(() => null)
@@ -812,17 +818,17 @@ async function handleAdminAnnualReportsUpdate(request, env) {
   try {
     const reports = validateAnnualReports(body?.reports)
     await replaceAnnualReports(env, reports)
-    return json({ ok: true, count: reports.length, expiresAt: session.exp })
+    return json({ ok: true, count: reports.length })
   } catch (error) {
     return json({ error: error.message || 'INVALID_ANNUAL_REPORTS_PAYLOAD' }, { status: 400 })
   }
 }
 
 async function handleAdminDealsUpdate(request, env) {
-  const session = await requireSession(request, env)
+  const session = await requireSession(request, env, 'admin')
 
-  if (!session) {
-    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  if (!session.ok) {
+    return authFailureResponse(session)
   }
 
   const body = await request.json().catch(() => null)
@@ -830,17 +836,17 @@ async function handleAdminDealsUpdate(request, env) {
   try {
     const deals = validateDeals(body?.deals)
     await replaceDeals(env, deals)
-    return json({ ok: true, count: deals.length, expiresAt: session.exp })
+    return json({ ok: true, count: deals.length })
   } catch (error) {
     return json({ error: error.message || 'INVALID_DEALS_PAYLOAD' }, { status: 400 })
   }
 }
 
 async function handleAdminReportsUpdate(request, env) {
-  const session = await requireSession(request, env)
+  const session = await requireSession(request, env, 'admin')
 
-  if (!session) {
-    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  if (!session.ok) {
+    return authFailureResponse(session)
   }
 
   const body = await request.json().catch(() => null)
@@ -848,7 +854,7 @@ async function handleAdminReportsUpdate(request, env) {
   try {
     const reports = validateReports(body?.reports)
     await replaceReports(env, reports)
-    return json({ ok: true, count: reports.length, expiresAt: session.exp })
+    return json({ ok: true, count: reports.length })
   } catch (error) {
     return json({ error: error.message || 'INVALID_REPORTS_PAYLOAD' }, { status: 400 })
   }
@@ -859,18 +865,14 @@ async function handleApi(request, env) {
     return json({ error: 'D1_NOT_CONFIGURED' }, { status: 500 })
   }
 
-  if (!env.INTERNAL_ACCESS_CREDENTIAL || !env.INTERNAL_SESSION_SECRET) {
-    return json({ error: 'WORKER_SECRETS_MISSING' }, { status: 500 })
+  if (missingSupabaseConfig(env)) {
+    return json({ error: 'SUPABASE_NOT_CONFIGURED' }, { status: 500 })
   }
 
   const url = new URL(request.url)
 
   if (request.method === 'GET' && url.pathname === '/api/internal/health') {
     return handleHealth(request, env)
-  }
-
-  if (request.method === 'POST' && url.pathname === '/api/internal/session') {
-    return handleCreateSession(request, env)
   }
 
   if (request.method === 'GET' && url.pathname === '/api/internal/deals') {
@@ -909,8 +911,8 @@ async function handlePublic(request, env) {
     return json({ error: 'D1_NOT_CONFIGURED' }, { status: 500 })
   }
 
-  if (!env.INTERNAL_SESSION_SECRET) {
-    return json({ error: 'WORKER_SECRETS_MISSING' }, { status: 500 })
+  if (missingSupabaseConfig(env)) {
+    return json({ error: 'SUPABASE_NOT_CONFIGURED' }, { status: 500 })
   }
 
   const url = new URL(request.url)

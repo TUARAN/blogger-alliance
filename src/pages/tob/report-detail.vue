@@ -1,100 +1,19 @@
-<template>
-  <div class="min-h-screen bg-slate-50">
-    <section class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-      <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-wide text-violet-600">客户报告</p>
-          <h1 class="mt-1 text-2xl font-bold text-slate-950 md:text-3xl">推文数据报告</h1>
-        </div>
-        <button
-          v-if="report"
-          class="h-9 rounded-lg border border-violet-200 bg-violet-50 px-3 text-sm font-semibold text-violet-700 hover:bg-violet-100"
-          @click="exportReportPdf"
-        >
-          导出 PDF
-        </button>
-      </div>
-
-      <div v-if="!report" class="rounded-2xl border border-violet-200 bg-white p-5 shadow-sm md:p-6">
-        <h2 class="text-lg font-semibold text-slate-900">请输入访问凭证</h2>
-        <p class="mt-2 text-sm leading-6 text-slate-600">该链接仅可查看当前报告，不提供报告列表查询。</p>
-        <div class="mt-4 flex flex-col gap-3 sm:flex-row">
-          <input
-            v-model="credentialInput"
-            type="password"
-            class="h-10 flex-1 rounded-lg border border-slate-300 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
-            placeholder="请输入访问凭证"
-            @keyup.enter="loadReport"
-          >
-          <button
-            class="h-10 rounded-lg bg-violet-600 px-4 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-60"
-            :disabled="isLoading"
-            @click="loadReport"
-          >
-            {{ isLoading ? '加载中...' : '查看报告' }}
-          </button>
-        </div>
-        <p v-if="message" class="mt-3 text-sm" :class="messageIsError ? 'text-red-600' : 'text-emerald-700'">{{ message }}</p>
-      </div>
-
-      <article v-else class="rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <div class="border-b border-slate-200 px-5 py-5 md:px-7">
-          <p class="text-xs font-semibold uppercase tracking-wide text-violet-600">数据报告</p>
-          <h2 class="mt-1 text-2xl font-bold leading-tight text-slate-950">{{ report.project || report.title || '未命名报告' }}</h2>
-          <p v-if="report.articleTitle" class="mt-2 text-sm text-slate-500">{{ formatArticleTitle(report.articleTitle) }}</p>
-          <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-600">
-            <span>报告 ID：<span class="font-mono text-slate-800">{{ report.id || '-' }}</span></span>
-            <span>执行人：<span class="text-slate-800">{{ report.author || '-' }}</span></span>
-            <span v-if="report.period">周期：<span class="text-slate-800">{{ report.period }}</span></span>
-          </div>
-          <div v-if="report.platforms?.length" class="mt-4 flex flex-wrap gap-2">
-            <span
-              v-for="platform in report.platforms"
-              :key="platform"
-              class="rounded-full bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-700"
-            >
-              {{ platform }}
-            </span>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3 px-5 py-5 md:grid-cols-5 md:px-7">
-          <MetricCard label="阅读" :value="report.stats?.reads" tone="teal" />
-          <MetricCard label="点赞" :value="report.stats?.likes" tone="rose" />
-          <MetricCard label="收藏" :value="report.stats?.favorites" tone="amber" />
-          <MetricCard label="评论" :value="report.stats?.comments" tone="sky" />
-          <MetricCard label="转发" :value="report.stats?.shares" tone="fuchsia" />
-        </div>
-
-        <div class="border-t border-slate-200 px-5 py-5 md:px-7">
-          <div class="whitespace-pre-line text-sm leading-7 text-slate-700">{{ report.content || '暂无正文。' }}</div>
-          <figure v-if="reportEvidenceImage" class="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
-            <img
-              :src="reportEvidenceImage.src"
-              :alt="reportEvidenceImage.alt"
-              class="w-full object-contain"
-            >
-            <figcaption class="border-t border-slate-200 px-4 py-2 text-xs text-slate-500">{{ reportEvidenceImage.caption }}</figcaption>
-          </figure>
-        </div>
-      </article>
-    </section>
-  </div>
-</template>
-
 <script setup>
-import { computed, defineComponent, h, ref } from 'vue'
+import { computed, defineComponent, h, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useAuth } from '../../composables/useAuth.js'
+import { AUTH_COPY } from '../../utils/authMessages.js'
 import { fetchSinglePromotionReport, explainInternalDataError } from '../../utils/internalDataApi'
-import { normalizeCredential } from '../../utils/credentialNormalize'
 
 const route = useRoute()
+const { initAuth, isInternal, getAccessToken, loading: authLoading } = useAuth()
+
 const reportId = computed(() => String(route.params.id || '').trim())
-const credentialInput = ref('')
 const report = ref(null)
 const isLoading = ref(false)
 const message = ref('')
 const messageIsError = ref(false)
+const accessError = ref('')
 
 const reportEvidenceImages = {
   'report-20260527-buildsom-tweet': {
@@ -136,24 +55,26 @@ function setMessage(text, isError = false) {
 }
 
 async function loadReport() {
-  const credential = normalizeCredential(credentialInput.value)
   if (!reportId.value) {
     setMessage('报告链接无效。', true)
     return
   }
-  if (!credential) {
-    setMessage('请输入访问凭证。', true)
+
+  const token = await getAccessToken()
+  if (!token) {
+    accessError.value = AUTH_COPY.sessionMissing
     return
   }
 
   isLoading.value = true
   setMessage('')
   try {
-    report.value = await fetchSinglePromotionReport(reportId.value, credential)
-    credentialInput.value = ''
+    report.value = await fetchSinglePromotionReport(reportId.value, token)
   } catch (error) {
     if (error?.message === 'NOT_FOUND') {
       setMessage('未找到该报告。', true)
+    } else if (error?.message === 'FORBIDDEN') {
+      accessError.value = explainInternalDataError(error, 'read')
     } else {
       setMessage(explainInternalDataError(error, 'read'), true)
     }
@@ -161,6 +82,17 @@ async function loadReport() {
     isLoading.value = false
   }
 }
+
+onMounted(async () => {
+  await initAuth()
+
+  if (!isInternal.value) {
+    accessError.value = AUTH_COPY.internalAccessDeniedBody
+    return
+  }
+
+  await loadReport()
+})
 
 function formatNumber(value) {
   const n = Number(value)
@@ -267,3 +199,90 @@ function exportReportPdf() {
   }, 250)
 }
 </script>
+
+<template>
+  <div class="min-h-screen bg-slate-50">
+    <AppNav />
+
+    <section class="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+      <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wide text-violet-600">客户报告</p>
+          <h1 class="mt-1 text-2xl font-bold text-slate-950 md:text-3xl">推文数据报告</h1>
+        </div>
+        <button
+          v-if="report"
+          class="h-9 rounded-lg border border-violet-200 bg-violet-50 px-3 text-sm font-semibold text-violet-700 hover:bg-violet-100"
+          @click="exportReportPdf"
+        >
+          导出 PDF
+        </button>
+      </div>
+
+      <div
+        v-if="authLoading || isLoading"
+        class="rounded-2xl border border-violet-200 bg-white p-5 shadow-sm md:p-6 text-sm text-slate-600"
+      >
+        正在加载报告...
+      </div>
+
+      <div
+        v-else-if="accessError"
+        class="rounded-2xl border border-amber-200 bg-amber-50 p-5 md:p-6"
+      >
+        <h2 class="text-lg font-semibold text-amber-950">无法查看报告</h2>
+        <p class="mt-2 text-sm leading-6 text-amber-800">{{ accessError }}</p>
+      </div>
+
+      <div
+        v-else-if="!report"
+        class="rounded-2xl border border-violet-200 bg-white p-5 shadow-sm md:p-6"
+      >
+        <h2 class="text-lg font-semibold text-slate-900">报告不可用</h2>
+        <p v-if="message" class="mt-3 text-sm" :class="messageIsError ? 'text-red-600' : 'text-emerald-700'">{{ message }}</p>
+      </div>
+
+      <article v-else class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="border-b border-slate-200 px-5 py-5 md:px-7">
+          <p class="text-xs font-semibold uppercase tracking-wide text-violet-600">数据报告</p>
+          <h2 class="mt-1 text-2xl font-bold leading-tight text-slate-950">{{ report.project || report.title || '未命名报告' }}</h2>
+          <p v-if="report.articleTitle" class="mt-2 text-sm text-slate-500">{{ formatArticleTitle(report.articleTitle) }}</p>
+          <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-600">
+            <span>报告 ID：<span class="font-mono text-slate-800">{{ report.id || '-' }}</span></span>
+            <span>执行人：<span class="text-slate-800">{{ report.author || '-' }}</span></span>
+            <span v-if="report.period">周期：<span class="text-slate-800">{{ report.period }}</span></span>
+          </div>
+          <div v-if="report.platforms?.length" class="mt-4 flex flex-wrap gap-2">
+            <span
+              v-for="platform in report.platforms"
+              :key="platform"
+              class="rounded-full bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-700"
+            >
+              {{ platform }}
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 px-5 py-5 md:grid-cols-5 md:px-7">
+          <MetricCard label="阅读" :value="report.stats?.reads" tone="teal" />
+          <MetricCard label="点赞" :value="report.stats?.likes" tone="rose" />
+          <MetricCard label="收藏" :value="report.stats?.favorites" tone="amber" />
+          <MetricCard label="评论" :value="report.stats?.comments" tone="sky" />
+          <MetricCard label="转发" :value="report.stats?.shares" tone="fuchsia" />
+        </div>
+
+        <div class="border-t border-slate-200 px-5 py-5 md:px-7">
+          <div class="whitespace-pre-line text-sm leading-7 text-slate-700">{{ report.content || '暂无正文。' }}</div>
+          <figure v-if="reportEvidenceImage" class="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+            <img
+              :src="reportEvidenceImage.src"
+              :alt="reportEvidenceImage.alt"
+              class="w-full object-contain"
+            >
+            <figcaption class="border-t border-slate-200 px-4 py-2 text-xs text-slate-500">{{ reportEvidenceImage.caption }}</figcaption>
+          </figure>
+        </div>
+      </article>
+    </section>
+  </div>
+</template>

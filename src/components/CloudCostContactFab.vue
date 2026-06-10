@@ -5,7 +5,7 @@ import qrcodeImage from '../img/qrcode1.jpg'
 defineProps({
   label: {
     type: String,
-    default: '获取专属链接'
+    default: '领优惠链接'
   }
 })
 
@@ -72,7 +72,7 @@ onMounted(() => {
             </button>
           </div>
         </div>
-        <div class="text-center text-[10px] leading-tight text-slate-500 mt-0.5">扫码后说明云厂商与月消费</div>
+        <div class="text-center text-[10px] leading-tight text-slate-500 mt-0.5">扫码说说用的哪家云</div>
         <div class="mt-1.5 bg-slate-50 p-0.5 rounded-lg">
           <img
             :src="qrcodeImage"

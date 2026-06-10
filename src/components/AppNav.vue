@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router'
 const navLinks = [
   { label: '介绍', to: '/tob/services' },
   { label: '案例', to: '/cases' },
-  { label: '后台', to: '/workspace' }
+  { label: '工作台', to: '/workspace' }
 ]
 
 defineProps({
@@ -47,7 +47,7 @@ watch(() => route.fullPath, () => {
             </router-link>
           </div>
           <slot name="links"></slot>
-          <WebLlmNavBot />
+          <AuthNavActions class="hidden md:block" />
           <button
             type="button"
             class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition-colors hover:bg-slate-50 md:hidden"
@@ -83,6 +83,9 @@ watch(() => route.fullPath, () => {
         >
           {{ item.label }}
         </router-link>
+        <div class="mt-2 border-t border-slate-200/70 pt-2 md:hidden">
+          <AuthNavActions variant="mobile" />
+        </div>
       </div>
     </div>
   </nav>

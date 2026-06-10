@@ -1,3 +1,5 @@
+import { AUTH_COPY } from './authMessages.js'
+
 function buildHeaders(token, hasJsonBody = false) {
   const headers = {}
 
@@ -43,13 +45,6 @@ async function apiRequest(path, { method = 'GET', body, token } = {}) {
   return readJsonResponse(response)
 }
 
-export async function createInternalDataSession(credential) {
-  return apiRequest('/api/internal/session', {
-    method: 'POST',
-    body: { credential }
-  })
-}
-
 export async function fetchCommercialDeals(token) {
   const payload = await apiRequest('/api/internal/deals', { token })
   return Array.isArray(payload?.deals) ? payload.deals : []
@@ -60,11 +55,8 @@ export async function fetchPromotionReports(token) {
   return Array.isArray(payload?.reports) ? payload.reports : []
 }
 
-export async function fetchSinglePromotionReport(reportId, credential) {
-  const payload = await apiRequest(`/api/client/reports/${encodeURIComponent(reportId)}`, {
-    method: 'POST',
-    body: { credential }
-  })
+export async function fetchSinglePromotionReport(reportId, token) {
+  const payload = await apiRequest(`/api/client/reports/${encodeURIComponent(reportId)}`, { token })
   return payload?.report || null
 }
 
@@ -118,45 +110,39 @@ export async function updateAnnualReports(token, reports) {
 export function explainInternalDataError(error, context = 'read') {
   const code = error?.message || ''
 
-  if (code === 'INVALID_CREDENTIAL' || code === 'EMPTY_CREDENTIAL') {
-    return '访问密码错误，请重新输入。'
+  if (code === 'FORBIDDEN') {
+    return AUTH_COPY.internalAccessDeniedBody
   }
 
   if (code === 'UNAUTHORIZED') {
-    return '访问会话已失效，请重新输入密码。'
+    return AUTH_COPY.sessionExpired
   }
 
-  if (code === 'TOO_MANY_ATTEMPTS') {
-    const retryAfterSeconds = Number(error?.payload?.retryAfterSeconds || 0)
-    const retryAfterMinutes = retryAfterSeconds > 0 ? Math.ceil(retryAfterSeconds / 60) : 15
-    return `输入错误次数过多，已临时锁定，请约 ${retryAfterMinutes} 分钟后再试。`
+  if (code === 'SUPABASE_NOT_CONFIGURED') {
+    return '数据服务暂不可用，请稍后再试或联系管理员。'
   }
 
   if (code === 'D1_NOT_CONFIGURED') {
-    return '服务端未绑定 D1 数据库。'
-  }
-
-  if (code === 'WORKER_SECRETS_MISSING') {
-    return '服务端缺少访问密码或会话密钥配置。'
+    return '数据服务尚未就绪，请稍后再试。'
   }
 
   if (code.startsWith('REQUEST_FAILED_5')) {
     return context === 'admin'
-      ? '服务端读取或写入 D1 失败，请稍后重试。'
-      : '服务端读取 D1 失败，请稍后重试。'
+      ? '保存失败，服务器暂时无法写入数据，请稍后重试。'
+      : '加载失败，服务器暂时无法读取数据，请稍后重试。'
   }
 
   if (code.startsWith('REQUEST_FAILED_4')) {
     return context === 'admin'
-      ? '请求被服务端拒绝，请重新输入密码后再试。'
-      : '请求失败，请重新输入密码后再试。'
+      ? '你没有权限执行此操作。如需编辑数据，请联系管理员开通管理员权限。'
+      : '你没有权限查看这部分内容。'
   }
 
   if (error instanceof TypeError) {
-    return '网络连接失败，请确认当前站点可以访问 Worker API。'
+    return '网络连接失败，请检查网络后重试。'
   }
 
   return context === 'admin'
-    ? '后台连接失败，请检查服务端状态后重试。'
-    : '读取数据失败，请检查服务端状态后重试。'
+    ? '操作失败，请稍后重试。'
+    : '加载失败，请稍后重试。'
 }

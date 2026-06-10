@@ -3,14 +3,14 @@
     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
       <div>
         <div class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">服务总览</div>
-        <h2 class="mt-2 text-2xl font-bold text-gray-900">5 类合作 & 报价对比</h2>
+        <h2 class="mt-2 text-2xl font-bold text-gray-900">6 类合作 & 报价对比</h2>
       </div>
       <div class="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-4 py-2 text-xs md:text-sm font-medium text-amber-800">
         报价口径混合（单篇 / 单价 / 项目费 / 分佣），起步预算见各行
       </div>
     </div>
     <p class="mt-4 max-w-4xl text-sm leading-7 text-gray-600">
-      按合作目标快速选型：要曝光走推文，要可量化点击走引流，要长期私域走社群；要持续内容资产 + 高提成转化，看 AI Access / 出海云访问 / 大厂云服务 三个联运专题。各服务可单选，也可组合执行。点击「专项介绍」查看完整说明，「查看案例」浏览合作呈现方式。
+      推文、引流、社群三类常规合作，以及 AI Access、出海云访问、大厂云服务三类专题推广。按目标选型：要曝光走推文，要可量化点击走引流，要长期私域走社群；要持续内容资产 + 高提成分佣，看下方专题联运。各服务可单选，也可组合执行。点击「专项介绍」查看完整说明，「查看案例」浏览合作呈现方式。
     </p>
 
     <div class="mt-6 grid gap-4 lg:grid-cols-3">
@@ -245,13 +245,13 @@
               <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-amber-100 border border-amber-200 px-2.5 py-0.5 text-[11px] font-medium text-amber-800">联运分佣</span></div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
-              <div>阿里云 / 腾讯云 / 华为云 / 火山引擎渠道推广</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">多云选型 + 账单优化 + 专属充值归因链接</div>
+              <div>个人 / 小团队 / 企业 · 四大云厂商渠道推广</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">渠道折扣 + 帮看账单 + 专属充值链接（官网下单）</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div class="font-semibold text-gray-900">零硬投入 · 按成交分佣</div>
               <div class="mt-1.5">渠道折扣 + 联运分成</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">建议月云消费 ≥ ¥3k 的企业 / 技术团队</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">面向企业 / 技术团队云采购场景</div>
               <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>建议 ≥ 3 个月</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
@@ -474,12 +474,12 @@ const mobileRows = [
     mode: '联运分佣',
     modeClass: modeClassMap.affiliate,
     theme: 'special',
-    scene: '阿里云 / 腾讯云 / 华为云 / 火山引擎渠道推广',
-    sceneNote: '多云选型 + 账单优化 + 专属充值归因链接',
+    scene: '个人 / 小团队 / 企业 · 四大云厂商渠道推广',
+    sceneNote: '渠道折扣 + 帮看账单 + 专属充值链接（官网下单）',
     startsAt: '零硬投入',
     cycle: '建议 ≥ 3 个月',
     priceLines: ['渠道折扣 + 联运分成', '按成交结算'],
-    priceNote: '建议月云消费 ≥ ¥3k 的企业 / 技术团队',
+    priceNote: '面向企业 / 技术团队云采购场景',
     metrics: '咨询线索 + 专属链接转化',
     asset: '联运落地页 + 选型内容 + 账单体检',
     detailTo: '/tob/services/cloud-cost',

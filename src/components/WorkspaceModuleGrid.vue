@@ -41,10 +41,11 @@ const modules = [
   },
   {
     title: '数据报告',
-    description: '合作进度、数据报告、年度总览统一台账，凭证共享。',
-    tag: '数据报告',
+    description: '合作进度、数据报告、年度总览统一台账。需登录并由管理员开通内部权限。',
+    tag: '内部权限',
     icon: '🗂️',
     locked: true,
+    requiresAuth: true,
     to: '/tob/internal',
     theme: {
       shadow: 'shadow-indigo-100/40',

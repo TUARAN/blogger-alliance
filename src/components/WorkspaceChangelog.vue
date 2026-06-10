@@ -55,7 +55,13 @@ const releases = [
     title: '后台化、报告分享与首页改版',
     summary:
       '同步 WebLLM 视觉，抽取 AppNav 与服务组件，增强专项服务和分类案例，上线安全报告分享、商单 owner、Excel 导入、移动端交互，并将合作品牌轮播拆分为独立页面后接入后台入口。',
-    commits: ['e3ff76c WebLLM', '2b11eda cases', '5beb46c sharing', '0be662c ledger', '7957550 carousel page']
+  {
+    version: 'v0.9.0',
+    period: '2026-06-02 至 2026-06-10',
+    title: 'Supabase 账号体系与角色权限',
+    summary:
+      '上线注册/登录/账号中心，以 Supabase 角色（普通成员、内部成员、管理员）替代内部访问凭证；Worker API 改为 JWT 鉴权，优化权限与邮箱验证引导，正式站点 https://blogger-alliance.cn/。',
+    commits: ['supabase auth', 'role guard', 'worker jwt', 'auth copy']
   }
 ]
 
@@ -304,6 +310,17 @@ const weeklyProgress = [
     focus: '里程碑可视化沉淀',
     highlights: ['新增工作台更新日志，开始将版本演进结构化沉淀为长期资产。'],
     commits: ['0a801bb changelog']
+  },
+  {
+    week: '2026 W24',
+    period: '06-08 至 06-14',
+    focus: '账号体系与权限重构',
+    highlights: [
+      '接入 Supabase 注册/登录/账号中心，正式站点统一为 https://blogger-alliance.cn/。',
+      '内部数据访问改为角色权限控制，移除导航栏机器人入口与旧凭证解锁流程。',
+      '注册邮箱验证、权限不足、登录失败等提示语全面中文化。'
+    ],
+    commits: ['supabase auth', 'role guard', 'worker jwt', 'auth copy']
   }
 ]
 
@@ -353,7 +370,9 @@ const timelineOrder = [
   { type: 'minor', key: '2026 W21' },
   { type: 'minor', key: '2026 W22' },
   { type: 'major', key: 'v0.8.0' },
-  { type: 'minor', key: '2026 W23' }
+  { type: 'minor', key: '2026 W23' },
+  { type: 'minor', key: '2026 W24' },
+  { type: 'major', key: 'v0.9.0' }
 ]
 
 const timelineItems = timelineOrder
@@ -400,7 +419,7 @@ const timelineItems = timelineOrder
         </p>
       </div>
       <div class="rounded-lg border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-600 shadow-sm">
-        最近同步：2026-06-01
+        最近同步：2026-06-10 · 站点 https://blogger-alliance.cn/
       </div>
     </div>
 

@@ -241,7 +241,7 @@ export const mockCaseModels = {
         subtitle: '需求表单、三步流程说明与微信承接模块。下方数字为样张口径。',
         metrics: [
           { label: '支持云厂商', value: '4 家' },
-          { label: '建议月消费门槛', value: '≥ ¥3k' },
+          { label: '线索承接', value: '表单 + 微信' },
           { label: '链接生成 SLA', value: '1 工作日' }
         ]
       },
