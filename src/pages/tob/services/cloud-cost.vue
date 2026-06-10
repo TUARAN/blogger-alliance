@@ -71,19 +71,25 @@
         </div>
       </section>
 
-      <div class="flex flex-wrap gap-3 pt-2">
+      <div class="flex flex-wrap items-center gap-3 pt-2">
         <a
           href="https://cloudcost.blogger-alliance.cn"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center justify-center rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-800"
+          class="inline-flex min-h-10 items-center justify-center rounded-full bg-emerald-700 px-5 text-sm font-medium text-white hover:bg-emerald-800"
         >
           领取官方充值链接 →
         </a>
-        <router-link to="/cases/enterprise-cloud" class="text-sm font-medium text-indigo-700 underline-offset-4 hover:underline">
+        <router-link
+          to="/cases/enterprise-cloud"
+          class="inline-flex min-h-10 items-center text-sm font-medium text-indigo-700 underline-offset-4 hover:underline"
+        >
           查看渠道服务说明 →
         </router-link>
-        <router-link to="/cloudcost" class="text-sm font-medium text-slate-600 underline-offset-4 hover:underline">
+        <router-link
+          to="/cloudcost"
+          class="inline-flex min-h-10 items-center text-sm font-medium text-slate-600 underline-offset-4 hover:underline"
+        >
           站内预览 →
         </router-link>
       </div>
