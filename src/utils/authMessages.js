@@ -10,7 +10,7 @@ export function getRoleLabel(role) {
 
 const AUTH_ERROR_MESSAGES = {
   invalid_credentials: '邮箱或密码不正确，请检查后重试。',
-  email_not_confirmed: '邮箱尚未完成验证。请打开注册邮箱，点击验证链接后再登录。',
+  email_not_confirmed: '邮箱尚未验证，请先查收邮件并点击验证链接。',
   user_already_registered: '该邮箱已注册，请直接登录。',
   signup_disabled: '当前暂不支持新用户注册，请联系管理员。',
   too_many_requests: '尝试次数过多，请稍等几分钟后再试。',
@@ -75,5 +75,9 @@ export const AUTH_COPY = {
   sessionExpired: '登录状态已失效，请重新登录。',
   sessionMissing: '登录状态异常，请重新登录后再试。',
   serviceUnavailable: '账号服务暂不可用，请稍后再试。',
-  devConfigMissing: '开发环境尚未完成账号服务配置，请联系开发者处理。'
+  verificationTitle: '请查收验证邮件',
+  verificationBody: '已向 {email} 发送验证链接，点击邮件中的链接完成验证，然后回来登录。',
+  verificationHint: '没收到？先查垃圾箱，或稍等片刻后重发。',
+  verificationResent: '验证邮件已重新发送',
+  verificationResendWait: '请 {seconds} 秒后再试'
 }

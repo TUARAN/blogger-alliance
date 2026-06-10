@@ -1,5 +1,5 @@
 import { ref, computed, readonly } from 'vue'
-import { supabase, isSupabaseConfigured } from '../lib/supabase.js'
+import { getSupabaseClient, initSupabase, isSupabaseConfigured } from '../lib/supabase.js'
 import { AUTH_COPY } from '../utils/authMessages.js'
 
 const user = ref(null)
@@ -25,6 +25,8 @@ export function hasMinimumRole(role, minimumRole) {
 }
 
 async function fetchProfile() {
+  const supabase = getSupabaseClient()
+
   if (!supabase || !user.value) {
     profile.value = null
     return
@@ -47,7 +49,11 @@ async function initAuth() {
   }
 
   initPromise = (async () => {
-    if (!isSupabaseConfigured || !supabase) {
+    await initSupabase()
+
+    const supabase = getSupabaseClient()
+
+    if (!isSupabaseConfigured.value || !supabase) {
       loading.value = false
       initialized.value = true
       return
@@ -91,6 +97,8 @@ export function useAuth() {
   })
 
   async function getAccessToken() {
+    const supabase = getSupabaseClient()
+
     if (!supabase) {
       return null
     }
@@ -100,6 +108,8 @@ export function useAuth() {
   }
 
   async function signUp({ email, password, displayName: name }) {
+    const supabase = getSupabaseClient()
+
     if (!supabase) {
       return { data: null, error: { message: AUTH_COPY.serviceUnavailable } }
     }
@@ -117,6 +127,8 @@ export function useAuth() {
   }
 
   async function signIn({ email, password }) {
+    const supabase = getSupabaseClient()
+
     if (!supabase) {
       return { data: null, error: { message: AUTH_COPY.serviceUnavailable } }
     }
@@ -124,7 +136,25 @@ export function useAuth() {
     return supabase.auth.signInWithPassword({ email, password })
   }
 
+  async function resendVerificationEmail(email) {
+    const supabase = getSupabaseClient()
+
+    if (!supabase) {
+      return { error: { message: AUTH_COPY.serviceUnavailable } }
+    }
+
+    return supabase.auth.resend({
+      type: 'signup',
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/login`
+      }
+    })
+  }
+
   async function signOut() {
+    const supabase = getSupabaseClient()
+
     if (!supabase) {
       return { error: { message: AUTH_COPY.serviceUnavailable } }
     }
@@ -137,6 +167,8 @@ export function useAuth() {
   }
 
   async function updateProfile({ displayName: name, avatarUrl }) {
+    const supabase = getSupabaseClient()
+
     if (!supabase || !user.value) {
       return { data: null, error: { message: '请先登录后再更新资料。' } }
     }
@@ -179,6 +211,7 @@ export function useAuth() {
     getAccessToken,
     signUp,
     signIn,
+    resendVerificationEmail,
     signOut,
     updateProfile,
     fetchProfile

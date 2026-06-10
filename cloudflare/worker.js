@@ -907,6 +907,26 @@ async function handleApi(request, env) {
 }
 
 async function handlePublic(request, env) {
+  const url = new URL(request.url)
+
+  if (request.method === 'GET' && url.pathname === '/api/public/auth-config') {
+    if (missingSupabaseConfig(env)) {
+      return json({ error: 'SUPABASE_NOT_CONFIGURED' }, { status: 503 })
+    }
+
+    return json(
+      {
+        supabaseUrl: env.SUPABASE_URL,
+        supabaseAnonKey: env.SUPABASE_ANON_KEY
+      },
+      {
+        headers: {
+          'Cache-Control': 'public, max-age=300'
+        }
+      }
+    )
+  }
+
   if (!env.DB) {
     return json({ error: 'D1_NOT_CONFIGURED' }, { status: 500 })
   }
@@ -914,8 +934,6 @@ async function handlePublic(request, env) {
   if (missingSupabaseConfig(env)) {
     return json({ error: 'SUPABASE_NOT_CONFIGURED' }, { status: 500 })
   }
-
-  const url = new URL(request.url)
 
   if (request.method === 'GET' && url.pathname === '/api/public/annual-report') {
     return handlePublicAnnualReport(request, env)

@@ -1,21 +1,64 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../../composables/useAuth.js'
 import { formatAuthError, AUTH_COPY } from '../../utils/authMessages.js'
 import { showToast } from '../../utils/toast.js'
 
 const router = useRouter()
-const { signUp, isSupabaseConfigured } = useAuth()
+const { signUp, resendVerificationEmail, isSupabaseConfigured, initialized, loading: authLoading } = useAuth()
 
 const displayName = ref('')
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const isSubmitting = ref(false)
+const isResending = ref(false)
+const resendCooldown = ref(0)
 const errorMessage = ref('')
 const verificationPending = ref(false)
 const registeredEmail = ref('')
+
+let resendTimer = null
+
+const verificationBody = computed(() => {
+  return AUTH_COPY.verificationBody.replace('{email}', registeredEmail.value)
+})
+
+const resendLabel = computed(() => {
+  if (isResending.value) {
+    return '发送中...'
+  }
+
+  if (resendCooldown.value > 0) {
+    return AUTH_COPY.verificationResendWait.replace('{seconds}', String(resendCooldown.value))
+  }
+
+  return '重发验证邮件'
+})
+
+onBeforeUnmount(() => {
+  if (resendTimer) {
+    clearInterval(resendTimer)
+  }
+})
+
+function startResendCooldown(seconds = 60) {
+  resendCooldown.value = seconds
+
+  if (resendTimer) {
+    clearInterval(resendTimer)
+  }
+
+  resendTimer = setInterval(() => {
+    resendCooldown.value -= 1
+
+    if (resendCooldown.value <= 0) {
+      clearInterval(resendTimer)
+      resendTimer = null
+    }
+  }, 1000)
+}
 
 async function handleSubmit() {
   errorMessage.value = ''
@@ -59,7 +102,28 @@ async function handleSubmit() {
 
   registeredEmail.value = email.value.trim()
   verificationPending.value = true
-  showToast('验证邮件已发送，请前往邮箱完成认证', { type: 'success' })
+  startResendCooldown(60)
+}
+
+async function handleResend() {
+  if (isResending.value || resendCooldown.value > 0 || !registeredEmail.value) {
+    return
+  }
+
+  isResending.value = true
+  errorMessage.value = ''
+
+  const { error } = await resendVerificationEmail(registeredEmail.value)
+
+  isResending.value = false
+
+  if (error) {
+    errorMessage.value = formatAuthError(error, '重发失败，请稍后再试。')
+    return
+  }
+
+  showToast(AUTH_COPY.verificationResent, { type: 'success' })
+  startResendCooldown(60)
 }
 </script>
 
@@ -75,34 +139,49 @@ async function handleSubmit() {
         </p>
 
         <div
-          v-if="!isSupabaseConfigured"
+          v-if="initialized && !isSupabaseConfigured"
           class="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
         >
-          {{ AUTH_COPY.devConfigMissing }}
+          {{ AUTH_COPY.serviceUnavailable }}
+        </div>
+
+        <div
+          v-else-if="authLoading"
+          class="mt-5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600"
+        >
+          正在连接账号服务...
         </div>
 
         <div
           v-if="verificationPending"
           class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5"
         >
-          <h2 class="text-lg font-semibold text-emerald-950">还差一步：验证邮箱</h2>
+          <h2 class="text-lg font-semibold text-emerald-950">{{ AUTH_COPY.verificationTitle }}</h2>
           <p class="mt-2 text-sm leading-6 text-emerald-900">
-            我们已向
-            <span class="font-semibold">{{ registeredEmail }}</span>
-            发送了一封验证邮件。请打开邮箱，点击邮件中的<strong>确认/验证链接</strong>完成认证。
+            {{ verificationBody }}
           </p>
-          <ol class="mt-4 space-y-2 text-sm text-emerald-900">
-            <li>1. 打开注册邮箱（Gmail 请同时查看「垃圾邮件」）</li>
-            <li>2. 找到标题含「Confirm your signup」或「确认注册」的邮件</li>
-            <li>3. 点击邮件里的验证链接</li>
-            <li>4. 验证完成后，返回本站登录</li>
-          </ol>
-          <router-link
-            to="/auth/login"
-            class="mt-5 inline-flex h-10 items-center rounded-lg bg-emerald-700 px-4 text-sm font-semibold text-white hover:bg-emerald-800"
-          >
-            我已验证，去登录
-          </router-link>
+          <p class="mt-3 text-xs leading-5 text-emerald-800/90">
+            {{ AUTH_COPY.verificationHint }}
+          </p>
+
+          <p v-if="errorMessage" class="mt-3 text-sm text-red-600">{{ errorMessage }}</p>
+
+          <div class="mt-5 flex flex-wrap gap-3">
+            <button
+              type="button"
+              class="inline-flex h-10 items-center rounded-lg border border-emerald-300 bg-white px-4 text-sm font-medium text-emerald-800 hover:bg-emerald-100 disabled:opacity-60"
+              :disabled="isResending || resendCooldown > 0"
+              @click="handleResend"
+            >
+              {{ resendLabel }}
+            </button>
+            <router-link
+              to="/auth/login"
+              class="inline-flex h-10 items-center rounded-lg bg-emerald-700 px-4 text-sm font-semibold text-white hover:bg-emerald-800"
+            >
+              去登录
+            </router-link>
+          </div>
         </div>
 
         <form v-else class="mt-6 space-y-4" @submit.prevent="handleSubmit">
@@ -159,13 +238,13 @@ async function handleSubmit() {
           <button
             type="submit"
             class="h-11 w-full rounded-lg bg-indigo-600 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-60"
-            :disabled="isSubmitting || !isSupabaseConfigured"
+            :disabled="isSubmitting || authLoading || !isSupabaseConfigured"
           >
             {{ isSubmitting ? '注册中...' : '注册' }}
           </button>
         </form>
 
-        <p class="mt-6 text-center text-sm text-slate-600">
+        <p v-if="!verificationPending" class="mt-6 text-center text-sm text-slate-600">
           已有账号？
           <router-link to="/auth/login" class="font-medium text-indigo-700 hover:text-indigo-800">
             去登录

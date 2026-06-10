@@ -1,17 +1,78 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '../../composables/useAuth.js'
 import { formatAuthError, AUTH_COPY } from '../../utils/authMessages.js'
 import { showToast } from '../../utils/toast.js'
 
 const router = useRouter()
-const { signIn, isSupabaseConfigured } = useAuth()
+const { signIn, resendVerificationEmail, isSupabaseConfigured, initialized, loading: authLoading } = useAuth()
 
 const email = ref('')
 const password = ref('')
 const isSubmitting = ref(false)
+const isResending = ref(false)
+const resendCooldown = ref(0)
 const errorMessage = ref('')
+
+let resendTimer = null
+
+const showVerificationHelp = computed(() => errorMessage.value.includes('验证'))
+
+const resendLabel = computed(() => {
+  if (isResending.value) {
+    return '发送中...'
+  }
+
+  if (resendCooldown.value > 0) {
+    return AUTH_COPY.verificationResendWait.replace('{seconds}', String(resendCooldown.value))
+  }
+
+  return '重发验证邮件'
+})
+
+onBeforeUnmount(() => {
+  if (resendTimer) {
+    clearInterval(resendTimer)
+  }
+})
+
+function startResendCooldown(seconds = 60) {
+  resendCooldown.value = seconds
+
+  if (resendTimer) {
+    clearInterval(resendTimer)
+  }
+
+  resendTimer = setInterval(() => {
+    resendCooldown.value -= 1
+
+    if (resendCooldown.value <= 0) {
+      clearInterval(resendTimer)
+      resendTimer = null
+    }
+  }, 1000)
+}
+
+async function handleResend() {
+  if (isResending.value || resendCooldown.value > 0 || !email.value.trim()) {
+    return
+  }
+
+  isResending.value = true
+
+  const { error } = await resendVerificationEmail(email.value.trim())
+
+  isResending.value = false
+
+  if (error) {
+    showToast(formatAuthError(error, '重发失败，请稍后再试。'), { type: 'error' })
+    return
+  }
+
+  showToast(AUTH_COPY.verificationResent, { type: 'success' })
+  startResendCooldown(60)
+}
 
 async function handleSubmit() {
   errorMessage.value = ''
@@ -57,10 +118,17 @@ async function handleSubmit() {
         </p>
 
         <div
-          v-if="!isSupabaseConfigured"
+          v-if="initialized && !isSupabaseConfigured"
           class="mt-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
         >
-          {{ AUTH_COPY.devConfigMissing }}
+          {{ AUTH_COPY.serviceUnavailable }}
+        </div>
+
+        <div
+          v-else-if="authLoading"
+          class="mt-5 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600"
+        >
+          正在连接账号服务...
         </div>
 
         <form class="mt-6 space-y-4" @submit.prevent="handleSubmit">
@@ -89,19 +157,22 @@ async function handleSubmit() {
           </div>
 
           <p v-if="errorMessage" class="text-sm text-red-600">{{ errorMessage }}</p>
-          <p
-            v-if="errorMessage.includes('验证')"
-            class="text-sm text-slate-600"
-          >
-            如果找不到邮件，请检查垃圾箱，或回到
-            <router-link to="/auth/register" class="font-medium text-indigo-700 hover:text-indigo-800">注册页</router-link>
-            重新发送验证邮件。
-          </p>
+          <div v-if="showVerificationHelp" class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
+            <p class="text-sm text-slate-600">{{ AUTH_COPY.verificationHint }}</p>
+            <button
+              type="button"
+              class="mt-3 inline-flex h-9 items-center rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-100 disabled:opacity-60"
+              :disabled="isResending || resendCooldown > 0 || !email.trim()"
+              @click="handleResend"
+            >
+              {{ resendLabel }}
+            </button>
+          </div>
 
           <button
             type="submit"
             class="h-11 w-full rounded-lg bg-indigo-600 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:opacity-60"
-            :disabled="isSubmitting || !isSupabaseConfigured"
+            :disabled="isSubmitting || authLoading || !isSupabaseConfigured"
           >
             {{ isSubmitting ? '登录中...' : '登录' }}
           </button>

@@ -9,22 +9,14 @@ defineProps({
 const { isInternal } = useAuth()
 
 function canOpenModule(module) {
-  if (!module.locked) {
-    return true
+  if (module.external) {
+    return !module.requiresInternal || isInternal.value
   }
 
-  if (!module.external) {
-    return true
-  }
-
-  return isInternal.value
+  return true
 }
 
 function moduleCta(module) {
-  if (module.external && !canOpenModule(module)) {
-    return WORKSPACE_CTA.locked
-  }
-
   return module.external ? WORKSPACE_CTA.open : WORKSPACE_CTA.enter
 }
 </script>
@@ -54,9 +46,9 @@ function moduleCta(module) {
           v-for="module in section.modules"
           :key="module.id"
           :to="module.external || !module.to ? undefined : module.to"
-          :href="module.external && canOpenModule(module) ? module.href : undefined"
-          :target="module.external && canOpenModule(module) ? '_blank' : undefined"
-          :rel="module.external && canOpenModule(module) ? 'noopener noreferrer' : undefined"
+          :href="module.external ? module.href : undefined"
+          :target="module.external ? '_blank' : undefined"
+          :rel="module.external ? 'noopener noreferrer' : undefined"
           :aria-disabled="module.locked && !canOpenModule(module) ? 'true' : undefined"
           class="group rounded-3xl border border-white/70 bg-white/90 shadow-lg transition-all duration-300"
           :class="[
@@ -120,20 +112,9 @@ function moduleCta(module) {
               <path d="M8 11V8a4 4 0 0 1 8 0v3" />
             </svg>
             <span>{{ moduleCta(module) }}</span>
-            <svg
-              v-if="module.external && canOpenModule(module)"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              class="h-4 w-4 shrink-0 opacity-80 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-              aria-hidden="true"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M4.25 5.5a.75.75 0 01.75-.75h8a.75.75 0 01.75.75v8a.75.75 0 01-1.5 0V7.56l-6.22 6.22a.75.75 0 11-1.06-1.06l6.22-6.22H5a.75.75 0 010-1.5z"
-                clip-rule="evenodd"
-              />
-            </svg>
+            <span v-if="module.external" class="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+              ↗
+            </span>
             <span v-else class="transition-transform group-hover:translate-x-1">→</span>
           </div>
         </component>

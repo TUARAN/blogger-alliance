@@ -4,7 +4,6 @@ import App from './App.vue'
 import AppNav from './components/AppNav.vue'
 import AuthNavActions from './components/AuthNavActions.vue'
 import { useAuth } from './composables/useAuth.js'
-import { isSupabaseConfigured } from './lib/supabase.js'
 import { CLOUDCOST_PATH, isCloudCostHost } from './utils/cloudcostHost.js'
 import './style.css'
 
@@ -117,12 +116,12 @@ router.beforeEach(async (to) => {
     }
   }
 
-  if (!isSupabaseConfigured) {
+  const { initAuth, isAuthenticated, isInternal, isAdmin, isSupabaseConfigured } = useAuth()
+  await initAuth()
+
+  if (!isSupabaseConfigured.value) {
     return true
   }
-
-  const { initAuth, isAuthenticated, isInternal, isAdmin, getAccessToken } = useAuth()
-  await initAuth()
 
   if (to.meta.requiresAuth || requiresAuth(to.path)) {
     if (!isAuthenticated.value) {

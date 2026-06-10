@@ -64,6 +64,14 @@ const releases = [
     summary:
       '上线注册/登录/账号中心，以 Supabase 角色（普通成员、内部成员、管理员）替代内部访问凭证；Worker API 改为 JWT 鉴权，优化权限与邮箱验证引导，正式站点 https://blogger-alliance.cn/。',
     commits: ['supabase auth', 'role guard', 'worker jwt', 'auth copy']
+  },
+  {
+    version: 'v0.10.0',
+    period: '2026-06-10',
+    title: '工作台板块整理与数据架构说明',
+    summary:
+      '工作台拆为公开板块与内部板块，统一功能命名并新增 SyncBlog 同步分发入口；明确 Supabase 与 D1 分工——Supabase 负责账号与角色鉴权，D1 仍是商单、数据报告、年度总览等业务数据的唯一存储，Worker 验 JWT 后读写 D1，短期内仍需保留双库。',
+    commits: ['c9001d1 workspace', 'workspace registry', 'auth nav fix']
   }
 ]
 
@@ -316,13 +324,15 @@ const weeklyProgress = [
   {
     week: '2026 W24',
     period: '06-08 至 06-14',
-    focus: '账号体系与权限重构',
+    focus: '账号体系、工作台与数据架构',
     highlights: [
       '接入 Supabase 注册/登录/账号中心，正式站点统一为 https://blogger-alliance.cn/。',
       '内部数据访问改为角色权限控制，移除导航栏机器人入口与旧凭证解锁流程。',
-      '注册邮箱验证、权限不足、登录失败等提示语全面中文化。'
+      '注册邮箱验证、权限不足、登录失败等提示语全面中文化。',
+      '工作台拆为公开/内部板块，统一命名并新增 SyncBlog 同步分发入口。',
+      '明确 Supabase（账号/角色）与 D1（商单/报告/年度总览）分工：鉴权走 Supabase，业务数据仍存 D1，短期需保留双库。'
     ],
-    commits: ['supabase auth', 'role guard', 'worker jwt', 'auth copy']
+    commits: ['supabase auth', 'role guard', 'c9001d1 workspace']
   }
 ]
 
@@ -374,7 +384,8 @@ const timelineOrder = [
   { type: 'major', key: 'v0.8.0' },
   { type: 'minor', key: '2026 W23' },
   { type: 'minor', key: '2026 W24' },
-  { type: 'major', key: 'v0.9.0' }
+  { type: 'major', key: 'v0.9.0' },
+  { type: 'major', key: 'v0.10.0' }
 ]
 
 const timelineItems = timelineOrder

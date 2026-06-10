@@ -3,7 +3,7 @@
  * - 分区：公开板块 / 内部板块
  * - 卡片 title：功能名（2–6 字）
  * - 卡片 tag：功能类型（四字短语，不重复写权限）
- * - 入口：站内「进入」、外链「打开」、无权限「需内部权限」
+ * - 入口：站内「进入」、外链「打开」、无权限「需内部权限」（仅 locked 且非外链）
  */
 
 export const WORKSPACE_CTA = {
@@ -16,7 +16,7 @@ export const WORKSPACE_SECTIONS = [
   {
     id: 'public',
     title: '公开板块',
-    description: '联盟对外内容与知识资源，无需登录即可访问。',
+    description: '联盟对外内容、知识资源与外部协作工具，无需登录即可访问。',
     modules: [
       {
         id: 'services',
@@ -73,13 +73,28 @@ export const WORKSPACE_SECTIONS = [
           tag: 'bg-slate-100 text-slate-700',
           cta: 'text-slate-700'
         }
+      },
+      {
+        id: 'syncblog',
+        title: '同步分发',
+        description: 'syncblog.cn 多平台内容同步与分发，配合台账录入独立报告。',
+        tag: '外部工具',
+        icon: '🔄',
+        external: true,
+        href: 'https://syncblog.cn',
+        theme: {
+          shadow: 'shadow-violet-100/40',
+          icon: 'bg-violet-100',
+          tag: 'bg-violet-50 text-violet-700',
+          cta: 'text-violet-700'
+        }
       }
     ]
   },
   {
     id: 'internal',
     title: '内部板块',
-    description: '联盟协作与数据工具，需登录并由管理员开通内部权限后使用。',
+    description: '数据台账需登录并由管理员开通内部权限后使用。',
     locked: true,
     modules: [
       {
@@ -95,22 +110,6 @@ export const WORKSPACE_SECTIONS = [
           icon: 'bg-indigo-100',
           tag: 'bg-indigo-50 text-indigo-700',
           cta: 'text-indigo-700'
-        }
-      },
-      {
-        id: 'syncblog',
-        title: '同步分发',
-        description: 'syncblog.cn 多平台内容同步与分发，配合台账录入独立报告。',
-        tag: '内容工具',
-        icon: '🔄',
-        locked: true,
-        external: true,
-        href: 'https://syncblog.cn',
-        theme: {
-          shadow: 'shadow-violet-100/40',
-          icon: 'bg-violet-100',
-          tag: 'bg-violet-50 text-violet-700',
-          cta: 'text-violet-700'
         }
       }
     ]
