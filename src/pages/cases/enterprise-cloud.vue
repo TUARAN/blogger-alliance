@@ -16,10 +16,10 @@ const model = mockCaseModels['enterprise-cloud']
         rel="noopener noreferrer"
         class="inline-flex items-center justify-center rounded-full bg-emerald-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-800"
       >
-        打开联运落地页 →
+        打开渠道咨询页 →
       </a>
       <router-link to="/tob/services/cloud-cost" class="text-sm font-medium text-indigo-700 underline-offset-4 hover:underline">
-        专项介绍 →
+        渠道服务说明 →
       </router-link>
     </div>
   </CasePageShell>

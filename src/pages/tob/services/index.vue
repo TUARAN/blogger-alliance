@@ -6,14 +6,14 @@
       <header class="mb-8">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900">服务介绍</h1>
         <p class="mt-3 text-gray-600 max-w-3xl">
-          博主联盟提供推文、引流、社群三类常规合作，以及 AI Access、出海云访问、大厂云服务三类专题推广。下方为报价与选型总览；每一类服务的完整说明、流程与交付已单独成页，可在表格中进入。
+          博主联盟提供推文、引流、社群三类推广合作，AI Access 与出海云访问两类专题联运，以及单独一类大厂云服务渠道——联盟本身就是云厂商认证渠道，提供官方充值与按量返利，不是内容推广。下方为报价与选型总览。
         </p>
       </header>
 
       <ServiceOverviewSection />
 
       <section class="mt-10 rounded-2xl border border-amber-200/80 bg-amber-50/40 px-5 py-4 text-sm leading-7 text-amber-950">
-        <span class="font-semibold">专题服务说明：</span>AI Access、出海云访问与大厂云服务强调持续内容资产与高提成分佣，合作前会单独评估赛道与合规口径。
+        <span class="font-semibold">说明：</span>AI Access、出海云访问为专题联运分佣；大厂云服务为渠道服务，联盟直接向客户提供云厂商官方充值渠道，与推广类合作路径不同。
       </section>
     </main>
 

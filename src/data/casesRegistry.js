@@ -77,10 +77,10 @@ export const casesHubItems = [
     path: '/cases/enterprise-cloud',
     servicePath: caseServicePaths['enterprise-cloud'],
     isMock: true,
-    badge: '联运模板',
-    blurb: '云服务渠道团购模式：按用量返利、阶梯越高返越多，联盟作为云厂商渠道商之一。',
-    proofPoints: ['渠道商身份', '按量返利', '阶梯加码'],
-    scenario: '云渠道 / 企业采购'
+    badge: '渠道服务',
+    blurb: '联盟即云厂商认证渠道：官方充值、按量返利、用量越大阶梯越高，非内容推广。',
+    proofPoints: ['联盟即渠道', '按量返利', '阶梯加码'],
+    scenario: '云采购 / 官方充值'
   }
 ]
 
@@ -222,18 +222,18 @@ export const mockCaseModels = {
     theme: 'sky'
   },
   'enterprise-cloud': {
-    eyebrow: 'Cloud Channel Rebate',
-    headline: '大厂云服务：渠道团购式返利合作',
+    eyebrow: 'Cloud Channel Service',
+    headline: '大厂云服务：联盟提供的采购渠道',
     intro:
-      '博主联盟是阿里云、腾讯云、华为云、火山引擎等头部云厂商的认证渠道商之一。合作模式类似「云服务团购」：客户通过联盟专属链接在官方充值，用多少消费、拿多少返利；用量越大，可进入更高返利阶梯。',
-    statusBadge: '渠道合作',
+      '这项服务和推文、引流、社群不同——博主联盟本身就是阿里云、腾讯云、华为云、火山引擎的认证渠道商，直接向客户提供官方充值渠道，而不是帮云厂商做内容推广。模式类似「云服务团购」：通过联盟专属链接在官方充值，用多少消费、拿多少返利；用量越大，进入更高返利阶梯。',
+    statusBadge: '渠道服务',
     steps: [
-      { title: '渠道商身份', description: '联盟作为云厂商授权渠道之一，充值仍走官方页面，发票与售后由云厂商提供。' },
-      { title: '专属充值链接', description: '顾问按云厂商与账号情况生成官方归因链接，确保消费计入渠道。' },
-      { title: '按量返利', description: '实际云消费按渠道政策返还，用多少、拿多少，不做一口价硬广。' },
+      { title: '联盟即渠道', description: '找博主联盟 = 直接走云厂商官方渠道价，不是另找推广代理投广告。' },
+      { title: '专属充值链接', description: '顾问按云厂商与账号生成官方归因链接，充值、发票、售后仍在云厂商完成。' },
+      { title: '按量返利', description: '实际云消费按渠道政策返还，用多少、返多少，不是按曝光或点击结算。' },
       { title: '阶梯加码', description: '月/年用量越高，匹配更高返利档位，用得越多、返利比例越高。' },
-      { title: '选型与体检', description: '可选多云选型内容与免费账单体检，帮团队控本后再充值。' },
-      { title: '透明结算', description: '返利明细、续费跟踪与争议处理 SLA，支持品牌与渠道方对账。' }
+      { title: '选型与体检', description: '可选多云选型建议与免费账单体检，帮团队在充值前控本。' },
+      { title: '透明结算', description: '返利明细与续费跟踪清晰可查，长期消费仍计入渠道。' }
     ],
     panels: [
       {
@@ -247,14 +247,14 @@ export const mockCaseModels = {
         ]
       },
       {
-        kicker: 'Channel Partner',
-        title: '团购式渠道合作',
-        subtitle: '强调「联盟是渠道商之一 + 按量返利 + 阶梯越高返越多」，而非一次性曝光交付。',
+        kicker: 'Not Promotion',
+        title: '渠道服务，不是推广合作',
+        subtitle: '与推文、引流、社群等「帮品牌做传播」的交付方式明确区分。',
         lines: [
-          '博主联盟 = 云服务渠道商（非云厂商本身）',
-          '客户官方充值 → 消费归因 → 按量返利',
-          '用量越大 → 更高返利阶梯 → 长期续费仍计渠道',
-          '内容获客 + 专属链接 + 返利结算 = 完整闭环'
+          '推广类：联盟帮品牌写内容、投点击、运营社群',
+          '渠道类：联盟自己就是云厂商渠道，提供官方充值入口',
+          '客户找我们 → 拿专属链接 → 官方充值 → 按量返利',
+          '不做硬广包量，也不按 CPM / CPC 结算云采购'
         ]
       }
     ],

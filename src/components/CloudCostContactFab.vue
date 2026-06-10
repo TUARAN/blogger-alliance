@@ -5,7 +5,7 @@ import qrcodeImage from '../img/qrcode1.jpg'
 defineProps({
   label: {
     type: String,
-    default: '领优惠链接'
+    default: '领官方充值链接'
   }
 })
 

@@ -48,21 +48,21 @@ const steps = [
     icon: '📝'
   },
   {
-    title: '拿到专属优惠链接',
-    desc: '顾问会根据你的云厂商和账号，生成一条官方充值 / 新购链接。',
+    title: '拿到专属官方充值链接',
+    desc: '顾问会根据你的云厂商和账号，生成一条带渠道归因的官方充值 / 新购链接。',
     icon: '🔗'
   },
   {
     title: '去官网下单就行',
-    desc: '用这条链接充值或购买，价格和售后跟云厂商官网一样正规，只是更省一点。',
+    desc: '用这条链接在官网充值或购买，仍是官方账号、发票与售后，同时享受渠道价与按量返利。',
     icon: '✅'
   }
 ]
 
 const benefits = [
   {
-    title: '比官网直充更省一点',
-    desc: '走合作渠道价，具体能省多少看云厂商和产品，买之前可以先问清楚。'
+    title: '官方渠道价 + 按量返利',
+    desc: '博主联盟即云厂商认证渠道，用多少消费、返多少；用量越大，返利阶梯越高。'
   },
   {
     title: '四家大厂云都能问',
@@ -85,7 +85,7 @@ const faqs = [
   },
   {
     q: '和自己去官网买有什么区别？',
-    a: '买的还是同一家云、同样的服务，发票和售后也找官方。区别是我们可以帮你拿到渠道折扣，有人帮你看账单、选型。'
+    a: '买的还是同一家云、同样的服务，发票和售后也找官方。区别是博主联盟本身就是渠道商，能给你官方渠道价、按量返利，以及账单选型建议。'
   },
   {
     q: '个人开发者 / 学生能用吗？',
@@ -112,7 +112,7 @@ function buildLeadMessage() {
     `想了解：${labelOf(needTypes, form.needType)}`,
     form.note.trim() ? `补充：${form.note.trim()}` : '',
     '',
-    '麻烦帮我生成专属优惠链接，谢谢～'
+    '麻烦帮我生成专属官方充值链接，谢谢～'
   ]
     .filter(Boolean)
     .join('\n')
@@ -175,9 +175,9 @@ function scrollTo(id) {
 }
 
 onMounted(() => {
-  document.title = '大厂云服务 · 云服务器更划算 | 博主联盟'
+  document.title = '大厂云服务 · 官方渠道充值 | 博主联盟'
   const description =
-    '个人开发者和小团队也能用的大厂云优惠通道。阿里云、腾讯云、华为云、火山引擎，联系顾问拿专属链接，官网充值更省钱。'
+    '博主联盟是阿里云、腾讯云、华为云、火山引擎认证渠道，提供官方充值链接与按量返利，不是内容推广。'
 
   let meta = document.querySelector('meta[name="description"]')
   if (!meta) {
@@ -202,7 +202,7 @@ onMounted(() => {
           </div>
           <div>
             <div class="text-sm font-semibold tracking-tight">大厂云服务</div>
-            <div class="text-[11px] text-slate-500">博主联盟 · 帮你省点云钱</div>
+            <div class="text-[11px] text-slate-500">联盟即渠道 · 非推广合作</div>
           </div>
         </div>
         <nav class="hidden items-center gap-5 text-sm text-slate-600 md:flex">
@@ -215,7 +215,7 @@ onMounted(() => {
           class="inline-flex min-h-10 items-center rounded-full bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800"
           @click="scrollTo('apply')"
         >
-          领优惠链接
+          领官方充值链接
         </button>
       </div>
     </header>
@@ -230,7 +230,7 @@ onMounted(() => {
         <div class="relative mx-auto max-w-6xl">
           <div class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-800">
             <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-            博主联盟帮你对接大厂云优惠
+            博主联盟 · 云服务官方渠道
           </div>
 
           <h1 class="mt-5 max-w-4xl text-4xl font-bold tracking-tight text-slate-900 md:text-5xl lg:text-6xl">
@@ -240,9 +240,9 @@ onMounted(() => {
           </h1>
 
           <p class="mt-5 max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
-            不管你是个人开发者、学生党 side project，还是小团队创业——先联系我们，拿到一条
-            <strong class="font-semibold text-slate-800">专属优惠链接</strong>，
-            再去官网充值或买服务器。还是官方账号、官方发票、官方客服，只是价格更友好。
+            不管你是个人开发者、学生党 side project，还是小团队创业——博主联盟就是云厂商认证渠道，先联系我们拿
+            <strong class="font-semibold text-slate-800">专属官方充值链接</strong>，
+            再去官网充值或买服务器。还是官方账号、官方发票、官方客服，享受渠道价与按量返利。
           </p>
 
           <div class="mt-6 flex flex-wrap gap-2 text-xs">
@@ -257,7 +257,7 @@ onMounted(() => {
               class="inline-flex min-h-11 items-center gap-2 rounded-full bg-emerald-700 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200/50 hover:bg-emerald-800"
               @click="scrollTo('apply')"
             >
-              我要领优惠链接
+              我要领官方充值链接
               <span aria-hidden="true">→</span>
             </button>
             <button
@@ -334,7 +334,7 @@ onMounted(() => {
         <div class="mx-auto max-w-6xl">
           <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
             <div>
-              <h2 class="text-2xl font-bold text-slate-900 md:text-3xl">填个表，领优惠链接</h2>
+              <h2 class="text-2xl font-bold text-slate-900 md:text-3xl">填个表，领官方充值链接</h2>
               <p class="mt-3 text-sm leading-7 text-slate-600">
                 填好后会自动复制一段话，你微信发给
                 <span class="font-medium text-slate-800">atar24</span>
@@ -371,7 +371,7 @@ onMounted(() => {
                     type="text"
                     required
                     class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
-                    placeholder="方便发你优惠链接"
+                    placeholder="方便发你官方充值链接"
                   />
                 </label>
 
@@ -439,7 +439,7 @@ onMounted(() => {
             <div id="contact" class="scroll-mt-24 rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm">
               <h3 class="text-lg font-semibold text-slate-900">直接微信聊</h3>
               <p class="mt-2 text-sm leading-7 text-slate-600">
-                扫码加微信，说一下用的哪家云、大概花多少，我们发你优惠链接。
+                扫码加微信，说一下用的哪家云、大概花多少，我们发你官方充值链接。
               </p>
               <div class="mt-4 rounded-xl bg-slate-50 p-3">
                 <img

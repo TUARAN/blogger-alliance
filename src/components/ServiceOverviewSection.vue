@@ -10,7 +10,7 @@
       </div>
     </div>
     <p class="mt-4 max-w-4xl text-sm leading-7 text-gray-600">
-      推文、引流、社群三类常规合作，以及 AI Access、出海云访问、大厂云服务三类专题推广。按目标选型：要曝光走推文，要可量化点击走引流，要长期私域走社群；要持续内容资产 + 高提成分佣，看下方专题联运。各服务可单选，也可组合执行。点击「专项介绍」查看完整说明，「查看案例」浏览合作呈现方式。
+      推文、引流、社群三类<strong class="font-medium text-gray-800">推广合作</strong>；AI Access、出海云访问两类<strong class="font-medium text-gray-800">专题联运</strong>；大厂云服务单独一类<strong class="font-medium text-gray-800">渠道服务</strong>——联盟本身就是云厂商认证渠道，提供官方充值与按量返利，不是帮云厂商做推广。按目标选型：要曝光走推文，要点击走引流，要私域走社群；要云采购渠道价走大厂云服务。
     </p>
 
     <div class="mt-6 grid gap-4 lg:grid-cols-3">
@@ -242,25 +242,25 @@
               <div class="inline-flex items-center gap-2 font-semibold text-gray-900">
                 <span>☁️</span><span>大厂云服务</span>
               </div>
-              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-amber-100 border border-amber-200 px-2.5 py-0.5 text-[11px] font-medium text-amber-800">联运分佣</span></div>
+              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-emerald-100 border border-emerald-200 px-2.5 py-0.5 text-[11px] font-medium text-emerald-800">渠道服务</span></div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
-              <div>个人 / 小团队 / 企业 · 四大云厂商渠道推广</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">渠道折扣 + 帮看账单 + 专属充值链接（官网下单）</div>
+              <div>个人 / 小团队 / 企业 · 联盟即云厂商官方渠道</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">非推广合作：专属充值链接 + 按量返利 + 账单体检</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
-              <div class="font-semibold text-gray-900">零硬投入 · 按成交分佣</div>
-              <div class="mt-1.5">渠道折扣 + 联运分成</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">面向企业 / 技术团队云采购场景</div>
-              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>建议 ≥ 3 个月</div>
+              <div class="font-semibold text-gray-900">官方充值 · 按量返利</div>
+              <div class="mt-1.5">用多少返多少 · 用量越大阶梯越高</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">面向有真实云采购 / 续费需求的团队</div>
+              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>长期有效</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
-              <div>咨询线索 + 专属链接转化</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">沉淀：联运落地页 + 选型内容 + 账单体检</div>
+              <div>云消费归因 + 返利阶梯</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">沉淀：官方充值链接 + 渠道返利政策</div>
             </td>
             <td class="px-4 py-4 align-top">
               <div class="flex flex-col gap-1.5 text-sm">
-                <router-link to="/tob/services/cloud-cost" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍 →</router-link>
+                <router-link to="/tob/services/cloud-cost" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">渠道说明 →</router-link>
                 <router-link to="/cases/enterprise-cloud" class="font-medium text-slate-600 hover:text-indigo-700 hover:underline whitespace-nowrap">查看案例 →</router-link>
               </div>
             </td>
@@ -275,7 +275,7 @@
         v-for="row in mobileRows"
         :key="row.title"
         class="rounded-xl border border-slate-200 bg-white p-4"
-        :class="row.theme === 'special' ? 'border-amber-200 bg-amber-50/30' : ''"
+        :class="row.theme === 'special' ? 'border-amber-200 bg-amber-50/30' : row.theme === 'channel' ? 'border-emerald-200 bg-emerald-50/30' : ''"
       >
         <div class="flex items-center justify-between gap-3">
           <div>
@@ -316,7 +316,7 @@
         </div>
 
         <div class="mt-4 flex flex-wrap gap-3 text-sm">
-          <router-link :to="row.detailTo" class="font-medium text-indigo-700 hover:underline">专项介绍 →</router-link>
+          <router-link :to="row.detailTo" class="font-medium text-indigo-700 hover:underline">{{ row.detailLabel || '专项介绍 →' }}</router-link>
           <a
             v-if="row.caseTo?.startsWith('http')"
             :href="row.caseTo"
@@ -333,15 +333,15 @@
     <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-gray-600">
       <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-3 py-2.5">
         <div class="font-semibold text-slate-700 mb-1">按目标选</div>
-        一次性发声 → 推文；持续要点击 / 线索 → 引流；长期沉淀 → 社群；长期高提成 → 专题联运。
+        一次性发声 → 推文；持续要点击 / 线索 → 引流；长期沉淀 → 社群；云采购官方渠道 → 大厂云服务；长期高提成 → AI Access / 出海云。
       </div>
       <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-3 py-2.5">
         <div class="font-semibold text-slate-700 mb-1">按预算选</div>
-        零硬投入 → 专题分佣；项目预算可控 → 社群；效果结算 → CPC；单次预算 → 推文。
+        零硬投入 → 专题联运分佣；云采购走官方渠道 → 大厂云服务；项目预算可控 → 社群；效果结算 → CPC；单次预算 → 推文。
       </div>
       <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-3 py-2.5">
         <div class="font-semibold text-slate-700 mb-1">按周期选</div>
-        单篇 / 排期 → 推文；2 周到几个月 → 引流 / 社群；3 个月以上长期协同 → 专题联运。
+        单篇 / 排期 → 推文；2 周到几个月 → 引流 / 社群；3 个月以上长期协同 → 专题联运；云采购渠道 → 大厂云服务（长期有效）。
       </div>
     </div>
 
@@ -471,18 +471,19 @@ const mobileRows = [
   {
     icon: '☁️',
     title: '大厂云服务',
-    mode: '联运分佣',
-    modeClass: modeClassMap.affiliate,
-    theme: 'special',
-    scene: '个人 / 小团队 / 企业 · 四大云厂商渠道推广',
-    sceneNote: '渠道折扣 + 帮看账单 + 专属充值链接（官网下单）',
-    startsAt: '零硬投入',
-    cycle: '建议 ≥ 3 个月',
-    priceLines: ['渠道折扣 + 联运分成', '按成交结算'],
-    priceNote: '面向企业 / 技术团队云采购场景',
-    metrics: '咨询线索 + 专属链接转化',
-    asset: '联运落地页 + 选型内容 + 账单体检',
+    mode: '渠道服务',
+    modeClass: 'bg-emerald-100 border border-emerald-200 text-emerald-800',
+    theme: 'channel',
+    scene: '个人 / 小团队 / 企业 · 联盟即云厂商官方渠道',
+    sceneNote: '非推广合作：专属充值链接 + 按量返利 + 账单体检',
+    startsAt: '官方渠道价',
+    cycle: '长期有效',
+    priceLines: ['用多少消费 · 返多少', '用量越大 · 返利阶梯越高'],
+    priceNote: '面向有真实云采购 / 续费需求，不是内容推广交付',
+    metrics: '云消费归因 + 返利阶梯',
+    asset: '官方充值链接 + 渠道返利政策',
     detailTo: '/tob/services/cloud-cost',
+    detailLabel: '渠道说明 →',
     caseTo: '/cases/enterprise-cloud'
   }
 ]
