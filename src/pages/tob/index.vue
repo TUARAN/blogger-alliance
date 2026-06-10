@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-b from-indigo-50/50 via-white to-white">
-    <AppNav logo-to="/" />
+    <AppNav />
 
     <!-- Hero 区域 -->
     <section class="relative overflow-hidden">

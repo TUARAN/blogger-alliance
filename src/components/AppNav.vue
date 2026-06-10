@@ -1,16 +1,15 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const navLinks = [
-  { label: '介绍', to: '/tob/services' },
-  { label: '案例', to: '/cases' },
-  { label: '工作台', to: '/workspace' }
+  { label: '介绍', to: '/tob/services', matchPrefix: '/tob/services' },
+  { label: '案例', to: '/cases', matchPrefix: '/cases' },
+  { label: '工作台', to: '/workspace', matchPrefix: '/workspace' }
 ]
 
 defineProps({
-  logoTo: { type: String, default: '/tob' },
-  workspaceActive: { type: Boolean, default: false }
+  logoTo: { type: String, default: '/' }
 })
 
 const route = useRoute()
@@ -18,6 +17,22 @@ const mobileMenuOpen = ref(false)
 
 watch(() => route.fullPath, () => {
   mobileMenuOpen.value = false
+})
+
+function isLinkActive(item) {
+  const current = route.path || '/'
+  if (!item.matchPrefix) {
+    return current === item.to
+  }
+  return current === item.matchPrefix || current.startsWith(`${item.matchPrefix}/`)
+}
+
+const activeLinkLabels = computed(() => {
+  const map = {}
+  for (const item of navLinks) {
+    map[item.label] = isLinkActive(item)
+  }
+  return map
 })
 </script>
 
@@ -40,8 +55,9 @@ watch(() => route.fullPath, () => {
               v-for="item in navLinks"
               :key="item.label"
               :to="item.to"
+              :aria-current="activeLinkLabels[item.label] ? 'page' : undefined"
               class="relative whitespace-nowrap transition-colors hover:text-slate-900 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-slate-900 after:transition-all hover:after:w-full"
-              active-class="text-slate-900 after:w-full"
+              :class="activeLinkLabels[item.label] ? 'text-slate-900 after:w-full' : ''"
             >
               {{ item.label }}
             </router-link>
@@ -78,8 +94,9 @@ watch(() => route.fullPath, () => {
           v-for="item in navLinks"
           :key="item.label"
           :to="item.to"
+          :aria-current="activeLinkLabels[item.label] ? 'page' : undefined"
           class="flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-950"
-          active-class="bg-slate-100 text-slate-950"
+          :class="activeLinkLabels[item.label] ? 'bg-slate-100 text-slate-950' : ''"
         >
           {{ item.label }}
         </router-link>

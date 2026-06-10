@@ -83,14 +83,6 @@ export const CLOUD_PROMO_COPY_SNIPPETS = [
   }
 ]
 
-export const CLOUD_PROMO_TABS = [
-  { id: 'overview', label: '概览' },
-  { id: 'assets', label: '素材库' },
-  { id: 'templates', label: '模版与选题' },
-  { id: 'pipeline', label: '流水线' },
-  { id: 'distribution', label: '分发与回流' }
-]
-
 export const CLOUD_PROMO_TEMPLATE_META = {
   'long-form-guide': {
     label: '长文指南',

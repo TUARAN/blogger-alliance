@@ -35,7 +35,7 @@ const welcomeText = computed(() => {
 
 <template>
   <div class="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-blue-100">
-    <AppNav workspace-active />
+    <AppNav />
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
       <div class="max-w-3xl">

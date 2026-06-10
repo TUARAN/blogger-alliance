@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-green-50 to-blue-100">
-    <AppNav logo-to="/">
+    <AppNav>
       <template #links>
-        <router-link to="/tob" class="text-gray-600 hover:text-indigo-600 transition-colors font-medium text-base">
+        <router-link to="/" class="text-gray-600 hover:text-indigo-600 transition-colors font-medium text-base">
           博主联盟
         </router-link>
       </template>

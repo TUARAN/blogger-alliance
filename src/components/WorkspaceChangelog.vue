@@ -72,6 +72,20 @@ const releases = [
     summary:
       '工作台拆为公开板块与内部板块，统一功能命名并新增 SyncBlog 同步分发入口；明确 Supabase 与 D1 分工——Supabase 负责账号与角色鉴权，D1 仍是商单、数据报告、年度总览等业务数据的唯一存储，Worker 验 JWT 后读写 D1，短期内仍需保留双库。',
     commits: ['c9001d1 workspace', 'workspace registry', 'auth nav fix']
+  },
+  {
+    version: 'v0.11.0',
+    period: '2026-06-10',
+    title: '导航高亮收敛与云自推广中控台升级',
+    summary:
+      '顶部导航子页前缀高亮、移除 workspaceActive 死代码，并把 /tob 统一重定向到 /；路由权限改为 meta.requires 单一来源。云自推广中控台：planned 内容收进「路线图」标签页，选题预览稿、CTA 片段与文案片段全部可编辑后再复制，新增全平台 UTM 一键 TSV 导出与已发布文章扫描占位，模版切换与预览稿联动，并为管理员页面注入 robots noindex。',
+    commits: [
+      'AppNav prefix active',
+      'route meta guards',
+      'cloud-promo editable',
+      'cloud-promo utm tsv',
+      'cloud-promo published scan'
+    ]
   }
 ]
 
@@ -330,9 +344,17 @@ const weeklyProgress = [
       '内部数据访问改为角色权限控制，移除导航栏机器人入口与旧凭证解锁流程。',
       '注册邮箱验证、权限不足、登录失败等提示语全面中文化。',
       '工作台拆为公开/内部板块，统一命名并新增 SyncBlog 同步分发入口。',
-      '明确 Supabase（账号/角色）与 D1（商单/报告/年度总览）分工：鉴权走 Supabase，业务数据仍存 D1，短期需保留双库。'
+      '明确 Supabase（账号/角色）与 D1（商单/报告/年度总览）分工：鉴权走 Supabase，业务数据仍存 D1，短期需保留双库。',
+      'AppNav 顶部按 matchPrefix 高亮子页（/tob/services/*、/cases/*、/workspace/* 全程激活），删除未生效的 workspaceActive prop；/tob 统一重定向到 /，logo 默认指向 /。',
+      '路由权限收敛为 meta.requires=auth/internal/admin 单一来源，废弃 AUTH_REQUIRED_PREFIXES 等三处前缀表。',
+      '云自推广中控台：所有 planned 项目收进新增的「路线图」标签页，首屏只保留可执行操作。',
+      '云自推广：选题预览稿 / CTA 片段 / 文案片段全部可编辑，复制前可直接微调，配「重置」按钮恢复模版渲染结果。',
+      '云自推广：新增「全平台 UTM」一键 TSV 表格（juejin/csdn/zhihu/wechat/weibo/moment），可直接喂给 metrics:collect。',
+      '云自推广：扫描 content/aliyun/published/**/meta.json 渲染已发布文章列表，空目录下展示登记模版。',
+      '云自推广：模版侧栏切换后预览稿按新模版重新渲染，方便同选题对比不同呈现。',
+      '云自推广：管理员页面挂载时注入 <meta name="robots" content="noindex,nofollow">。'
     ],
-    commits: ['supabase auth', 'role guard', 'c9001d1 workspace']
+    commits: ['supabase auth', 'role guard', 'c9001d1 workspace', 'nav prefix active', 'route meta guards', 'cloud-promo refactor']
   }
 ]
 
@@ -385,7 +407,8 @@ const timelineOrder = [
   { type: 'minor', key: '2026 W23' },
   { type: 'minor', key: '2026 W24' },
   { type: 'major', key: 'v0.9.0' },
-  { type: 'major', key: 'v0.10.0' }
+  { type: 'major', key: 'v0.10.0' },
+  { type: 'major', key: 'v0.11.0' }
 ]
 
 const timelineItems = timelineOrder

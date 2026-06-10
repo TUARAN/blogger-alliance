@@ -7,18 +7,19 @@ import { useAuth } from './composables/useAuth.js'
 import { CLOUDCOST_PATH, isCloudCostHost } from './utils/cloudcostHost.js'
 import './style.css'
 
-const AUTH_REQUIRED_PREFIXES = [
-  '/account',
-  '/tob/internal',
-  '/annual-report-2025',
-  '/tob/reports',
-  '/workspace/cloud-promo'
-]
+/**
+ * 路由权限策略：
+ * - meta.requires = 'auth'     → 仅需登录
+ * - meta.requires = 'internal' → 登录 + 内部成员（隐含 'auth'）
+ * - meta.requires = 'admin'    → 登录 + 管理员（隐含 'auth'）
+ * - meta.guestOnly = true      → 已登录用户自动跳转工作台
+ * 新增受限路由时只需在路由定义里加 meta.requires，无需再维护单独的前缀表。
+ */
 
 // 路由配置
 const routes = [
   { path: '/', component: () => import('./pages/tob/index.vue') },
-  { path: '/tob', component: () => import('./pages/tob/index.vue') },
+  { path: '/tob', redirect: '/' },
   { path: '/cases', component: () => import('./pages/cases/index.vue') },
   { path: '/cases/tweet', component: () => import('./pages/cases/tweet.vue') },
   { path: '/cases/cpc', component: () => import('./pages/cases/cpc.vue') },
@@ -26,7 +27,11 @@ const routes = [
   { path: '/cases/ai-access', component: () => import('./pages/cases/ai-access.vue') },
   { path: '/cases/oversea-cloud', component: () => import('./pages/cases/oversea-cloud.vue') },
   { path: '/cases/enterprise-cloud', component: () => import('./pages/cases/enterprise-cloud.vue') },
-  { path: '/tob/internal', component: () => import('./pages/tob/internal.vue') },
+  {
+    path: '/tob/internal',
+    component: () => import('./pages/tob/internal.vue'),
+    meta: { requires: 'internal' }
+  },
   {
     path: '/tob/deals',
     redirect: (to) => ({ path: '/tob/internal', query: { ...to.query, tab: 'deals' } })
@@ -35,7 +40,11 @@ const routes = [
     path: '/tob/reports',
     redirect: (to) => ({ path: '/tob/internal', query: { ...to.query, tab: 'reports' } })
   },
-  { path: '/tob/reports/:id', component: () => import('./pages/tob/report-detail.vue') },
+  {
+    path: '/tob/reports/:id',
+    component: () => import('./pages/tob/report-detail.vue'),
+    meta: { requires: 'internal' }
+  },
   { path: '/tob/services', component: () => import('./pages/tob/services/index.vue') },
   { path: '/tob/services/tweet', component: () => import('./pages/tob/services/tweet.vue') },
   { path: '/tob/services/cpc', component: () => import('./pages/tob/services/cpc.vue') },
@@ -46,7 +55,11 @@ const routes = [
   { path: '/tob/services/enterprise-cloud', redirect: '/tob/services/cloud-cost' },
   { path: '/cloudcost', component: () => import('./pages/cloudcost/index.vue') },
   { path: '/matrix', redirect: '/workspace' },
-  { path: '/annual-report-2025', component: () => import('./pages/annual-report/index.vue') },
+  {
+    path: '/annual-report-2025',
+    component: () => import('./pages/annual-report/index.vue'),
+    meta: { requires: 'internal' }
+  },
   { path: '/workspace', component: () => import('./pages/workspace/index.vue') },
   { path: '/workspace/changelog', component: () => import('./pages/workspace/changelog.vue') },
   {
@@ -54,10 +67,18 @@ const routes = [
     redirect: (to) => ({ path: '/tob/internal', query: { ...to.query, tab: 'admin' } })
   },
   { path: '/workspace/web-llm', component: () => import('./pages/workspace/web-llm/index.vue') },
-  { path: '/workspace/cloud-promo', component: () => import('./pages/workspace/cloud-promo/index.vue') },
+  {
+    path: '/workspace/cloud-promo',
+    component: () => import('./pages/workspace/cloud-promo/index.vue'),
+    meta: { requires: 'admin' }
+  },
   { path: '/auth/login', component: () => import('./pages/auth/login.vue'), meta: { guestOnly: true } },
   { path: '/auth/register', component: () => import('./pages/auth/register.vue'), meta: { guestOnly: true } },
-  { path: '/account', component: () => import('./pages/account/index.vue'), meta: { requiresAuth: true } },
+  {
+    path: '/account',
+    component: () => import('./pages/account/index.vue'),
+    meta: { requires: 'auth' }
+  },
   { path: '/ecosystem', component: () => import('./pages/ecosystem-position/index.vue') },
   { path: '/why-us', component: () => import('./pages/why-us/index.vue') },
   { path: '/toc', component: () => import('./pages/toc/index.vue') },
@@ -101,29 +122,14 @@ const router = createRouter({
   }
 })
 
-function requiresAuth(path) {
-  return AUTH_REQUIRED_PREFIXES.some((prefix) => path === prefix || path.startsWith(`${prefix}/`))
-}
-
-function requiresInternalRole(path) {
-  return ['/tob/internal', '/annual-report-2025', '/tob/reports'].some(
-    (prefix) => path === prefix || path.startsWith(`${prefix}/`)
-  )
-}
-
-function requiresAdminRole(path) {
-  return ['/workspace/cloud-promo'].some(
-    (prefix) => path === prefix || path.startsWith(`${prefix}/`)
-  )
-}
-
 router.beforeEach(async (to) => {
   if (isCloudCostHost()) {
     if (to.path === '/') {
       return CLOUDCOST_PATH
     }
 
-    if (to.path === '/tob' || to.path.startsWith('/tob/')) {
+    // /tob 已重定向到 /，这里只需要拦截 /tob/ 子路径回到主站
+    if (to.path.startsWith('/tob/')) {
       window.location.assign(`https://blogger-alliance.cn${to.fullPath}`)
       return false
     }
@@ -136,26 +142,28 @@ router.beforeEach(async (to) => {
     return true
   }
 
-  if (to.meta.requiresAuth || requiresAuth(to.path)) {
+  const requires = to.meta.requires
+
+  if (requires) {
     if (!isAuthenticated.value) {
       return {
         path: '/auth/login',
         query: { redirect: to.fullPath }
       }
     }
-  }
 
-  if (requiresInternalRole(to.path) && isAuthenticated.value && !isInternal.value) {
-    return {
-      path: '/workspace',
-      query: { notice: 'internal-required' }
+    if (requires === 'internal' && !isInternal.value) {
+      return {
+        path: '/workspace',
+        query: { notice: 'internal-required' }
+      }
     }
-  }
 
-  if (requiresAdminRole(to.path) && isAuthenticated.value && !isAdmin.value) {
-    return {
-      path: '/workspace',
-      query: { notice: 'admin-required' }
+    if (requires === 'admin' && !isAdmin.value) {
+      return {
+        path: '/workspace',
+        query: { notice: 'admin-required' }
+      }
     }
   }
 
