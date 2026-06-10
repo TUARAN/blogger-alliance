@@ -1,6 +1,38 @@
 import { ref, computed, readonly } from 'vue'
 import { getSupabaseClient, initSupabase, isSupabaseConfigured } from '../lib/supabase.js'
 import { AUTH_COPY } from '../utils/authMessages.js'
+import {
+  NETWORK_ERROR_COPY,
+  isLikelyNetworkError,
+  probeSupabaseReachable
+} from '../utils/networkProbe.js'
+
+/**
+ * 包裹 Supabase 调用，统一捕获 "Failed to fetch" 类网络异常并给出中文提示。
+ * 成功路径走 supabase 自己的 { data, error } 返回；失败路径返回结构一致的 error.message。
+ */
+async function callWithNetworkGuard(label, action) {
+  try {
+    return await action()
+  } catch (err) {
+    if (!isLikelyNetworkError(err)) {
+      throw err
+    }
+
+    const probe = await probeSupabaseReachable()
+    const reason = probe.ok ? 'unknown' : probe.reason
+    return {
+      data: null,
+      error: {
+        message: NETWORK_ERROR_COPY[reason] || NETWORK_ERROR_COPY.unknown,
+        code: 'network_error',
+        kind: 'network',
+        reason,
+        originalLabel: label
+      }
+    }
+  }
+}
 
 const user = ref(null)
 const profile = ref(null)
@@ -114,16 +146,18 @@ export function useAuth() {
       return { data: null, error: { message: AUTH_COPY.serviceUnavailable } }
     }
 
-    return supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/login`,
-        data: {
-          display_name: name
+    return callWithNetworkGuard('signUp', () =>
+      supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/login`,
+          data: {
+            display_name: name
+          }
         }
-      }
-    })
+      })
+    )
   }
 
   async function signIn({ email, password }) {
@@ -133,7 +167,9 @@ export function useAuth() {
       return { data: null, error: { message: AUTH_COPY.serviceUnavailable } }
     }
 
-    return supabase.auth.signInWithPassword({ email, password })
+    return callWithNetworkGuard('signIn', () =>
+      supabase.auth.signInWithPassword({ email, password })
+    )
   }
 
   async function resendVerificationEmail(email) {
@@ -143,13 +179,15 @@ export function useAuth() {
       return { error: { message: AUTH_COPY.serviceUnavailable } }
     }
 
-    return supabase.auth.resend({
-      type: 'signup',
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/login`
-      }
-    })
+    return callWithNetworkGuard('resend', () =>
+      supabase.auth.resend({
+        type: 'signup',
+        email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/login`
+        }
+      })
+    )
   }
 
   async function signOut() {

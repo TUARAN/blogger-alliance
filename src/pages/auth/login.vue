@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '../../composables/useAuth.js'
 import { formatAuthError, AUTH_COPY } from '../../utils/authMessages.js'
 import { showToast } from '../../utils/toast.js'
+import AuthNetworkBanner from '../../components/AuthNetworkBanner.vue'
 
 const router = useRouter()
 const { signIn, resendVerificationEmail, isSupabaseConfigured, initialized, loading: authLoading } = useAuth()
@@ -130,6 +131,8 @@ async function handleSubmit() {
         >
           正在连接账号服务...
         </div>
+
+        <AuthNetworkBanner v-else />
 
         <form class="mt-6 space-y-4" @submit.prevent="handleSubmit">
           <div>

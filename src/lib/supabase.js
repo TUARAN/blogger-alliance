@@ -6,6 +6,7 @@ const buildTimeKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 const client = ref(null)
 const ready = ref(Boolean(buildTimeUrl && buildTimeKey))
+let configuredUrl = null
 let initPromise = null
 
 function applyConfig(url, key) {
@@ -14,6 +15,7 @@ function applyConfig(url, key) {
   }
 
   client.value = createClient(url, key)
+  configuredUrl = url
   ready.value = true
   return true
 }
@@ -26,6 +28,10 @@ export const isSupabaseConfigured = readonly(ready)
 
 export function getSupabaseClient() {
   return client.value
+}
+
+export function getSupabaseUrl() {
+  return configuredUrl
 }
 
 export async function initSupabase() {

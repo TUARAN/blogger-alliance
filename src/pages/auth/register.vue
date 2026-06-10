@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useAuth } from '../../composables/useAuth.js'
 import { formatAuthError, AUTH_COPY } from '../../utils/authMessages.js'
 import { showToast } from '../../utils/toast.js'
+import AuthNetworkBanner from '../../components/AuthNetworkBanner.vue'
 
 const router = useRouter()
 const { signUp, resendVerificationEmail, isSupabaseConfigured, initialized, loading: authLoading } = useAuth()
@@ -151,6 +152,8 @@ async function handleResend() {
         >
           正在连接账号服务...
         </div>
+
+        <AuthNetworkBanner v-else />
 
         <div
           v-if="verificationPending"

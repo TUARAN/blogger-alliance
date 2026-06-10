@@ -76,15 +76,17 @@ const releases = [
   {
     version: 'v0.11.0',
     period: '2026-06-10',
-    title: '导航高亮收敛与云自推广中控台升级',
+    title: '导航高亮收敛、云自推广中控台升级与账号服务网络检测',
     summary:
-      '顶部导航子页前缀高亮、移除 workspaceActive 死代码，并把 /tob 统一重定向到 /；路由权限改为 meta.requires 单一来源。云自推广中控台：planned 内容收进「路线图」标签页，选题预览稿、CTA 片段与文案片段全部可编辑后再复制，新增全平台 UTM 一键 TSV 导出与已发布文章扫描占位，模版切换与预览稿联动，并为管理员页面注入 robots noindex。',
+      '顶部导航子页前缀高亮、移除 workspaceActive 死代码，并把 /tob 统一重定向到 /；路由权限改为 meta.requires 单一来源。云自推广中控台：planned 内容收进「路线图」标签页，选题预览稿、CTA 片段与文案片段全部可编辑后再复制，新增全平台 UTM 一键 TSV 导出与已发布文章扫描占位，模版切换与预览稿联动，并为管理员页面注入 robots noindex。账号体系新增主动网络探测：登录/注册页加载时检测 supabase.co 可达性，注册/登录/重发邮件接口统一捕获 Failed to fetch 类异常并给出中文代理排障提示。更新日志时间线倒序展示。',
     commits: [
       'AppNav prefix active',
       'route meta guards',
       'cloud-promo editable',
       'cloud-promo utm tsv',
-      'cloud-promo published scan'
+      'cloud-promo published scan',
+      'auth network probe',
+      'changelog reverse'
     ]
   }
 ]
@@ -352,9 +354,11 @@ const weeklyProgress = [
       '云自推广：新增「全平台 UTM」一键 TSV 表格（juejin/csdn/zhihu/wechat/weibo/moment），可直接喂给 metrics:collect。',
       '云自推广：扫描 content/aliyun/published/**/meta.json 渲染已发布文章列表，空目录下展示登记模版。',
       '云自推广：模版侧栏切换后预览稿按新模版重新渲染，方便同选题对比不同呈现。',
-      '云自推广：管理员页面挂载时注入 <meta name="robots" content="noindex,nofollow">。'
+      '云自推广：管理员页面挂载时注入 <meta name="robots" content="noindex,nofollow">。',
+      '账号服务网络检测：登录/注册页主动探测 supabase.co 可达性，不通时给出代理/网络层面的中文排障提示；签到、注册、重发邮件接口统一捕获 Failed to fetch 类异常并替换为可读文案。',
+      '更新日志时间线倒序展示，最新版本和当周条目置顶。'
     ],
-    commits: ['supabase auth', 'role guard', 'c9001d1 workspace', 'nav prefix active', 'route meta guards', 'cloud-promo refactor']
+    commits: ['supabase auth', 'role guard', 'c9001d1 workspace', 'nav prefix active', 'route meta guards', 'cloud-promo refactor', 'auth network probe', 'changelog reverse']
   }
 ]
 
