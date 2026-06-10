@@ -222,10 +222,11 @@ export const mockCaseModels = {
     theme: 'sky'
   },
   'enterprise-cloud': {
-    eyebrow: 'Cloud Channel Rebate Sample',
-    headline: '大厂云服务：渠道团购式返利合作样张',
+    eyebrow: 'Cloud Channel Rebate',
+    headline: '大厂云服务：渠道团购式返利合作',
     intro:
-      '博主联盟是阿里云、腾讯云、华为云、火山引擎等头部云厂商的认证渠道商之一。合作模式类似「云服务团购」：客户通过联盟专属链接在官方充值，用多少消费、拿多少返利；用量越大，可进入更高返利阶梯。以下为渠道归因、返利结算与交付样张口径。',
+      '博主联盟是阿里云、腾讯云、华为云、火山引擎等头部云厂商的认证渠道商之一。合作模式类似「云服务团购」：客户通过联盟专属链接在官方充值，用多少消费、拿多少返利；用量越大，可进入更高返利阶梯。',
+    statusBadge: '渠道合作',
     steps: [
       { title: '渠道商身份', description: '联盟作为云厂商授权渠道之一，充值仍走官方页面，发票与售后由云厂商提供。' },
       { title: '专属充值链接', description: '顾问按云厂商与账号情况生成官方归因链接，确保消费计入渠道。' },
@@ -236,17 +237,17 @@ export const mockCaseModels = {
     ],
     panels: [
       {
-        kicker: 'Rebate Tier · Sample',
+        kicker: 'Rebate Tier',
         title: '返利阶梯示意',
-        subtitle: '按实际消费档位匹配返利比例，具体以云厂商当期渠道政策为准。下方为样张口径。',
+        subtitle: '按实际消费档位匹配返利比例，具体以云厂商当期渠道政策为准。',
         metrics: [
-          { label: '基础档（示例）', value: '月消费 < ¥5k' },
-          { label: '成长档（示例）', value: '月消费 ¥5k–50k' },
-          { label: '战略档（示例）', value: '月消费 > ¥50k' }
+          { label: '基础档', value: '月消费 < ¥5k' },
+          { label: '成长档', value: '月消费 ¥5k–50k' },
+          { label: '战略档', value: '月消费 > ¥50k' }
         ]
       },
       {
-        kicker: 'Channel · Sample',
+        kicker: 'Channel Partner',
         title: '团购式渠道合作',
         subtitle: '强调「联盟是渠道商之一 + 按量返利 + 阶梯越高返越多」，而非一次性曝光交付。',
         lines: [

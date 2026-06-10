@@ -14,6 +14,10 @@ defineProps({
   theme: {
     type: String,
     default: 'slate'
+  },
+  statusBadge: {
+    type: String,
+    default: '交付样张'
   }
 })
 
@@ -68,10 +72,11 @@ const badgeBg = {
           <p class="mt-3 text-sm md:text-base leading-7 text-gray-600">{{ intro }}</p>
         </div>
         <span
+          v-if="statusBadge"
           class="inline-flex shrink-0 items-center rounded-full px-3 py-1 text-xs font-semibold"
           :class="badgeBg[theme]"
         >
-          交付样张
+          {{ statusBadge }}
         </span>
       </div>
 
