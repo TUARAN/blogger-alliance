@@ -1,0 +1,49 @@
+{
+  "topics": [
+    {
+      "id": "aliyun-ecs-renew-001",
+      "angle": "已有账号续费",
+      "title": "个人开发者阿里云续费，怎么比官网更划算",
+      "keywords": ["ECS", "续费", "个人开发者"],
+      "template": "long-form-guide",
+      "priority": "high",
+      "status": "draft"
+    },
+    {
+      "id": "aliyun-group-buy-001",
+      "angle": "小团队团购",
+      "title": "创业小队团购阿里云，全程自己的账号怎么操作",
+      "keywords": ["团购", "创业团队", "自有账号"],
+      "template": "long-form-guide",
+      "priority": "high",
+      "status": "draft"
+    },
+    {
+      "id": "aliyun-bill-audit-001",
+      "angle": "账单优化",
+      "title": "阿里云账单每月太贵？先免费帮你看一眼",
+      "keywords": ["账单", "省钱", "选型"],
+      "template": "listicle-tips",
+      "priority": "medium",
+      "status": "draft"
+    },
+    {
+      "id": "aliyun-gpu-ai-001",
+      "angle": "AI / GPU 上云",
+      "title": "跑大模型上阿里云 GPU，渠道价能省多少",
+      "keywords": ["GPU", "AI", "PAI", "灵积"],
+      "template": "long-form-guide",
+      "priority": "medium",
+      "status": "scheduled"
+    },
+    {
+      "id": "aliyun-new-user-001",
+      "angle": "新用户建站",
+      "title": "第一次买阿里云服务器，别直接在官网下单",
+      "keywords": ["新用户", "建站", "ECS"],
+      "template": "faq-compilation",
+      "priority": "low",
+      "status": "draft"
+    }
+  ]
+}

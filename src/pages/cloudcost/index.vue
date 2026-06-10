@@ -177,7 +177,7 @@ function scrollTo(id) {
 onMounted(() => {
   document.title = '大厂云服务 · 官方渠道充值 | 博主联盟'
   const description =
-    '博主联盟是阿里云、腾讯云、华为云、火山引擎认证渠道，提供官方充值链接与按量返利，不是内容推广。'
+    '博主联盟是阿里云、腾讯云、华为云、火山引擎认证渠道，提供官方充值链接与按量返利。'
 
   let meta = document.querySelector('meta[name="description"]')
   if (!meta) {
@@ -202,7 +202,7 @@ onMounted(() => {
           </div>
           <div>
             <div class="text-sm font-semibold tracking-tight">大厂云服务</div>
-            <div class="text-[11px] text-slate-500">联盟即渠道 · 非推广合作</div>
+            <div class="text-[11px] text-slate-500">联盟即渠道 · 官方充值返利</div>
           </div>
         </div>
         <nav class="hidden items-center gap-5 text-sm text-slate-600 md:flex">

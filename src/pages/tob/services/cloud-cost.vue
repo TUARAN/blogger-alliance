@@ -4,11 +4,10 @@
       <header class="mb-8">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900">大厂云服务</h1>
         <p class="mt-3 text-lg text-gray-600 leading-relaxed">
-          博主联盟本身就是阿里云、腾讯云、华为云、火山引擎的认证渠道商——我们提供的
-          <strong class="font-semibold text-gray-800">不是内容推广</strong>，而是云服务采购渠道：联系顾问拿到专属官方充值链接，在官网下单，享受渠道折扣与按量返利。
+          博主联盟本身就是阿里云、腾讯云、华为云、火山引擎的认证渠道商，提供<strong class="font-semibold text-gray-800">云服务采购渠道</strong>：联系顾问拿到专属官方充值链接，在官网下单，享受渠道折扣与按量返利。
         </p>
         <div class="mt-3 flex flex-wrap gap-2 text-xs">
-          <span class="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-1 text-emerald-700">渠道服务 · 非推广合作</span>
+          <span class="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-1 text-emerald-700">渠道服务</span>
           <span class="inline-flex items-center rounded-full bg-slate-50 border border-slate-200 px-2.5 py-1 text-slate-700">四大云厂商 · 中立选型</span>
           <span class="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-2.5 py-1 text-amber-700">用多少 · 返多少 · 阶梯加码</span>
         </div>
@@ -26,7 +25,7 @@
           <div class="rounded-xl border border-emerald-200 bg-white p-4">
             <div class="text-sm font-semibold text-emerald-800">渠道服务（大厂云服务）</div>
             <p class="mt-2 text-sm leading-6 text-gray-600">
-              联盟自己就是云厂商渠道，直接向客户提供官方充值入口与返利政策，核心是「帮客户买云更划算」，不是替云厂商打广告。
+              联盟自己就是云厂商渠道，直接向客户提供官方充值入口与返利政策，核心是「帮客户买云更划算」。
             </p>
           </div>
         </div>
@@ -54,7 +53,7 @@
         <h2 class="text-lg font-semibold text-gray-900">适合谁</h2>
         <ul class="mt-4 space-y-2 text-sm text-gray-600">
           <li class="flex items-start"><span class="text-emerald-600 mr-2">•</span><span>个人开发者、创业团队、企业 IT —— 有真实上云 / 续费需求</span></li>
-          <li class="flex items-start"><span class="text-emerald-600 mr-2">•</span><span>希望走官方渠道价，而不是找联盟做内容推广</span></li>
+          <li class="flex items-start"><span class="text-emerald-600 mr-2">•</span><span>希望走官方渠道价，拿长期返利与账单优化建议</span></li>
           <li class="flex items-start"><span class="text-emerald-600 mr-2">•</span><span>愿意通过专属链接在官网充值，享受长期返利与账单优化建议</span></li>
         </ul>
       </section>

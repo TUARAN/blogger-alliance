@@ -10,7 +10,7 @@
       </div>
     </div>
     <p class="mt-4 max-w-4xl text-sm leading-7 text-gray-600">
-      推文、引流、社群三类<strong class="font-medium text-gray-800">推广合作</strong>；AI Access、出海云访问两类<strong class="font-medium text-gray-800">专题联运</strong>；大厂云服务单独一类<strong class="font-medium text-gray-800">渠道服务</strong>——联盟本身就是云厂商认证渠道，提供官方充值与按量返利，不是帮云厂商做推广。按目标选型：要曝光走推文，要点击走引流，要私域走社群；要云采购渠道价走大厂云服务。
+      推文、引流、社群三类<strong class="font-medium text-gray-800">推广合作</strong>；AI Access、出海云访问两类<strong class="font-medium text-gray-800">专题联运</strong>；大厂云服务单独一类<strong class="font-medium text-gray-800">渠道服务</strong>——联盟本身就是云厂商认证渠道，提供官方充值与按量返利。按目标选型：要曝光走推文，要点击走引流，要私域走社群；要云采购渠道价走大厂云服务。
     </p>
 
     <div class="mt-6 grid gap-4 lg:grid-cols-3">
@@ -246,7 +246,7 @@
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div>个人 / 小团队 / 企业 · 联盟即云厂商官方渠道</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">非推广合作：专属充值链接 + 按量返利 + 账单体检</div>
+              <div class="mt-1.5 text-xs text-gray-500 leading-5">专属充值链接 + 按量返利 + 账单体检</div>
             </td>
             <td class="px-4 py-4 align-top text-gray-700">
               <div class="font-semibold text-gray-900">官方充值 · 按量返利</div>
@@ -475,11 +475,11 @@ const mobileRows = [
     modeClass: 'bg-emerald-100 border border-emerald-200 text-emerald-800',
     theme: 'channel',
     scene: '个人 / 小团队 / 企业 · 联盟即云厂商官方渠道',
-    sceneNote: '非推广合作：专属充值链接 + 按量返利 + 账单体检',
+    sceneNote: '专属充值链接 + 按量返利 + 账单体检',
     startsAt: '官方渠道价',
     cycle: '长期有效',
     priceLines: ['用多少消费 · 返多少', '用量越大 · 返利阶梯越高'],
-    priceNote: '面向有真实云采购 / 续费需求，不是内容推广交付',
+    priceNote: '面向有真实云采购 / 续费需求',
     metrics: '云消费归因 + 返利阶梯',
     asset: '官方充值链接 + 渠道返利政策',
     detailTo: '/tob/services/cloud-cost',

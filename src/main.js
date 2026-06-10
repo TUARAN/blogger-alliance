@@ -7,7 +7,13 @@ import { useAuth } from './composables/useAuth.js'
 import { CLOUDCOST_PATH, isCloudCostHost } from './utils/cloudcostHost.js'
 import './style.css'
 
-const AUTH_REQUIRED_PREFIXES = ['/account', '/tob/internal', '/annual-report-2025', '/tob/reports']
+const AUTH_REQUIRED_PREFIXES = [
+  '/account',
+  '/tob/internal',
+  '/annual-report-2025',
+  '/tob/reports',
+  '/workspace/cloud-promo'
+]
 
 // 路由配置
 const routes = [
@@ -48,6 +54,7 @@ const routes = [
     redirect: (to) => ({ path: '/tob/internal', query: { ...to.query, tab: 'admin' } })
   },
   { path: '/workspace/web-llm', component: () => import('./pages/workspace/web-llm/index.vue') },
+  { path: '/workspace/cloud-promo', component: () => import('./pages/workspace/cloud-promo/index.vue') },
   { path: '/auth/login', component: () => import('./pages/auth/login.vue'), meta: { guestOnly: true } },
   { path: '/auth/register', component: () => import('./pages/auth/register.vue'), meta: { guestOnly: true } },
   { path: '/account', component: () => import('./pages/account/index.vue'), meta: { requiresAuth: true } },
@@ -104,6 +111,12 @@ function requiresInternalRole(path) {
   )
 }
 
+function requiresAdminRole(path) {
+  return ['/workspace/cloud-promo'].some(
+    (prefix) => path === prefix || path.startsWith(`${prefix}/`)
+  )
+}
+
 router.beforeEach(async (to) => {
   if (isCloudCostHost()) {
     if (to.path === '/') {
@@ -136,6 +149,13 @@ router.beforeEach(async (to) => {
     return {
       path: '/workspace',
       query: { notice: 'internal-required' }
+    }
+  }
+
+  if (requiresAdminRole(to.path) && isAuthenticated.value && !isAdmin.value) {
+    return {
+      path: '/workspace',
+      query: { notice: 'admin-required' }
     }
   }
 

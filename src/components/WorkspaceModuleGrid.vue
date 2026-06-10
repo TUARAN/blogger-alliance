@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue'
 import { useAuth } from '../composables/useAuth.js'
 import { WORKSPACE_CTA, WORKSPACE_SECTIONS } from '../data/workspaceRegistry.js'
 
@@ -6,7 +7,14 @@ defineProps({
   compact: { type: Boolean, default: false }
 })
 
-const { isInternal } = useAuth()
+const { isInternal, isAdmin } = useAuth()
+
+const visibleSections = computed(() =>
+  WORKSPACE_SECTIONS.filter((section) => !section.requiresAdmin || isAdmin.value).map((section) => ({
+    ...section,
+    modules: section.modules.filter((module) => !module.requiresAdmin || isAdmin.value)
+  }))
+)
 
 function canOpenModule(module) {
   if (module.external) {
@@ -24,7 +32,7 @@ function moduleCta(module) {
 <template>
   <div class="space-y-12">
     <section
-      v-for="section in WORKSPACE_SECTIONS"
+      v-for="section in visibleSections"
       :key="section.id"
       :aria-labelledby="`workspace-section-${section.id}`"
     >

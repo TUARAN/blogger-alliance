@@ -72,6 +72,9 @@ export const AUTH_COPY = {
   internalAccessDeniedTitle: '暂无内部数据访问权限',
   internalAccessDeniedBody:
     '你的账号已登录，但还没有查看数据台账、年度总览等内部内容的权限。请联系联盟管理员为你开通权限。',
+  adminAccessDeniedTitle: '暂无管理员权限',
+  adminAccessDeniedBody:
+    '云服务自推广等管理板块仅对管理员开放。如需使用，请联系联盟管理员。',
   sessionExpired: '登录状态已失效，请重新登录。',
   sessionMissing: '登录状态异常，请重新登录后再试。',
   serviceUnavailable: '账号服务暂不可用，请稍后再试。',

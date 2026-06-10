@@ -12,6 +12,8 @@ export const WORKSPACE_CTA = {
   locked: '需内部权限'
 }
 
+export const ADMIN_MODULE_TITLES = ['云自推广']
+
 export const WORKSPACE_SECTIONS = [
   {
     id: 'public',
@@ -110,6 +112,29 @@ export const WORKSPACE_SECTIONS = [
           icon: 'bg-indigo-100',
           tag: 'bg-indigo-50 text-indigo-700',
           cta: 'text-indigo-700'
+        }
+      }
+    ]
+  },
+  {
+    id: 'admin',
+    title: '管理板块',
+    description: '仅管理员可见的推广与运营工具。',
+    requiresAdmin: true,
+    modules: [
+      {
+        id: 'cloud-promo',
+        title: '云自推广',
+        description: '阿里云落地页素材、模版、选题与内容飞轮中控台。',
+        tag: '推广素材',
+        icon: '☁️',
+        requiresAdmin: true,
+        to: '/workspace/cloud-promo',
+        theme: {
+          shadow: 'shadow-orange-100/40',
+          icon: 'bg-orange-100',
+          tag: 'bg-orange-50 text-orange-700',
+          cta: 'text-orange-700'
         }
       }
     ]

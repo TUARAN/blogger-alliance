@@ -4,16 +4,17 @@ import { useRoute } from 'vue-router'
 import { useAuth } from '../../composables/useAuth.js'
 import { AUTH_COPY } from '../../utils/authMessages.js'
 import WorkspaceModuleGrid from '../../components/WorkspaceModuleGrid.vue'
-import { INTERNAL_MODULE_TITLES, PUBLIC_MODULE_TITLES } from '../../data/workspaceRegistry.js'
+import { ADMIN_MODULE_TITLES, INTERNAL_MODULE_TITLES, PUBLIC_MODULE_TITLES } from '../../data/workspaceRegistry.js'
 
 const route = useRoute()
-const { initAuth, isAuthenticated, isInternal, displayName, loading } = useAuth()
+const { initAuth, isAuthenticated, isInternal, isAdmin, displayName, loading } = useAuth()
 
 onMounted(() => {
   initAuth()
 })
 
 const showInternalNotice = computed(() => route.query.notice === 'internal-required')
+const showAdminNotice = computed(() => route.query.notice === 'admin-required')
 
 const welcomeText = computed(() => {
   const publicList = PUBLIC_MODULE_TITLES.join('、')
@@ -27,7 +28,8 @@ const welcomeText = computed(() => {
     return `${displayName.value}，欢迎回来。公开板块（${publicList}）可直接使用；如需 ${internalList}，请联系管理员开通内部权限。`
   }
 
-  return `${displayName.value}，欢迎回来。公开板块与内部板块均已可用，包括 ${internalList}。`
+  const adminHint = isAdmin.value ? `；管理板块（${ADMIN_MODULE_TITLES.join('、')}）已可用。` : ''
+  return `${displayName.value}，欢迎回来。公开板块与内部板块均已可用，包括 ${internalList}${adminHint}`
 })
 </script>
 
@@ -49,6 +51,14 @@ const welcomeText = computed(() => {
       >
         <h2 class="text-base font-semibold text-amber-950">{{ AUTH_COPY.internalAccessDeniedTitle }}</h2>
         <p class="mt-2 text-sm leading-6 text-amber-900">{{ AUTH_COPY.internalAccessDeniedBody }}</p>
+      </div>
+
+      <div
+        v-if="showAdminNotice"
+        class="mt-6 max-w-3xl rounded-2xl border border-orange-200 bg-orange-50 p-5"
+      >
+        <h2 class="text-base font-semibold text-orange-950">{{ AUTH_COPY.adminAccessDeniedTitle }}</h2>
+        <p class="mt-2 text-sm leading-6 text-orange-900">{{ AUTH_COPY.adminAccessDeniedBody }}</p>
       </div>
 
       <div
