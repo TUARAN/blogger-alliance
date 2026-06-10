@@ -10,8 +10,8 @@ import './style.css'
 /**
  * 路由权限策略：
  * - meta.requires = 'auth'     → 仅需登录
- * - meta.requires = 'internal' → 登录 + 内部成员（隐含 'auth'）
- * - meta.requires = 'admin'    → 登录 + 管理员（隐含 'auth'）
+ * - meta.requires = 'internal' → 登录后由目标页校验内部权限
+ * - meta.requires = 'admin'    → 登录后由目标页校验管理员权限
  * - meta.guestOnly = true      → 已登录用户自动跳转工作台
  * 新增受限路由时只需在路由定义里加 meta.requires，无需再维护单独的前缀表。
  */
@@ -135,7 +135,7 @@ router.beforeEach(async (to) => {
     }
   }
 
-  const { initAuth, isAuthenticated, isInternal, isAdmin, isSupabaseConfigured } = useAuth()
+  const { initAuth, isAuthenticated, isSupabaseConfigured } = useAuth()
   await initAuth()
 
   if (!isSupabaseConfigured.value) {
@@ -149,20 +149,6 @@ router.beforeEach(async (to) => {
       return {
         path: '/auth/login',
         query: { redirect: to.fullPath }
-      }
-    }
-
-    if (requires === 'internal' && !isInternal.value) {
-      return {
-        path: '/workspace',
-        query: { notice: 'internal-required' }
-      }
-    }
-
-    if (requires === 'admin' && !isAdmin.value) {
-      return {
-        path: '/workspace',
-        query: { notice: 'admin-required' }
       }
     }
   }

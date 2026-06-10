@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useAuth } from '../../../composables/useAuth.js'
+import { AUTH_COPY } from '../../../utils/authMessages.js'
 import { showToast } from '../../../utils/toast.js'
 import {
   CLOUD_PROMO_CONTACT,
@@ -24,7 +25,7 @@ import {
   renderTopicDraft
 } from '../../../data/cloudPromoContent.js'
 
-const { initAuth } = useAuth()
+const { initAuth, isAdmin, loading: authLoading } = useAuth()
 
 const CLOUD_PROMO_TABS = [
   { id: 'overview', label: '概览' },
@@ -257,6 +258,30 @@ function statusClass(status) {
         </span>
       </div>
 
+      <div
+        v-if="authLoading"
+        class="mt-8 rounded-2xl border border-orange-100 bg-white p-6 text-sm text-slate-600"
+      >
+        正在验证账号权限...
+      </div>
+
+      <div
+        v-else-if="!isAdmin"
+        class="mt-8 rounded-2xl border border-orange-200 bg-orange-50 p-5 md:p-6"
+      >
+        <h2 class="text-lg font-semibold text-orange-950 mb-2">{{ AUTH_COPY.adminAccessDeniedTitle }}</h2>
+        <p class="text-sm text-orange-800 mb-3">
+          {{ AUTH_COPY.adminAccessDeniedBody }}
+        </p>
+        <router-link
+          to="/workspace"
+          class="inline-flex h-10 items-center rounded-lg bg-orange-700 px-4 text-sm font-semibold text-white hover:bg-orange-800"
+        >
+          返回工作台
+        </router-link>
+      </div>
+
+      <template v-else>
       <!-- 当前选题 / UTM sticky 概览，跨 tab 提示当前状态 -->
       <div
         class="sticky top-16 z-20 mt-6 -mx-4 border-y border-orange-200/70 bg-orange-50/85 px-4 py-3 backdrop-blur sm:mx-0 sm:rounded-2xl sm:border"
@@ -806,6 +831,7 @@ npm run metrics:collect -- --input ./links.tsv</pre>
           </ul>
         </div>
       </div>
+      </template>
     </section>
   </div>
 </template>

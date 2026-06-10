@@ -1,24 +1,21 @@
 /**
  * 联盟工作台命名约定：
- * - 分区：公开板块 / 内部板块
+ * - 分区：公开板块 / 内部板块 / 管理板块
  * - 卡片 title：功能名（2–6 字）
- * - 卡片 tag：功能类型（四字短语，不重复写权限）
- * - 入口：站内「进入」、外链「打开」、无权限「需内部权限」（仅 locked 且非外链）
+ * - 卡片 tag：功能类型（四字短语）
+ * - 入口：站内「进入」、外链「打开」；权限由路由守卫与目标页处理
  */
 
 export const WORKSPACE_CTA = {
   enter: '进入',
-  open: '打开',
-  locked: '需内部权限'
+  open: '打开'
 }
-
-export const ADMIN_MODULE_TITLES = ['云自推广']
 
 export const WORKSPACE_SECTIONS = [
   {
     id: 'public',
     title: '公开板块',
-    description: '联盟对外内容、知识资源与外部协作工具，无需登录即可访问。',
+    description: '联盟对外内容、知识资源与外部协作工具。',
     modules: [
       {
         id: 'services',
@@ -96,8 +93,7 @@ export const WORKSPACE_SECTIONS = [
   {
     id: 'internal',
     title: '内部板块',
-    description: '数据台账需登录并由管理员开通内部权限后使用。',
-    locked: true,
+    description: '合作进度、数据报告与年度总览。',
     modules: [
       {
         id: 'ledger',
@@ -105,7 +101,6 @@ export const WORKSPACE_SECTIONS = [
         description: '合作进度、数据报告与年度总览统一维护入口。',
         tag: '数据管理',
         icon: '🗂️',
-        locked: true,
         to: '/tob/internal',
         theme: {
           shadow: 'shadow-indigo-100/40',
@@ -119,16 +114,14 @@ export const WORKSPACE_SECTIONS = [
   {
     id: 'admin',
     title: '管理板块',
-    description: '仅管理员可见的推广与运营工具。',
-    requiresAdmin: true,
+    description: '推广素材与内容飞轮工具。',
     modules: [
       {
         id: 'cloud-promo',
-        title: '云自推广',
+        title: '云服务自推广',
         description: '阿里云落地页素材、模版、选题与内容飞轮中控台。',
         tag: '推广素材',
         icon: '☁️',
-        requiresAdmin: true,
         to: '/workspace/cloud-promo',
         theme: {
           shadow: 'shadow-orange-100/40',
