@@ -248,8 +248,6 @@ async function handleResend() {
           >
             {{ isSubmitting ? '注册中...' : '注册' }}
           </button>
-
-          <EmailProviderHint variant="inline" />
         </form>
 
         <p v-if="!verificationPending" class="mt-6 text-center text-sm text-slate-600">

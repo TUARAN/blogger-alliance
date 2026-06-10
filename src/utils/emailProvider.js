@@ -18,7 +18,7 @@ export const EMAIL_PROVIDER = {
   id: 'resend',
   name: 'Resend',
   sender: 'noreply@mail.syncblog.cn',
-  limit: '每小时 100 封 / 每月 3000 封，足以覆盖日常注册',
+  limit: '每小时 100 封 / 每月 3000 封',
   hint: '若 5 分钟内未收到，请检查垃圾箱或点「重发验证邮件」。',
   trustworthy: true
 }
