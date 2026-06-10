@@ -356,6 +356,7 @@ const weeklyProgress = [
       '云自推广：模版侧栏切换后预览稿按新模版重新渲染，方便同选题对比不同呈现。',
       '云自推广：管理员页面挂载时注入 <meta name="robots" content="noindex,nofollow">。',
       '账号服务网络检测：登录/注册页主动探测 supabase.co 可达性，不通时给出代理/网络层面的中文排障提示；签到、注册、重发邮件接口统一捕获 Failed to fetch 类异常并替换为可读文案。',
+      '邮件服务方透明化：登录/注册页与"请查收验证邮件"卡片显式标注当前由 Supabase 内置 SMTP 发送（限额 2 封/小时），切换到自定义 SMTP（如 Resend）后只需改 src/utils/emailProvider.js 一处常量。',
       '更新日志时间线倒序展示，最新版本和当周条目置顶。'
     ],
     commits: ['supabase auth', 'role guard', 'c9001d1 workspace', 'nav prefix active', 'route meta guards', 'cloud-promo refactor', 'auth network probe', 'changelog reverse']

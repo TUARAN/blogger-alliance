@@ -5,6 +5,7 @@ import { useAuth } from '../../composables/useAuth.js'
 import { formatAuthError, AUTH_COPY } from '../../utils/authMessages.js'
 import { showToast } from '../../utils/toast.js'
 import AuthNetworkBanner from '../../components/AuthNetworkBanner.vue'
+import EmailProviderHint from '../../components/EmailProviderHint.vue'
 
 const router = useRouter()
 const { signUp, resendVerificationEmail, isSupabaseConfigured, initialized, loading: authLoading } = useAuth()
@@ -167,6 +168,8 @@ async function handleResend() {
             {{ AUTH_COPY.verificationHint }}
           </p>
 
+          <EmailProviderHint variant="box" />
+
           <p v-if="errorMessage" class="mt-3 text-sm text-red-600">{{ errorMessage }}</p>
 
           <div class="mt-5 flex flex-wrap gap-3">
@@ -245,6 +248,8 @@ async function handleResend() {
           >
             {{ isSubmitting ? '注册中...' : '注册' }}
           </button>
+
+          <EmailProviderHint variant="inline" />
         </form>
 
         <p v-if="!verificationPending" class="mt-6 text-center text-sm text-slate-600">

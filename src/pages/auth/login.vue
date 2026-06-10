@@ -5,6 +5,7 @@ import { useAuth } from '../../composables/useAuth.js'
 import { formatAuthError, AUTH_COPY } from '../../utils/authMessages.js'
 import { showToast } from '../../utils/toast.js'
 import AuthNetworkBanner from '../../components/AuthNetworkBanner.vue'
+import EmailProviderHint from '../../components/EmailProviderHint.vue'
 
 const router = useRouter()
 const { signIn, resendVerificationEmail, isSupabaseConfigured, initialized, loading: authLoading } = useAuth()
@@ -170,6 +171,7 @@ async function handleSubmit() {
             >
               {{ resendLabel }}
             </button>
+            <EmailProviderHint variant="inline" />
           </div>
 
           <button
