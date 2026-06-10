@@ -15,12 +15,12 @@
  *   }
  */
 export const EMAIL_PROVIDER = {
-  id: 'supabase-builtin',
-  name: 'Supabase 内置 SMTP',
-  sender: 'noreply@mail.app.supabase.io',
-  limit: '每小时 2 封（超出会被静默丢弃）',
-  hint: '若 5 分钟内未收到，可能已触发限流；请等待约 1 小时后重试，或联系管理员（微信 atar24）确认。',
-  trustworthy: false
+  id: 'resend',
+  name: 'Resend',
+  sender: 'noreply@mail.syncblog.cn',
+  limit: '每小时 100 封 / 每月 3000 封，足以覆盖日常注册',
+  hint: '若 5 分钟内未收到，请检查垃圾箱或点「重发验证邮件」。',
+  trustworthy: true
 }
 
 export function describeEmailProvider() {
