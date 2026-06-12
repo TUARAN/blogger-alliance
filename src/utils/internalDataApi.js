@@ -107,6 +107,19 @@ export async function updateAnnualReports(token, reports) {
   })
 }
 
+export async function fetchAdminUsers(token) {
+  const payload = await apiRequest('/api/internal/admin/users', { token })
+  return Array.isArray(payload?.users) ? payload.users : []
+}
+
+export async function updateUserRole(token, userId, role) {
+  return apiRequest(`/api/internal/admin/users/${encodeURIComponent(userId)}/role`, {
+    method: 'PUT',
+    token,
+    body: { role }
+  })
+}
+
 export function explainInternalDataError(error, context = 'read') {
   const code = error?.message || ''
 
@@ -122,8 +135,8 @@ export function explainInternalDataError(error, context = 'read') {
     return '数据服务暂不可用，请稍后再试或联系管理员。'
   }
 
-  if (code === 'D1_NOT_CONFIGURED') {
-    return '数据服务尚未就绪，请稍后再试。'
+  if (code === 'SUPABASE_SERVICE_ROLE_NOT_CONFIGURED') {
+    return '数据服务尚未完成服务端配置，请联系管理员。'
   }
 
   if (code.startsWith('REQUEST_FAILED_5')) {

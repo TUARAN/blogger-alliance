@@ -108,6 +108,20 @@ export const WORKSPACE_SECTIONS = [
           tag: 'bg-indigo-50 text-indigo-700',
           cta: 'text-indigo-700'
         }
+      },
+      {
+        id: 'users',
+        title: '用户管理',
+        description: '查看注册用户，分配成员、内部、管理员角色（仅管理员可用）。',
+        tag: '用户体系',
+        icon: '👥',
+        to: '/workspace/users',
+        theme: {
+          shadow: 'shadow-fuchsia-100/40',
+          icon: 'bg-fuchsia-100',
+          tag: 'bg-fuchsia-50 text-fuchsia-700',
+          cta: 'text-fuchsia-700'
+        }
       }
     ]
   },

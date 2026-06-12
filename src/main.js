@@ -68,6 +68,11 @@ const routes = [
   },
   { path: '/workspace/web-llm', component: () => import('./pages/workspace/web-llm/index.vue') },
   {
+    path: '/workspace/users',
+    component: () => import('./pages/workspace/users.vue'),
+    meta: { requires: 'admin' }
+  },
+  {
     path: '/workspace/cloud-promo',
     component: () => import('./pages/workspace/cloud-promo/index.vue'),
     meta: { requires: 'admin' }

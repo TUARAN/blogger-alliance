@@ -6,6 +6,7 @@ import { formatAuthError, AUTH_COPY } from '../../utils/authMessages.js'
 import { showToast } from '../../utils/toast.js'
 import AuthNetworkBanner from '../../components/AuthNetworkBanner.vue'
 import EmailProviderHint from '../../components/EmailProviderHint.vue'
+import OAuthButtons from '../../components/OAuthButtons.vue'
 
 const router = useRouter()
 const { signIn, resendVerificationEmail, isSupabaseConfigured, initialized, loading: authLoading } = useAuth()
@@ -182,6 +183,8 @@ async function handleSubmit() {
             {{ isSubmitting ? '登录中...' : '登录' }}
           </button>
         </form>
+
+        <OAuthButtons class="mt-6" :disabled="authLoading || !isSupabaseConfigured" />
 
         <p class="mt-6 text-center text-sm text-slate-600">
           还没有账号？

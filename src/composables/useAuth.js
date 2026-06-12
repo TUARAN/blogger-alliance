@@ -160,6 +160,27 @@ export function useAuth() {
     )
   }
 
+  /**
+   * OAuth 第三方登录（github / google）。
+   * 成功后浏览器整页跳转到 Supabase 授权页，回站后由 supabase-js 自动解析会话。
+   */
+  async function signInWithOAuth(provider, { redirectTo } = {}) {
+    const supabase = getSupabaseClient()
+
+    if (!supabase) {
+      return { data: null, error: { message: AUTH_COPY.serviceUnavailable } }
+    }
+
+    return callWithNetworkGuard('signInWithOAuth', () =>
+      supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: redirectTo || `${window.location.origin}/workspace`
+        }
+      })
+    )
+  }
+
   async function signIn({ email, password }) {
     const supabase = getSupabaseClient()
 
@@ -249,6 +270,7 @@ export function useAuth() {
     getAccessToken,
     signUp,
     signIn,
+    signInWithOAuth,
     resendVerificationEmail,
     signOut,
     updateProfile,

@@ -15,9 +15,9 @@
 | 前端 | `npm run preview` | 预览构建结果 |
 | Cloudflare | `npm run cf:dev` | 本地 Worker（需先 `build`） |
 | Cloudflare | `npm run cf:deploy` | 构建并部署 Worker + 静态资源 |
-| D1 | `npm run d1:export-seed` | 从 `private/*.json` 导出 `tmp/d1-seed.sql` |
-| D1 | `npm run d1:import-ledger` | 从 Excel 导入合作台账到 D1 |
 | Supabase | `npm run supabase:migrate` | 执行 `supabase/migrations/` SQL |
+| Supabase | `npm run supabase:export-seed` | 从 `private/*.json` 导出 `tmp/supabase-seed.sql` |
+| Supabase | `npm run supabase:import-ledger` | 从 Excel 导入合作台账到 Supabase |
 | Supabase | `npm run supabase:auth-urls` | 配置 Auth Site URL / Redirect URLs |
 | 采集 | `npm run metrics:login` | Playwright 登录各平台并保存会话 |
 | 采集 | `npm run metrics:collect` | 批量采集页面可见互动数据 |
@@ -149,39 +149,57 @@ git push origin feature/add-blogger-你的名字
 
 欢迎提交 Issue 和 Pull Request！
 
-## ☁️ Cloudflare D1 数据维护（内部协作）
+## ☁️ Supabase 数据维护（内部协作）
 
-内部数据已改为 `Cloudflare D1 + Worker API` 方案：
+内部数据已改为 `Supabase Postgres + Worker API` 方案：
 
 - 前端页面不再直接导入密文数据
-- 访问凭证只用于向 Worker 换取 30 分钟有效的会话 token
-- Worker 鉴权成功后才会从 D1 读取商单和报告数据
+- 账号、角色、商单、报告和年度总览统一存放在 Supabase
+- Worker 校验 Supabase JWT 和角色后，使用服务端 `SUPABASE_SERVICE_ROLE_KEY` 读写业务表
+- 浏览器只持有 Supabase anon key，不持有 service role key
 
 相关文件：
 
-- D1 表结构：`cloudflare/schema.sql`
+- Supabase 表结构：`supabase/migrations/`
 - Worker API：`cloudflare/worker.js`
 - Wrangler 配置：`wrangler.jsonc`
 - 本地开发变量示例：`.dev.vars.example`
-- JSON 导出 D1 SQL：`scripts/export-d1-seed.mjs`
-- Excel 导入 D1：`scripts/import-ledger-excel-to-d1.mjs`
+- JSON 导出 Supabase SQL：`scripts/export-supabase-seed.mjs`
+- Excel 导入 Supabase：`scripts/import-ledger-excel-to-supabase.mjs`
 - 后台录入页：`src/pages/tob/internal.vue`
 
-### 1) 先创建 D1 数据库
+### 1) 初始化 Supabase 表结构
 
 ```bash
-npx wrangler d1 create blogger-alliance
+npm run supabase:migrate
 ```
 
-创建完成后，把返回的 `database_id` 填到 `wrangler.jsonc` 里的 `d1_databases[0].database_id`。
+该命令会按文件名顺序执行 `supabase/migrations/` 下的 SQL，包含：
 
-### 2) 初始化表结构
+- `profiles`：Supabase Auth 用户资料与角色
+- `commercial_deals`：合作进度台账
+- `promotion_reports`：推广数据报告
+- `annual_reports`：年度总览
+- `replace_*` RPC：后台整表替换写入，保持事务一致性
 
-```bash
-npx wrangler d1 execute blogger-alliance --file=cloudflare/schema.sql
-```
+### 1.1) 开启 GitHub / Google OAuth 登录
 
-### 3) 配置 Worker Secrets
+登录、注册页已内置「GitHub 登录 / Google 登录」按钮（`src/components/OAuthButtons.vue`），走 Supabase 内置 OAuth（`signInWithOAuth`），与邮箱注册共用 `profiles` 触发器和角色体系。启用步骤：
+
+1. **GitHub**：GitHub → Settings → Developer settings → OAuth Apps → New OAuth App
+   - Authorization callback URL 填 `https://<project-ref>.supabase.co/auth/v1/callback`
+   - 把 Client ID / Client Secret 填到 Supabase Dashboard → Authentication → Providers → GitHub
+2. **Google**：Google Cloud Console → APIs & Services → Credentials → OAuth client ID（Web application）
+   - Authorized redirect URI 同样填 `https://<project-ref>.supabase.co/auth/v1/callback`
+   - 把 Client ID / Client Secret 填到 Supabase Dashboard → Authentication → Providers → Google
+3. **Redirect URLs**：Supabase Dashboard → Authentication → URL Configuration，把
+   `https://blogger-alliance.cn/workspace`（以及本地 `http://localhost:5173/workspace`）加入 Redirect URLs，
+   或运行 `npm run supabase:auth-urls` 同步
+4. 执行 `npm run supabase:migrate` 应用 `005_oauth_profiles.sql`（OAuth 注册时自动取昵称、头像）
+
+> 注意：同一邮箱在 Supabase 默认会自动合并身份（GitHub / Google / 邮箱密码视为同一账号），管理员邮箱用 OAuth 登录同样会被 `003/005` 迁移引导为 admin。
+
+### 2) 配置 Worker Secrets
 
 复制示例文件：
 
@@ -191,49 +209,41 @@ cp .dev.vars.example .dev.vars
 
 然后填写：
 
-- `INTERNAL_ACCESS_CREDENTIAL`：前端输入的访问凭证
-- `INTERNAL_SESSION_SECRET`：用于签发会话 token 的随机长串
+- `SUPABASE_URL`：Supabase 项目 URL
+- `SUPABASE_ANON_KEY`：Supabase anon / publishable key
+- `SUPABASE_SERVICE_ROLE_KEY`：Supabase service role key，仅 Worker 服务端使用
 
 部署前还需要把它们写入 Cloudflare：
 
 ```bash
-npx wrangler secret put INTERNAL_ACCESS_CREDENTIAL
-npx wrangler secret put INTERNAL_SESSION_SECRET
+npx wrangler secret put SUPABASE_URL
+npx wrangler secret put SUPABASE_ANON_KEY
+npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
 ```
 
-### 4) 一次性初始化 / 灾备导入
+### 3) 一次性初始化 / 灾备导入
 
-生产数据以 Cloudflare D1 为唯一真实来源。`private/*.json` 只用于新环境初始化或灾备恢复，不作为日常维护入口，也不要把私密业务数据提交到仓库。
+生产数据以 Supabase 为唯一真实来源。`private/*.json` 只用于新环境初始化或灾备恢复，不作为日常维护入口，也不要把私密业务数据提交到仓库。
 
-如需从本地灾备文件重建 D1，可使用：
+如需从本地灾备文件重建 Supabase 业务表，可使用：
 
 - `private/commercialDeals.source.json`
 - `private/promotionReports.source.json`
-- `private/annualReports.source.json`（年度总览，新增）
+- `private/annualReports.source.json`
 
 生成 SQL：
 
 ```bash
-npm run d1:export-seed
+npm run supabase:export-seed
 ```
 
 默认会产出：
 
-- `tmp/d1-seed.sql`
+- `tmp/supabase-seed.sql`
 
-执行导入：
+执行导入可通过 Supabase SQL Editor，或使用 `psql` 连接项目数据库执行该 SQL。
 
-```bash
-npx wrangler d1 execute blogger-alliance --file=tmp/d1-seed.sql
-```
-
-导入远端生产 D1 时必须显式加 `--remote`：
-
-```bash
-npx wrangler d1 execute blogger-alliance --remote --file=tmp/d1-seed.sql
-```
-
-### 5) 本地联调与部署
+### 4) 本地联调与部署
 
 本地跑 Cloudflare Worker：
 
@@ -254,53 +264,58 @@ npm run cf:deploy
 > - 部署命令：`npx wrangler deploy`
 > - 生产分支：`main`
 > - Secrets 仍通过 `npx wrangler secret put` 一次性写入，无需在 Builds 面板再配
-> - D1 绑定由 `wrangler.jsonc` 控制，自动生效
 
-### 6) D1 唯一数据源与后台维护
+### 5) Supabase 唯一数据源与后台维护
 
-日常新增、编辑、删除台账和报告时，以 D1 为准，通过内部页面直接写数据库：
+日常新增、编辑、删除台账和报告时，以 Supabase 为准，通过内部页面写入：
 
 - 路径：`/tob/internal`
 
+用户角色管理（仅管理员）：
+
+- 路径：`/workspace/users`（工作台 → 内部板块 → 用户管理）
+- 能力：查看全部注册用户，分配 `member / internal / admin` 角色；不能修改自己的角色
+- 实现：`GET /api/internal/admin/users`、`PUT /api/internal/admin/users/:id/role`（Worker 校验 admin 后用 service role 写 `profiles`）
+
 当前能力：
 
-- 直接读取 D1 中的 `commercial_deals` 和 `promotion_reports`
+- 读取 Supabase 中的 `commercial_deals` 和 `promotion_reports`
 - 在浏览器里新增、编辑、删除合作进度和数据报告
-- 通过 Worker 鉴权接口写回 D1
+- 通过 Worker 鉴权接口写回 Supabase
 - 可查看 `/api/internal/health` 返回的健康状态和当前记录数（含 `annualReports` 计数）
-- 同页底部「📈 年度总览编辑器」可直接维护 `annual_reports`
+- 同页底部「年度总览编辑器」可直接维护 `annual_reports`
 
 这条链路是日常维护入口；不要再通过修改本地 JSON 维护生产数据。
 
-### 7) 从 Excel 导入合作进度台账
+### 6) 从 Excel 导入合作进度台账
 
-Excel 导入也走 Worker 鉴权接口：`Excel -> /api/internal/admin/deals -> D1`，不会把业务数据写入前端包。
+Excel 导入也走 Worker 鉴权接口：`Excel -> /api/internal/admin/deals -> Supabase`，不会把业务数据写入前端包。
 
 先只解析 Excel，检查字段映射：
 
 ```bash
-npm run d1:import-ledger -- --parse-only --excel="/path/to/草稿（含报价结算）.xlsx"
+npm run supabase:import-ledger -- --parse-only --excel="/path/to/草稿（含报价结算）.xlsx"
 ```
 
 导入到本地 Worker：
 
 ```bash
-INTERNAL_ACCESS_CREDENTIAL='访问凭证' \
+SUPABASE_ACCESS_TOKEN='管理员 Supabase access token' \
 INTERNAL_API_BASE='http://127.0.0.1:8787' \
-npm run d1:import-ledger -- --excel="/path/to/草稿（含报价结算）.xlsx"
+npm run supabase:import-ledger -- --excel="/path/to/草稿（含报价结算）.xlsx"
 ```
 
 导入到线上 Worker：
 
 ```bash
-INTERNAL_ACCESS_CREDENTIAL='访问凭证' \
+SUPABASE_ACCESS_TOKEN='管理员 Supabase access token' \
 INTERNAL_API_BASE='https://你的线上域名' \
-npm run d1:import-ledger -- --excel="/path/to/草稿（含报价结算）.xlsx"
+npm run supabase:import-ledger -- --excel="/path/to/草稿（含报价结算）.xlsx"
 ```
 
-脚本会先读取当前 D1 台账，再按品牌、服务和期数尽量匹配旧记录，保留 `muted`、`category`、`reportCooperationId` 等 Excel 没有的字段，并把 Excel 的「承接（进度）」写入 `owner` 字段，最后整体写回 `commercial_deals`。
+脚本会先读取当前 Supabase 台账，再按品牌、服务和期数尽量匹配旧记录，保留 `muted`、`category`、`reportCooperationId` 等 Excel 没有的字段，并把 Excel 的「承接（进度）」写入 `owner` 字段，最后整体写回 `commercial_deals`。
 
-### 8) 字段约定
+### 7) 字段约定
 
 商单表 `commercial_deals` 主要字段：
 
@@ -319,13 +334,13 @@ npm run d1:import-ledger -- --excel="/path/to/草稿（含报价结算）.xlsx"
 年度总览表 `annual_reports` 主要字段：
 
 - `year`：年份，主键
-- `partners_json`：合作品牌名数组 JSON
-- `summary_cards_json`：核心指标卡片数组 JSON（label / value / accent）
-- `highlights_json`：年度重点字符串数组 JSON
+- `partners`：合作品牌名数组 JSON
+- `summary_cards`：核心指标卡片数组 JSON（label / value / accent）
+- `highlights`：年度重点字符串数组 JSON
 - `intro`：介绍语（接在「我们与 …… 等品牌完成合作，」之后）
 - `updated_at`：维护时间
 
-页面 `/annual-report-2025` 在凭证会话有效时通过 `GET /api/public/annual-report?year=2025` 读取。
+页面 `/annual-report-2025` 在 Supabase 内部成员登录态有效时读取年度总览。
 内部 `/tob/internal` 解锁后可在「年度总览编辑器」直接修改并保存（走 `PUT /api/internal/admin/annual-reports`）。
 
 报告表 `promotion_reports` 主要字段：
@@ -338,13 +353,13 @@ npm run d1:import-ledger -- --excel="/path/to/草稿（含报价结算）.xlsx"
 - `period`：统计周期文案
 - `published_at`：ISO 时间
 - `cooperation_id`：与合作进度表关联的合作编码
-- `platforms_json`：平台数组 JSON
-- `stats_json`：统计对象 JSON
-- `platform_stats_json`：按平台统计 JSON
-- `author_sections_json`：按博主拆分的分项 JSON
+- `platforms`：平台数组 JSON
+- `stats`：统计对象 JSON
+- `platform_stats`：按平台统计 JSON
+- `author_sections`：按博主拆分的分项 JSON
 - `content`：报告正文
 
-当前仓库已经移除前端加解密资产，内部数据统一走 `Worker + D1`。
+当前仓库已经移除前端加解密资产，内部数据统一走 `Worker + Supabase`。
 
 ---
 

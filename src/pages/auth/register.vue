@@ -6,6 +6,7 @@ import { formatAuthError, AUTH_COPY } from '../../utils/authMessages.js'
 import { showToast } from '../../utils/toast.js'
 import AuthNetworkBanner from '../../components/AuthNetworkBanner.vue'
 import EmailProviderHint from '../../components/EmailProviderHint.vue'
+import OAuthButtons from '../../components/OAuthButtons.vue'
 
 const router = useRouter()
 const { signUp, resendVerificationEmail, isSupabaseConfigured, initialized, loading: authLoading } = useAuth()
@@ -249,6 +250,12 @@ async function handleResend() {
             {{ isSubmitting ? '注册中...' : '注册' }}
           </button>
         </form>
+
+        <OAuthButtons
+          v-if="!verificationPending"
+          class="mt-6"
+          :disabled="authLoading || !isSupabaseConfigured"
+        />
 
         <p v-if="!verificationPending" class="mt-6 text-center text-sm text-slate-600">
           已有账号？

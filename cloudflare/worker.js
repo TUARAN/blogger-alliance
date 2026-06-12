@@ -1,22 +1,3 @@
-const SESSION_TTL_MS = 30 * 60 * 1000
-const ACCESS_FAILURE_WINDOW_MS = 15 * 60 * 1000
-const ACCESS_MAX_FAILURES = 5
-const ACCESS_LOCKOUT_MS = 15 * 60 * 1000
-const jsonEncoder = new TextEncoder()
-const textDecoder = new TextDecoder()
-
-function normalizeCredential(raw) {
-  if (raw == null) {
-    return ''
-  }
-
-  return String(raw)
-    .replace(/^\uFEFF/, '')
-    .replace(/[\u200B-\u200D\u2060\uFEFF]/g, '')
-    .trim()
-    .normalize('NFKC')
-}
-
 function json(data, init = {}) {
   return new Response(JSON.stringify(data), {
     ...init,
@@ -26,178 +7,6 @@ function json(data, init = {}) {
       ...(init.headers || {})
     }
   })
-}
-
-function toBase64Url(bytes) {
-  let binary = ''
-
-  for (const byte of bytes) {
-    binary += String.fromCharCode(byte)
-  }
-
-  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '')
-}
-
-function fromBase64Url(value) {
-  const normalized = String(value).replace(/-/g, '+').replace(/_/g, '/')
-  const padLength = (4 - (normalized.length % 4 || 4)) % 4
-  const binary = atob(normalized + '='.repeat(padLength))
-  const bytes = new Uint8Array(binary.length)
-
-  for (let i = 0; i < binary.length; i += 1) {
-    bytes[i] = binary.charCodeAt(i)
-  }
-
-  return bytes
-}
-
-async function importHmacKey(secret) {
-  return crypto.subtle.importKey(
-    'raw',
-    jsonEncoder.encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign', 'verify']
-  )
-}
-
-async function signTokenPayload(payload, secret) {
-  const payloadBase64 = toBase64Url(jsonEncoder.encode(JSON.stringify(payload)))
-  const key = await importHmacKey(secret)
-  const signature = await crypto.subtle.sign('HMAC', key, jsonEncoder.encode(payloadBase64))
-
-  return `${payloadBase64}.${toBase64Url(new Uint8Array(signature))}`
-}
-
-async function verifySessionToken(token, secret) {
-  if (!token || typeof token !== 'string' || !token.includes('.')) {
-    return null
-  }
-
-  const [payloadBase64, signatureBase64] = token.split('.', 2)
-
-  if (!payloadBase64 || !signatureBase64) {
-    return null
-  }
-
-  let payload
-
-  try {
-    payload = JSON.parse(textDecoder.decode(fromBase64Url(payloadBase64)))
-  } catch {
-    return null
-  }
-
-  if (!payload?.exp || payload.exp <= Date.now()) {
-    return null
-  }
-
-  const key = await importHmacKey(secret)
-  const isValid = await crypto.subtle.verify(
-    'HMAC',
-    key,
-    fromBase64Url(signatureBase64),
-    jsonEncoder.encode(payloadBase64)
-  )
-
-  if (!isValid || payload.scope !== 'internal-data') {
-    return null
-  }
-
-  return payload
-}
-
-function getClientFingerprintSource(request) {
-  const ip =
-    request.headers.get('CF-Connecting-IP') ||
-    request.headers.get('x-forwarded-for') ||
-    request.headers.get('x-real-ip') ||
-    'unknown'
-  const userAgent = request.headers.get('User-Agent') || 'unknown'
-
-  return `${String(ip).trim()}|${String(userAgent).trim()}`
-}
-
-function bytesToHex(bytes) {
-  return Array.from(bytes, (value) => value.toString(16).padStart(2, '0')).join('')
-}
-
-async function createClientKey(request) {
-  const source = getClientFingerprintSource(request)
-  const digest = await crypto.subtle.digest('SHA-256', jsonEncoder.encode(source))
-  return bytesToHex(new Uint8Array(digest))
-}
-
-function getRetryAfterSeconds(until) {
-  return Math.max(1, Math.ceil((until - Date.now()) / 1000))
-}
-
-function createLockResponse(lockedUntil) {
-  return json(
-    {
-      error: 'TOO_MANY_ATTEMPTS',
-      lockedUntil,
-      retryAfterSeconds: getRetryAfterSeconds(lockedUntil)
-    },
-    {
-      status: 429,
-      headers: {
-        'Retry-After': String(getRetryAfterSeconds(lockedUntil))
-      }
-    }
-  )
-}
-
-async function readAccessAttempt(env, clientKey) {
-  return env.DB.prepare(`
-    SELECT
-      client_key AS clientKey,
-      failure_count AS failureCount,
-      first_failed_at AS firstFailedAt,
-      last_failed_at AS lastFailedAt,
-      locked_until AS lockedUntil
-    FROM internal_access_attempts
-    WHERE client_key = ?
-  `).bind(clientKey).first()
-}
-
-async function clearAccessAttempt(env, clientKey) {
-  await env.DB.prepare('DELETE FROM internal_access_attempts WHERE client_key = ?')
-    .bind(clientKey)
-    .run()
-}
-
-async function registerFailedAccessAttempt(env, clientKey, previousAttempt) {
-  const now = Date.now()
-  const previousFirst = Number(previousAttempt?.firstFailedAt || 0)
-  const previousCount = Number(previousAttempt?.failureCount || 0)
-  const withinWindow = previousFirst > 0 && now - previousFirst < ACCESS_FAILURE_WINDOW_MS
-
-  const firstFailedAt = withinWindow ? previousFirst : now
-  const failureCount = withinWindow ? previousCount + 1 : 1
-  const lockedUntil = failureCount >= ACCESS_MAX_FAILURES ? now + ACCESS_LOCKOUT_MS : 0
-
-  await env.DB.prepare(`
-    INSERT INTO internal_access_attempts (
-      client_key,
-      failure_count,
-      first_failed_at,
-      last_failed_at,
-      locked_until
-    ) VALUES (?, ?, ?, ?, ?)
-    ON CONFLICT(client_key) DO UPDATE SET
-      failure_count = excluded.failure_count,
-      first_failed_at = excluded.first_failed_at,
-      last_failed_at = excluded.last_failed_at,
-      locked_until = excluded.locked_until
-  `).bind(clientKey, failureCount, firstFailedAt, now, lockedUntil).run()
-
-  return {
-    failureCount,
-    firstFailedAt,
-    lastFailedAt: now,
-    lockedUntil
-  }
 }
 
 function readBearerToken(request) {
@@ -222,6 +31,80 @@ function hasMinimumRole(role, minimumRole) {
 
 function missingSupabaseConfig(env) {
   return !env.SUPABASE_URL || !env.SUPABASE_ANON_KEY
+}
+
+function missingSupabaseDataConfig(env) {
+  return missingSupabaseConfig(env) || !env.SUPABASE_SERVICE_ROLE_KEY
+}
+
+function getSupabaseBaseUrl(env) {
+  return String(env.SUPABASE_URL || '').replace(/\/$/, '')
+}
+
+function getSupabaseRestUrl(env, path) {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`
+  return `${getSupabaseBaseUrl(env)}/rest/v1${normalizedPath}`
+}
+
+function getSupabaseDataHeaders(env, { hasBody = false, prefer = '' } = {}) {
+  return {
+    apikey: env.SUPABASE_SERVICE_ROLE_KEY,
+    Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+    Accept: 'application/json',
+    ...(hasBody ? { 'Content-Type': 'application/json' } : {}),
+    ...(prefer ? { Prefer: prefer } : {})
+  }
+}
+
+async function supabaseDataRequest(env, path, { method = 'GET', body, prefer } = {}) {
+  if (missingSupabaseDataConfig(env)) {
+    const error = new Error('SUPABASE_SERVICE_ROLE_NOT_CONFIGURED')
+    error.status = 500
+    throw error
+  }
+
+  const response = await fetch(getSupabaseRestUrl(env, path), {
+    method,
+    headers: getSupabaseDataHeaders(env, {
+      hasBody: body !== undefined,
+      prefer
+    }),
+    body: body === undefined ? undefined : JSON.stringify(body)
+  })
+
+  const text = await response.text()
+  const payload = text ? JSON.parse(text) : null
+
+  if (!response.ok) {
+    const error = new Error(payload?.code || payload?.message || payload?.error || `SUPABASE_REQUEST_FAILED_${response.status}`)
+    error.status = response.status
+    error.payload = payload
+    throw error
+  }
+
+  return payload
+}
+
+function dataErrorResponse(error) {
+  if (error?.message === 'SUPABASE_SERVICE_ROLE_NOT_CONFIGURED') {
+    return json({ error: error.message }, { status: 500 })
+  }
+
+  if (error?.message === '42501' || error?.status === 401) {
+    return json({ error: 'UNAUTHORIZED' }, { status: 401 })
+  }
+
+  if (error?.status === 403) {
+    return json({ error: 'FORBIDDEN' }, { status: 403 })
+  }
+
+  return json(
+    {
+      error: 'SUPABASE_DATA_REQUEST_FAILED',
+      detail: error?.message || 'UNKNOWN_ERROR'
+    },
+    { status: 500 }
+  )
 }
 
 async function verifySupabaseAccess(request, env, minimumRole = 'internal') {
@@ -293,9 +176,9 @@ function mapDealRow(row) {
     category: row.category || '',
     referrer: row.referrer || '',
     owner: row.owner || '',
-    updatedAt: row.updatedAt || '',
-    muted: Number(row.muted) === 1,
-    reportCooperationId: row.reportCooperationId || ''
+    updatedAt: row.updatedAt || row.updated_at || '',
+    muted: row.muted === true || Number(row.muted) === 1,
+    reportCooperationId: row.reportCooperationId || row.report_cooperation_id || ''
   }
 }
 
@@ -315,17 +198,17 @@ function mapReportRow(row) {
   return {
     id: row.id || '',
     title: row.title || '',
-    articleTitle: row.articleTitle || '',
+    articleTitle: row.articleTitle || row.article_title || '',
     project: row.project || '',
     author: row.author || '',
     period: row.period || '',
-    publishedAt: row.publishedAt || '',
-    platforms: parseJsonColumn(row.platformsJson, []),
-    stats: parseJsonColumn(row.statsJson, {}),
-    platformStats: parseJsonColumn(row.platformStatsJson, {}),
-    authorSections: parseJsonColumn(row.authorSectionsJson, []),
+    publishedAt: row.publishedAt || row.published_at || '',
+    platforms: Array.isArray(row.platforms) ? row.platforms : parseJsonColumn(row.platformsJson, []),
+    stats: row.stats && typeof row.stats === 'object' && !Array.isArray(row.stats) ? row.stats : parseJsonColumn(row.statsJson, {}),
+    platformStats: row.platform_stats && typeof row.platform_stats === 'object' && !Array.isArray(row.platform_stats) ? row.platform_stats : parseJsonColumn(row.platformStatsJson, {}),
+    authorSections: Array.isArray(row.author_sections) ? row.author_sections : parseJsonColumn(row.authorSectionsJson, []),
     content: row.content || '',
-    cooperationId: row.cooperationId || ''
+    cooperationId: row.cooperationId || row.cooperation_id || ''
   }
 }
 
@@ -392,11 +275,11 @@ function validateDeals(records) {
 function mapAnnualRow(row) {
   return {
     year: Number(row.year) || 0,
-    partners: parseJsonColumn(row.partnersJson, []),
-    summaryCards: parseJsonColumn(row.summaryCardsJson, []),
-    highlights: parseJsonColumn(row.highlightsJson, []),
+    partners: Array.isArray(row.partners) ? row.partners : parseJsonColumn(row.partnersJson, []),
+    summaryCards: Array.isArray(row.summary_cards) ? row.summary_cards : parseJsonColumn(row.summaryCardsJson, []),
+    highlights: Array.isArray(row.highlights) ? row.highlights : parseJsonColumn(row.highlightsJson, []),
     intro: row.intro || '',
-    updatedAt: row.updatedAt || ''
+    updatedAt: row.updatedAt || row.updated_at || ''
   }
 }
 
@@ -487,25 +370,13 @@ async function handleDeals(request, env) {
     return authFailureResponse(session)
   }
 
-  const { results } = await env.DB.prepare(`
-    SELECT
-      id,
-      brand,
-      service,
-      progress,
-      remark,
-      category,
-      referrer,
-      owner,
-      updated_at AS updatedAt,
-      muted,
-      report_cooperation_id AS reportCooperationId
-    FROM commercial_deals
-    ORDER BY sort_order ASC, updated_at DESC, id ASC
-  `).all()
+  const rows = await supabaseDataRequest(
+    env,
+    '/commercial_deals?select=id,brand,service,progress,remark,category,referrer,owner,updated_at,muted,report_cooperation_id&order=sort_order.asc,updated_at.desc,id.asc'
+  )
 
   return json({
-    deals: (results || []).map(mapDealRow)
+    deals: (rows || []).map(mapDealRow)
   })
 }
 
@@ -516,27 +387,13 @@ async function handleReports(request, env) {
     return authFailureResponse(session)
   }
 
-  const { results } = await env.DB.prepare(`
-    SELECT
-      id,
-      title,
-      article_title AS articleTitle,
-      project,
-      author,
-      period,
-      published_at AS publishedAt,
-      platforms_json AS platformsJson,
-      stats_json AS statsJson,
-      platform_stats_json AS platformStatsJson,
-      author_sections_json AS authorSectionsJson,
-      content,
-      cooperation_id AS cooperationId
-    FROM promotion_reports
-    ORDER BY sort_order ASC, published_at DESC, id DESC
-  `).all()
+  const rows = await supabaseDataRequest(
+    env,
+    '/promotion_reports?select=id,title,article_title,project,author,period,published_at,platforms,stats,platform_stats,author_sections,content,cooperation_id&order=sort_order.asc,published_at.desc,id.desc'
+  )
 
   return json({
-    reports: (results || []).map(mapReportRow)
+    reports: (rows || []).map(mapReportRow)
   })
 }
 
@@ -547,25 +404,11 @@ async function handleClientReport(request, env, reportId) {
     return authFailureResponse(session)
   }
 
-  const row = await env.DB.prepare(`
-    SELECT
-      id,
-      title,
-      article_title AS articleTitle,
-      project,
-      author,
-      period,
-      published_at AS publishedAt,
-      platforms_json AS platformsJson,
-      stats_json AS statsJson,
-      platform_stats_json AS platformStatsJson,
-      author_sections_json AS authorSectionsJson,
-      content,
-      cooperation_id AS cooperationId
-    FROM promotion_reports
-    WHERE id = ?
-    LIMIT 1
-  `).bind(reportId).first()
+  const rows = await supabaseDataRequest(
+    env,
+    `/promotion_reports?select=id,title,article_title,project,author,period,published_at,platforms,stats,platform_stats,author_sections,content,cooperation_id&id=eq.${encodeURIComponent(reportId)}&limit=1`
+  )
+  const row = rows?.[0]
 
   if (!row) {
     return json({ error: 'NOT_FOUND' }, { status: 404 })
@@ -575,11 +418,7 @@ async function handleClientReport(request, env, reportId) {
 }
 
 async function handleClientApi(request, env) {
-  if (!env.DB) {
-    return json({ error: 'D1_NOT_CONFIGURED' }, { status: 500 })
-  }
-
-  if (missingSupabaseConfig(env)) {
+  if (missingSupabaseDataConfig(env)) {
     return json({ error: 'SUPABASE_NOT_CONFIGURED' }, { status: 500 })
   }
 
@@ -587,7 +426,11 @@ async function handleClientApi(request, env) {
   const reportMatch = url.pathname.match(/^\/api\/client\/reports\/([^/]+)$/)
 
   if (request.method === 'GET' && reportMatch) {
-    return handleClientReport(request, env, decodeURIComponent(reportMatch[1]))
+    try {
+      return await handleClientReport(request, env, decodeURIComponent(reportMatch[1]))
+    } catch (error) {
+      return dataErrorResponse(error)
+    }
   }
 
   return json({ error: 'NOT_FOUND' }, { status: 404 })
@@ -600,36 +443,39 @@ async function handleReportCoopIds(request, env) {
     return authFailureResponse(session)
   }
 
-  const { results } = await env.DB.prepare(`
-    SELECT DISTINCT lower(trim(cooperation_id)) AS cooperationId
-    FROM promotion_reports
-    WHERE cooperation_id IS NOT NULL AND trim(cooperation_id) != ''
-  `).all()
+  const rows = await supabaseDataRequest(
+    env,
+    '/promotion_reports?select=cooperation_id'
+  )
+  const cooperationIds = Array.from(new Set(
+    (rows || [])
+      .map((row) => String(row.cooperation_id || '').trim().toLowerCase())
+      .filter(Boolean)
+  ))
 
   return json({
-    cooperationIds: (results || []).map((row) => row.cooperationId).filter(Boolean)
+    cooperationIds
   })
 }
 
 async function handleHealth(_request, env) {
-  const [dealsCount, reportsCount, annualCount] = await Promise.all([
-    env.DB.prepare('SELECT COUNT(*) AS count FROM commercial_deals').first(),
-    env.DB.prepare('SELECT COUNT(*) AS count FROM promotion_reports').first(),
-    env.DB.prepare('SELECT COUNT(*) AS count FROM annual_reports').first()
-  ])
+  const counts = await supabaseDataRequest(env, '/rpc/get_internal_data_counts', {
+    method: 'POST',
+    body: {}
+  })
 
   return json({
     ok: true,
     service: 'blogger-alliance-internal-api',
-    database: 'blogger-alliance',
+    database: 'supabase',
     authPolicy: {
       provider: 'supabase',
       roles: ['member', 'internal', 'admin']
     },
     counts: {
-      deals: Number(dealsCount?.count || 0),
-      reports: Number(reportsCount?.count || 0),
-      annualReports: Number(annualCount?.count || 0)
+      deals: Number(counts?.deals || 0),
+      reports: Number(counts?.reports || 0),
+      annualReports: Number(counts?.annualReports || 0)
     },
     timestamp: new Date().toISOString()
   })
@@ -645,28 +491,24 @@ async function handlePublicAnnualReport(request, env) {
   const url = new URL(request.url)
   const yearParam = url.searchParams.get('year')
   const yearNumber = Number(yearParam)
-  const sql = `
-    SELECT
-      year,
-      partners_json AS partnersJson,
-      summary_cards_json AS summaryCardsJson,
-      highlights_json AS highlightsJson,
-      intro,
-      updated_at AS updatedAt
-    FROM annual_reports
-  `
-
   if (yearParam && Number.isFinite(yearNumber)) {
-    const row = await env.DB.prepare(`${sql} WHERE year = ? LIMIT 1`).bind(Math.trunc(yearNumber)).first()
+    const rows = await supabaseDataRequest(
+      env,
+      `/annual_reports?select=year,partners,summary_cards,highlights,intro,updated_at&year=eq.${Math.trunc(yearNumber)}&limit=1`
+    )
+    const row = rows?.[0]
     if (!row) {
       return json({ error: 'NOT_FOUND' }, { status: 404 })
     }
     return json({ report: mapAnnualRow(row) })
   }
 
-  const { results } = await env.DB.prepare(`${sql} ORDER BY year DESC`).all()
+  const rows = await supabaseDataRequest(
+    env,
+    '/annual_reports?select=year,partners,summary_cards,highlights,intro,updated_at&order=year.desc'
+  )
   return json({
-    reports: (results || []).map(mapAnnualRow)
+    reports: (rows || []).map(mapAnnualRow)
   })
 }
 
@@ -677,133 +519,35 @@ async function handleAnnualReportsAdminList(request, env) {
     return authFailureResponse(session)
   }
 
-  const { results } = await env.DB.prepare(`
-    SELECT
-      year,
-      partners_json AS partnersJson,
-      summary_cards_json AS summaryCardsJson,
-      highlights_json AS highlightsJson,
-      intro,
-      updated_at AS updatedAt
-    FROM annual_reports
-    ORDER BY year DESC
-  `).all()
+  const rows = await supabaseDataRequest(
+    env,
+    '/annual_reports?select=year,partners,summary_cards,highlights,intro,updated_at&order=year.desc'
+  )
 
   return json({
-    reports: (results || []).map(mapAnnualRow)
+    reports: (rows || []).map(mapAnnualRow)
   })
 }
 
 async function replaceDeals(env, deals) {
-  const statements = [env.DB.prepare('DELETE FROM commercial_deals')]
-
-  deals.forEach((deal, index) => {
-    statements.push(
-      env.DB.prepare(`
-        INSERT INTO commercial_deals (
-          id,
-          brand,
-          service,
-          progress,
-          remark,
-          category,
-          referrer,
-          owner,
-          updated_at,
-          muted,
-          report_cooperation_id,
-          sort_order
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `).bind(
-        deal.id,
-        deal.brand,
-        deal.service,
-        deal.progress,
-        deal.remark,
-        deal.category,
-        deal.referrer,
-        deal.owner,
-        deal.updatedAt,
-        deal.muted ? 1 : 0,
-        deal.reportCooperationId,
-        index
-      )
-    )
+  return supabaseDataRequest(env, '/rpc/replace_commercial_deals', {
+    method: 'POST',
+    body: { records: deals }
   })
-
-  await env.DB.batch(statements)
 }
 
 async function replaceReports(env, reports) {
-  const statements = [env.DB.prepare('DELETE FROM promotion_reports')]
-
-  reports.forEach((report, index) => {
-    statements.push(
-      env.DB.prepare(`
-        INSERT INTO promotion_reports (
-          id,
-          title,
-          article_title,
-          project,
-          author,
-          period,
-          published_at,
-          cooperation_id,
-          platforms_json,
-          stats_json,
-          platform_stats_json,
-          author_sections_json,
-          content,
-          sort_order
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `).bind(
-        report.id,
-        report.title,
-        report.articleTitle,
-        report.project,
-        report.author,
-        report.period,
-        report.publishedAt,
-        report.cooperationId,
-        JSON.stringify(report.platforms),
-        JSON.stringify(report.stats),
-        JSON.stringify(report.platformStats),
-        JSON.stringify(report.authorSections),
-        report.content,
-        index
-      )
-    )
+  return supabaseDataRequest(env, '/rpc/replace_promotion_reports', {
+    method: 'POST',
+    body: { records: reports }
   })
-
-  await env.DB.batch(statements)
 }
 
 async function replaceAnnualReports(env, reports) {
-  const statements = [env.DB.prepare('DELETE FROM annual_reports')]
-
-  reports.forEach((report) => {
-    statements.push(
-      env.DB.prepare(`
-        INSERT INTO annual_reports (
-          year,
-          partners_json,
-          summary_cards_json,
-          highlights_json,
-          intro,
-          updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?)
-      `).bind(
-        report.year,
-        JSON.stringify(report.partners),
-        JSON.stringify(report.summaryCards),
-        JSON.stringify(report.highlights),
-        report.intro,
-        report.updatedAt
-      )
-    )
+  return supabaseDataRequest(env, '/rpc/replace_annual_reports', {
+    method: 'POST',
+    body: { records: reports }
   })
-
-  await env.DB.batch(statements)
 }
 
 async function handleAdminAnnualReportsUpdate(request, env) {
@@ -817,9 +561,10 @@ async function handleAdminAnnualReportsUpdate(request, env) {
 
   try {
     const reports = validateAnnualReports(body?.reports)
-    await replaceAnnualReports(env, reports)
-    return json({ ok: true, count: reports.length })
+    const count = await replaceAnnualReports(env, reports)
+    return json({ ok: true, count: Number(count || reports.length) })
   } catch (error) {
+    if (error.status) return dataErrorResponse(error)
     return json({ error: error.message || 'INVALID_ANNUAL_REPORTS_PAYLOAD' }, { status: 400 })
   }
 }
@@ -835,9 +580,10 @@ async function handleAdminDealsUpdate(request, env) {
 
   try {
     const deals = validateDeals(body?.deals)
-    await replaceDeals(env, deals)
-    return json({ ok: true, count: deals.length })
+    const count = await replaceDeals(env, deals)
+    return json({ ok: true, count: Number(count || deals.length) })
   } catch (error) {
+    if (error.status) return dataErrorResponse(error)
     return json({ error: error.message || 'INVALID_DEALS_PAYLOAD' }, { status: 400 })
   }
 }
@@ -853,38 +599,118 @@ async function handleAdminReportsUpdate(request, env) {
 
   try {
     const reports = validateReports(body?.reports)
-    await replaceReports(env, reports)
-    return json({ ok: true, count: reports.length })
+    const count = await replaceReports(env, reports)
+    return json({ ok: true, count: Number(count || reports.length) })
   } catch (error) {
+    if (error.status) return dataErrorResponse(error)
     return json({ error: error.message || 'INVALID_REPORTS_PAYLOAD' }, { status: 400 })
   }
 }
 
-async function handleApi(request, env) {
-  if (!env.DB) {
-    return json({ error: 'D1_NOT_CONFIGURED' }, { status: 500 })
+const ASSIGNABLE_ROLES = ['member', 'internal', 'admin']
+
+async function handleAdminUsersList(request, env) {
+  const session = await requireSession(request, env, 'admin')
+
+  if (!session.ok) {
+    return authFailureResponse(session)
   }
 
-  if (missingSupabaseConfig(env)) {
+  const rows = await supabaseDataRequest(
+    env,
+    '/profiles?select=id,email,display_name,avatar_url,role,created_at,updated_at&order=created_at.desc'
+  )
+
+  return json({
+    users: (rows || []).map((row) => ({
+      id: row.id || '',
+      email: row.email || '',
+      displayName: row.display_name || '',
+      avatarUrl: row.avatar_url || '',
+      role: row.role || 'member',
+      createdAt: row.created_at || '',
+      updatedAt: row.updated_at || ''
+    }))
+  })
+}
+
+async function handleAdminUserRoleUpdate(request, env, userId) {
+  const session = await requireSession(request, env, 'admin')
+
+  if (!session.ok) {
+    return authFailureResponse(session)
+  }
+
+  // 禁止管理员修改自己的角色，避免误操作把自己降权锁死
+  if (session.user?.id === userId) {
+    return json({ error: 'CANNOT_CHANGE_OWN_ROLE' }, { status: 400 })
+  }
+
+  const body = await request.json().catch(() => null)
+  const role = String(body?.role || '').trim()
+
+  if (!ASSIGNABLE_ROLES.includes(role)) {
+    return json({ error: 'INVALID_ROLE' }, { status: 400 })
+  }
+
+  try {
+    const rows = await supabaseDataRequest(
+      env,
+      `/profiles?id=eq.${encodeURIComponent(userId)}&select=id,email,display_name,role,updated_at`,
+      {
+        method: 'PATCH',
+        body: { role, updated_at: new Date().toISOString() },
+        prefer: 'return=representation'
+      }
+    )
+
+    if (!rows?.length) {
+      return json({ error: 'NOT_FOUND' }, { status: 404 })
+    }
+
+    return json({ ok: true, user: rows[0] })
+  } catch (error) {
+    return dataErrorResponse(error)
+  }
+}
+
+async function handleApi(request, env) {
+  if (missingSupabaseDataConfig(env)) {
     return json({ error: 'SUPABASE_NOT_CONFIGURED' }, { status: 500 })
   }
 
   const url = new URL(request.url)
 
   if (request.method === 'GET' && url.pathname === '/api/internal/health') {
-    return handleHealth(request, env)
+    try {
+      return await handleHealth(request, env)
+    } catch (error) {
+      return dataErrorResponse(error)
+    }
   }
 
   if (request.method === 'GET' && url.pathname === '/api/internal/deals') {
-    return handleDeals(request, env)
+    try {
+      return await handleDeals(request, env)
+    } catch (error) {
+      return dataErrorResponse(error)
+    }
   }
 
   if (request.method === 'GET' && url.pathname === '/api/internal/reports') {
-    return handleReports(request, env)
+    try {
+      return await handleReports(request, env)
+    } catch (error) {
+      return dataErrorResponse(error)
+    }
   }
 
   if (request.method === 'GET' && url.pathname === '/api/internal/reports/coop-ids') {
-    return handleReportCoopIds(request, env)
+    try {
+      return await handleReportCoopIds(request, env)
+    } catch (error) {
+      return dataErrorResponse(error)
+    }
   }
 
   if (request.method === 'PUT' && url.pathname === '/api/internal/admin/deals') {
@@ -896,11 +722,29 @@ async function handleApi(request, env) {
   }
 
   if (request.method === 'GET' && url.pathname === '/api/internal/annual-reports') {
-    return handleAnnualReportsAdminList(request, env)
+    try {
+      return await handleAnnualReportsAdminList(request, env)
+    } catch (error) {
+      return dataErrorResponse(error)
+    }
   }
 
   if (request.method === 'PUT' && url.pathname === '/api/internal/admin/annual-reports') {
     return handleAdminAnnualReportsUpdate(request, env)
+  }
+
+  if (request.method === 'GET' && url.pathname === '/api/internal/admin/users') {
+    try {
+      return await handleAdminUsersList(request, env)
+    } catch (error) {
+      return dataErrorResponse(error)
+    }
+  }
+
+  const userRoleMatch = url.pathname.match(/^\/api\/internal\/admin\/users\/([^/]+)\/role$/)
+
+  if (request.method === 'PUT' && userRoleMatch) {
+    return handleAdminUserRoleUpdate(request, env, decodeURIComponent(userRoleMatch[1]))
   }
 
   return json({ error: 'NOT_FOUND' }, { status: 404 })
@@ -927,16 +771,16 @@ async function handlePublic(request, env) {
     )
   }
 
-  if (!env.DB) {
-    return json({ error: 'D1_NOT_CONFIGURED' }, { status: 500 })
-  }
-
-  if (missingSupabaseConfig(env)) {
+  if (missingSupabaseDataConfig(env)) {
     return json({ error: 'SUPABASE_NOT_CONFIGURED' }, { status: 500 })
   }
 
   if (request.method === 'GET' && url.pathname === '/api/public/annual-report') {
-    return handlePublicAnnualReport(request, env)
+    try {
+      return await handlePublicAnnualReport(request, env)
+    } catch (error) {
+      return dataErrorResponse(error)
+    }
   }
 
   return json({ error: 'NOT_FOUND' }, { status: 404 })
