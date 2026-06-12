@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import pg from 'pg'
 
@@ -90,10 +90,19 @@ if (!password) {
   process.exit(1)
 }
 
-const sql = readFileSync(
-  resolve(process.cwd(), 'supabase/migrations/001_profiles.sql'),
-  'utf8'
-)
+const migrationsDir = resolve(process.cwd(), 'supabase/migrations')
+const migrations = readdirSync(migrationsDir)
+  .filter((fileName) => fileName.endsWith('.sql'))
+  .sort((a, b) => a.localeCompare(b))
+  .map((fileName) => ({
+    fileName,
+    sql: readFileSync(resolve(migrationsDir, fileName), 'utf8')
+  }))
+
+if (migrations.length === 0) {
+  console.error('supabase/migrations/ 下没有可执行的 SQL 文件。')
+  process.exit(1)
+}
 
 let lastError = null
 
@@ -102,11 +111,18 @@ for (const { label, config } of createClients(projectRef, password)) {
 
   try {
     await client.connect()
-    await client.query(sql)
+    for (const migration of migrations) {
+      await client.query(migration.sql)
+      console.log(`已执行: ${migration.fileName}`)
+    }
     const { rows } = await client.query(`
-      select to_regclass('public.profiles') as profiles_table
+      select
+        to_regclass('public.profiles') as profiles_table,
+        to_regclass('public.commercial_deals') as deals_table,
+        to_regclass('public.promotion_reports') as reports_table,
+        to_regclass('public.annual_reports') as annual_table
     `)
-    console.log(`迁移成功（${label}）。profiles 表:`, rows[0]?.profiles_table || '未找到')
+    console.log(`迁移成功（${label}）。`, rows[0])
     await client.end()
     process.exit(0)
   } catch (error) {

@@ -4,11 +4,11 @@ import process from 'node:process'
 import AdmZip from 'adm-zip'
 
 /**
- * Import commercial ledger rows from Excel into D1 via Worker admin API.
+ * Import commercial ledger rows from Excel into Supabase via Worker admin API.
  *
  * Usage:
- *   npm run d1:import-ledger -- --parse-only --excel="/path/to/file.xlsx"
- *   INTERNAL_ACCESS_CREDENTIAL='...' npm run d1:import-ledger -- --excel="/path/to/file.xlsx"
+ *   npm run supabase:import-ledger -- --parse-only --excel="/path/to/file.xlsx"
+ *   SUPABASE_ACCESS_TOKEN='...' npm run supabase:import-ledger -- --excel="/path/to/file.xlsx"
  */
 
 const DEFAULT_EXCEL_PATH = '/Users/tuaran/Downloads/运营支撑台账26/草稿（含报价结算）.xlsx'
@@ -368,14 +368,6 @@ async function requestJson(url, options = {}) {
   return payload
 }
 
-async function createSession(apiBase, credential) {
-  const payload = await requestJson(`${apiBase}/api/internal/session`, {
-    method: 'POST',
-    body: JSON.stringify({ credential })
-  })
-  return payload.token
-}
-
 async function fetchCurrentDeals(apiBase, token) {
   const payload = await requestJson(`${apiBase}/api/internal/deals`, {
     headers: { Authorization: `Bearer ${token}` }
@@ -433,7 +425,7 @@ async function writeDryRun(filePath, payload) {
 async function main() {
   const excelPath = path.resolve(getArg('--excel', process.env.LEDGER_EXCEL_PATH || DEFAULT_EXCEL_PATH))
   const apiBase = (getArg('--api-base', process.env.INTERNAL_API_BASE || DEFAULT_API_BASE)).replace(/\/$/, '')
-  const credential = process.env.INTERNAL_ACCESS_CREDENTIAL || ''
+  const token = process.env.SUPABASE_ACCESS_TOKEN || getArg('--token', '')
   const dryRun = hasFlag('--dry-run')
   const parseOnly = hasFlag('--parse-only')
 
@@ -455,11 +447,10 @@ async function main() {
     return
   }
 
-  if (!credential) {
-    throw new Error('INTERNAL_ACCESS_CREDENTIAL 环境变量不能为空')
+  if (!token) {
+    throw new Error('SUPABASE_ACCESS_TOKEN 环境变量或 --token 参数不能为空')
   }
 
-  const token = await createSession(apiBase, credential)
   const currentDeals = await fetchCurrentDeals(apiBase, token)
   const nextDeals = mergeDeals(excelDeals, currentDeals)
 
@@ -473,13 +464,13 @@ async function main() {
       deals: nextDeals
     })
     console.log(`已生成预览: ${outPath}`)
-    console.log(`当前 D1 台账 ${currentDeals.length} 条，Excel 合并后 ${nextDeals.length} 条，未写入数据库。`)
+    console.log(`当前 Supabase 台账 ${currentDeals.length} 条，Excel 合并后 ${nextDeals.length} 条，未写入数据库。`)
     return
   }
 
   const result = await updateDeals(apiBase, token, nextDeals)
   console.log(`Excel 工作表: ${sheetName}`)
-  console.log(`已写入 D1 合作进度台账: ${result.count} 条`)
+  console.log(`已写入 Supabase 合作进度台账: ${result.count} 条`)
 }
 
 main().catch((error) => {

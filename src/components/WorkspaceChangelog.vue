@@ -88,6 +88,14 @@ const releases = [
       'auth network probe',
       'changelog reverse'
     ]
+  },
+  {
+    version: 'v0.12.0',
+    period: '2026-06-11',
+    title: '业务数据并入 Supabase',
+    summary:
+      '移除 D1 业务数据依赖，商单、报告、年度总览统一迁入 Supabase Postgres；Worker 继续作为 API 边界，校验 Supabase JWT 与角色后用服务端密钥读写业务表，并完成生产迁移与 Worker secret 配置。',
+    commits: ['supabase data', 'worker postgres', 'remove d1', 'migrate prod']
   }
 ]
 
@@ -346,7 +354,9 @@ const weeklyProgress = [
       '内部数据访问改为角色权限控制，移除导航栏机器人入口与旧凭证解锁流程。',
       '注册邮箱验证、权限不足、登录失败等提示语全面中文化。',
       '工作台拆为公开/内部板块，统一命名并新增 SyncBlog 同步分发入口。',
-      '明确 Supabase（账号/角色）与 D1（商单/报告/年度总览）分工：鉴权走 Supabase，业务数据仍存 D1，短期需保留双库。',
+      '业务数据并入 Supabase Postgres，账号、角色、商单、报告、年度总览统一以 Supabase 为事实源；Worker 继续负责 JWT 角色校验和服务端写入。',
+      '执行 Supabase migration，创建 commercial_deals、promotion_reports、annual_reports 表与整表替换 RPC，并完成 Worker SUPABASE_SERVICE_ROLE_KEY secret 配置。',
+      '移除 Wrangler D1 binding、D1 schema、D1 迁移脚本和旧 D1 迁移文档；维护命令改为 supabase:export-seed 与 supabase:import-ledger。',
       'AppNav 顶部按 matchPrefix 高亮子页（/tob/services/*、/cases/*、/workspace/* 全程激活），删除未生效的 workspaceActive prop；/tob 统一重定向到 /，logo 默认指向 /。',
       '路由权限收敛为 meta.requires=auth/internal/admin 单一来源，废弃 AUTH_REQUIRED_PREFIXES 等三处前缀表。',
       '云自推广中控台：所有 planned 项目收进新增的「路线图」标签页，首屏只保留可执行操作。',
@@ -414,7 +424,8 @@ const timelineOrder = [
   { type: 'minor', key: '2026 W24' },
   { type: 'major', key: 'v0.9.0' },
   { type: 'major', key: 'v0.10.0' },
-  { type: 'major', key: 'v0.11.0' }
+  { type: 'major', key: 'v0.11.0' },
+  { type: 'major', key: 'v0.12.0' }
 ]
 
 // 时间线倒序展示：最新的版本 / 周条目放最前面

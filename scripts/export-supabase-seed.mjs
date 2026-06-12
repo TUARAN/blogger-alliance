@@ -2,18 +2,18 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 
 /**
- * Export private JSON backups to D1 seed SQL.
+ * Export private JSON backups to Supabase seed SQL.
  *
  * Usage:
- *   npm run d1:export-seed
- *   npm run d1:export-seed -- --output ./tmp/d1-seed.sql
+ *   npm run supabase:export-seed
+ *   npm run supabase:export-seed -- --output ./tmp/supabase-seed.sql
  */
 
 const cwd = process.cwd()
 const DEFAULT_DEALS_PATH = path.resolve(cwd, 'private/commercialDeals.source.json')
 const DEFAULT_REPORTS_PATH = path.resolve(cwd, 'private/promotionReports.source.json')
 const DEFAULT_ANNUAL_PATH = path.resolve(cwd, 'private/annualReports.source.json')
-const DEFAULT_OUTPUT_PATH = path.resolve(cwd, 'tmp/d1-seed.sql')
+const DEFAULT_OUTPUT_PATH = path.resolve(cwd, 'tmp/supabase-seed.sql')
 
 function getArg(flag, fallback = '') {
   const exact = process.argv.find((arg) => arg.startsWith(`${flag}=`))
@@ -45,7 +45,7 @@ function sqlJson(value, fallback) {
 }
 
 function sqlBool(value) {
-  return value === true ? '1' : '0'
+  return value === true ? 'true' : 'false'
 }
 
 async function readJson(filePath) {
@@ -121,7 +121,7 @@ async function main() {
   const dealsPath = path.resolve(cwd, getArg('--deals', DEFAULT_DEALS_PATH))
   const reportsPath = path.resolve(cwd, getArg('--reports', DEFAULT_REPORTS_PATH))
   const annualPath = path.resolve(cwd, getArg('--annual', DEFAULT_ANNUAL_PATH))
-  const outputPath = path.resolve(cwd, getArg('--out', DEFAULT_OUTPUT_PATH))
+  const outputPath = path.resolve(cwd, getArg('--output', getArg('--out', DEFAULT_OUTPUT_PATH)))
 
   const deals = await readJson(dealsPath)
   const reports = await readJson(reportsPath)
@@ -140,22 +140,24 @@ async function main() {
   }
 
   const annualSection = annualReports.length === 0
-    ? `DELETE FROM annual_reports;
+    ? `DELETE FROM public.annual_reports;
 `
-    : `DELETE FROM annual_reports;
-INSERT INTO annual_reports (
+    : `DELETE FROM public.annual_reports;
+INSERT INTO public.annual_reports (
   year,
-  partners_json,
-  summary_cards_json,
-  highlights_json,
+  partners,
+  summary_cards,
+  highlights,
   intro,
   updated_at
 ) VALUES
 ${buildAnnualReportsInsertRows(annualReports).join(',\n')};
 `
 
-  const sql = `DELETE FROM commercial_deals;
-INSERT INTO commercial_deals (
+  const sql = `BEGIN;
+
+DELETE FROM public.commercial_deals;
+INSERT INTO public.commercial_deals (
   id,
   brand,
   service,
@@ -171,8 +173,8 @@ INSERT INTO commercial_deals (
 ) VALUES
 ${buildDealsInsertRows(deals).join(',\n')};
 
-DELETE FROM promotion_reports;
-INSERT INTO promotion_reports (
+DELETE FROM public.promotion_reports;
+INSERT INTO public.promotion_reports (
   id,
   title,
   article_title,
@@ -181,21 +183,24 @@ INSERT INTO promotion_reports (
   period,
   published_at,
   cooperation_id,
-  platforms_json,
-  stats_json,
-  platform_stats_json,
-  author_sections_json,
+  platforms,
+  stats,
+  platform_stats,
+  author_sections,
   content,
   sort_order
 ) VALUES
 ${buildReportsInsertRows(reports).join(',\n')};
 
-${annualSection}`
+${annualSection}
+
+COMMIT;
+`
 
   await fs.mkdir(path.dirname(outputPath), { recursive: true })
   await fs.writeFile(outputPath, sql, 'utf8')
 
-  console.log(`已生成 D1 导入 SQL: ${path.relative(cwd, outputPath)}`)
+  console.log(`已生成 Supabase 导入 SQL: ${path.relative(cwd, outputPath)}`)
   console.log(`commercial_deals: ${deals.length} 条`)
   console.log(`promotion_reports: ${reports.length} 条`)
   console.log(`annual_reports: ${annualReports.length} 条`)
