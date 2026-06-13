@@ -1,0 +1,27 @@
+{
+  "$comment": "data/ledger/deals/<id>.json 的字段契约。被 scripts/ledger-validate.mjs 读取做机器校验，同时是 codex / claude code 录入时的字段字典。改这里前请同步更新 data/ledger/README.md。",
+  "version": 1,
+  "idPattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+  "fields": {
+    "id": { "type": "string", "required": true, "public": true, "desc": "合作唯一编码，须与文件名一致，命名约定 品牌-服务-期数，如 finclip-cpc-1。报告通过 cooperationId 引用它，改名会断链。" },
+    "brand": { "type": "string", "required": true, "public": true, "desc": "品牌 / 项目名（或官网域名）。" },
+    "service": { "type": "string", "required": true, "public": true, "desc": "具体服务，如 CPC / 直发推文 / 品牌推文 / AI推文 / 素材供稿 / 专题 / 社群宣传。" },
+    "progress": { "type": "string", "required": true, "public": true, "desc": "当前进度（自由文本，建议含下方某个状态关键词便于归类）。" },
+    "remark": { "type": "string", "required": false, "public": true, "desc": "备注（期数、承接人、沟通要点等）。" },
+    "category": { "type": "string", "required": false, "public": true, "desc": "分类标签，可空。" },
+    "referrer": { "type": "string", "required": false, "public": true, "desc": "推荐人。" },
+    "owner": { "type": "string", "required": false, "public": true, "desc": "承接人 / 负责人。" },
+    "updatedAt": { "type": "string", "required": false, "public": true, "desc": "最近沟通时间，格式 YYYY.M.D，如 2026.3.20。" },
+    "reportCooperationId": { "type": "string", "required": false, "public": true, "desc": "若报告挂在另一编码下，填那个编码；默认留空表示用 id 本身。" },
+    "muted": { "type": "boolean", "required": false, "public": true, "desc": "是否暂不推进/归档，true 时台账弱化展示。" },
+    "settlement": { "type": "envelope-or-null", "required": false, "sensitive": true, "desc": "结算敏感信息（前向/后向/运营支撑金额 + 结算详情）。必须是 ledger:encrypt 产出的密文信封字符串或 null。明文金额绝不允许出现在此字段或文件任何位置。" }
+  },
+  "progressKeywordHints": {
+    "$comment": "非强制；仅用于台账自动归类与校验告警。",
+    "communicating": ["沟通", "需求", "报价", "待确认", "确认中"],
+    "executing": ["执行", "待执行", "已发布", "待出数据", "持续计费", "投放中"],
+    "settlement": ["待结算", "待付款", "待支付", "开票", "结算中"],
+    "completed": ["已完成", "已闭环", "已结算", "已收款"],
+    "inactive": ["暂不推进", "暂停", "取消", "作废", "无效", "测试"]
+  }
+}

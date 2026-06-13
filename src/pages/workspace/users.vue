@@ -14,12 +14,14 @@ const { initAuth, isAdmin, loading: authLoading, user, getAccessToken } = useAut
 const ROLE_OPTIONS = [
   { value: 'member', label: '普通成员' },
   { value: 'internal', label: '内部成员' },
+  { value: 'manager', label: '普通管理员' },
   { value: 'admin', label: '管理员' }
 ]
 
 const ROLE_BADGE = {
   member: 'bg-slate-100 text-slate-700',
   internal: 'bg-blue-50 text-blue-700',
+  manager: 'bg-teal-50 text-teal-700',
   admin: 'bg-indigo-100 text-indigo-800'
 }
 
@@ -43,7 +45,7 @@ const filteredUsers = computed(() => {
 })
 
 const roleCounts = computed(() => {
-  const counts = { member: 0, internal: 0, admin: 0 }
+  const counts = { member: 0, internal: 0, manager: 0, admin: 0 }
 
   users.value.forEach((item) => {
     if (counts[item.role] !== undefined) {
@@ -139,7 +141,7 @@ watch(
             用户管理
           </h1>
           <p class="mt-3 text-base leading-7 text-slate-600">
-            查看注册用户并分配角色：普通成员、内部成员（可读内部数据）、管理员（可管理全部数据）。
+            查看注册用户并分配角色：普通成员、内部成员（可读内部数据）、普通管理员（维护台账但看不到结算金额）、管理员（可管理全部数据并解密结算）。
           </p>
         </div>
         <span
@@ -173,7 +175,7 @@ watch(
       </div>
 
       <template v-else>
-        <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
           <div
             v-for="option in ROLE_OPTIONS"
             :key="option.value"

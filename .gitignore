@@ -39,6 +39,12 @@ tmp/
 private/
 src/data/commercialDeals.source.json
 src/data/promotionReports.source.json
+# 结算明文工作表（仅本地中转，加密后即可删除；绝不提交明文金额）
+ledger-settlement-plain.json
+**/ledger-settlement-plain.json
+*.plain.json
+# 结算密码短语（仅本地）
+.ledger.env
 
 # Claude Code 本地状态（worktree、个人设置）
 .claude/worktrees/
