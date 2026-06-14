@@ -43,13 +43,15 @@ let initPromise = null
 export const ROLES = {
   MEMBER: 'member',
   INTERNAL: 'internal',
+  MANAGER: 'manager',
   ADMIN: 'admin'
 }
 
 const ROLE_RANK = {
   member: 0,
   internal: 1,
-  admin: 2
+  manager: 2,
+  admin: 3
 }
 
 export function hasMinimumRole(role, minimumRole) {
@@ -119,6 +121,7 @@ export function useAuth() {
   const role = computed(() => profile.value?.role || ROLES.MEMBER)
   const isAuthenticated = computed(() => Boolean(user.value))
   const isInternal = computed(() => hasMinimumRole(role.value, ROLES.INTERNAL))
+  const isManager = computed(() => role.value === ROLES.MANAGER)
   const isAdmin = computed(() => role.value === ROLES.ADMIN)
 
   const displayName = computed(() => {
@@ -263,6 +266,7 @@ export function useAuth() {
     isSupabaseConfigured,
     isAuthenticated,
     isInternal,
+    isManager,
     isAdmin,
     role,
     displayName,

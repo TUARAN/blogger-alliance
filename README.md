@@ -17,7 +17,10 @@
 | Cloudflare | `npm run cf:deploy` | 构建并部署 Worker + 静态资源 |
 | Supabase | `npm run supabase:migrate` | 执行 `supabase/migrations/` SQL |
 | Supabase | `npm run supabase:export-seed` | 从 `private/*.json` 导出 `tmp/supabase-seed.sql` |
-| Supabase | `npm run supabase:import-ledger` | 从 Excel 导入合作台账到 Supabase |
+| 台账 | `npm run ledger:validate` | 校验 `data/ledger/deals/*.json` |
+| 台账 | `npm run ledger:encrypt` | owner 把结算金额加密成密文信封 |
+| 台账 | `npm run ledger:sync` | 校验后同步台账到 Supabase |
+| 台账 | `npm run ledger:migrate-excel` | 一次性把 Excel 落成 `data/ledger` 文件 |
 | Supabase | `npm run supabase:auth-urls` | 配置 Auth Site URL / Redirect URLs |
 | 采集 | `npm run metrics:login` | Playwright 登录各平台并保存会话 |
 | 采集 | `npm run metrics:collect` | 批量采集页面可见互动数据 |
@@ -165,8 +168,9 @@ git push origin feature/add-blogger-你的名字
 - Wrangler 配置：`wrangler.jsonc`
 - 本地开发变量示例：`.dev.vars.example`
 - JSON 导出 Supabase SQL：`scripts/export-supabase-seed.mjs`
-- Excel 导入 Supabase：`scripts/import-ledger-excel-to-supabase.mjs`
-- 后台录入页：`src/pages/tob/internal.vue`
+- 台账权威源与录入规范：`data/ledger/`（详见 `data/ledger/README.md`）
+- 台账同步 / 校验 / 加密脚本：`scripts/ledger-sync.mjs`、`scripts/ledger-validate.mjs`、`scripts/ledger-encrypt.mjs`
+- 台账只读展示页：`src/pages/tob/internal.vue`
 
 ### 1) 初始化 Supabase 表结构
 
@@ -265,55 +269,58 @@ npm run cf:deploy
 > - 生产分支：`main`
 > - Secrets 仍通过 `npx wrangler secret put` 一次性写入，无需在 Builds 面板再配
 
-### 5) Supabase 唯一数据源与后台维护
+### 5) 台账权威源：`data/ledger`（Git 协作）
 
-日常新增、编辑、删除台账和报告时，以 Supabase 为准，通过内部页面写入：
+合作台账的**唯一权威源**是 Git 跟踪的 `data/ledger/deals/<id>.json`（每合作一文件），**不再通过网页或数据库手改**。完整录入规范见 [`data/ledger/README.md`](data/ledger/README.md)。
 
-- 路径：`/tob/internal`
+- 公开/内部字段（明文，团队可见）：进度、品牌、服务、备注、推荐人、承接人等。
+- 敏感结算字段 `settlement`：只能是 `null` 或 `ledger:encrypt` 产出的**密文信封**，明文金额绝不入库、不入 git。
+
+日常流程：
+
+```bash
+# 1. 改 / 加 data/ledger/deals/*.json（公开字段），settlement 先填 null
+# 2. （仅 owner）加密结算金额
+npm run ledger:encrypt -- --deal=<id>
+# 3. 校验 → 提交 PR（CI 也会跑 ledger:validate）
+npm run ledger:validate
+# 4. 合并后同步到 Supabase
+npm run ledger:sync
+```
+
+页面 `/tob/internal` 现为**只读展示**：
+
+- `internal` / `manager` 看进度等公开字段；
+- 只有 `admin`(owner) 点「解锁结算」输入密码短语后，于浏览器**本地解密**查看结算金额，密文经 Worker 仅对 admin 下发。
 
 用户角色管理（仅管理员）：
 
 - 路径：`/workspace/users`（工作台 → 内部板块 → 用户管理）
-- 能力：查看全部注册用户，分配 `member / internal / admin` 角色；不能修改自己的角色
+- 角色：`member`（公开站点）/ `internal`（只读台账）/ `manager`（普通管理员，维护台账但看不到金额）/ `admin`（owner，可解密金额并管理全部）
 - 实现：`GET /api/internal/admin/users`、`PUT /api/internal/admin/users/:id/role`（Worker 校验 admin 后用 service role 写 `profiles`）
 
-当前能力：
+> 报告（`promotion_reports`）与年度总览（`annual_reports`）暂仍由 `private/*.source.json` + `supabase:export-seed` 维护。
 
-- 读取 Supabase 中的 `commercial_deals` 和 `promotion_reports`
-- 在浏览器里新增、编辑、删除合作进度和数据报告
-- 通过 Worker 鉴权接口写回 Supabase
-- 可查看 `/api/internal/health` 返回的健康状态和当前记录数（含 `annualReports` 计数）
-- 同页底部「年度总览编辑器」可直接维护 `annual_reports`
+### 6) 一次性把旧 Excel 落成 `data/ledger`
 
-这条链路是日常维护入口；不要再通过修改本地 JSON 维护生产数据。
-
-### 6) 从 Excel 导入合作进度台账
-
-Excel 导入也走 Worker 鉴权接口：`Excel -> /api/internal/admin/deals -> Supabase`，不会把业务数据写入前端包。
-
-先只解析 Excel，检查字段映射：
+从运营支撑台账 Excel + 现有 `private/commercialDeals.source.json` 生成每合作一文件：
 
 ```bash
-npm run supabase:import-ledger -- --parse-only --excel="/path/to/草稿（含报价结算）.xlsx"
+npm run ledger:migrate-excel -- --excel="/path/to/运营支撑台账26.xlsx"
 ```
 
-导入到本地 Worker：
+脚本会：
+
+- 在 `data/ledger/deals/` 生成 17 个合作文件（公开字段，`settlement` 置 `null`）；
+- 把 Excel 的结算金额按 品牌+服务+期数 匹配到 deal id，写入 `tmp/ledger-settlement-plain.json`（**明文工作表，已 gitignore，加密后即删**）。
+
+随后 owner 批量加密结算并删除明文工作表：
 
 ```bash
-SUPABASE_ACCESS_TOKEN='管理员 Supabase access token' \
-INTERNAL_API_BASE='http://127.0.0.1:8787' \
-npm run supabase:import-ledger -- --excel="/path/to/草稿（含报价结算）.xlsx"
+LEDGER_PASSPHRASE='***' npm run ledger:encrypt -- --batch=tmp/ledger-settlement-plain.json
+rm tmp/ledger-settlement-plain.json
+npm run ledger:validate && npm run ledger:sync
 ```
-
-导入到线上 Worker：
-
-```bash
-SUPABASE_ACCESS_TOKEN='管理员 Supabase access token' \
-INTERNAL_API_BASE='https://你的线上域名' \
-npm run supabase:import-ledger -- --excel="/path/to/草稿（含报价结算）.xlsx"
-```
-
-脚本会先读取当前 Supabase 台账，再按品牌、服务和期数尽量匹配旧记录，保留 `muted`、`category`、`reportCooperationId` 等 Excel 没有的字段，并把 Excel 的「承接（进度）」写入 `owner` 字段，最后整体写回 `commercial_deals`。
 
 ### 7) 字段约定
 
@@ -330,6 +337,7 @@ npm run supabase:import-ledger -- --excel="/path/to/草稿（含报价结算）.
 - `updated_at`：最近沟通时间，保持 `YYYY.MM.DD`
 - `muted`：是否置灰
 - `report_cooperation_id`：跳转报告时使用的关联合作编码
+- `settlement_cipher`：结算敏感信息密文信封（AES-256-GCM），仅 admin 查询时下发、仅 owner 凭密码短语本地解密
 
 年度总览表 `annual_reports` 主要字段：
 
@@ -341,7 +349,7 @@ npm run supabase:import-ledger -- --excel="/path/to/草稿（含报价结算）.
 - `updated_at`：维护时间
 
 页面 `/annual-report-2025` 在 Supabase 内部成员登录态有效时读取年度总览。
-内部 `/tob/internal` 解锁后可在「年度总览编辑器」直接修改并保存（走 `PUT /api/internal/admin/annual-reports`）。
+年度总览仍通过 `private/annualReports.source.json` + `supabase:export-seed` 维护（`/tob/internal` 已改为只读，不再内嵌编辑器）。
 
 报告表 `promotion_reports` 主要字段：
 

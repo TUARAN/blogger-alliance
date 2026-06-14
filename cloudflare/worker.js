@@ -22,7 +22,8 @@ function readBearerToken(request) {
 const ROLE_RANK = {
   member: 0,
   internal: 1,
-  admin: 2
+  manager: 2,
+  admin: 3
 }
 
 function hasMinimumRole(role, minimumRole) {
@@ -167,7 +168,7 @@ async function requireSupabaseAccess(request, env, minimumRole = 'internal') {
 }
 
 function mapDealRow(row) {
-  return {
+  const mapped = {
     id: row.id || '',
     brand: row.brand || '',
     service: row.service || '',
@@ -180,6 +181,13 @@ function mapDealRow(row) {
     muted: row.muted === true || Number(row.muted) === 1,
     reportCooperationId: row.reportCooperationId || row.report_cooperation_id || ''
   }
+
+  // 结算密文只在 admin 查询时被 select 出来；其余角色这里拿不到，连密文都不下发。
+  if (row.settlement_cipher !== undefined) {
+    mapped.settlement = row.settlement_cipher || ''
+  }
+
+  return mapped
 }
 
 function parseJsonColumn(raw, fallback) {
@@ -370,9 +378,11 @@ async function handleDeals(request, env) {
     return authFailureResponse(session)
   }
 
+  // 仅 admin(owner) 的查询才包含结算密文列；internal/manager 连密文都拿不到。
+  const settlementColumn = session.role === 'admin' ? ',settlement_cipher' : ''
   const rows = await supabaseDataRequest(
     env,
-    '/commercial_deals?select=id,brand,service,progress,remark,category,referrer,owner,updated_at,muted,report_cooperation_id&order=sort_order.asc,updated_at.desc,id.asc'
+    `/commercial_deals?select=id,brand,service,progress,remark,category,referrer,owner,updated_at,muted,report_cooperation_id${settlementColumn}&order=sort_order.asc,updated_at.desc,id.asc`
   )
 
   return json({
@@ -470,7 +480,7 @@ async function handleHealth(_request, env) {
     database: 'supabase',
     authPolicy: {
       provider: 'supabase',
-      roles: ['member', 'internal', 'admin']
+      roles: ['member', 'internal', 'manager', 'admin']
     },
     counts: {
       deals: Number(counts?.deals || 0),
@@ -607,7 +617,7 @@ async function handleAdminReportsUpdate(request, env) {
   }
 }
 
-const ASSIGNABLE_ROLES = ['member', 'internal', 'admin']
+const ASSIGNABLE_ROLES = ['member', 'internal', 'manager', 'admin']
 
 async function handleAdminUsersList(request, env) {
   const session = await requireSession(request, env, 'admin')

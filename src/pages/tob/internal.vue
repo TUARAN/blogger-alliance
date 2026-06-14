@@ -7,7 +7,7 @@
         <div>
           <h1 class="text-2xl md:text-3xl font-bold text-gray-900">数据台账</h1>
           <p class="mt-2 text-sm md:text-base text-gray-600">
-            合作进度、数据报告与年度总览统一维护。登录且具备内部权限后可查看与管理。
+            合作进度、数据报告与年度总览统一查看。数据由本地 <code class="px-1 rounded bg-white/70">data/ledger</code> 维护后同步，此处只读。
           </p>
         </div>
         <div class="flex flex-wrap gap-2">
@@ -19,15 +19,14 @@
             <span>📈</span>
             <span>查看 2025 年度总览</span>
           </router-link>
-          <template v-if="isUnlocked">
-            <button
-              class="h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60"
-              :disabled="isRefreshing"
-              @click="refreshAll"
-            >
-              {{ isRefreshing ? '加载中...' : '刷新数据' }}
-            </button>
-          </template>
+          <button
+            v-if="isUnlocked"
+            class="h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+            :disabled="isRefreshing"
+            @click="refreshAll"
+          >
+            {{ isRefreshing ? '加载中...' : '刷新数据' }}
+          </button>
         </div>
       </div>
 
@@ -126,21 +125,24 @@
           </div>
 
           <div class="mt-4 flex flex-wrap items-center gap-2">
+            <!-- 结算解锁：仅 owner(admin) 可用；密码短语只活在内存 -->
             <button
-              v-if="isAdmin"
-              class="h-9 px-4 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700"
-              @click="openCreateDeal"
+              v-if="isAdmin && !settlementUnlocked"
+              class="h-9 px-4 rounded-lg bg-amber-600 text-white text-sm font-semibold hover:bg-amber-700"
+              @click="openUnlock"
             >
-              ➕ 新增合作
+              🔓 解锁结算
             </button>
-            <a
-              href="https://syncblog.cn/stats"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex h-9 items-center rounded-lg border border-indigo-300 bg-white px-4 text-sm font-medium text-indigo-700 hover:bg-indigo-50"
+            <button
+              v-if="isAdmin && settlementUnlocked"
+              class="h-9 px-4 rounded-lg border border-amber-300 bg-amber-50 text-amber-800 text-sm font-semibold hover:bg-amber-100"
+              @click="lockSettlement"
             >
-              ➕ 新增独立报告
-            </a>
+              🔒 锁定结算（{{ settlementMap.size }} 条已解密）
+            </button>
+            <span v-if="!isAdmin" class="inline-flex items-center h-9 px-3 rounded-lg bg-slate-100 text-xs text-slate-500">
+              🔒 结算金额仅 owner 可解密查看
+            </span>
             <button
               class="h-9 px-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50"
               @click="copyAsTable"
@@ -166,6 +168,7 @@
                   <th class="px-3 py-3 text-left text-xs font-semibold">推荐人</th>
                   <th class="px-3 py-3 text-left text-xs font-semibold">承接人</th>
                   <th class="px-3 py-3 text-left text-xs font-semibold">最近沟通</th>
+                  <th class="px-3 py-3 text-left text-xs font-semibold">结算</th>
                   <th class="px-3 py-3 text-center text-xs font-semibold">报告</th>
                   <th class="px-3 py-3 text-center text-xs font-semibold">操作</th>
                 </tr>
@@ -203,27 +206,52 @@
                     <td class="px-3 py-3 align-top text-slate-600 whitespace-nowrap">{{ deal.referrer || '—' }}</td>
                     <td class="px-3 py-3 align-top text-slate-600">{{ deal.owner || '—' }}</td>
                     <td class="px-3 py-3 align-top text-slate-600 font-mono text-xs whitespace-nowrap">{{ deal.updatedAt || '—' }}</td>
+
+                    <!-- 结算列：默认打码；owner 解锁后本地解密展示 -->
+                    <td class="px-3 py-3 align-top text-xs whitespace-nowrap">
+                      <template v-if="!hasSettlement(deal)">
+                        <span class="text-slate-300">—</span>
+                      </template>
+                      <template v-else-if="!isAdmin">
+                        <span class="inline-flex items-center rounded bg-slate-100 px-1.5 py-0.5 text-slate-400" title="仅 owner 可解密">🔒 ••••</span>
+                      </template>
+                      <template v-else-if="!settlementUnlocked || !settlementMap.has(deal.id)">
+                        <span class="inline-flex items-center rounded bg-amber-50 px-1.5 py-0.5 text-amber-600 font-mono">••••</span>
+                      </template>
+                      <template v-else>
+                        <div class="space-y-0.5 font-mono text-slate-700">
+                          <div v-if="settlementMap.get(deal.id).forward">前 {{ settlementMap.get(deal.id).forward }}</div>
+                          <div v-if="settlementMap.get(deal.id).backward">后 {{ settlementMap.get(deal.id).backward }}</div>
+                          <div v-if="settlementMap.get(deal.id).opsSupport">运 {{ settlementMap.get(deal.id).opsSupport }}</div>
+                          <p
+                            v-if="settlementMap.get(deal.id).detail"
+                            class="font-sans text-[11px] text-slate-500 leading-5 max-w-[16rem] whitespace-pre-line"
+                          >{{ settlementMap.get(deal.id).detail }}</p>
+                        </div>
+                      </template>
+                    </td>
+
                     <td class="px-3 py-3 align-top text-center">
                       <span class="inline-flex items-center rounded-full bg-violet-50 px-2 py-0.5 text-xs font-semibold text-violet-700">
                         {{ dealReports(deal).length }}
                       </span>
                     </td>
                     <td class="px-3 py-3 align-top text-center whitespace-nowrap">
-                      <button v-if="isAdmin" class="text-xs text-indigo-600 hover:text-indigo-800 mr-2" @click="openEditDeal(deal)">编辑</button>
                       <button
                         v-if="dealReports(deal).length > 0"
-                        class="text-xs text-violet-600 hover:text-violet-800 mr-2"
+                        class="text-xs text-violet-600 hover:text-violet-800"
                         @click="openDealReports(deal)"
                       >
                         查看报告
                       </button>
+                      <span v-else class="text-xs text-slate-300">—</span>
                     </td>
                   </tr>
 
                   <!-- Expanded reports row -->
                   <tr v-if="isExpanded(deal.id) && dealReports(deal).length > 0" class="bg-indigo-50/30 border-t border-indigo-100">
                     <td></td>
-                    <td colspan="9" class="px-3 py-4">
+                    <td colspan="10" class="px-3 py-4">
                       <div class="space-y-3">
                         <div
                           v-for="report in dealReports(deal)"
@@ -243,7 +271,6 @@
                             <div class="flex shrink-0 gap-2">
                               <button class="text-xs text-violet-600 hover:text-violet-800" @click="openViewReport(report)">查看</button>
                               <router-link class="text-xs text-slate-600 hover:text-slate-800" :to="reportSharePath(report)">分享页</router-link>
-                              <button v-if="isAdmin" class="text-xs text-indigo-600 hover:text-indigo-800" @click="openEditReport(report)">编辑</button>
                             </div>
                           </div>
                           <div class="rounded-lg bg-teal-50/70 px-3 py-2 text-xs text-teal-900">
@@ -261,8 +288,8 @@
                 </template>
 
                 <tr v-if="filteredDeals.length === 0">
-                  <td colspan="10" class="px-4 py-10 text-center text-sm text-gray-500">
-                    未找到匹配合作，请调整筛选条件或新增合作。
+                  <td colspan="11" class="px-4 py-10 text-center text-sm text-gray-500">
+                    未找到匹配合作，请调整筛选条件。
                   </td>
                 </tr>
               </tbody>
@@ -270,53 +297,10 @@
           </div>
         </div>
 
-        <!-- Annual reports editor -->
-        <div v-if="isAdmin" class="mt-5 rounded-2xl border border-orange-100 bg-white shadow-sm overflow-hidden">
-          <button
-            type="button"
-            class="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-orange-50/60 transition-colors"
-            @click="annualEditorOpen = !annualEditorOpen"
-          >
-            <div class="flex items-center gap-2">
-              <span class="text-lg">📈</span>
-              <span class="text-sm font-semibold text-gray-900">年度总览编辑器</span>
-              <span class="text-xs text-gray-500">{{ annualReports.length }} 份</span>
-            </div>
-            <span class="text-xs text-gray-400">{{ annualEditorOpen ? '收起 ▴' : '展开 ▾' }}</span>
-          </button>
-          <div v-if="annualEditorOpen" class="border-t border-orange-100 p-4 space-y-3">
-            <p class="text-xs text-gray-500 leading-5">
-              直接编辑年度总览数据 JSON 数组，每条对象需要 <code class="px-1 rounded bg-gray-100">year</code>、<code class="px-1 rounded bg-gray-100">partners</code>、<code class="px-1 rounded bg-gray-100">summaryCards</code>、<code class="px-1 rounded bg-gray-100">highlights</code>、<code class="px-1 rounded bg-gray-100">intro</code> 字段。保存后会立即生效，前台 <router-link to="/annual-report-2025" class="text-orange-700 hover:underline">/annual-report-2025</router-link> 对具备内部权限的账号开放。
-            </p>
-            <textarea
-              v-model="annualEditorJson"
-              rows="14"
-              class="w-full font-mono text-xs p-3 rounded-lg border border-orange-200 bg-orange-50/40 focus:outline-none focus:ring-2 focus:ring-orange-300"
-              spellcheck="false"
-            ></textarea>
-            <div class="flex flex-wrap items-center gap-2">
-              <button
-                class="h-9 px-4 rounded-lg bg-orange-600 text-white text-sm font-semibold hover:bg-orange-700 disabled:opacity-60"
-                :disabled="isSavingAnnual"
-                @click="saveAnnualReports"
-              >
-                {{ isSavingAnnual ? '保存中...' : '保存年度总览' }}
-              </button>
-              <button
-                class="h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
-                @click="resetAnnualEditor"
-              >
-                重置为最近一次加载
-              </button>
-              <span v-if="annualMessage" class="text-xs" :class="annualMessageIsError ? 'text-red-600' : 'text-emerald-700'">{{ annualMessage }}</span>
-            </div>
-          </div>
-        </div>
-
         <!-- Orphan reports (no matching deal) -->
         <div v-if="orphanReports.length > 0" class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4">
           <h3 class="text-sm font-semibold text-amber-900 mb-2">未匹配合作的报告（{{ orphanReports.length }}）</h3>
-          <p class="text-xs text-amber-700 mb-3">以下报告的 cooperationId 未在合作列表中找到对应条目，建议补全或修正。</p>
+          <p class="text-xs text-amber-700 mb-3">以下报告的 cooperationId 未在合作列表中找到对应条目，建议在 data/ledger 中补全对应合作或修正报告。</p>
           <div class="space-y-2">
             <div
               v-for="report in orphanReports"
@@ -331,7 +315,6 @@
               <div class="shrink-0 flex items-center gap-3">
                 <button class="text-violet-600 hover:text-violet-800" @click="openViewReport(report)">查看</button>
                 <router-link class="text-slate-600 hover:text-slate-800" :to="reportSharePath(report)">分享页</router-link>
-                <button v-if="isAdmin" class="text-indigo-600 hover:text-indigo-800" @click="openEditReport(report)">编辑</button>
               </div>
             </div>
           </div>
@@ -339,26 +322,48 @@
       </template>
     </section>
 
-    <!-- Modals -->
-    <DealFormModal
-      v-if="dealModalOpen"
-      :deal="editingDeal"
-      :is-saving="isSavingDeal"
-      @save="handleDealSave"
-      @cancel="closeDealModal"
-      @delete="handleDealDelete"
-    />
+    <!-- 结算解锁弹窗（仅 owner） -->
+    <div
+      v-if="unlockModalOpen"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 p-4"
+      @click.self="closeUnlock"
+    >
+      <div class="w-full max-w-sm rounded-2xl bg-white shadow-2xl p-5" role="dialog" aria-modal="true" aria-label="解锁结算">
+        <h3 class="text-base font-bold text-slate-900">解锁结算金额</h3>
+        <p class="mt-1 text-xs text-slate-500 leading-5">
+          输入结算密码短语，仅在本浏览器内存中解密，不会上传、不会保存。关闭页面或点「锁定结算」即清除。
+        </p>
+        <form @submit.prevent="submitUnlock">
+          <input
+            ref="passphraseInputRef"
+            v-model="passphraseInput"
+            type="password"
+            autocomplete="off"
+            placeholder="结算密码短语"
+            class="mt-3 w-full h-10 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+          >
+          <p v-if="unlockError" class="mt-2 text-xs text-red-600">{{ unlockError }}</p>
+          <div class="mt-4 flex justify-end gap-2">
+            <button
+              type="button"
+              class="h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:bg-gray-50"
+              @click="closeUnlock"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              class="h-9 px-4 rounded-lg bg-amber-600 text-white text-sm font-semibold hover:bg-amber-700 disabled:opacity-60"
+              :disabled="isUnlocking || !passphraseInput"
+            >
+              {{ isUnlocking ? '解密中...' : '解锁' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-    <ReportFormModal
-      v-if="reportModalOpen"
-      :report="editingReport"
-      :cooperation-id="reportModalCoopId"
-      :is-saving="isSavingReport"
-      @save="handleReportSave"
-      @cancel="closeReportModal"
-      @delete="handleReportDelete"
-    />
-
+    <!-- 报告查看弹窗（只读） -->
     <div
       v-if="reportViewerOpen && viewingReports.length"
       class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 p-4"
@@ -501,19 +506,15 @@
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
-import DealFormModal from '../../components/internal/DealFormModal.vue'
-import ReportFormModal from '../../components/internal/ReportFormModal.vue'
+import AppNav from '../../components/AppNav.vue'
 import { useAuth } from '../../composables/useAuth.js'
 import { AUTH_COPY } from '../../utils/authMessages.js'
 import {
   explainInternalDataError,
   fetchCommercialDeals,
-  fetchPromotionReports,
-  updateCommercialDeals,
-  updatePromotionReports,
-  fetchAnnualReportsAdmin,
-  updateAnnualReports
+  fetchPromotionReports
 } from '../../utils/internalDataApi'
+import { decryptDealsSettlement, isEncryptedSettlement } from '../../utils/settlementCrypto.js'
 
 const { initAuth, isInternal, isAdmin, getAccessToken, loading: authLoading } = useAuth()
 
@@ -535,14 +536,15 @@ const toolbarMessage = ref('')
 const toolbarError = ref('')
 let toolbarTimer = null
 
-const dealModalOpen = ref(false)
-const editingDeal = ref(null)
-const isSavingDeal = ref(false)
+// ---- 结算解锁（仅 owner，明文只活在内存） ----
+const settlementUnlocked = ref(false)
+const settlementMap = reactive(new Map())
+const unlockModalOpen = ref(false)
+const passphraseInput = ref('')
+const unlockError = ref('')
+const isUnlocking = ref(false)
+const passphraseInputRef = ref(null)
 
-const reportModalOpen = ref(false)
-const editingReport = ref(null)
-const reportModalCoopId = ref('')
-const isSavingReport = ref(false)
 const reportViewerOpen = ref(false)
 const viewingReport = ref(null)
 const viewingReports = ref([])
@@ -557,26 +559,16 @@ const reportEvidenceImages = {
   }
 }
 
-const annualReports = ref([])
-const annualEditorOpen = ref(false)
-const annualEditorJson = ref('[]')
-const isSavingAnnual = ref(false)
-const annualMessage = ref('')
-const annualMessageIsError = ref(false)
-let annualMessageTimer = null
-
 const viewingReportsTitle = computed(() => {
   if (viewingReports.value.length === 1) {
     const report = viewingReports.value[0]
     return report.project || report.title || '未命名报告'
   }
-
   if (viewingReports.value.length > 1) {
     const first = viewingReports.value[0]
     const project = first?.project || first?.title || '数据报告'
     return `${project} 等 ${viewingReports.value.length} 份报告`
   }
-
   return '数据报告'
 })
 
@@ -588,7 +580,6 @@ watch(reportViewerOpen, async (open) => {
     reportViewerDialogRef.value?.focus()
     return
   }
-
   document.body.style.overflow = previousBodyOverflow
 })
 
@@ -596,51 +587,9 @@ onBeforeUnmount(() => {
   if (reportViewerOpen.value) {
     document.body.style.overflow = previousBodyOverflow
   }
+  // 离开页面即清空内存中的结算明文。
+  lockSettlement()
 })
-
-function setAnnualMessage(text, isError = false) {
-  if (annualMessageTimer) clearTimeout(annualMessageTimer)
-  annualMessage.value = text
-  annualMessageIsError.value = isError
-  annualMessageTimer = setTimeout(() => {
-    annualMessage.value = ''
-    annualMessageIsError.value = false
-  }, 3500)
-}
-
-function syncAnnualEditorFromState() {
-  annualEditorJson.value = JSON.stringify(annualReports.value, null, 2)
-}
-
-function resetAnnualEditor() {
-  syncAnnualEditorFromState()
-  setAnnualMessage('已重置为最近一次加载的数据。')
-}
-
-async function saveAnnualReports() {
-  let parsed
-  try {
-    parsed = JSON.parse(annualEditorJson.value)
-  } catch {
-    setAnnualMessage('JSON 解析失败，请检查格式。', true)
-    return
-  }
-  if (!Array.isArray(parsed)) {
-    setAnnualMessage('顶层必须是数组。', true)
-    return
-  }
-  isSavingAnnual.value = true
-  try {
-    await updateAnnualReports(accessToken.value, parsed)
-    annualReports.value = parsed
-    syncAnnualEditorFromState()
-    setAnnualMessage(`已保存，共 ${parsed.length} 份年度总览。`)
-  } catch (error) {
-    setAnnualMessage(explainInternalDataError(error, 'admin'), true)
-  } finally {
-    isSavingAnnual.value = false
-  }
-}
 
 function setToolbarMessage(text, isError = false) {
   if (toolbarTimer) clearTimeout(toolbarTimer)
@@ -658,15 +607,14 @@ function setToolbarMessage(text, isError = false) {
 }
 
 async function loadAll() {
-  const [d, r, a] = await Promise.all([
+  const [d, r] = await Promise.all([
     fetchCommercialDeals(accessToken.value),
-    fetchPromotionReports(accessToken.value),
-    fetchAnnualReportsAdmin(accessToken.value).catch(() => [])
+    fetchPromotionReports(accessToken.value)
   ])
   deals.value = Array.isArray(d) ? d : []
   reports.value = Array.isArray(r) ? r : []
-  annualReports.value = Array.isArray(a) ? a : []
-  syncAnnualEditorFromState()
+  // 数据刷新后，已解密的明文不再保证与新密文对应，重新锁定更安全。
+  lockSettlement()
 }
 
 async function bootstrapInternalPage() {
@@ -714,7 +662,59 @@ async function refreshAll() {
   }
 }
 
-// Filter options
+// ---- 结算解锁逻辑 ----
+function hasSettlement(deal) {
+  return isEncryptedSettlement(deal?.settlement)
+}
+
+function openUnlock() {
+  unlockError.value = ''
+  passphraseInput.value = ''
+  unlockModalOpen.value = true
+  nextTick(() => passphraseInputRef.value?.focus())
+}
+
+function closeUnlock() {
+  unlockModalOpen.value = false
+  passphraseInput.value = ''
+  unlockError.value = ''
+}
+
+async function submitUnlock() {
+  const passphrase = passphraseInput.value
+  if (!passphrase) return
+  isUnlocking.value = true
+  unlockError.value = ''
+  try {
+    const decrypted = await decryptDealsSettlement(deals.value, passphrase)
+    if (decrypted.size === 0) {
+      unlockError.value = '没有可解密的结算数据。'
+      return
+    }
+    settlementMap.clear()
+    for (const [id, plain] of decrypted) settlementMap.set(id, plain)
+    settlementUnlocked.value = true
+    closeUnlock()
+    setToolbarMessage(`已解锁 ${decrypted.size} 条结算（仅本设备内存）。`)
+  } catch (error) {
+    if (error?.message === 'SETTLEMENT_DECRYPT_FAILED') {
+      unlockError.value = '密码短语不正确，无法解密。'
+    } else {
+      unlockError.value = '解密失败，请重试。'
+    }
+  } finally {
+    isUnlocking.value = false
+    passphraseInput.value = ''
+  }
+}
+
+function lockSettlement() {
+  settlementMap.clear()
+  settlementUnlocked.value = false
+  passphraseInput.value = ''
+}
+
+// ---- Filter options ----
 const serviceOptions = computed(() => {
   const s = new Set()
   for (const d of deals.value) {
@@ -804,7 +804,6 @@ function dealMatchesKeyword(deal, kw) {
   const blob = [deal.id, deal.brand, deal.service, deal.progress, deal.remark, deal.referrer, deal.owner, deal.reportCooperationId, deal.updatedAt]
     .filter(Boolean).join(' ').toLowerCase()
   if (blob.includes(kw)) return true
-  // Also match if any linked report matches keyword
   const reps = dealReports(deal)
   return reps.some((r) => {
     const rb = [r.id, r.project, r.author, r.period, r.articleTitle, r.content, r.cooperationId,
@@ -884,7 +883,7 @@ function progressBadgeClass(progress) {
   return 'bg-indigo-50 text-indigo-700'
 }
 
-// Copy as table
+// Copy as table（不含结算金额，避免明文外泄）
 async function copyAsTable() {
   const headers = ['合作编码', '品牌/项目', '合作内容', '当前进度', '备注', '推荐人', '承接人', '最近沟通', '报告数']
   const rows = filteredDeals.value.map((d) => [
@@ -894,76 +893,13 @@ async function copyAsTable() {
   const tsv = [headers, ...rows].map((r) => r.map((c) => String(c).replace(/\t/g, ' ')).join('\t')).join('\n')
   try {
     await navigator.clipboard.writeText(tsv)
-    setToolbarMessage('已复制为 TSV 表格，可直接粘贴到飞书 / Excel。')
+    setToolbarMessage('已复制为 TSV 表格（不含结算金额），可直接粘贴到飞书 / Excel。')
   } catch {
     setToolbarMessage('复制失败，请检查剪贴板权限。', true)
   }
 }
 
-// Deal CRUD
-function openCreateDeal() {
-  editingDeal.value = null
-  dealModalOpen.value = true
-}
-function openEditDeal(deal) {
-  editingDeal.value = { ...deal }
-  dealModalOpen.value = true
-}
-function closeDealModal() {
-  dealModalOpen.value = false
-  editingDeal.value = null
-}
-
-async function handleDealSave(payload) {
-  const { mode, deal, originalId } = payload
-  isSavingDeal.value = true
-  try {
-    const current = deals.value.slice()
-    if (mode === 'create') {
-      if (current.some((d) => String(d.id).toUpperCase() === deal.id.toUpperCase())) {
-        throw new Error('DUPLICATE_ID')
-      }
-      current.push(deal)
-    } else {
-      const idx = current.findIndex((d) => d.id === originalId)
-      if (idx === -1) throw new Error('DEAL_NOT_FOUND')
-      current[idx] = { ...current[idx], ...deal, id: current[idx].id }
-    }
-    await updateCommercialDeals(accessToken.value, current)
-    deals.value = current
-    closeDealModal()
-    setToolbarMessage(mode === 'create' ? '合作已创建。' : '合作已更新。')
-  } catch (error) {
-    const msg = error?.message === 'DUPLICATE_ID' ? '合作编码已存在。' : explainInternalDataError(error, 'admin')
-    setToolbarMessage(msg, true)
-  } finally {
-    isSavingDeal.value = false
-  }
-}
-
-async function handleDealDelete() {
-  if (!editingDeal.value) return
-  const dealId = editingDeal.value.id
-  const linked = dealReports(editingDeal.value).length
-  const msg = linked > 0
-    ? `确定删除合作「${dealId}」吗？该合作下有 ${linked} 条报告，这些报告将成为孤立状态（需单独处理）。`
-    : `确定删除合作「${dealId}」吗？此操作不可恢复。`
-  if (!window.confirm(msg)) return
-  isSavingDeal.value = true
-  try {
-    const next = deals.value.filter((d) => d.id !== dealId)
-    await updateCommercialDeals(accessToken.value, next)
-    deals.value = next
-    closeDealModal()
-    setToolbarMessage('合作已删除。')
-  } catch (error) {
-    setToolbarMessage(explainInternalDataError(error, 'admin'), true)
-  } finally {
-    isSavingDeal.value = false
-  }
-}
-
-// Report CRUD
+// Report viewer（只读）
 function openDealReports(deal) {
   const list = dealReports(deal)
   if (list.length === 0) return
@@ -1108,68 +1044,6 @@ function exportReportPdf(report) {
   printWindow.setTimeout(() => {
     printWindow.print()
   }, 250)
-}
-function openEditReport(report) {
-  editingReport.value = { ...report }
-  reportModalCoopId.value = report.cooperationId || ''
-  reportModalOpen.value = true
-}
-function closeReportModal() {
-  reportModalOpen.value = false
-  editingReport.value = null
-  reportModalCoopId.value = ''
-}
-
-async function handleReportSave(payload) {
-  const { mode, report, originalId } = payload
-  isSavingReport.value = true
-  try {
-    const current = reports.value.slice()
-    if (mode === 'create') {
-      if (current.some((r) => String(r.id) === report.id)) {
-        throw new Error('DUPLICATE_ID')
-      }
-      current.push(report)
-    } else {
-      const idx = current.findIndex((r) => r.id === originalId)
-      if (idx === -1) throw new Error('REPORT_NOT_FOUND')
-      current[idx] = { ...current[idx], ...report, id: current[idx].id }
-    }
-    await updatePromotionReports(accessToken.value, current)
-    reports.value = current
-    // Ensure the related deal row is expanded to show change
-    const coopKey = String(report.cooperationId || '').toUpperCase()
-    const host = deals.value.find((d) =>
-      String(d.id || '').toUpperCase() === coopKey ||
-      String(d.reportCooperationId || '').toUpperCase() === coopKey
-    )
-    if (host) expanded.add(host.id)
-    closeReportModal()
-    setToolbarMessage(mode === 'create' ? '报告已创建。' : '报告已更新。')
-  } catch (error) {
-    const msg = error?.message === 'DUPLICATE_ID' ? '报告 ID 已存在。' : explainInternalDataError(error, 'admin')
-    setToolbarMessage(msg, true)
-  } finally {
-    isSavingReport.value = false
-  }
-}
-
-async function handleReportDelete() {
-  if (!editingReport.value) return
-  const reportId = editingReport.value.id
-  if (!window.confirm(`确定删除报告「${reportId}」吗？此操作不可恢复。`)) return
-  isSavingReport.value = true
-  try {
-    const next = reports.value.filter((r) => r.id !== reportId)
-    await updatePromotionReports(accessToken.value, next)
-    reports.value = next
-    closeReportModal()
-    setToolbarMessage('报告已删除。')
-  } catch (error) {
-    setToolbarMessage(explainInternalDataError(error, 'admin'), true)
-  } finally {
-    isSavingReport.value = false
-  }
 }
 
 onMounted(() => {
