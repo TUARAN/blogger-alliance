@@ -15,6 +15,7 @@
     "ledger:validate": "node scripts/ledger-validate.mjs",
     "ledger:sync": "node scripts/ledger-sync.mjs",
     "ledger:migrate-excel": "node scripts/migrate-excel-to-ledger.mjs",
+    "ledger:restore-aux": "node scripts/ledger-restore-aux.mjs",
     "supabase:auth-urls": "node scripts/configure-supabase-auth-urls.mjs",
     "metrics:login": "node scripts/collect-visible-metrics.mjs login",
     "metrics:collect": "node scripts/collect-visible-metrics.mjs collect"
