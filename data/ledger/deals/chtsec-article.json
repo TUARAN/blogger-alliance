@@ -10,5 +10,5 @@
   "updatedAt": "2026.3.9",
   "reportCooperationId": "",
   "muted": true,
-  "settlement": null
+  "settlement": "{\"v\":1,\"alg\":\"AES-256-GCM\",\"kdf\":\"PBKDF2-SHA256\",\"iter\":210000,\"salt\":\"N8xcKKRYoz1KCl64hPJ3RA==\",\"iv\":\"WA9eCtQBXbinF/DA\",\"ct\":\"i7Xd2zdPJGKY6Jymup8U6YoD\",\"tag\":\"zlqQemesPycqeV8nl/DAnw==\"}"
 }
