@@ -436,7 +436,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { bloggersData, cooperationHeatOrder } from '../../data/bloggerInfo.js'
 import { trackLinkClick, getBloggerStats, recordPageView } from '../../utils/stats.js'
-import bloggerRosterFile from '../../data/博主联盟花名册v20260106.xlsx?url'
+import bloggerRosterFile from '../../data/博主联盟花名册v20260616.xlsx?url'
 import { showToast } from '../../utils/toast.js'
 import BrandMarquee from '../../components/BrandMarquee.vue'
 import ServiceOverviewSection from '../../components/ServiceOverviewSection.vue'

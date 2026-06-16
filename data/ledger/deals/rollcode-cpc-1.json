@@ -10,5 +10,5 @@
   "updatedAt": "2026.3.9",
   "reportCooperationId": "",
   "muted": false,
-  "settlement": null
+  "settlement": "{\"v\":1,\"alg\":\"AES-256-GCM\",\"kdf\":\"PBKDF2-SHA256\",\"iter\":210000,\"salt\":\"pM7FmMmCO1kimxRcIICJHQ==\",\"iv\":\"jShYCYw9yCkY8Rf6\",\"ct\":\"4C/N/idVuY0zHVAh4rZTg4zjwYbN+sW7ueP4Ar6c5o3FV7T2cohF6plqh/OmB+WPh540Re+LT6gbK0lYq/uXCxS+LCZUbCJDNumfBS12Hw+AxD4J4sWHmOP/1+OOo9Yfh4G33aBImbque52gRcQx+H0UD0AlGHWSc2UfrdVj2OhNNUeztLMd8RoQb2tS2D8=\",\"tag\":\"BfHkw6Gaj7gFcOnhHa/nag==\"}"
 }
