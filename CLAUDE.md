@@ -30,4 +30,4 @@ npm run supabase:migrate   # 执行 supabase/migrations/ SQL
 `member`(0) < `internal`(1，只读台账) < `manager`(2，普通管理员，维护台账但看不到金额) < `admin`(3，owner，可解密金额)。
 角色等级见 `src/composables/useAuth.js` 与 `cloudflare/worker.js` 的 `ROLE_RANK`。结算解密由密码短语把守，不仅是角色。
 
-更多数据底座、部署、字段约定见 [`README.md`](README.md)。
+更多数据底座、部署、字段约定见 [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md)（`README.md` 只做产品介绍）。
