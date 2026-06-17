@@ -90,7 +90,7 @@
             <td class="px-4 py-4 align-top text-gray-700">
               <div class="font-semibold text-gray-900">起步 ¥500 / 篇</div>
               <div class="mt-1.5 space-y-0.5">
-                <div>直发 ¥500–1.5k／篇</div>
+                <div>直发 ¥500–1k／篇</div>
                 <div>简单测评 ¥1k–1.5k／篇</div>
                 <div>研发测评 ¥3k–5k／篇</div>
               </div>
@@ -389,7 +389,7 @@ const mobileRows = [
     startsAt: '¥500 / 篇',
     cycle: '单篇起 / 可排期',
     priceLines: [
-      '直发 ¥500–1.5k／篇',
+      '直发 ¥500–1k／篇',
       '简单测评 ¥1k–1.5k／篇',
       '研发测评 ¥3k–5k／篇'
     ],
