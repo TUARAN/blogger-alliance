@@ -22,7 +22,7 @@
           class="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm md:text-base font-semibold text-indigo-700 bg-white border border-indigo-200 shadow-sm hover:shadow-md transition-all"
         >
           <span>🗂️</span>
-          <span>联盟工作台</span>
+          <span>联盟入口</span>
         </router-link>
         <router-link
           to="/cases"

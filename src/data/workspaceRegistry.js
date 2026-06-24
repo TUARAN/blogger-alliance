@@ -1,6 +1,6 @@
 /**
- * 联盟工作台命名约定：
- * - 分区：公开板块 / 内部板块 / 管理板块
+ * 联盟入口命名约定：
+ * - 分区：公开资源 / 成员入口 / 管理工具
  * - 卡片 title：功能名（2–6 字）
  * - 卡片 tag：功能类型（四字短语）
  * - 入口：站内「进入」、外链「打开」；权限由路由守卫与目标页处理
@@ -14,8 +14,8 @@ export const WORKSPACE_CTA = {
 export const WORKSPACE_SECTIONS = [
   {
     id: 'public',
-    title: '公开板块',
-    description: '联盟对外内容、知识资源与外部协作工具。',
+    title: '公开资源',
+    description: '对外服务、案例、知识内容与正在建设的矩阵联盟。',
     modules: [
       {
         id: 'services',
@@ -60,9 +60,23 @@ export const WORKSPACE_SECTIONS = [
         }
       },
       {
+        id: 'matrix',
+        title: '矩阵联盟',
+        description: '从 KOL 推广升级为全民内容共创与矩阵分发系统。',
+        tag: '建设中',
+        icon: '🧩',
+        to: '/matrix',
+        theme: {
+          shadow: 'shadow-cyan-100/40',
+          icon: 'bg-cyan-100',
+          tag: 'bg-cyan-50 text-cyan-700',
+          cta: 'text-cyan-700'
+        }
+      },
+      {
         id: 'changelog',
         title: '更新日志',
-        description: '按版本与周维度回看工作台、服务页、案例与数据底座演进。',
+        description: '按版本与周维度回看联盟入口、服务页、案例与数据底座演进。',
         tag: '产品动态',
         icon: '📝',
         to: '/workspace/changelog',
@@ -71,6 +85,27 @@ export const WORKSPACE_SECTIONS = [
           icon: 'bg-slate-100',
           tag: 'bg-slate-100 text-slate-700',
           cta: 'text-slate-700'
+        }
+      }
+    ]
+  },
+  {
+    id: 'member',
+    title: '成员入口',
+    description: '成员协作、合作数据与外部内容分发工具。',
+    modules: [
+      {
+        id: 'ledger',
+        title: '数据台账',
+        description: '合作进度、数据报告与年度总览统一维护入口。',
+        tag: '数据管理',
+        icon: '🗂️',
+        to: '/tob/internal',
+        theme: {
+          shadow: 'shadow-indigo-100/40',
+          icon: 'bg-indigo-100',
+          tag: 'bg-indigo-50 text-indigo-700',
+          cta: 'text-indigo-700'
         }
       },
       {
@@ -91,24 +126,10 @@ export const WORKSPACE_SECTIONS = [
     ]
   },
   {
-    id: 'internal',
-    title: '内部板块',
-    description: '合作进度、数据报告与年度总览。',
+    id: 'admin',
+    title: '管理工具',
+    description: '用户权限、推广素材与运营后台工具。',
     modules: [
-      {
-        id: 'ledger',
-        title: '数据台账',
-        description: '合作进度、数据报告与年度总览统一维护入口。',
-        tag: '数据管理',
-        icon: '🗂️',
-        to: '/tob/internal',
-        theme: {
-          shadow: 'shadow-indigo-100/40',
-          icon: 'bg-indigo-100',
-          tag: 'bg-indigo-50 text-indigo-700',
-          cta: 'text-indigo-700'
-        }
-      },
       {
         id: 'users',
         title: '用户管理',
@@ -122,14 +143,7 @@ export const WORKSPACE_SECTIONS = [
           tag: 'bg-fuchsia-50 text-fuchsia-700',
           cta: 'text-fuchsia-700'
         }
-      }
-    ]
-  },
-  {
-    id: 'admin',
-    title: '管理板块',
-    description: '推广素材与内容飞轮工具。',
-    modules: [
+      },
       {
         id: 'cloud-promo',
         title: '云服务自推广',

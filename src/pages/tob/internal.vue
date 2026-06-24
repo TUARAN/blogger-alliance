@@ -49,7 +49,7 @@
           to="/workspace"
           class="inline-flex h-10 items-center rounded-lg bg-amber-700 px-4 text-sm font-semibold text-white hover:bg-amber-800"
         >
-          返回工作台
+          返回联盟入口
         </router-link>
       </div>
 

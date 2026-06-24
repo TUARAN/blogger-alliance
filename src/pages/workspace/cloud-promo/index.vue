@@ -171,7 +171,7 @@ const ROADMAP_REPO_PATHS = [
 // robots noindex（仅管理员页面，避免被搜索引擎抓取 SPA shell）
 let robotsMeta = null
 onMounted(() => {
-  document.title = '云服务自推广 · 联盟工作台'
+  document.title = '云服务自推广 · 联盟入口'
   initAuth()
 
   robotsMeta = document.createElement('meta')
@@ -242,7 +242,7 @@ function statusClass(status) {
             to="/workspace"
             class="inline-flex items-center gap-1 text-sm font-medium text-slate-600 hover:text-orange-700"
           >
-            ← 返回工作台
+            ← 返回联盟入口
           </router-link>
           <h1 class="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
             云服务自推广
@@ -277,7 +277,7 @@ function statusClass(status) {
           to="/workspace"
           class="inline-flex h-10 items-center rounded-lg bg-orange-700 px-4 text-sm font-semibold text-white hover:bg-orange-800"
         >
-          返回工作台
+          返回联盟入口
         </router-link>
       </div>
 

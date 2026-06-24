@@ -30,45 +30,73 @@ function moduleCta(module) {
       </div>
 
       <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        <component
-          :is="module.external ? 'a' : 'router-link'"
-          v-for="module in section.modules"
-          :key="module.id"
-          :to="module.external || !module.to ? undefined : module.to"
-          :href="module.external ? module.href : undefined"
-          :target="module.external ? '_blank' : undefined"
-          :rel="module.external ? 'noopener noreferrer' : undefined"
-          class="group rounded-3xl border border-white/70 bg-white/90 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-          :class="[module.theme.shadow, compact ? 'p-5' : 'p-6']"
-        >
-          <div class="flex items-start justify-between gap-3">
-            <span
-              class="inline-flex items-center justify-center rounded-2xl text-2xl"
-              :class="[module.theme.icon, compact ? 'h-11 w-11' : 'h-12 w-12']"
-            >
-              {{ module.icon }}
-            </span>
-            <span
-              class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
-              :class="module.theme.tag"
-            >
-              <span>{{ module.tag }}</span>
-            </span>
-          </div>
+        <template v-for="module in section.modules" :key="module.id">
+          <a
+            v-if="module.external"
+            :href="module.href"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group rounded-3xl border border-white/70 bg-white/90 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+            :class="[module.theme.shadow, compact ? 'p-5' : 'p-6']"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <span
+                class="inline-flex items-center justify-center rounded-2xl text-2xl"
+                :class="[module.theme.icon, compact ? 'h-11 w-11' : 'h-12 w-12']"
+              >
+                {{ module.icon }}
+              </span>
+              <span
+                class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
+                :class="module.theme.tag"
+              >
+                <span>{{ module.tag }}</span>
+              </span>
+            </div>
 
-          <h3 class="mt-5 font-bold text-gray-900" :class="compact ? 'text-lg' : 'text-xl'">
-            {{ module.title }}
-          </h3>
-          <p class="mt-2 text-sm leading-6 text-gray-600">{{ module.description }}</p>
+            <h3 class="mt-5 font-bold text-gray-900" :class="compact ? 'text-lg' : 'text-xl'">
+              {{ module.title }}
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-gray-600">{{ module.description }}</p>
 
-          <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold" :class="module.theme.cta">
-            <span>{{ moduleCta(module) }}</span>
-            <span v-if="module.external" class="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
-              ↗
-            </span>
-            <span v-else class="transition-transform group-hover:translate-x-1">→</span>
-          </div>
-        </component>
+            <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold" :class="module.theme.cta">
+              <span>{{ moduleCta(module) }}</span>
+              <span class="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">↗</span>
+            </div>
+          </a>
+
+          <router-link
+            v-else
+            :to="module.to"
+            class="group rounded-3xl border border-white/70 bg-white/90 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+            :class="[module.theme.shadow, compact ? 'p-5' : 'p-6']"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <span
+                class="inline-flex items-center justify-center rounded-2xl text-2xl"
+                :class="[module.theme.icon, compact ? 'h-11 w-11' : 'h-12 w-12']"
+              >
+                {{ module.icon }}
+              </span>
+              <span
+                class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
+                :class="module.theme.tag"
+              >
+                <span>{{ module.tag }}</span>
+              </span>
+            </div>
+
+            <h3 class="mt-5 font-bold text-gray-900" :class="compact ? 'text-lg' : 'text-xl'">
+              {{ module.title }}
+            </h3>
+            <p class="mt-2 text-sm leading-6 text-gray-600">{{ module.description }}</p>
+
+            <div class="mt-6 inline-flex items-center gap-2 text-sm font-semibold" :class="module.theme.cta">
+              <span>{{ moduleCta(module) }}</span>
+              <span class="transition-transform group-hover:translate-x-1">→</span>
+            </div>
+          </router-link>
+        </template>
       </div>
     </section>
   </div>

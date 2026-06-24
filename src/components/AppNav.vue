@@ -5,7 +5,8 @@ import { useRoute } from 'vue-router'
 const navLinks = [
   { label: '介绍', to: '/tob/services', matchPrefix: '/tob/services' },
   { label: '案例', to: '/cases', matchPrefix: '/cases' },
-  { label: '工作台', to: '/workspace', matchPrefix: '/workspace' }
+  { label: '矩阵联盟', to: '/matrix', matchPrefix: '/matrix', badge: '建设中' },
+  { label: '联盟入口', to: '/workspace', matchPrefix: '/workspace' }
 ]
 
 defineProps({
@@ -56,10 +57,16 @@ const activeLinkLabels = computed(() => {
               :key="item.label"
               :to="item.to"
               :aria-current="activeLinkLabels[item.label] ? 'page' : undefined"
-              class="relative whitespace-nowrap transition-colors hover:text-slate-900 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-slate-900 after:transition-all hover:after:w-full"
+              class="relative inline-flex items-center gap-1.5 whitespace-nowrap transition-colors hover:text-slate-900 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-slate-900 after:transition-all hover:after:w-full"
               :class="activeLinkLabels[item.label] ? 'text-slate-900 after:w-full' : ''"
             >
-              {{ item.label }}
+              <span>{{ item.label }}</span>
+              <span
+                v-if="item.badge"
+                class="rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold leading-none text-amber-800"
+              >
+                {{ item.badge }}
+              </span>
             </router-link>
           </div>
           <slot name="links"></slot>
@@ -98,7 +105,13 @@ const activeLinkLabels = computed(() => {
           class="flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 hover:text-slate-950"
           :class="activeLinkLabels[item.label] ? 'bg-slate-100 text-slate-950' : ''"
         >
-          {{ item.label }}
+          <span>{{ item.label }}</span>
+          <span
+            v-if="item.badge"
+            class="ml-2 rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold leading-none text-amber-800"
+          >
+            {{ item.badge }}
+          </span>
         </router-link>
         <div class="mt-2 border-t border-slate-200/70 pt-2 md:hidden">
           <AuthNavActions variant="mobile" />

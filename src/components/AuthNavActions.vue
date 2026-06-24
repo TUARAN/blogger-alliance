@@ -54,7 +54,7 @@ async function handleSignOut() {
           class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
           @click="menuOpen = false"
         >
-          工作台
+          联盟入口
         </router-link>
         <button
           type="button"

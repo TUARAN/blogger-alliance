@@ -135,7 +135,7 @@ watch(
             to="/workspace"
             class="inline-flex items-center gap-1 text-sm font-medium text-slate-600 hover:text-indigo-700"
           >
-            ← 返回工作台
+            ← 返回联盟入口
           </router-link>
           <h1 class="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
             用户管理
@@ -170,7 +170,7 @@ watch(
           to="/workspace"
           class="inline-flex h-10 items-center rounded-lg bg-indigo-700 px-4 text-sm font-semibold text-white hover:bg-indigo-800"
         >
-          返回工作台
+          返回联盟入口
         </router-link>
       </div>
 
