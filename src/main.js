@@ -54,7 +54,8 @@ const routes = [
   { path: '/tob/services/cloud-cost', component: () => import('./pages/tob/services/cloud-cost.vue') },
   { path: '/tob/services/enterprise-cloud', redirect: '/tob/services/cloud-cost' },
   { path: '/cloudcost', component: () => import('./pages/cloudcost/index.vue') },
-  { path: '/matrix', redirect: '/workspace' },
+  { path: '/matrix', component: () => import('./pages/matrix/index.vue') },
+  { path: '/matrix/earn', component: () => import('./pages/matrix/earn.vue') },
   {
     path: '/annual-report-2025',
     component: () => import('./pages/annual-report/index.vue'),
