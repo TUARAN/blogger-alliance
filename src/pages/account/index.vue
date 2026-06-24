@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import AccountSupportHint from '../../components/AccountSupportHint.vue'
 import { useAuth } from '../../composables/useAuth.js'
 import { getRoleLabel } from '../../utils/authMessages.js'
 import { showToast } from '../../utils/toast.js'
@@ -69,6 +70,7 @@ async function handleSignOut() {
       <div v-else class="rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm sm:p-8">
         <h1 class="text-2xl font-bold text-slate-900">账号中心</h1>
         <p class="mt-2 text-sm text-slate-600">管理你的联盟账号资料。</p>
+        <AccountSupportHint class="mt-5" />
 
         <div class="mt-6 space-y-4">
           <div>

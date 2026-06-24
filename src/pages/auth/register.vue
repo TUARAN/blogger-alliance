@@ -5,6 +5,7 @@ import { useAuth } from '../../composables/useAuth.js'
 import { formatAuthError, AUTH_COPY } from '../../utils/authMessages.js'
 import { showToast } from '../../utils/toast.js'
 import AuthNetworkBanner from '../../components/AuthNetworkBanner.vue'
+import AccountSupportHint from '../../components/AccountSupportHint.vue'
 import EmailProviderHint from '../../components/EmailProviderHint.vue'
 import OAuthButtons from '../../components/OAuthButtons.vue'
 
@@ -138,7 +139,7 @@ async function handleResend() {
       <div class="rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm sm:p-8">
         <h1 class="text-2xl font-bold text-slate-900">注册账号</h1>
         <p class="mt-2 text-sm text-slate-600">
-          创建联盟账号，后续可在工作台使用更多功能。
+          创建联盟账号，后续可在联盟入口使用更多功能。
         </p>
 
         <div
@@ -256,6 +257,8 @@ async function handleResend() {
           class="mt-6"
           :disabled="authLoading || !isSupabaseConfigured"
         />
+
+        <AccountSupportHint class="mt-5" />
 
         <p v-if="!verificationPending" class="mt-6 text-center text-sm text-slate-600">
           已有账号？
