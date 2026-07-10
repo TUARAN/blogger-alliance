@@ -20,6 +20,11 @@ const reportEvidenceImages = {
     src: '/report-assets/buildsom-geo-effect-20260527.png',
     alt: 'BuildSOM GEO 效果截图',
     caption: 'GEO 效果截图：BuildSOM 已在 AI 回答引用内容中形成品牌露出。'
+  },
+  'report-20260710-buildsom-tweet': {
+    src: '/report-assets/buildsom-geo-effect-20260527.png',
+    alt: 'BuildSOM GEO 效果截图',
+    caption: 'GEO 效果截图：BuildSOM 已在 AI 回答引用内容中形成品牌露出。'
   }
 }
 
