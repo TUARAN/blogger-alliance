@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "devices": [
+    {
+      "kid": "sha256:dJPO_smzExgUYXFkPVifmnYHwlPhEYUNkQEtXjEOkEg",
+      "label": "macOS · 2026/7/10",
+      "userId": "7b5f5924-339d-4223-9e9d-a8ba804ae0ef",
+      "publicKeyJwk": {
+        "alg": "RSA-OAEP-256",
+        "e": "AQAB",
+        "ext": true,
+        "key_ops": [
+          "encrypt"
+        ],
+        "kty": "RSA",
+        "n": "0ahMEQe6WQ4kik_mWwRio7jjnrnPUeZeUDGaaeijKT3iD7ch9YFuGpxt4x6ncaQ8ckE1NS9qQ4YfUmDE25M-Sw7oXS89fyowbHGk4ofB52B4TUKWXH56rnlV6YiMlFd-GEkouCw3gGlrmoJba8M2IrnuKiKTcPEPaJRSVA92K-jwZxsJjvt8zNVrRA_BulSDtAUcriwbmfoEE0G9Z4rJh2ZJ-ckGgdKFT2JMV7lwl9WWousrc9VJSrhqtztoRY-WRMQSfOZCmsFCoLuqnREbgen1w42NnuDj2_bt_eWfIweGgaJd3fLdSHGi_lPHA1bgUqd7mGyxoGrY5dO0d50m3RvMPFR-_XkWEcDId5s1s0Ky5m_1rj_Xgf_Lm-ujyRkmKQ02qPjLbJ_G8ParVeP-fSYcIrsaYID-Q8ws_bt9guaFEjAZ8URl9rLmFUUtiMK_VL4JWbLlUoZYAP5rb5RUUreObGdsh8ak3-TBOjGK8_iMveNMfbp6ebWWrg6-2Sxj"
+      },
+      "createdAt": "2026-07-10T06:27:06.827Z",
+      "revoked": false
+    }
+  ]
+}

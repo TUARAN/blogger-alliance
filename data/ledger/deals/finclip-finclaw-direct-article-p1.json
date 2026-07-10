@@ -10,5 +10,5 @@
   "updatedAt": "2026.3.12",
   "reportCooperationId": "",
   "muted": false,
-  "settlement": "{\"v\":1,\"alg\":\"AES-256-GCM\",\"kdf\":\"PBKDF2-SHA256\",\"iter\":210000,\"salt\":\"jMzhNyj20omzQbb/lYKqJg==\",\"iv\":\"SKri+TKDHPhYYgpZ\",\"ct\":\"Ijig9oEXb8tmQmL2D/BlxMZYp1fmKCF1s/Apj+TBbzt58EWp+Kn/R4g8OmizrWpenudfblEfc6+7wsTd6tR6PUhKvWdmRFeulxlRVUav/87+2chDWF5nc4E=\",\"tag\":\"dpCXBuyTTEn5D5ZrKUArWA==\"}"
+  "settlement": "{\"v\":2,\"alg\":\"AES-256-GCM\",\"iv\":\"juzTQPFgAH977c1Z\",\"ct\":\"VPgg/h1xhxN19OHwoN1LeVhQndovZGybtSF6qf/GPNkPudqPMyPqgJOBDf+tj3vR4wY9E17kXdhzLW0CHNb0le6o2djT0Ju1PDjelsSYUztAFLuOaQ3Bw18=\",\"tag\":\"20B1nKYxspDfGVLKl9HWbg==\",\"recipients\":[{\"kid\":\"sha256:dJPO_smzExgUYXFkPVifmnYHwlPhEYUNkQEtXjEOkEg\",\"userId\":\"7b5f5924-339d-4223-9e9d-a8ba804ae0ef\",\"label\":\"macOS · 2026/7/10\",\"alg\":\"RSA-OAEP-256\",\"ek\":\"DY2dSBVTRo1xJzveYsr2G/lvKWrGR8+ilMe60lTIseqV/ZYcKcNkd1c8k0gasZcW3pvjuncuGjynwV0zin7rS2vEUXCdZJdnmuOe+Yh9axXyp3afXPBnKXlgACDphVh62J4Shs2zl166Dm2fEFdPfC//TA0ijvi8TwKrrJf99ZfujLunTxDBBPxFZ+ONL7mBsIVk8ttcHuQtzW60CG/WswTG9fnVFz9dIJqiSIgIIcNyLvQBFbKSt2WQqgNpvtf9cQbDRk/7S2t3BBCnwbB2NArOCaaV3Xfs13ezppCV5EvLS9wyNZ28b8awCUD3uNV0gvSQJxhDfIpDjIzlZOqGnxn54uPJBtnj9FkgZJIK8uOnqHAO5o+3VJ1YOD9ADTAIVVbaXrLlw3IsfohN7wKNjAfQP98VCDFNLccq8FMtOsKeT7N0f/i81xEEeSgq50/fZ7RXSLrDRQwUyqrl0IqvJgJo3Qe2be5ERZ06ChMT/vf29WtuwSe/N6wPV4dte36a\"}]}"
 }

@@ -1,6 +1,6 @@
 {
   "$comment": "data/ledger/deals/<id>.json 的字段契约。被 scripts/ledger-validate.mjs 读取做机器校验，同时是 codex / claude code 录入时的字段字典。改这里前请同步更新 data/ledger/README.md。",
-  "version": 1,
+  "version": 2,
   "idPattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
   "fields": {
     "id": { "type": "string", "required": true, "public": true, "desc": "合作唯一编码，须与文件名一致，命名约定 品牌-服务-期数，如 finclip-cpc-1。报告通过 cooperationId 引用它，改名会断链。" },
@@ -14,7 +14,7 @@
     "updatedAt": { "type": "string", "required": false, "public": true, "desc": "最近沟通时间，格式 YYYY.M.D，如 2026.3.20。" },
     "reportCooperationId": { "type": "string", "required": false, "public": true, "desc": "若报告挂在另一编码下，填那个编码；默认留空表示用 id 本身。" },
     "muted": { "type": "boolean", "required": false, "public": true, "desc": "是否暂不推进/归档，true 时台账弱化展示。" },
-    "settlement": { "type": "envelope-or-null", "required": false, "sensitive": true, "desc": "结算敏感信息（前向/后向/运营支撑金额 + 结算详情）。必须是 ledger:encrypt 产出的密文信封字符串或 null。明文金额绝不允许出现在此字段或文件任何位置。" }
+    "settlement": { "type": "envelope-or-null", "required": false, "sensitive": true, "desc": "结算敏感信息（前向/后向/运营支撑金额 + 结算详情）。新数据必须是 ledger:encrypt 产出的设备公钥 v2 密文信封；迁移期间兼容历史 v1 口令信封；也可以为 null。明文金额绝不允许出现在此字段或文件任何位置。" }
   },
   "progressKeywordHints": {
     "$comment": "非强制；仅用于台账自动归类与校验告警。",

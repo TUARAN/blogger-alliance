@@ -13,7 +13,7 @@
 - `settlement` 字段只能是 `null` 或 `ledger:encrypt` 产出的**密文信封**。
   **绝对禁止**把前向/后向/运营支撑金额或结算详情的**明文**写进任何 `.json`、提交记录或日志。
 - 改完跑 `npm run ledger:validate`，必须通过。
-- 结算金额加密需要密码短语，只有 owner 持有；普通维护只填公开字段，`settlement` 留 `null`。
+- 新结算使用站长设备公钥加密；历史 v1 迁移时才临时使用旧密码短语。普通维护只填公开字段，`settlement` 留 `null`。
 
 ## 常用命令
 
@@ -21,6 +21,9 @@
 npm run dev                # 本地前端
 npm run build              # 构建
 npm run ledger:validate    # 校验台账文件
+npm run ledger:device      # 管理站长设备公钥
+npm run ledger:encrypt     # 用设备公钥加密结算金额
+npm run ledger:migrate-device # 一次性迁移历史 v1 密文
 npm run ledger:sync        # 同步台账到 Supabase
 npm run supabase:migrate   # 执行 supabase/migrations/ SQL
 ```
@@ -28,6 +31,6 @@ npm run supabase:migrate   # 执行 supabase/migrations/ SQL
 ## 角色模型
 
 `member`(0) < `internal`(1，只读台账) < `manager`(2，普通管理员，维护台账但看不到金额) < `admin`(3，owner，可解密金额)。
-角色等级见 `src/composables/useAuth.js` 与 `cloudflare/worker.js` 的 `ROLE_RANK`。结算解密由密码短语把守，不仅是角色。
+角色等级见 `src/composables/useAuth.js` 与 `cloudflare/worker.js` 的 `ROLE_RANK`。角色只控制密文下发；真正解密还需要站长浏览器中的设备私钥。
 
 更多数据底座、部署、字段约定见 [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md)（`README.md` 只做产品介绍）。

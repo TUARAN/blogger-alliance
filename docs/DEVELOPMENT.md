@@ -17,7 +17,7 @@
 | Supabase | `npm run supabase:migrate` | 执行 `supabase/migrations/` SQL |
 | Supabase | `npm run supabase:export-seed` | 从 `private/*.json` 导出 `tmp/supabase-seed.sql` |
 | 台账 | `npm run ledger:validate` | 校验 `data/ledger/deals/*.json` |
-| 台账 | `npm run ledger:encrypt` | owner 把结算金额加密成密文信封 |
+| 台账 | `npm run ledger:device` / `npm run ledger:encrypt` | owner 登记设备公钥并把结算金额加密成 v2 密文信封 |
 | 台账 | `npm run ledger:sync` | 校验后同步台账到 Supabase |
 | 台账 | `npm run ledger:migrate-excel` | 一次性把 Excel 落成 `data/ledger` 文件 |
 | Supabase | `npm run supabase:auth-urls` | 配置 Auth Site URL / Redirect URLs |
@@ -169,19 +169,22 @@ npm run cf:deploy
 日常流程：
 
 ```bash
-# 1. 改 / 加 data/ledger/deals/*.json（公开字段），settlement 先填 null
-# 2. （仅 owner）加密结算金额
+# 首次使用：站长在页面启用设备并导出公钥，然后登记公钥
+npm run ledger:device -- add --file=<浏览器导出的公钥文件>
+# 改 / 加 data/ledger/deals/*.json（公开字段），settlement 先填 null
+# （仅 owner）用设备公钥加密结算金额
 npm run ledger:encrypt -- --deal=<id>
-# 3. 校验 → 提交 PR（CI 也会跑 ledger:validate）
+# 校验 → 提交 PR（CI 也会跑 ledger:validate）
 npm run ledger:validate
-# 4. 合并后同步到 Supabase
+# 合并后同步到 Supabase
 npm run ledger:sync
 ```
 
 页面 `/tob/internal` 现为**只读展示**：
 
 - `internal` / `manager` 看进度等公开字段；
-- 只有 `admin`(owner) 点「解锁结算」输入密码短语后，于浏览器**本地解密**查看结算金额，密文经 Worker 仅对 admin 下发。
+- 只有 `admin`(owner) 能从 Worker 取得结算密文；浏览器使用 IndexedDB 中不可导出的设备私钥自动在本地解密。
+- 新设备先导出公钥，再由旧受信任设备生成轮换包；`npm run ledger:device -- apply-rewrap --file=<包>` 只追加包装密钥，不触碰结算正文密文。
 
 用户角色管理（仅管理员）：
 
@@ -207,7 +210,7 @@ npm run ledger:migrate-excel -- --excel="/path/to/运营支撑台账26.xlsx"
 随后 owner 批量加密结算并删除明文工作表：
 
 ```bash
-LEDGER_PASSPHRASE='***' npm run ledger:encrypt -- --batch=tmp/ledger-settlement-plain.json
+npm run ledger:encrypt -- --batch=tmp/ledger-settlement-plain.json
 rm tmp/ledger-settlement-plain.json
 npm run ledger:validate && npm run ledger:sync
 ```
@@ -227,7 +230,7 @@ npm run ledger:validate && npm run ledger:sync
 - `updated_at`：最近沟通时间，保持 `YYYY.MM.DD`
 - `muted`：是否置灰
 - `report_cooperation_id`：跳转报告时使用的关联合作编码
-- `settlement_cipher`：结算敏感信息密文信封（AES-256-GCM），仅 admin 查询时下发、仅 owner 凭密码短语本地解密
+- `settlement_cipher`：结算敏感信息密文信封（AES-256-GCM + 设备 RSA-OAEP 包装密钥），仅 admin 查询时下发、仅持有已登记设备私钥的 owner 浏览器本地解密
 
 年度总览表 `annual_reports` 主要字段：
 

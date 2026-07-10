@@ -43,6 +43,8 @@ src/data/promotionReports.source.json
 ledger-settlement-plain.json
 **/ledger-settlement-plain.json
 *.plain.json
+# 设备授权轮换中转包（只含密文与公钥，应用后删除）
+settlement-rewrap-*.json
 # 结算密码短语（仅本地）
 .ledger.env
 

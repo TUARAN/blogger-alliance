@@ -16,7 +16,7 @@
 
 `settlement` 只能是两种值之一：
 - `null`（没有结算信息，或还没加密）
-- 一段**密文信封字符串**（由 `ledger:encrypt` 生成，形如 `{"v":1,"alg":"AES-256-GCM",...}`）
+- 一段**密文信封字符串**（新数据由 `ledger:encrypt` 生成设备密钥 v2 信封；迁移期间兼容历史 v1 口令信封）
 
 ⛔ **绝对禁止**把前向/后向/运营支撑金额、结算详情的**明文**写进任何 `.json`。明文只在 owner 本地中转文件 `tmp/ledger-settlement-plain.json` 里（已被 .gitignore）。
 
@@ -47,18 +47,45 @@
 ```
 
 4. 本地校验：`npm run ledger:validate`
-5. 提交 PR（见第 5 节）。
+5. 提交 PR（见第 6 节）。
 
 ---
 
-## 3. 录入 / 更新结算金额（**仅 owner**）
+## 3. 首次启用站长设备密钥（**仅 owner**）
 
-金额需要密码短语加密，只有 owner 持有密码短语，因此**只有 owner 能录金额**。
+1. 站长登录 `/tob/internal`，点击「启用本设备」。浏览器会生成 RSA-OAEP 密钥对：私钥不可导出，只保存在当前浏览器 IndexedDB；公钥自动下载为 `settlement-device-*.public.json`。
+2. 把下载的公钥登记到 Git 跟踪的设备清单：
+
+```bash
+npm run ledger:device -- add --file=~/Downloads/settlement-device-xxx.public.json
+npm run ledger:device -- list
+npm run ledger:validate
+```
+
+`data/ledger/keys/devices.json` 只含公钥，可以提交。私钥绝不进入仓库、数据库、Worker 或日志。清除浏览器数据会删除本机私钥，因此至少保留一台仍能解密的受信任设备。
+
+### 授权一台新电脑
+
+1. 在新电脑登录站长账号，点「启用本设备」，取得新设备公钥文件。
+2. 在仍可解密的旧设备点「授权新设备」，选择上述公钥，下载 `settlement-rewrap-*.json` 轮换包。
+3. 在仓库应用轮换包并同步：
+
+```bash
+npm run ledger:device -- apply-rewrap --file=~/Downloads/settlement-rewrap-xxx.json
+npm run ledger:validate
+npm run ledger:sync
+```
+
+轮换只给原 AES 数据密钥追加一份新设备公钥包装，不会解密或改动结算正文密文。应用后可删除轮换包。
+
+## 4. 录入 / 更新结算金额（**仅 owner**）
+
+金额使用随机 AES-256-GCM 数据密钥加密，数据密钥再分别用所有已登记设备的 RSA-OAEP-SHA256 公钥包装。录入不需要私钥或解密口令。
 
 单条：
 ```bash
 npm run ledger:encrypt -- --deal=finclip-cpc-1
-# 按提示输入 前向/后向/运营支撑/详情 与密码短语，自动写入该文件的 settlement
+# 按提示输入 前向/后向/运营支撑/详情，自动写入 v2 settlement
 ```
 
 批量（迁移/补录时）：
@@ -67,12 +94,22 @@ npm run ledger:encrypt -- --deal=finclip-cpc-1
 npm run ledger:encrypt -- --batch=tmp/ledger-settlement-plain.json
 ```
 
-密码短语来源：环境变量 `LEDGER_PASSPHRASE`（可放本地 `.ledger.env`，已 gitignore），或交互输入（不回显）。
-**密码短语永不入库、永不入 git。** 忘记密码短语 = 旧密文永久不可读，只能重录。
+批量明文文件加密后立即删除。`ledger:encrypt` 不会把明文或密文打印到终端。
+
+### 一次性迁移历史 v1 密文
+
+必须先登记至少一台设备公钥，再执行：
+
+```bash
+npm run ledger:migrate-device
+npm run ledger:validate
+```
+
+迁移命令只在内存中使用一次旧密码短语：它先验证所有 v1 密文都能解开，再统一改写为 v2；任一条失败时不会改动文件。迁移并同步完成后，日常查看和录入不再需要旧口令。
 
 ---
 
-## 4. 同步到线上（owner / manager）
+## 5. 同步到线上（owner / manager）
 
 ```bash
 npm run ledger:validate        # 先校验
@@ -80,22 +117,25 @@ npm run ledger:sync            # 生成含 settlement_cipher 的 seed SQL 到 tm
 npm run supabase:migrate       # 执行 SQL，覆盖线上台账
 ```
 
-线上权限：`internal` 只读进度等公开字段；`manager` 同样看不到金额；只有 `admin`(owner) 在台账页输入密码短语后，于浏览器本地解密查看金额。
+线上权限：`internal` 只读进度等公开字段；`manager` 同样看不到金额；只有 `admin`(owner) 能取得密文，且只有持有匹配设备私钥的站长浏览器能自动解密。Worker、Supabase 与 Git 均不能解密。
 
 ---
 
-## 5. 协作流程（PR）
+## 6. 协作流程（PR）
 
 1. 从 `main` 拉分支，改 / 加 `data/ledger/deals/*.json`（每人尽量只动自己的合作文件）。
 2. `npm run ledger:validate` 通过后提交 PR（CI 也会跑 validate）。
-3. 金额相关改动由 owner 负责或 owner review。
+3. 金额与设备公钥相关改动由 owner 负责或 owner review。
 4. 合并后由 owner / manager 跑同步。
 
 ---
 
-## 6. 常见错误
+## 7. 常见错误
 
 - `ID_MISMATCH`：文件里的 `id` 和文件名不一致。
 - `DUPLICATE_ID`：两个文件 `id` 相同。
 - `MISSING_FIELD`：缺 `id/brand/service/progress`。
-- `BAD_SETTLEMENT`：`settlement` 既不是 `null` 也不是合法密文信封 —— 多半是有人直接写了明文金额，按第 3 节加密。
+- `BAD_SETTLEMENT`：`settlement` 既不是 `null` 也不是合法密文信封 —— 多半是有人直接写了明文金额，按第 4 节加密。
+- `SETTLEMENT_DEVICE_PUBLIC_KEY_REQUIRED`：尚未登记有效设备公钥。
+- 页面提示「旧密文待一次性迁移」：按第 4 节执行 `ledger:migrate-device`。
+- 页面提示「未授权给本设备」：该设备登记晚于密文生成，需要对历史密文执行设备密钥轮换，不能只改角色绕过。

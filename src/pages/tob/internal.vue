@@ -125,21 +125,46 @@
           </div>
 
           <div class="mt-4 flex flex-wrap items-center gap-2">
-            <!-- 结算解锁：仅 owner(admin) 可用；密码短语只活在内存 -->
+            <!-- 结算设备密钥：仅 owner(admin) 可初始化与自动解密 -->
             <button
-              v-if="isAdmin && !settlementUnlocked"
+              v-if="isAdmin && !settlementDevice"
               class="h-9 px-4 rounded-lg bg-amber-600 text-white text-sm font-semibold hover:bg-amber-700"
-              @click="openUnlock"
+              :disabled="isSettingUpDevice"
+              @click="setupSettlementDevice"
             >
-              🔓 解锁结算
+              {{ isSettingUpDevice ? '正在生成密钥...' : '🔐 启用本设备' }}
             </button>
             <button
-              v-if="isAdmin && settlementUnlocked"
+              v-if="isAdmin && settlementDevice"
               class="h-9 px-4 rounded-lg border border-amber-300 bg-amber-50 text-amber-800 text-sm font-semibold hover:bg-amber-100"
-              @click="lockSettlement"
+              @click="downloadSettlementPublicKey"
             >
-              🔒 锁定结算（{{ settlementMap.size }} 条已解密）
+              导出设备公钥
             </button>
+            <button
+              v-if="isAdmin && settlementDevice"
+              class="h-9 px-4 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 text-sm font-semibold hover:bg-indigo-100 disabled:opacity-60"
+              :disabled="isRewrappingDevice"
+              @click="chooseRewrapPublicKey"
+            >
+              {{ isRewrappingDevice ? '正在生成轮换包...' : '授权新设备' }}
+            </button>
+            <input
+              ref="rewrapFileInput"
+              type="file"
+              accept="application/json,.json"
+              class="hidden"
+              @change="handleRewrapPublicKey"
+            >
+            <span v-if="isAdmin && settlementDevice" class="inline-flex items-center h-9 px-3 rounded-lg bg-emerald-50 text-xs text-emerald-700">
+              🔓 本机自动解密 {{ settlementMap.size }} 条
+            </span>
+            <span v-if="isAdmin && legacySettlementCount" class="inline-flex items-center h-9 px-3 rounded-lg bg-amber-50 text-xs text-amber-700">
+              {{ legacySettlementCount }} 条旧密文待一次性迁移
+            </span>
+            <span v-if="isAdmin && unauthorizedSettlementCount" class="inline-flex items-center h-9 px-3 rounded-lg bg-red-50 text-xs text-red-700">
+              {{ unauthorizedSettlementCount }} 条未授权给本设备
+            </span>
             <span v-if="!isAdmin" class="inline-flex items-center h-9 px-3 rounded-lg bg-slate-100 text-xs text-slate-500">
               🔒 结算金额仅 owner 可解密查看
             </span>
@@ -215,7 +240,7 @@
                       <template v-else-if="!isAdmin">
                         <span class="inline-flex items-center rounded bg-slate-100 px-1.5 py-0.5 text-slate-400" title="仅 owner 可解密">🔒 ••••</span>
                       </template>
-                      <template v-else-if="!settlementUnlocked || !settlementMap.has(deal.id)">
+                      <template v-else-if="!settlementMap.has(deal.id)">
                         <span class="inline-flex items-center rounded bg-amber-50 px-1.5 py-0.5 text-amber-600 font-mono">••••</span>
                       </template>
                       <template v-else>
@@ -321,47 +346,6 @@
         </div>
       </template>
     </section>
-
-    <!-- 结算解锁弹窗（仅 owner） -->
-    <div
-      v-if="unlockModalOpen"
-      class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 p-4"
-      @click.self="closeUnlock"
-    >
-      <div class="w-full max-w-sm rounded-2xl bg-white shadow-2xl p-5" role="dialog" aria-modal="true" aria-label="解锁结算">
-        <h3 class="text-base font-bold text-slate-900">解锁结算金额</h3>
-        <p class="mt-1 text-xs text-slate-500 leading-5">
-          输入结算密码短语，仅在本浏览器内存中解密，不会上传、不会保存。关闭页面或点「锁定结算」即清除。
-        </p>
-        <form @submit.prevent="submitUnlock">
-          <input
-            ref="passphraseInputRef"
-            v-model="passphraseInput"
-            type="password"
-            autocomplete="off"
-            placeholder="结算密码短语"
-            class="mt-3 w-full h-10 px-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
-          >
-          <p v-if="unlockError" class="mt-2 text-xs text-red-600">{{ unlockError }}</p>
-          <div class="mt-4 flex justify-end gap-2">
-            <button
-              type="button"
-              class="h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:bg-gray-50"
-              @click="closeUnlock"
-            >
-              取消
-            </button>
-            <button
-              type="submit"
-              class="h-9 px-4 rounded-lg bg-amber-600 text-white text-sm font-semibold hover:bg-amber-700 disabled:opacity-60"
-              :disabled="isUnlocking || !passphraseInput"
-            >
-              {{ isUnlocking ? '解密中...' : '解锁' }}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
 
     <!-- 报告查看弹窗（只读） -->
     <div
@@ -505,7 +489,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import AppNav from '../../components/AppNav.vue'
 import { useAuth } from '../../composables/useAuth.js'
 import { AUTH_COPY } from '../../utils/authMessages.js'
@@ -514,9 +498,20 @@ import {
   fetchCommercialDeals,
   fetchPromotionReports
 } from '../../utils/internalDataApi'
-import { decryptDealsSettlement, isEncryptedSettlement } from '../../utils/settlementCrypto.js'
+import {
+  decryptDealsSettlementWithDevice,
+  isEncryptedSettlement,
+  isLegacySettlement,
+  rewrapDealsSettlementForDevice
+} from '../../utils/settlementCrypto.js'
+import {
+  createSettlementDeviceKey,
+  getDefaultDeviceLabel,
+  getSettlementDeviceKey,
+  toPublicDeviceConfig
+} from '../../utils/settlementDeviceKey.js'
 
-const { initAuth, isInternal, isAdmin, getAccessToken, loading: authLoading } = useAuth()
+const { initAuth, isInternal, isAdmin, user, getAccessToken, loading: authLoading } = useAuth()
 
 const deals = ref([])
 const reports = ref([])
@@ -536,14 +531,17 @@ const toolbarMessage = ref('')
 const toolbarError = ref('')
 let toolbarTimer = null
 
-// ---- 结算解锁（仅 owner，明文只活在内存） ----
-const settlementUnlocked = ref(false)
+// ---- 结算设备密钥（仅 owner；私钥不可导出，存于本浏览器 IndexedDB） ----
 const settlementMap = reactive(new Map())
-const unlockModalOpen = ref(false)
-const passphraseInput = ref('')
-const unlockError = ref('')
-const isUnlocking = ref(false)
-const passphraseInputRef = ref(null)
+// CryptoKey 是浏览器原生对象，必须避免被 Vue 深层代理。
+const settlementDevice = shallowRef(null)
+const isSettingUpDevice = ref(false)
+const unauthorizedSettlementCount = ref(0)
+const rewrapFileInput = ref(null)
+const isRewrappingDevice = ref(false)
+const legacySettlementCount = computed(() => (
+  deals.value.filter((deal) => isLegacySettlement(deal?.settlement)).length
+))
 
 const reportViewerOpen = ref(false)
 const viewingReport = ref(null)
@@ -592,8 +590,8 @@ onBeforeUnmount(() => {
   if (reportViewerOpen.value) {
     document.body.style.overflow = previousBodyOverflow
   }
-  // 离开页面即清空内存中的结算明文。
-  lockSettlement()
+  // 离开页面即清空内存中的结算明文；设备私钥仍由浏览器安全存储保管。
+  clearSettlementPlaintext()
 })
 
 function setToolbarMessage(text, isError = false) {
@@ -618,8 +616,8 @@ async function loadAll() {
   ])
   deals.value = Array.isArray(d) ? d : []
   reports.value = Array.isArray(r) ? r : []
-  // 数据刷新后，已解密的明文不再保证与新密文对应，重新锁定更安全。
-  lockSettlement()
+  // 数据刷新后清掉旧明文，随后用本机私钥对新密文自动解密。
+  clearSettlementPlaintext()
 }
 
 async function bootstrapInternalPage() {
@@ -643,6 +641,7 @@ async function bootstrapInternalPage() {
 
     accessToken.value = token
     await loadAll()
+    if (isAdmin.value) await prepareSettlementDevice()
     isUnlocked.value = true
   } catch (error) {
     bootstrapError.value = explainInternalDataError(error, 'read')
@@ -659,6 +658,7 @@ async function refreshAll() {
   try {
     accessToken.value = await getAccessToken() || accessToken.value
     await loadAll()
+    if (isAdmin.value) await prepareSettlementDevice()
     setToolbarMessage('已刷新最新数据。')
   } catch (error) {
     setToolbarMessage(explainInternalDataError(error, 'read'), true)
@@ -667,56 +667,114 @@ async function refreshAll() {
   }
 }
 
-// ---- 结算解锁逻辑 ----
+// ---- 结算设备密钥逻辑 ----
 function hasSettlement(deal) {
   return isEncryptedSettlement(deal?.settlement)
 }
 
-function openUnlock() {
-  unlockError.value = ''
-  passphraseInput.value = ''
-  unlockModalOpen.value = true
-  nextTick(() => passphraseInputRef.value?.focus())
-}
-
-function closeUnlock() {
-  unlockModalOpen.value = false
-  passphraseInput.value = ''
-  unlockError.value = ''
-}
-
-async function submitUnlock() {
-  const passphrase = passphraseInput.value
-  if (!passphrase) return
-  isUnlocking.value = true
-  unlockError.value = ''
+async function decryptSettlementForCurrentDevice() {
+  clearSettlementPlaintext()
+  if (!settlementDevice.value) return
   try {
-    const decrypted = await decryptDealsSettlement(deals.value, passphrase)
-    if (decrypted.size === 0) {
-      unlockError.value = '没有可解密的结算数据。'
-      return
-    }
-    settlementMap.clear()
-    for (const [id, plain] of decrypted) settlementMap.set(id, plain)
-    settlementUnlocked.value = true
-    closeUnlock()
-    setToolbarMessage(`已解锁 ${decrypted.size} 条结算（仅本设备内存）。`)
-  } catch (error) {
-    if (error?.message === 'SETTLEMENT_DECRYPT_FAILED') {
-      unlockError.value = '密码短语不正确，无法解密。'
-    } else {
-      unlockError.value = '解密失败，请重试。'
-    }
-  } finally {
-    isUnlocking.value = false
-    passphraseInput.value = ''
+    const { result, unauthorized } = await decryptDealsSettlementWithDevice(
+      deals.value,
+      settlementDevice.value
+    )
+    for (const [id, plain] of result) settlementMap.set(id, plain)
+    unauthorizedSettlementCount.value = unauthorized.length
+  } catch {
+    clearSettlementPlaintext()
+    setToolbarMessage('本设备无法解密结算，请确认密钥未被浏览器清除。', true)
   }
 }
 
-function lockSettlement() {
+function clearSettlementPlaintext() {
   settlementMap.clear()
-  settlementUnlocked.value = false
-  passphraseInput.value = ''
+  unauthorizedSettlementCount.value = 0
+}
+
+async function prepareSettlementDevice() {
+  try {
+    settlementDevice.value = await getSettlementDeviceKey(user.value?.id)
+    await decryptSettlementForCurrentDevice()
+  } catch {
+    settlementDevice.value = null
+    clearSettlementPlaintext()
+    setToolbarMessage('当前浏览器不支持设备密钥，无法自动解密结算。', true)
+  }
+}
+
+async function setupSettlementDevice() {
+  if (!user.value?.id || isSettingUpDevice.value) return
+  isSettingUpDevice.value = true
+  try {
+    settlementDevice.value = await createSettlementDeviceKey(
+      user.value.id,
+      getDefaultDeviceLabel()
+    )
+    downloadSettlementPublicKey()
+    await decryptSettlementForCurrentDevice()
+    setToolbarMessage('本设备私钥已生成。请登记刚下载的公钥后，再迁移旧结算。')
+  } catch {
+    setToolbarMessage('设备密钥生成失败，请使用最新版浏览器重试。', true)
+  } finally {
+    isSettingUpDevice.value = false
+  }
+}
+
+function downloadSettlementPublicKey() {
+  if (!settlementDevice.value) return
+  const config = toPublicDeviceConfig(settlementDevice.value)
+  const blob = new Blob([`${JSON.stringify(config, null, 2)}\n`], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `settlement-device-${config.kid.replace(/[^a-zA-Z0-9_-]/g, '_')}.public.json`
+  link.click()
+  URL.revokeObjectURL(url)
+}
+
+function downloadJsonFile(filename, payload) {
+  const blob = new Blob([`${JSON.stringify(payload, null, 2)}\n`], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  link.click()
+  URL.revokeObjectURL(url)
+}
+
+function chooseRewrapPublicKey() {
+  rewrapFileInput.value?.click()
+}
+
+async function handleRewrapPublicKey(event) {
+  const file = event.target?.files?.[0]
+  if (!file || !settlementDevice.value || isRewrappingDevice.value) return
+  isRewrappingDevice.value = true
+  try {
+    const targetDevice = JSON.parse(await file.text())
+    if (!targetDevice?.kid || !targetDevice?.publicKeyJwk || !targetDevice?.label) {
+      throw new Error('SETTLEMENT_TARGET_DEVICE_INVALID')
+    }
+    const settlements = await rewrapDealsSettlementForDevice(
+      deals.value,
+      settlementDevice.value,
+      targetDevice
+    )
+    const count = Object.keys(settlements).length
+    downloadJsonFile(`settlement-rewrap-${targetDevice.kid.replace(/[^a-zA-Z0-9_-]/g, '_')}.json`, {
+      version: 1,
+      targetDevice,
+      settlements
+    })
+    setToolbarMessage(`已生成新设备轮换包（${count} 条密文）。请在仓库运行 ledger:device apply-rewrap。`)
+  } catch {
+    setToolbarMessage('新设备授权失败，请确认选择的是台账页导出的设备公钥。', true)
+  } finally {
+    isRewrappingDevice.value = false
+    if (event.target) event.target.value = ''
+  }
 }
 
 // ---- Filter options ----

@@ -1,153 +1,186 @@
-/**
- * 结算金额「字段级加密」——浏览器端解密。
- *
- * 信封格式（与 scripts/lib/settlementEnvelope.mjs 保持一致）：
- *   {
- *     "v": 1,
- *     "alg": "AES-256-GCM",
- *     "kdf": "PBKDF2-SHA256",
- *     "iter": 210000,
- *     "salt": "<base64>",
- *     "iv":   "<base64>",
- *     "ct":   "<base64>",   // 密文（不含 tag）
- *     "tag":  "<base64>"    // GCM 认证标签
- *   }
- *
- * 设计要点：
- * - 密码短语只活在内存里，绝不写入 localStorage / 任何持久化。
- * - 即使拿到密文（如越权读库），没有正确密码短语也解不出明文。
- * - 仅 owner（admin）会在台账页输入密码短语临时解锁。
- */
+/** 浏览器端结算信封解析与设备私钥解密。 */
 
-const ENVELOPE_VERSION = 1
+const LEGACY_ENVELOPE_VERSION = 1
+const DEVICE_ENVELOPE_VERSION = 2
 const EXPECTED_ALG = 'AES-256-GCM'
-const EXPECTED_KDF = 'PBKDF2-SHA256'
+const EXPECTED_LEGACY_KDF = 'PBKDF2-SHA256'
+const EXPECTED_WRAP_ALG = 'RSA-OAEP-256'
 
 function base64ToBytes(value) {
   const binary = atob(String(value || ''))
   const bytes = new Uint8Array(binary.length)
-  for (let i = 0; i < binary.length; i += 1) {
-    bytes[i] = binary.charCodeAt(i)
-  }
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i)
   return bytes
+}
+
+function bytesToBase64(value) {
+  let binary = ''
+  for (const byte of new Uint8Array(value)) binary += String.fromCharCode(byte)
+  return btoa(binary)
 }
 
 export function parseSettlementEnvelope(raw) {
   if (raw == null || raw === '') return null
-
   let envelope = raw
   if (typeof raw === 'string') {
-    try {
-      envelope = JSON.parse(raw)
-    } catch {
-      throw new Error('SETTLEMENT_ENVELOPE_MALFORMED')
-    }
+    try { envelope = JSON.parse(raw) } catch { throw new Error('SETTLEMENT_ENVELOPE_MALFORMED') }
   }
-
-  if (
-    !envelope ||
-    typeof envelope !== 'object' ||
-    envelope.v !== ENVELOPE_VERSION ||
-    envelope.alg !== EXPECTED_ALG ||
-    envelope.kdf !== EXPECTED_KDF ||
-    !Number.isFinite(Number(envelope.iter)) ||
-    !envelope.salt ||
-    !envelope.iv ||
-    !envelope.ct ||
-    !envelope.tag
-  ) {
+  if (!envelope || typeof envelope !== 'object' || envelope.alg !== EXPECTED_ALG) {
     throw new Error('SETTLEMENT_ENVELOPE_MALFORMED')
   }
 
+  const commonValid = envelope.iv && envelope.ct && envelope.tag
+  const legacyValid = envelope.v === LEGACY_ENVELOPE_VERSION
+    && envelope.kdf === EXPECTED_LEGACY_KDF
+    && Number.isFinite(Number(envelope.iter))
+    && envelope.salt
+  const deviceValid = envelope.v === DEVICE_ENVELOPE_VERSION
+    && Array.isArray(envelope.recipients)
+    && envelope.recipients.length > 0
+    && new Set(envelope.recipients.map((recipient) => recipient?.kid)).size === envelope.recipients.length
+    && envelope.recipients.every((recipient) => (
+      recipient?.kid && recipient?.alg === EXPECTED_WRAP_ALG && recipient?.ek
+    ))
+  if (!commonValid || (!legacyValid && !deviceValid)) {
+    throw new Error('SETTLEMENT_ENVELOPE_MALFORMED')
+  }
   return envelope
 }
 
+export function getSettlementEnvelopeVersion(raw) {
+  try { return Number(parseSettlementEnvelope(raw)?.v || 0) } catch { return 0 }
+}
+
 export function isEncryptedSettlement(raw) {
-  try {
-    return parseSettlementEnvelope(raw) != null
-  } catch {
-    return false
-  }
+  return getSettlementEnvelopeVersion(raw) > 0
 }
 
-async function deriveKey(passphrase, salt, iterations) {
-  const baseKey = await crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(passphrase),
-    'PBKDF2',
-    false,
-    ['deriveKey']
-  )
-
-  return crypto.subtle.deriveKey(
-    {
-      name: 'PBKDF2',
-      salt,
-      iterations,
-      hash: 'SHA-256'
-    },
-    baseKey,
-    { name: 'AES-GCM', length: 256 },
-    false,
-    ['decrypt']
-  )
+export function isLegacySettlement(raw) {
+  return getSettlementEnvelopeVersion(raw) === LEGACY_ENVELOPE_VERSION
 }
 
-/**
- * 解密单个结算信封。
- * @returns {Promise<{forward?: string, backward?: string, opsSupport?: string, detail?: string}>}
- * @throws SETTLEMENT_ENVELOPE_MALFORMED | SETTLEMENT_DECRYPT_FAILED
- */
-export async function decryptSettlement(raw, passphrase) {
+export function isDeviceSettlement(raw) {
+  return getSettlementEnvelopeVersion(raw) === DEVICE_ENVELOPE_VERSION
+}
+
+export async function decryptSettlementWithDevice(raw, device) {
   const envelope = parseSettlementEnvelope(raw)
   if (!envelope) return null
+  if (envelope.v !== DEVICE_ENVELOPE_VERSION) throw new Error('SETTLEMENT_LEGACY_MIGRATION_REQUIRED')
+  if (!device?.kid || !device?.privateKey) throw new Error('SETTLEMENT_DEVICE_KEY_REQUIRED')
+  if (!globalThis.crypto?.subtle) throw new Error('SETTLEMENT_CRYPTO_UNAVAILABLE')
 
-  if (!passphrase) {
-    throw new Error('SETTLEMENT_PASSPHRASE_REQUIRED')
-  }
+  const recipient = envelope.recipients.find((item) => item.kid === device.kid)
+  if (!recipient) throw new Error('SETTLEMENT_DEVICE_NOT_AUTHORIZED')
 
-  if (!globalThis.crypto?.subtle) {
-    throw new Error('SETTLEMENT_CRYPTO_UNAVAILABLE')
-  }
-
-  const salt = base64ToBytes(envelope.salt)
-  const iv = base64ToBytes(envelope.iv)
-  const ct = base64ToBytes(envelope.ct)
-  const tag = base64ToBytes(envelope.tag)
-
-  // WebCrypto 的 AES-GCM 期望 密文 || tag 拼接在一起。
-  const combined = new Uint8Array(ct.length + tag.length)
-  combined.set(ct, 0)
-  combined.set(tag, ct.length)
-
+  let dataKey
   let plainBuffer
   try {
-    const key = await deriveKey(passphrase, salt, Number(envelope.iter))
-    plainBuffer = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, combined)
+    const rawDataKey = await crypto.subtle.decrypt(
+      { name: 'RSA-OAEP' },
+      device.privateKey,
+      base64ToBytes(recipient.ek)
+    )
+    dataKey = await crypto.subtle.importKey('raw', rawDataKey, { name: 'AES-GCM' }, false, ['decrypt'])
+    const ct = base64ToBytes(envelope.ct)
+    const tag = base64ToBytes(envelope.tag)
+    const combined = new Uint8Array(ct.length + tag.length)
+    combined.set(ct, 0)
+    combined.set(tag, ct.length)
+    plainBuffer = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv: base64ToBytes(envelope.iv) },
+      dataKey,
+      combined
+    )
   } catch {
-    // 密码短语错误或密文被篡改都会走到这里（GCM 认证失败）。
     throw new Error('SETTLEMENT_DECRYPT_FAILED')
   }
 
-  const text = new TextDecoder().decode(plainBuffer)
   try {
-    return JSON.parse(text)
+    return JSON.parse(new TextDecoder().decode(plainBuffer))
   } catch {
-    // 兼容明文不是 JSON 的历史数据，原样返回。
-    return { detail: text }
+    throw new Error('SETTLEMENT_DECRYPT_FAILED')
   }
 }
 
-/**
- * 用同一密码短语解密一批 deal，返回 id -> 明文对象 的映射。
- * 任一条解密失败即整体抛错（说明密码短语错误）。
- */
-export async function decryptDealsSettlement(deals, passphrase) {
+export async function decryptDealsSettlementWithDevice(deals, device) {
   const result = new Map()
+  const unauthorized = []
   for (const deal of deals) {
-    if (!isEncryptedSettlement(deal?.settlement)) continue
-    const plain = await decryptSettlement(deal.settlement, passphrase)
-    result.set(deal.id, plain)
+    if (!isDeviceSettlement(deal?.settlement)) continue
+    try {
+      result.set(deal.id, await decryptSettlementWithDevice(deal.settlement, device))
+    } catch (error) {
+      if (error?.message === 'SETTLEMENT_DEVICE_NOT_AUTHORIZED') {
+        unauthorized.push(deal.id)
+        continue
+      }
+      throw error
+    }
   }
-  return result
+  return { result, unauthorized }
+}
+
+/**
+ * 受信任设备为新设备追加一个包装后的数据密钥。不会解密结算正文，iv/ct/tag 均保持不变。
+ */
+export async function rewrapSettlementForDevice(raw, currentDevice, targetDevice) {
+  const envelope = parseSettlementEnvelope(raw)
+  if (!envelope || envelope.v !== DEVICE_ENVELOPE_VERSION) {
+    throw new Error('SETTLEMENT_DEVICE_ENVELOPE_REQUIRED')
+  }
+  if (!targetDevice?.kid || !targetDevice?.publicKeyJwk) {
+    throw new Error('SETTLEMENT_TARGET_DEVICE_INVALID')
+  }
+  if (envelope.recipients.some((item) => item.kid === targetDevice.kid)) return raw
+
+  const currentRecipient = envelope.recipients.find((item) => item.kid === currentDevice?.kid)
+  if (!currentRecipient || !currentDevice?.privateKey) {
+    throw new Error('SETTLEMENT_DEVICE_NOT_AUTHORIZED')
+  }
+
+  let rawDataKey
+  let targetPublicKey
+  let wrappedKey
+  try {
+    rawDataKey = await crypto.subtle.decrypt(
+      { name: 'RSA-OAEP' },
+      currentDevice.privateKey,
+      base64ToBytes(currentRecipient.ek)
+    )
+    targetPublicKey = await crypto.subtle.importKey(
+      'jwk',
+      targetDevice.publicKeyJwk,
+      { name: 'RSA-OAEP', hash: 'SHA-256' },
+      false,
+      ['encrypt']
+    )
+    wrappedKey = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, targetPublicKey, rawDataKey)
+  } catch {
+    throw new Error('SETTLEMENT_REWRAP_FAILED')
+  }
+
+  return JSON.stringify({
+    ...envelope,
+    recipients: [
+      ...envelope.recipients,
+      {
+        kid: String(targetDevice.kid),
+        ...(targetDevice.userId ? { userId: String(targetDevice.userId) } : {}),
+        ...(targetDevice.label ? { label: String(targetDevice.label) } : {}),
+        alg: EXPECTED_WRAP_ALG,
+        ek: bytesToBase64(wrappedKey)
+      }
+    ]
+  })
+}
+
+export async function rewrapDealsSettlementForDevice(deals, currentDevice, targetDevice) {
+  const settlements = {}
+  for (const deal of deals) {
+    if (!isDeviceSettlement(deal?.settlement)) continue
+    const next = await rewrapSettlementForDevice(deal.settlement, currentDevice, targetDevice)
+    if (next !== deal.settlement) settlements[deal.id] = next
+  }
+  return settlements
 }
