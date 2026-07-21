@@ -93,6 +93,12 @@ npm run supabase:migrate
 
 > 注意：同一邮箱在 Supabase 默认会自动合并身份（GitHub / Google / 邮箱密码视为同一账号），管理员邮箱用 OAuth 登录同样会被 `003/005` 迁移引导为 admin。
 
+### 1.2) 配置邮箱确认模板
+
+部分邮箱服务会预取邮件中的一次性验证链接，导致用户点击时 Supabase 返回 `One-time token not found`。项目使用两步确认避免令牌被预取消耗：邮件先打开站内 `/auth/confirm`，用户主动点击按钮后才调用 `verifyOtp`。
+
+在 Supabase Dashboard → Authentication → Email Templates → Confirm signup 中，将模板内容设置为 [`supabase/templates/confirmation.html`](../supabase/templates/confirmation.html)。模板中的链接必须保留 `token_hash={{ .TokenHash }}` 和 `type=email`；不要改回直接使用 `{{ .ConfirmationURL }}`。
+
 ### 2) 配置 Worker Secrets
 
 复制示例文件：

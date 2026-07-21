@@ -14,7 +14,8 @@ const AUTH_ERROR_MESSAGES = {
   user_already_registered: '该邮箱已注册，请直接登录。',
   signup_disabled: '当前暂不支持新用户注册，请联系管理员。',
   too_many_requests: '尝试次数过多，请稍等几分钟后再试。',
-  weak_password: '密码强度不足，请至少使用 6 位字符。'
+  weak_password: '密码强度不足，请至少使用 6 位字符。',
+  otp_expired: '验证链接无效或已过期，请返回登录页重新发送验证邮件。'
 }
 
 function normalizeAuthErrorMessage(message = '') {
@@ -38,6 +39,15 @@ function normalizeAuthErrorMessage(message = '') {
 
   if (text.includes('too many requests') || text.includes('rate limit')) {
     return AUTH_ERROR_MESSAGES.too_many_requests
+  }
+
+  if (
+    text.includes('token has expired')
+    || text.includes('token not found')
+    || text.includes('otp_expired')
+    || (text.includes('email link') && text.includes('invalid'))
+  ) {
+    return AUTH_ERROR_MESSAGES.otp_expired
   }
 
   if (text.includes('password') && text.includes('least')) {
@@ -79,7 +89,7 @@ export const AUTH_COPY = {
   sessionMissing: '登录状态异常，请重新登录后再试。',
   serviceUnavailable: '账号服务暂不可用，请稍后再试。',
   verificationTitle: '请查收验证邮件',
-  verificationBody: '已向 {email} 发送验证链接，点击邮件中的链接完成验证，然后回来登录。',
+  verificationBody: '已向 {email} 发送验证链接。打开链接后，再在确认页点击按钮完成验证。',
   verificationHint: '没收到？先查垃圾箱，或稍等片刻后重发。',
   verificationResent: '验证邮件已重新发送',
   verificationResendWait: '请 {seconds} 秒后再试'

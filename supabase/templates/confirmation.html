@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+  <body style="margin:0;background:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a">
+    <div style="max-width:560px;margin:0 auto;padding:40px 20px">
+      <div style="border:1px solid #e2e8f0;border-radius:16px;background:#ffffff;padding:32px">
+        <h1 style="margin:0;font-size:24px;line-height:1.4">确认你的邮箱</h1>
+        <p style="margin:16px 0 0;line-height:1.8;color:#475569">
+          点击下方按钮进入博主联盟确认页，再点击一次“确认邮箱并登录”即可完成注册。
+        </p>
+        <p style="margin:24px 0 0">
+          <a
+            href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email"
+            style="display:inline-block;border-radius:8px;background:#4f46e5;padding:12px 20px;color:#ffffff;text-decoration:none;font-weight:600"
+          >确认邮箱</a>
+        </p>
+        <p style="margin:24px 0 0;font-size:13px;line-height:1.7;color:#64748b">
+          如果你没有注册博主联盟账号，可以忽略此邮件。
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

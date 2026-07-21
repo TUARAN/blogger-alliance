@@ -214,6 +214,21 @@ export function useAuth() {
     )
   }
 
+  async function verifySignupEmail(tokenHash) {
+    const supabase = getSupabaseClient()
+
+    if (!supabase) {
+      return { data: null, error: { message: AUTH_COPY.serviceUnavailable } }
+    }
+
+    return callWithNetworkGuard('verifySignupEmail', () =>
+      supabase.auth.verifyOtp({
+        token_hash: tokenHash,
+        type: 'email'
+      })
+    )
+  }
+
   async function signOut() {
     const supabase = getSupabaseClient()
 
@@ -276,6 +291,7 @@ export function useAuth() {
     signIn,
     signInWithOAuth,
     resendVerificationEmail,
+    verifySignupEmail,
     signOut,
     updateProfile,
     fetchProfile
