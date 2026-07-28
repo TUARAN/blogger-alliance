@@ -26,6 +26,17 @@ const ROLE_RANK = {
   admin: 3
 }
 
+const EMAIL_VERIFICATION_GRACE_MS = 24 * 60 * 60 * 1000
+
+function isExpiredUnverifiedPasswordUser(user, now = Date.now()) {
+  if (user?.app_metadata?.provider !== 'email' || user?.email_confirmed_at || user?.confirmed_at) {
+    return false
+  }
+
+  const createdAt = Date.parse(user?.created_at || '')
+  return Number.isFinite(createdAt) && createdAt + EMAIL_VERIFICATION_GRACE_MS <= now
+}
+
 function hasMinimumRole(role, minimumRole) {
   return (ROLE_RANK[role] ?? 0) >= (ROLE_RANK[minimumRole] ?? 0)
 }
@@ -127,6 +138,11 @@ async function verifySupabaseAccess(request, env, minimumRole = 'internal') {
   }
 
   const user = await userResponse.json()
+
+  if (isExpiredUnverifiedPasswordUser(user)) {
+    return { ok: false, status: 401, error: 'EMAIL_VERIFICATION_EXPIRED' }
+  }
+
   const profileResponse = await fetch(
     `${env.SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(user.id)}&select=role`,
     {
@@ -188,6 +204,18 @@ function mapDealRow(row) {
   }
 
   return mapped
+}
+
+function mapOpsSupportSummaryRow(row) {
+  return {
+    id: row.id || '',
+    title: row.title || '',
+    period: row.period || '',
+    participantCount: Number(row.participant_count || 0),
+    status: row.status || '',
+    updatedAt: row.updated_at || '',
+    settlement: row.settlement_cipher || ''
+  }
 }
 
 function parseJsonColumn(raw, fallback) {
@@ -407,6 +435,23 @@ async function handleReports(request, env) {
   })
 }
 
+async function handleOpsSupportSummaries(request, env) {
+  const session = await requireSession(request, env, 'admin')
+
+  if (!session.ok) {
+    return authFailureResponse(session)
+  }
+
+  const rows = await supabaseDataRequest(
+    env,
+    '/ops_support_summaries?select=id,title,period,participant_count,status,updated_at,settlement_cipher&order=sort_order.asc,period.desc'
+  )
+
+  return json({
+    summaries: (rows || []).map(mapOpsSupportSummaryRow)
+  })
+}
+
 async function handleClientReport(request, env, reportId) {
   const session = await requireSession(request, env, 'internal')
 
@@ -485,7 +530,8 @@ async function handleHealth(_request, env) {
     counts: {
       deals: Number(counts?.deals || 0),
       reports: Number(counts?.reports || 0),
-      annualReports: Number(counts?.annualReports || 0)
+      annualReports: Number(counts?.annualReports || 0),
+      opsSupportSummaries: Number(counts?.opsSupportSummaries || 0)
     },
     timestamp: new Date().toISOString()
   })
@@ -715,6 +761,14 @@ async function handleApi(request, env) {
     }
   }
 
+  if (request.method === 'GET' && url.pathname === '/api/internal/admin/ops-support-summaries') {
+    try {
+      return await handleOpsSupportSummaries(request, env)
+    } catch (error) {
+      return dataErrorResponse(error)
+    }
+  }
+
   if (request.method === 'GET' && url.pathname === '/api/internal/reports/coop-ids') {
     try {
       return await handleReportCoopIds(request, env)
@@ -876,6 +930,63 @@ function normalizeSiteRequest(request) {
   return request
 }
 
+async function deleteExpiredUnverifiedUsers(env) {
+  if (missingSupabaseDataConfig(env)) {
+    throw new Error('SUPABASE_SERVICE_ROLE_NOT_CONFIGURED')
+  }
+
+  const users = []
+  const perPage = 1000
+
+  for (let page = 1; ; page += 1) {
+    const response = await fetch(
+      `${getSupabaseBaseUrl(env)}/auth/v1/admin/users?page=${page}&per_page=${perPage}`,
+      {
+        headers: {
+          Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+          apikey: env.SUPABASE_SERVICE_ROLE_KEY,
+          Accept: 'application/json'
+        }
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error(`SUPABASE_AUTH_USERS_LIST_FAILED_${response.status}`)
+    }
+
+    const payload = await response.json()
+    const pageUsers = Array.isArray(payload?.users) ? payload.users : []
+    users.push(...pageUsers)
+
+    if (pageUsers.length < perPage) {
+      break
+    }
+  }
+
+  const expiredIds = users
+    .filter((user) => isExpiredUnverifiedPasswordUser(user))
+    .map((user) => user.id)
+
+  await Promise.all(expiredIds.map(async (userId) => {
+    const response = await fetch(
+      `${getSupabaseBaseUrl(env)}/auth/v1/admin/users/${encodeURIComponent(userId)}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+          apikey: env.SUPABASE_SERVICE_ROLE_KEY
+        }
+      }
+    )
+
+    if (!response.ok && response.status !== 404) {
+      throw new Error(`SUPABASE_AUTH_USER_DELETE_FAILED_${response.status}`)
+    }
+  }))
+
+  return expiredIds.length
+}
+
 export default {
   async fetch(request, env) {
     request = normalizeSiteRequest(request)
@@ -894,5 +1005,10 @@ export default {
     }
 
     return handleAssets(request, env)
+  },
+
+  async scheduled(_controller, env) {
+    const deletedCount = await deleteExpiredUnverifiedUsers(env)
+    console.log(`Expired unverified auth users deleted: ${deletedCount}`)
   }
 }

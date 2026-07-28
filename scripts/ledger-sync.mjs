@@ -1,5 +1,6 @@
 import process from 'node:process'
 import { loadAndValidateDeals } from './lib/ledgerDeals.mjs'
+import { loadAndValidateOpsSummaries } from './lib/ledgerOpsSummaries.mjs'
 import { withClient } from './lib/supabaseDb.mjs'
 
 /**
@@ -16,7 +17,9 @@ import { withClient } from './lib/supabaseDb.mjs'
 async function main() {
   const dryRun = process.argv.includes('--dry-run')
 
-  const { files, records, errors, warnings } = await loadAndValidateDeals()
+  const { files, records, errors: dealErrors, warnings } = await loadAndValidateDeals()
+  const { records: summaries, errors: summaryErrors } = await loadAndValidateOpsSummaries()
+  const errors = [...dealErrors, ...summaryErrors]
 
   if (files.length === 0) {
     throw new Error('data/ledger/deals/ 下没有任何合作文件。')
@@ -30,21 +33,29 @@ async function main() {
   }
 
   const encrypted = records.filter((r) => r.settlement != null).length
+  const encryptedSummaries = summaries.filter((r) => r.settlement != null).length
 
   if (dryRun) {
-    console.log(`[dry-run] 校验通过：${records.length} 条合作，${encrypted} 条含加密结算。未写库。`)
+    console.log(`[dry-run] 校验通过：${records.length} 条合作（${encrypted} 条含加密结算），${summaries.length} 份运营支撑总结（${encryptedSummaries} 份含密文）。未写库。`)
     return
   }
 
   const { label, result } = await withClient(async (client) => {
-    const { rows } = await client.query(
+    const dealsResult = await client.query(
       'select public.replace_commercial_deals($1::jsonb) as count',
       [JSON.stringify(records)]
     )
-    return rows[0]?.count ?? 0
+    const summariesResult = await client.query(
+      'select public.replace_ops_support_summaries($1::jsonb) as count',
+      [JSON.stringify(summaries)]
+    )
+    return {
+      deals: dealsResult.rows[0]?.count ?? 0,
+      summaries: summariesResult.rows[0]?.count ?? 0
+    }
   })
 
-  console.log(`已同步到 Supabase（${label}）：commercial_deals ${result} 条，其中 ${encrypted} 条含加密结算。`)
+  console.log(`已同步到 Supabase（${label}）：commercial_deals ${result.deals} 条（${encrypted} 条含加密结算），ops_support_summaries ${result.summaries} 份（${encryptedSummaries} 份含密文）。`)
 }
 
 main().catch((error) => {

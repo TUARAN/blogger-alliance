@@ -8,12 +8,6 @@ const navLinks = [
   { label: '联盟入口', to: '/workspace', matchPrefix: '/workspace' }
 ]
 
-const matrixLink = {
-  label: '矩阵联盟',
-  to: '/matrix',
-  matchPrefix: '/matrix'
-}
-
 defineProps({
   logoTo: { type: String, default: '/' }
 })
@@ -38,7 +32,6 @@ const activeLinkLabels = computed(() => {
   for (const item of navLinks) {
     map[item.label] = isLinkActive(item)
   }
-  map[matrixLink.label] = isLinkActive(matrixLink)
   return map
 })
 </script>
@@ -128,18 +121,4 @@ const activeLinkLabels = computed(() => {
     </div>
   </nav>
 
-  <router-link
-    :to="matrixLink.to"
-    :aria-current="activeLinkLabels[matrixLink.label] ? 'page' : undefined"
-    aria-label="矩阵联盟，建设中"
-    title="矩阵联盟 · 建设中"
-    class="fixed left-4 z-30 inline-flex min-h-12 items-center gap-2.5 rounded-md border border-slate-700 bg-slate-950 px-4 text-white shadow-lg transition-all hover:-translate-y-0.5 hover:border-indigo-600 hover:bg-indigo-700 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:left-6"
-    :class="activeLinkLabels[matrixLink.label] ? 'border-amber-300 ring-2 ring-amber-300 ring-offset-2' : ''"
-    style="bottom: max(1rem, env(safe-area-inset-bottom));"
-  >
-    <span class="text-lg leading-none" aria-hidden="true">⚒️</span>
-    <span class="whitespace-nowrap text-sm font-semibold tracking-wide">
-      矩阵联盟<span class="mx-1.5 text-slate-500" aria-hidden="true">·</span><span class="text-amber-300">建设中</span>
-    </span>
-  </router-link>
 </template>

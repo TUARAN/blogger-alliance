@@ -4,6 +4,7 @@ import process from 'node:process'
 import readline from 'node:readline'
 import { encryptSettlement, isValidEnvelope } from './lib/settlementEnvelope.mjs'
 import { loadActiveRecipients } from './lib/settlementDevices.mjs'
+import { OPS_SUMMARIES_DIR } from './lib/ledgerOpsSummaries.mjs'
 
 /**
  * owner 本地录入结算，使用已登记设备公钥生成 v2 信封。
@@ -51,6 +52,23 @@ async function writeSettlement(dealId, envelope) {
   return path.relative(process.cwd(), filePath)
 }
 
+async function writeSummarySettlement(summaryId, envelope) {
+  const filePath = path.join(OPS_SUMMARIES_DIR, `${summaryId}.json`)
+  let summary
+  try {
+    summary = JSON.parse(await fs.readFile(filePath, 'utf8'))
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      throw new Error(`找不到运营支撑总结：${path.relative(process.cwd(), filePath)}`)
+    }
+    throw error
+  }
+  if (summary.id !== summaryId) throw new Error(`运营支撑总结编码不匹配：${summaryId}`)
+  summary.settlement = envelope
+  await fs.writeFile(filePath, `${JSON.stringify(summary, null, 2)}\n`, 'utf8')
+  return path.relative(process.cwd(), filePath)
+}
+
 function encryptAndCheck(payload, recipients) {
   const envelope = encryptSettlement(payload, recipients)
   if (!isValidEnvelope(envelope)) throw new Error('加密自检失败：生成的 v2 信封无效')
@@ -82,12 +100,27 @@ async function runBatch(batchPath, recipients) {
 async function main() {
   const dealId = getArg('--deal')
   const batchPath = getArg('--batch')
+  const summaryId = getArg('--summary')
+  const payloadPath = getArg('--payload')
   const recipients = await loadActiveRecipients()
   if (recipients.length === 0) {
     throw new Error('尚未登记站长设备公钥。请在台账页启用本设备、导出公钥，再运行 npm run ledger:device -- add --file=<文件>。')
   }
 
   if (batchPath) return runBatch(batchPath, recipients)
+
+  if (summaryId) {
+    if (!payloadPath) throw new Error('运营支撑总结加密必须同时指定 --payload=<本地明文中转文件>')
+    const resolvedPayloadPath = path.resolve(process.cwd(), payloadPath)
+    const payload = JSON.parse(await fs.readFile(resolvedPayloadPath, 'utf8'))
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+      throw new Error('运营支撑总结明文必须是 JSON 对象')
+    }
+    const rel = await writeSummarySettlement(summaryId, encryptAndCheck(payload, recipients))
+    await fs.rm(resolvedPayloadPath, { force: true })
+    console.log(`已用 ${recipients.length} 台受信任设备的公钥写入 ${rel}，明文中转文件已删除。`)
+    return
+  }
 
   let payload = {
     forward: getArg('--forward'),

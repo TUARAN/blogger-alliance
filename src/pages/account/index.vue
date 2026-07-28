@@ -7,12 +7,38 @@ import { getRoleLabel } from '../../utils/authMessages.js'
 import { showToast } from '../../utils/toast.js'
 
 const router = useRouter()
-const { user, profile, isAuthenticated, loading, initAuth, updateProfile, signOut, role } = useAuth()
+const {
+  user,
+  profile,
+  isAuthenticated,
+  isEmailVerificationPending,
+  emailVerificationDeadline,
+  loading,
+  initAuth,
+  updateProfile,
+  signOut,
+  resendVerificationEmail,
+  role
+} = useAuth()
 
 const roleLabel = computed(() => getRoleLabel(role.value))
 const displayName = ref('')
 const isSaving = ref(false)
+const isResending = ref(false)
 const errorMessage = ref('')
+
+const verificationDeadlineLabel = computed(() => {
+  if (!emailVerificationDeadline.value) {
+    return ''
+  }
+
+  return new Intl.DateTimeFormat('zh-CN', {
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(emailVerificationDeadline.value)
+})
 
 onMounted(async () => {
   await initAuth()
@@ -56,6 +82,23 @@ async function handleSignOut() {
   showToast('已退出登录', { type: 'success' })
   router.replace('/auth/login')
 }
+
+async function handleResendVerification() {
+  if (isResending.value || !user.value?.email) {
+    return
+  }
+
+  isResending.value = true
+  const { error } = await resendVerificationEmail(user.value.email)
+  isResending.value = false
+
+  if (error) {
+    showToast(error.message || '重发失败，请稍后再试。', { type: 'error' })
+    return
+  }
+
+  showToast('验证邮件已重新发送', { type: 'success' })
+}
 </script>
 
 <template>
@@ -71,6 +114,24 @@ async function handleSignOut() {
         <h1 class="text-2xl font-bold text-slate-900">账号中心</h1>
         <p class="mt-2 text-sm text-slate-600">管理你的联盟账号资料。</p>
         <AccountSupportHint class="mt-5" />
+
+        <div
+          v-if="isEmailVerificationPending"
+          class="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-4 text-sm text-amber-900"
+        >
+          <p class="font-semibold">邮箱等待验证</p>
+          <p class="mt-1 leading-6">
+            你可以暂时正常使用账号，请在 {{ verificationDeadlineLabel }} 前完成验证，逾期账号会自动失效。
+          </p>
+          <button
+            type="button"
+            class="mt-3 inline-flex h-9 items-center rounded-lg border border-amber-300 bg-white px-3 font-medium text-amber-900 hover:bg-amber-100 disabled:opacity-60"
+            :disabled="isResending"
+            @click="handleResendVerification"
+          >
+            {{ isResending ? '发送中...' : '重发验证邮件' }}
+          </button>
+        </div>
 
         <div class="mt-6 space-y-4">
           <div>

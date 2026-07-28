@@ -1,0 +1,14 @@
+{
+  "$comment": "data/ledger/ops-summaries/<id>.json 的字段契约。所有金额、扣减项、税率、分配明细与参与者信息必须放在 settlement 设备密钥信封中。",
+  "version": 1,
+  "idPattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+  "fields": {
+    "id": { "type": "string", "required": true, "public": true },
+    "title": { "type": "string", "required": true, "public": true },
+    "period": { "type": "string", "required": true, "public": true },
+    "participantCount": { "type": "integer", "required": true, "public": true },
+    "status": { "type": "string", "required": true, "public": true },
+    "updatedAt": { "type": "string", "required": true, "public": true },
+    "settlement": { "type": "envelope-or-null", "required": false, "sensitive": true }
+  }
+}

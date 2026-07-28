@@ -55,6 +55,11 @@ export async function fetchPromotionReports(token) {
   return Array.isArray(payload?.reports) ? payload.reports : []
 }
 
+export async function fetchOpsSupportSummaries(token) {
+  const payload = await apiRequest('/api/internal/admin/ops-support-summaries', { token })
+  return Array.isArray(payload?.summaries) ? payload.summaries : []
+}
+
 export async function fetchSinglePromotionReport(reportId, token) {
   const payload = await apiRequest(`/api/client/reports/${encodeURIComponent(reportId)}`, { token })
   return payload?.report || null

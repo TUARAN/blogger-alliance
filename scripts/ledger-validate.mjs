@@ -1,5 +1,6 @@
 import process from 'node:process'
 import { loadAndValidateDeals } from './lib/ledgerDeals.mjs'
+import { loadAndValidateOpsSummaries } from './lib/ledgerOpsSummaries.mjs'
 import { loadDeviceRegistry } from './lib/settlementDevices.mjs'
 import { isDeviceEnvelope, isLegacyEnvelope } from './lib/settlementEnvelope.mjs'
 
@@ -11,7 +12,13 @@ import { isDeviceEnvelope, isLegacyEnvelope } from './lib/settlementEnvelope.mjs
  */
 
 async function main() {
-  const { files, records, errors, warnings } = await loadAndValidateDeals()
+  const { files, records, errors: dealErrors, warnings } = await loadAndValidateDeals()
+  const {
+    files: summaryFiles,
+    records: summaryRecords,
+    errors: summaryErrors
+  } = await loadAndValidateOpsSummaries()
+  const errors = [...dealErrors, ...summaryErrors]
   let devices = []
   try {
     devices = (await loadDeviceRegistry()).devices
@@ -29,7 +36,7 @@ async function main() {
   const activeKids = new Set(
     devices.filter((device) => device.revoked !== true).map((device) => device.kid)
   )
-  for (const record of records.filter((item) => isDeviceEnvelope(item.settlement))) {
+  for (const record of [...records, ...summaryRecords].filter((item) => isDeviceEnvelope(item.settlement))) {
     const recipientKids = new Set(
       JSON.parse(record.settlement).recipients.map((recipient) => recipient.kid)
     )
@@ -57,10 +64,13 @@ async function main() {
   const encrypted = records.filter((r) => r.settlement != null).length
   const legacy = records.filter((r) => isLegacyEnvelope(r.settlement)).length
   const deviceEncrypted = records.filter((r) => isDeviceEnvelope(r.settlement)).length
+  const encryptedSummaries = summaryRecords.filter((r) => r.settlement != null).length
+  const legacySummaries = summaryRecords.filter((r) => isLegacyEnvelope(r.settlement)).length
+  const deviceEncryptedSummaries = summaryRecords.filter((r) => isDeviceEnvelope(r.settlement)).length
   const activeDevices = devices.filter((device) => device.revoked !== true).length
-  if (legacy > 0) console.warn(`⚠ ${legacy} 条结算仍是 v1 口令信封，需一次性迁移为设备密钥 v2。`)
+  if (legacy + legacySummaries > 0) console.warn(`⚠ ${legacy + legacySummaries} 条结算仍是 v1 口令信封，需一次性迁移为设备密钥 v2。`)
   if (activeDevices === 0) console.warn('⚠ 尚未登记站长设备公钥，新结算暂时无法加密。')
-  console.log(`✓ 校验通过：${records.length} 条合作，${encrypted} 条含加密结算（v1=${legacy}, v2=${deviceEncrypted}），受信任设备 ${activeDevices} 台，${warnings.length} 个字段告警。`)
+  console.log(`✓ 校验通过：${records.length} 条合作，${encrypted} 条含加密结算（v1=${legacy}, v2=${deviceEncrypted}）；${summaryFiles.length} 份运营支撑总结，${encryptedSummaries} 份含密文（v1=${legacySummaries}, v2=${deviceEncryptedSummaries}）；受信任设备 ${activeDevices} 台，${warnings.length} 个字段告警。`)
 }
 
 main().catch((error) => {

@@ -11,6 +11,7 @@ export function getRoleLabel(role) {
 const AUTH_ERROR_MESSAGES = {
   invalid_credentials: '邮箱或密码不正确，请检查后重试。',
   email_not_confirmed: '邮箱尚未验证，请先查收邮件并点击验证链接。',
+  email_verification_expired: '该账号未在注册后 24 小时内验证邮箱，现已失效，请重新注册。',
   user_already_registered: '该邮箱已注册，请直接登录。',
   signup_disabled: '当前暂不支持新用户注册，请联系管理员。',
   too_many_requests: '尝试次数过多，请稍等几分钟后再试。',
@@ -27,6 +28,10 @@ function normalizeAuthErrorMessage(message = '') {
 
   if (text.includes('email not confirmed')) {
     return AUTH_ERROR_MESSAGES.email_not_confirmed
+  }
+
+  if (text.includes('email_verification_expired')) {
+    return AUTH_ERROR_MESSAGES.email_verification_expired
   }
 
   if (text.includes('already registered') || text.includes('user already exists')) {
@@ -89,8 +94,8 @@ export const AUTH_COPY = {
   sessionMissing: '登录状态异常，请重新登录后再试。',
   serviceUnavailable: '账号服务暂不可用，请稍后再试。',
   verificationTitle: '请查收验证邮件',
-  verificationBody: '已向 {email} 发送验证链接。打开链接后，再在确认页点击按钮完成验证。',
-  verificationHint: '没收到？先查垃圾箱，或稍等片刻后重发。',
+  verificationBody: '已向 {email} 发送验证链接。你现在可以先登录使用，但需要在注册后 24 小时内完成验证。',
+  verificationHint: '超过 24 小时仍未验证，账号会自动失效。没收到邮件？先查垃圾箱，或稍等片刻后重发。',
   verificationResent: '验证邮件已重新发送',
   verificationResendWait: '请 {seconds} 秒后再试'
 }

@@ -6,6 +6,11 @@ import {
   isLikelyNetworkError,
   probeSupabaseReachable
 } from '../utils/networkProbe.js'
+import {
+  getEmailVerificationDeadline,
+  isEmailVerificationExpired,
+  isEmailVerified
+} from '../utils/authVerification.js'
 
 /**
  * 包裹 Supabase 调用，统一捕获 "Failed to fetch" 类网络异常并给出中文提示。
@@ -94,14 +99,24 @@ async function initAuth() {
     }
 
     const { data: { session } } = await supabase.auth.getSession()
-    user.value = session?.user ?? null
+    const sessionUser = session?.user ?? null
+
+    if (sessionUser && isEmailVerificationExpired(sessionUser)) {
+      await supabase.auth.signOut({ scope: 'local' })
+      user.value = null
+    } else {
+      user.value = sessionUser
+    }
 
     if (user.value) {
       await fetchProfile()
     }
 
     supabase.auth.onAuthStateChange(async (_event, session) => {
-      user.value = session?.user ?? null
+      const nextUser = session?.user ?? null
+      user.value = nextUser && !isEmailVerificationExpired(nextUser)
+        ? nextUser
+        : null
 
       if (user.value) {
         await fetchProfile()
@@ -120,6 +135,12 @@ async function initAuth() {
 export function useAuth() {
   const role = computed(() => profile.value?.role || ROLES.MEMBER)
   const isAuthenticated = computed(() => Boolean(user.value))
+  const isEmailVerificationPending = computed(() => (
+    Boolean(user.value)
+    && !isEmailVerified(user.value)
+    && !isEmailVerificationExpired(user.value)
+  ))
+  const emailVerificationDeadline = computed(() => getEmailVerificationDeadline(user.value))
   const isInternal = computed(() => hasMinimumRole(role.value, ROLES.INTERNAL))
   const isManager = computed(() => role.value === ROLES.MANAGER)
   const isAdmin = computed(() => role.value === ROLES.ADMIN)
@@ -191,9 +212,26 @@ export function useAuth() {
       return { data: null, error: { message: AUTH_COPY.serviceUnavailable } }
     }
 
-    return callWithNetworkGuard('signIn', () =>
+    const result = await callWithNetworkGuard('signIn', () =>
       supabase.auth.signInWithPassword({ email, password })
     )
+
+    if (result.data?.user && isEmailVerificationExpired(result.data.user)) {
+      await supabase.auth.signOut({ scope: 'local' })
+      return {
+        data: null,
+        error: {
+          message: 'EMAIL_VERIFICATION_EXPIRED',
+          code: 'email_verification_expired'
+        },
+        verificationPending: false
+      }
+    }
+
+    return {
+      ...result,
+      verificationPending: Boolean(result.data?.user && !isEmailVerified(result.data.user))
+    }
   }
 
   async function resendVerificationEmail(email) {
@@ -280,6 +318,8 @@ export function useAuth() {
     initialized: readonly(initialized),
     isSupabaseConfigured,
     isAuthenticated,
+    isEmailVerificationPending,
+    emailVerificationDeadline,
     isInternal,
     isManager,
     isAdmin,

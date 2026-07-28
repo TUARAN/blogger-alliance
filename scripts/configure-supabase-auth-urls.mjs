@@ -55,7 +55,7 @@ if (!token) {
   console.error(
     'Missing SUPABASE_ACCESS_TOKEN.\n'
     + 'Create one at https://supabase.com/dashboard/account/tokens\n'
-    'Then run: SUPABASE_ACCESS_TOKEN=sbp_xxx npm run supabase:auth-urls'
+    + 'Then run: SUPABASE_ACCESS_TOKEN=sbp_xxx npm run supabase:auth-urls'
   )
   process.exit(1)
 }
@@ -94,6 +94,7 @@ console.log('Redirect URLs:', REDIRECT_URLS.join(', '))
 const current = await request('GET')
 console.log('\nCurrent Site URL:', current.site_url)
 console.log('Current Redirect URLs:', current.uri_allow_list || '(empty)')
+console.log('Allow unverified email sign-ins:', Boolean(current.mailer_allow_unverified_email_sign_ins))
 
 const existing = (current.uri_allow_list || '')
   .split(',')
@@ -104,9 +105,14 @@ const mergedRedirects = [...new Set([...existing, ...REDIRECT_URLS])]
 
 const updated = await request('PATCH', {
   site_url: SITE_URL,
-  uri_allow_list: mergedRedirects.join(',')
+  uri_allow_list: mergedRedirects.join(','),
+  mailer_autoconfirm: false,
+  mailer_allow_unverified_email_sign_ins: true,
+  mailer_otp_exp: 86400
 })
 
 console.log('\nUpdated Site URL:', updated.site_url)
 console.log('Updated Redirect URLs:', updated.uri_allow_list)
+console.log('Allow unverified email sign-ins:', Boolean(updated.mailer_allow_unverified_email_sign_ins))
+console.log('Email verification link expiry:', `${updated.mailer_otp_exp || 86400} seconds`)
 console.log('\nDone.')

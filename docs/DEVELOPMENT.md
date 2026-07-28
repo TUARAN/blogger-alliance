@@ -20,7 +20,7 @@
 | 台账 | `npm run ledger:device` / `npm run ledger:encrypt` | owner 登记设备公钥并把结算金额加密成 v2 密文信封 |
 | 台账 | `npm run ledger:sync` | 校验后同步台账到 Supabase |
 | 台账 | `npm run ledger:migrate-excel` | 一次性把 Excel 落成 `data/ledger` 文件 |
-| Supabase | `npm run supabase:auth-urls` | 配置 Auth Site URL / Redirect URLs |
+| Supabase | `npm run supabase:auth-urls` | 配置 Auth URL，并开启“未验证邮箱可登录、24 小时验证链接” |
 | 采集 | `npm run metrics:login` | Playwright 登录各平台并保存会话 |
 | 采集 | `npm run metrics:collect` | 批量采集页面可见互动数据 |
 
@@ -94,6 +94,11 @@ npm run supabase:migrate
 > 注意：同一邮箱在 Supabase 默认会自动合并身份（GitHub / Google / 邮箱密码视为同一账号），管理员邮箱用 OAuth 登录同样会被 `003/005` 迁移引导为 admin。
 
 ### 1.2) 配置邮箱确认模板
+
+邮箱密码账号采用 24 小时宽限期：注册后可先登录，必须在注册后 24 小时内完成邮箱验证。运行
+`npm run supabase:auth-urls` 会保持邮箱确认开启、允许未验证邮箱登录，并把验证链接有效期设为
+24 小时。Worker 会在访问内部接口时拦截已过期账号，并通过每小时 Cron 删除超时未验证的邮箱账号。
+GitHub / Google OAuth 账号不受此清理规则影响。
 
 部分邮箱服务会预取邮件中的一次性验证链接，导致用户点击时 Supabase 返回 `One-time token not found`。项目使用两步确认避免令牌被预取消耗：邮件先打开站内 `/auth/confirm`，用户主动点击按钮后才调用 `verifyOtp`。
 
