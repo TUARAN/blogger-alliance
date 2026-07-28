@@ -11,8 +11,7 @@ const navLinks = [
 const matrixLink = {
   label: '矩阵联盟',
   to: '/matrix',
-  matchPrefix: '/matrix',
-  badge: '建设中'
+  matchPrefix: '/matrix'
 }
 
 defineProps({
@@ -80,17 +79,6 @@ const activeLinkLabels = computed(() => {
           <div class="hidden md:block">
             <AuthNavActions />
           </div>
-          <router-link
-            :to="matrixLink.to"
-            :aria-current="activeLinkLabels[matrixLink.label] ? 'page' : undefined"
-            class="group relative hidden min-h-9 items-center gap-2 overflow-hidden rounded-full bg-slate-950 px-3.5 text-sm font-semibold text-white shadow-sm ring-1 ring-slate-950 transition-all hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-md hover:ring-indigo-700 md:inline-flex"
-            :class="activeLinkLabels[matrixLink.label] ? 'ring-2 ring-amber-300 ring-offset-2' : ''"
-          >
-            <span>{{ matrixLink.label }}</span>
-            <span class="rounded-full bg-amber-300 px-2 py-1 text-[10px] font-bold leading-none text-slate-950 transition-colors group-hover:bg-white">
-              {{ matrixLink.badge }}
-            </span>
-          </router-link>
           <button
             type="button"
             class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 transition-colors hover:bg-slate-50 md:hidden"
@@ -136,21 +124,19 @@ const activeLinkLabels = computed(() => {
         <div class="mt-2 border-t border-slate-200/70 pt-2 md:hidden">
           <AuthNavActions variant="mobile" />
         </div>
-        <router-link
-          :to="matrixLink.to"
-          :aria-current="activeLinkLabels[matrixLink.label] ? 'page' : undefined"
-          class="relative mt-2 flex min-h-12 items-center overflow-hidden rounded-xl bg-slate-950 px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700"
-          :class="activeLinkLabels[matrixLink.label] ? 'ring-2 ring-amber-300 ring-offset-2' : ''"
-        >
-          <span>{{ matrixLink.label }}</span>
-          <span class="ml-2 rounded-full bg-amber-300 px-2 py-1 text-[10px] font-bold leading-none text-slate-950">
-            {{ matrixLink.badge }}
-          </span>
-          <svg class="ml-auto h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path d="m9 18 6-6-6-6" />
-          </svg>
-        </router-link>
       </div>
     </div>
   </nav>
+
+  <router-link
+    :to="matrixLink.to"
+    :aria-current="activeLinkLabels[matrixLink.label] ? 'page' : undefined"
+    :aria-label="matrixLink.label"
+    :title="matrixLink.label"
+    class="fixed left-4 z-30 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-slate-700 bg-slate-950 text-xl text-white shadow-lg transition-all hover:-translate-y-0.5 hover:border-indigo-600 hover:bg-indigo-700 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 sm:left-6"
+    :class="activeLinkLabels[matrixLink.label] ? 'border-amber-300 ring-2 ring-amber-300 ring-offset-2' : ''"
+    style="bottom: max(1rem, env(safe-area-inset-bottom));"
+  >
+    <span aria-hidden="true">⚒️</span>
+  </router-link>
 </template>
