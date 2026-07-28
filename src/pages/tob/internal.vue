@@ -63,8 +63,31 @@
 
       <!-- Unified ledger -->
       <template v-else-if="isUnlocked">
-        <!-- Stats summary -->
-        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
+        <div class="mb-5 inline-flex rounded-xl border border-indigo-100 bg-white p-1 shadow-sm" aria-label="台账查看模式">
+          <button
+            type="button"
+            class="min-h-10 rounded-lg px-4 text-sm font-semibold transition-colors"
+            :class="activeLedgerView === 'progress' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-50'"
+            @click="activeLedgerView = 'progress'"
+          >
+            活动进度
+          </button>
+          <button
+            v-if="isAdmin"
+            type="button"
+            class="min-h-10 rounded-lg px-4 text-sm font-semibold transition-colors"
+            :class="activeLedgerView === 'ops' ? 'bg-amber-500 text-amber-950 shadow-sm' : 'text-slate-600 hover:bg-amber-50'"
+            @click="activeLedgerView = 'ops'"
+          >
+            运营支撑
+          </button>
+        </div>
+
+        <template v-if="activeLedgerView === 'progress'">
+          <LedgerActivityHeatmap :deals="deals" :reports="reports" />
+
+          <!-- Stats summary -->
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
           <div class="rounded-xl border border-indigo-100 bg-white px-4 py-3">
             <p class="text-xs text-gray-500">合作数</p>
             <p class="mt-1 text-xl font-bold text-indigo-700 tabular-nums">{{ filteredDeals.length }}</p>
@@ -87,11 +110,11 @@
               {{ formatNumber(filteredStats.comments + filteredStats.shares + filteredStats.favorites) }}
             </p>
           </div>
-        </div>
+          </div>
 
-        <!-- Toolbar -->
-        <div class="rounded-2xl border border-indigo-100 bg-white shadow-sm p-4 md:p-5 mb-5">
-          <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+          <!-- Toolbar -->
+          <div class="rounded-2xl border border-indigo-100 bg-white shadow-sm p-4 md:p-5 mb-5">
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-7">
             <div>
               <label class="block text-xs text-gray-500 mb-1">服务类型</label>
               <select v-model="serviceFilter" class="w-full h-9 px-2 rounded-lg border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -113,13 +136,29 @@
                 <option v-for="item in yearOptions" :key="item" :value="item">{{ item }}</option>
               </select>
             </div>
-            <div class="md:col-span-2">
-              <label class="block text-xs text-gray-500 mb-1">关键词（合作编码 / 品牌 / 服务 / 备注 / 报告）</label>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">推荐人</label>
+              <select v-model="referrerFilter" class="w-full h-9 px-2 rounded-lg border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="all">全部推荐人</option>
+                <option v-for="item in referrerOptions" :key="item" :value="item">{{ item }}</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-500 mb-1">数据报告</label>
+              <select v-model="reportFilter" class="w-full h-9 px-2 rounded-lg border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="all">全部合作</option>
+                <option value="with">已有报告</option>
+                <option value="without">暂无报告</option>
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs text-gray-500 mb-1">关键词（支持空格分隔多个条件）</label>
               <input
                 v-model="keyword"
                 type="text"
-                placeholder="输入任意关键词筛选合作与报告"
+                placeholder="编码 / 品牌 / 服务 / 备注 / 人员 / 报告"
                 class="w-full h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                @keyup.esc="keyword = ''"
               >
             </div>
           </div>
@@ -174,13 +213,23 @@
             >
               复制为表格
             </button>
+            <button
+              v-if="hasActiveFilters"
+              class="h-9 px-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-slate-600 hover:bg-slate-50"
+              @click="resetFilters"
+            >
+              清空筛选
+            </button>
+            <span v-if="hasActiveFilters" class="text-xs text-slate-500">
+              当前显示 {{ filteredDeals.length }} / {{ deals.length }} 条合作
+            </span>
             <span v-if="toolbarMessage" class="text-xs text-emerald-700">{{ toolbarMessage }}</span>
             <span v-if="toolbarError" class="text-xs text-red-600">{{ toolbarError }}</span>
           </div>
-        </div>
+          </div>
 
-        <!-- Main ledger table -->
-        <div class="rounded-2xl border border-indigo-100 bg-white shadow-sm overflow-hidden">
+          <!-- Main ledger table -->
+          <div class="rounded-2xl border border-indigo-100 bg-white shadow-sm overflow-hidden">
           <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
               <thead class="bg-indigo-50/80 text-gray-700">
@@ -193,7 +242,6 @@
                   <th class="px-3 py-3 text-left text-xs font-semibold">推荐人</th>
                   <th class="px-3 py-3 text-left text-xs font-semibold">承接人</th>
                   <th class="px-3 py-3 text-left text-xs font-semibold">最近沟通</th>
-                  <th class="px-3 py-3 text-left text-xs font-semibold">结算</th>
                   <th class="px-3 py-3 text-center text-xs font-semibold">报告</th>
                   <th class="px-3 py-3 text-center text-xs font-semibold">操作</th>
                 </tr>
@@ -222,7 +270,7 @@
                     <td class="px-3 py-3 align-top">
                       <span
                         class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
-                        :class="progressBadgeClass(deal.progress)"
+                        :class="progressBadgeClass(deal)"
                       >
                         {{ deal.progress || '—' }}
                       </span>
@@ -231,30 +279,6 @@
                     <td class="px-3 py-3 align-top text-slate-600 whitespace-nowrap">{{ deal.referrer || '—' }}</td>
                     <td class="px-3 py-3 align-top text-slate-600">{{ deal.owner || '—' }}</td>
                     <td class="px-3 py-3 align-top text-slate-600 font-mono text-xs whitespace-nowrap">{{ deal.updatedAt || '—' }}</td>
-
-                    <!-- 结算列：默认打码；owner 解锁后本地解密展示 -->
-                    <td class="px-3 py-3 align-top text-xs whitespace-nowrap">
-                      <template v-if="!hasSettlement(deal)">
-                        <span class="text-slate-300">—</span>
-                      </template>
-                      <template v-else-if="!isAdmin">
-                        <span class="inline-flex items-center rounded bg-slate-100 px-1.5 py-0.5 text-slate-400" title="仅 owner 可解密">🔒 ••••</span>
-                      </template>
-                      <template v-else-if="!settlementMap.has(deal.id)">
-                        <span class="inline-flex items-center rounded bg-amber-50 px-1.5 py-0.5 text-amber-600 font-mono">••••</span>
-                      </template>
-                      <template v-else>
-                        <div class="space-y-0.5 font-mono text-slate-700">
-                          <div v-if="settlementMap.get(deal.id).forward">前 {{ settlementMap.get(deal.id).forward }}</div>
-                          <div v-if="settlementMap.get(deal.id).backward">后 {{ settlementMap.get(deal.id).backward }}</div>
-                          <div v-if="settlementMap.get(deal.id).opsSupport">运 {{ settlementMap.get(deal.id).opsSupport }}</div>
-                          <p
-                            v-if="settlementMap.get(deal.id).detail"
-                            class="font-sans text-[11px] text-slate-500 leading-5 max-w-[16rem] whitespace-pre-line"
-                          >{{ settlementMap.get(deal.id).detail }}</p>
-                        </div>
-                      </template>
-                    </td>
 
                     <td class="px-3 py-3 align-top text-center">
                       <span class="inline-flex items-center rounded-full bg-violet-50 px-2 py-0.5 text-xs font-semibold text-violet-700">
@@ -276,7 +300,7 @@
                   <!-- Expanded reports row -->
                   <tr v-if="isExpanded(deal.id) && dealReports(deal).length > 0" class="bg-indigo-50/30 border-t border-indigo-100">
                     <td></td>
-                    <td colspan="10" class="px-3 py-4">
+                    <td colspan="9" class="px-3 py-4">
                       <div class="space-y-3">
                         <div
                           v-for="report in dealReports(deal)"
@@ -313,17 +337,17 @@
                 </template>
 
                 <tr v-if="filteredDeals.length === 0">
-                  <td colspan="11" class="px-4 py-10 text-center text-sm text-gray-500">
+                  <td colspan="10" class="px-4 py-10 text-center text-sm text-gray-500">
                     未找到匹配合作，请调整筛选条件。
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </div>
+          </div>
 
-        <!-- Orphan reports (no matching deal) -->
-        <div v-if="orphanReports.length > 0" class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+          <!-- Orphan reports (no matching deal) -->
+          <div v-if="orphanReports.length > 0" class="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4">
           <h3 class="text-sm font-semibold text-amber-900 mb-2">未匹配合作的报告（{{ orphanReports.length }}）</h3>
           <p class="text-xs text-amber-700 mb-3">以下报告的 cooperationId 未在合作列表中找到对应条目，建议在 data/ledger 中补全对应合作或修正报告。</p>
           <div class="space-y-2">
@@ -343,7 +367,16 @@
               </div>
             </div>
           </div>
-        </div>
+          </div>
+        </template>
+
+        <OpsSupportView
+          v-else-if="isAdmin"
+          :summaries="opsSupportSummaries"
+          :summary-map="opsSummaryMap"
+          :deals="deals"
+          :settlement-map="settlementMap"
+        />
       </template>
     </section>
 
@@ -491,16 +524,18 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch } from 'vue'
 import AppNav from '../../components/AppNav.vue'
+import LedgerActivityHeatmap from '../../components/LedgerActivityHeatmap.vue'
+import OpsSupportView from '../../components/OpsSupportView.vue'
 import { useAuth } from '../../composables/useAuth.js'
 import { AUTH_COPY } from '../../utils/authMessages.js'
 import {
   explainInternalDataError,
   fetchCommercialDeals,
+  fetchOpsSupportSummaries,
   fetchPromotionReports
 } from '../../utils/internalDataApi'
 import {
   decryptDealsSettlementWithDevice,
-  isEncryptedSettlement,
   isLegacySettlement,
   rewrapDealsSettlementForDevice
 } from '../../utils/settlementCrypto.js'
@@ -515,6 +550,7 @@ const { initAuth, isInternal, isAdmin, user, getAccessToken, loading: authLoadin
 
 const deals = ref([])
 const reports = ref([])
+const opsSupportSummaries = ref([])
 const accessToken = ref('')
 const isUnlocked = ref(false)
 const isBootstrapping = ref(false)
@@ -524,7 +560,10 @@ const isRefreshing = ref(false)
 const serviceFilter = ref('all')
 const progressFilter = ref('all')
 const yearFilter = ref('all')
+const referrerFilter = ref('all')
+const reportFilter = ref('all')
 const keyword = ref('')
+const activeLedgerView = ref('progress')
 
 const expanded = reactive(new Set())
 const toolbarMessage = ref('')
@@ -533,6 +572,7 @@ let toolbarTimer = null
 
 // ---- 结算设备密钥（仅 owner；私钥不可导出，存于本浏览器 IndexedDB） ----
 const settlementMap = reactive(new Map())
+const opsSummaryMap = reactive(new Map())
 // CryptoKey 是浏览器原生对象，必须避免被 Vue 深层代理。
 const settlementDevice = shallowRef(null)
 const isSettingUpDevice = ref(false)
@@ -540,7 +580,8 @@ const unauthorizedSettlementCount = ref(0)
 const rewrapFileInput = ref(null)
 const isRewrappingDevice = ref(false)
 const legacySettlementCount = computed(() => (
-  deals.value.filter((deal) => isLegacySettlement(deal?.settlement)).length
+  [...deals.value, ...opsSupportSummaries.value]
+    .filter((record) => isLegacySettlement(record?.settlement)).length
 ))
 
 const reportViewerOpen = ref(false)
@@ -610,12 +651,14 @@ function setToolbarMessage(text, isError = false) {
 }
 
 async function loadAll() {
-  const [d, r] = await Promise.all([
+  const [d, r, summaries] = await Promise.all([
     fetchCommercialDeals(accessToken.value),
-    fetchPromotionReports(accessToken.value)
+    fetchPromotionReports(accessToken.value),
+    isAdmin.value ? fetchOpsSupportSummaries(accessToken.value) : Promise.resolve([])
   ])
   deals.value = Array.isArray(d) ? d : []
   reports.value = Array.isArray(r) ? r : []
+  opsSupportSummaries.value = Array.isArray(summaries) ? summaries : []
   // 数据刷新后清掉旧明文，随后用本机私钥对新密文自动解密。
   clearSettlementPlaintext()
 }
@@ -668,20 +711,21 @@ async function refreshAll() {
 }
 
 // ---- 结算设备密钥逻辑 ----
-function hasSettlement(deal) {
-  return isEncryptedSettlement(deal?.settlement)
-}
-
 async function decryptSettlementForCurrentDevice() {
   clearSettlementPlaintext()
   if (!settlementDevice.value) return
   try {
-    const { result, unauthorized } = await decryptDealsSettlementWithDevice(
+    const dealResult = await decryptDealsSettlementWithDevice(
       deals.value,
       settlementDevice.value
     )
-    for (const [id, plain] of result) settlementMap.set(id, plain)
-    unauthorizedSettlementCount.value = unauthorized.length
+    const summaryResult = await decryptDealsSettlementWithDevice(
+      opsSupportSummaries.value,
+      settlementDevice.value
+    )
+    for (const [id, plain] of dealResult.result) settlementMap.set(id, plain)
+    for (const [id, plain] of summaryResult.result) opsSummaryMap.set(id, plain)
+    unauthorizedSettlementCount.value = dealResult.unauthorized.length + summaryResult.unauthorized.length
   } catch {
     clearSettlementPlaintext()
     setToolbarMessage('本设备无法解密结算，请确认密钥未被浏览器清除。', true)
@@ -690,6 +734,7 @@ async function decryptSettlementForCurrentDevice() {
 
 function clearSettlementPlaintext() {
   settlementMap.clear()
+  opsSummaryMap.clear()
   unauthorizedSettlementCount.value = 0
 }
 
@@ -762,11 +807,17 @@ async function handleRewrapPublicKey(event) {
       settlementDevice.value,
       targetDevice
     )
-    const count = Object.keys(settlements).length
+    const summarySettlements = await rewrapDealsSettlementForDevice(
+      opsSupportSummaries.value,
+      settlementDevice.value,
+      targetDevice
+    )
+    const count = Object.keys(settlements).length + Object.keys(summarySettlements).length
     downloadJsonFile(`settlement-rewrap-${targetDevice.kid.replace(/[^a-zA-Z0-9_-]/g, '_')}.json`, {
       version: 1,
       targetDevice,
-      settlements
+      settlements,
+      summarySettlements
     })
     setToolbarMessage(`已生成新设备轮换包（${count} 条密文）。请在仓库运行 ledger:device apply-rewrap。`)
   } catch {
@@ -786,6 +837,15 @@ const serviceOptions = computed(() => {
   return Array.from(s).filter(Boolean).sort()
 })
 
+const referrerOptions = computed(() => {
+  const referrers = new Set()
+  for (const deal of deals.value) {
+    const referrer = String(deal.referrer || '').trim()
+    if (referrer) referrers.add(referrer)
+  }
+  return Array.from(referrers).sort((a, b) => a.localeCompare(b, 'zh-CN'))
+})
+
 const progressOptions = [
   { label: '沟通中', value: 'communicating' },
   { label: '执行中', value: 'executing' },
@@ -796,15 +856,13 @@ const progressOptions = [
 
 function progressGroup(deal) {
   const progress = String(deal.progress || '').trim()
-  const remark = String(deal.remark || '').trim()
-  const text = `${progress} ${remark}`
 
-  if (!progress || progress === '/') return 'inactive'
-  if (text.includes('暂不推进') || text.includes('暂停') || text.includes('取消') || text.includes('作废') || text.includes('无效') || text.includes('测试')) return 'inactive'
-  if (text.includes('待结算') || text.includes('待付款') || text.includes('待支付') || text.includes('开票') || text.includes('结算中')) return 'settlement'
-  if (text.includes('已完成') || text.includes('已闭环') || text.includes('已结算') || text.includes('已收款')) return 'completed'
-  if (text.includes('执行') || text.includes('待执行') || text.includes('已发布') || text.includes('待出数据') || text.includes('持续计费') || text.includes('投放中')) return 'executing'
-  if (text.includes('沟通') || text.includes('需求') || text.includes('报价') || text.includes('待确认') || text.includes('确认中')) return 'communicating'
+  if (deal.muted || !progress || progress === '/') return 'inactive'
+  if (progress.includes('暂不推进') || progress.includes('暂停') || progress.includes('取消') || progress.includes('作废') || progress.includes('无效')) return 'inactive'
+  if (progress.includes('待结算') || progress.includes('待付款') || progress.includes('待支付') || progress.includes('开票') || progress.includes('结算中')) return 'settlement'
+  if (progress.includes('已完成') || progress.includes('已闭环') || progress.includes('已结算') || progress.includes('已收款')) return 'completed'
+  if (progress.includes('执行') || progress.includes('待执行') || progress.includes('已发布') || progress.includes('待出数据') || progress.includes('持续计费') || progress.includes('投放中')) return 'executing'
+  if (progress.includes('沟通') || progress.includes('需求') || progress.includes('报价') || progress.includes('待确认') || progress.includes('确认中')) return 'communicating'
 
   return 'communicating'
 }
@@ -864,16 +922,41 @@ const orphanReports = computed(() => {
 // Filters
 function dealMatchesKeyword(deal, kw) {
   if (!kw) return true
-  const blob = [deal.id, deal.brand, deal.service, deal.progress, deal.remark, deal.referrer, deal.owner, deal.reportCooperationId, deal.updatedAt]
+  const reportText = dealReports(deal).map((report) => (
+    [report.id, report.project, report.author, report.period, report.articleTitle, report.content, report.cooperationId,
+      Array.isArray(report.platforms) ? report.platforms.join(' ') : '']
+      .filter(Boolean).join(' ')
+  )).join(' ')
+  const blob = [
+    deal.id, deal.brand, deal.service, deal.progress, deal.remark, deal.category,
+    deal.referrer, deal.owner, deal.reportCooperationId, deal.updatedAt, reportText
+  ]
     .filter(Boolean).join(' ').toLowerCase()
-  if (blob.includes(kw)) return true
-  const reps = dealReports(deal)
-  return reps.some((r) => {
-    const rb = [r.id, r.project, r.author, r.period, r.articleTitle, r.content, r.cooperationId,
-      Array.isArray(r.platforms) ? r.platforms.join(' ') : '']
-      .filter(Boolean).join(' ').toLowerCase()
-    return rb.includes(kw)
-  })
+  return kw.split(/\s+/).filter(Boolean).every((token) => blob.includes(token))
+}
+
+function dealUpdatedAtTime(deal) {
+  const match = String(deal.updatedAt || '').trim().match(/^(\d{4})[./-](\d{1,2})[./-](\d{1,2})/)
+  if (!match) return 0
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])).getTime()
+}
+
+const hasActiveFilters = computed(() => (
+  serviceFilter.value !== 'all'
+  || progressFilter.value !== 'all'
+  || yearFilter.value !== 'all'
+  || referrerFilter.value !== 'all'
+  || reportFilter.value !== 'all'
+  || keyword.value.trim() !== ''
+))
+
+function resetFilters() {
+  serviceFilter.value = 'all'
+  progressFilter.value = 'all'
+  yearFilter.value = 'all'
+  referrerFilter.value = 'all'
+  reportFilter.value = 'all'
+  keyword.value = ''
 }
 
 const filteredDeals = computed(() => {
@@ -885,12 +968,16 @@ const filteredDeals = computed(() => {
       const m = String(d.updatedAt || '').match(/(\d{4})/)
       if (!m || m[1] !== yearFilter.value) return false
     }
+    if (referrerFilter.value !== 'all' && d.referrer !== referrerFilter.value) return false
+    const reportCount = dealReports(d).length
+    if (reportFilter.value === 'with' && reportCount === 0) return false
+    if (reportFilter.value === 'without' && reportCount > 0) return false
     if (!dealMatchesKeyword(d, kw)) return false
     return true
   }).sort((a, b) => {
-    const ad = String(a.updatedAt || '')
-    const bd = String(b.updatedAt || '')
-    return bd.localeCompare(ad)
+    const dateDifference = dealUpdatedAtTime(b) - dealUpdatedAtTime(a)
+    if (dateDifference !== 0) return dateDifference
+    return String(a.id || '').localeCompare(String(b.id || ''))
   })
 })
 
@@ -937,8 +1024,8 @@ function formatArticleTitle(raw) {
   return `《${t}》`
 }
 
-function progressBadgeClass(progress) {
-  const group = progressGroup({ progress })
+function progressBadgeClass(deal) {
+  const group = progressGroup(deal)
   if (group === 'inactive') return 'bg-slate-100 text-slate-700'
   if (group === 'settlement') return 'bg-amber-50 text-amber-800'
   if (group === 'completed') return 'bg-emerald-50 text-emerald-700'

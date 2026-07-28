@@ -6,8 +6,8 @@
   "remark": "1期；二次沟通 - 有需求 - 需跟进；二次电话沟通：2026.4.22；承接：安东尼、浪里行舟、erpan",
   "category": "",
   "referrer": "安东尼",
-  "owner": "",
-  "updatedAt": "2026.5.27",
+  "owner": "安东尼、浪里行舟、erpan",
+  "updatedAt": "2026.5.7",
   "reportCooperationId": "",
   "muted": false,
   "settlement": "{\"v\":2,\"alg\":\"AES-256-GCM\",\"iv\":\"fA6ixJxOc+UqpTXX\",\"ct\":\"9sNvgl4+gqjFtOU0OVBKlDwxHVOSxL6umC4j+JszXPoxj8h+ph0lTysni7Krb3PNtdymIr4zM6wbUYBTnhDjJWsuzyh1OGnRl2muYOT3bm/Cq41nflFIKJxEuks=\",\"tag\":\"u1XZZuykOWSgJkaMeOCilQ==\",\"recipients\":[{\"kid\":\"sha256:dJPO_smzExgUYXFkPVifmnYHwlPhEYUNkQEtXjEOkEg\",\"userId\":\"7b5f5924-339d-4223-9e9d-a8ba804ae0ef\",\"label\":\"macOS · 2026/7/10\",\"alg\":\"RSA-OAEP-256\",\"ek\":\"oSuLY8HSFoqHojqxGfOQMa3iaOsbgTRQxgnMxp/h8+s+jQF70Y2qSp+DoHQv0UVD/vYdDSmJ1WVwkrhfjcaVfzeHdBccJAqHPxkVmGxH2IT5z6PSICKWKNGMXhyjIqx3D0fDVPQeffbI5i8vYCfXF1Evj9M0yx/eYT0OO0F7H3GNhqyEAIodQu/IUW+yR44wjy5XmBDsDsnRz8GY87VoXVobWZ5q70SZUzhnLJgxKj8VODRbAAgLuoiHDdY/UcfIkuxkv1/g3xXYwDsOTXUmXq06cVM6g0RqHPJGqpOjtlGBOlNa+dJ8rQKhfzSpG5v+edTftp3a1XFy62JzwME/iy1YCgx+ZABBT9VJ7U+ND2O/6DqHNAvJOP0+ZENPJ7+tNMT7NUDCy/RGFu3U3P4UYUlS7WZHhLw0wIL6SCVdgWEuggPHxjrOUG70DCYFPFeXLVzE5fZLfZsTZtjA1hw/weqkKdIhdTb+q14pt7KHUZsdVUyYaY7tQuBxtIG9IDMh\"}]}"

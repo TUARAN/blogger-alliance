@@ -8,6 +8,7 @@ import AuthNetworkBanner from '../../components/AuthNetworkBanner.vue'
 import AccountSupportHint from '../../components/AccountSupportHint.vue'
 import EmailProviderHint from '../../components/EmailProviderHint.vue'
 import OAuthButtons from '../../components/OAuthButtons.vue'
+import AuthModeSwitch from '../../components/AuthModeSwitch.vue'
 
 const router = useRouter()
 const { signUp, resendVerificationEmail, isSupabaseConfigured, initialized, loading: authLoading } = useAuth()
@@ -99,7 +100,7 @@ async function handleSubmit() {
   }
 
   if (data?.session) {
-    showToast('注册成功', { type: 'success' })
+    showToast('注册成功，请在 24 小时内完成邮箱验证。', { type: 'warning' })
     router.replace('/workspace')
     return
   }
@@ -139,8 +140,9 @@ async function handleResend() {
       <div class="rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm sm:p-8">
         <h1 class="text-2xl font-bold text-slate-900">注册账号</h1>
         <p class="mt-2 text-sm text-slate-600">
-          创建联盟账号，后续可在联盟入口使用更多功能。
+          创建后可以先登录使用，请在 24 小时内验证邮箱。
         </p>
+        <AuthModeSwitch class="mt-6" active="register" />
 
         <div
           v-if="initialized && !isSupabaseConfigured"
@@ -187,7 +189,7 @@ async function handleResend() {
               to="/auth/login"
               class="inline-flex h-10 items-center rounded-lg bg-emerald-700 px-4 text-sm font-semibold text-white hover:bg-emerald-800"
             >
-              去登录
+              先去登录
             </router-link>
           </div>
         </div>

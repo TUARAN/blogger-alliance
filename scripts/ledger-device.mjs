@@ -8,6 +8,7 @@ import {
   validateDevice
 } from './lib/settlementDevices.mjs'
 import { isDeviceEnvelope, isValidEnvelope } from './lib/settlementEnvelope.mjs'
+import { OPS_SUMMARIES_DIR } from './lib/ledgerOpsSummaries.mjs'
 
 const DEALS_DIR = path.resolve(process.cwd(), 'data/ledger/deals')
 
@@ -97,6 +98,14 @@ async function applyRewrap(file) {
     validateRewrappedEnvelope(deal.settlement, nextEnvelope, bundle.targetDevice.kid)
     deal.settlement = nextEnvelope
     updates.push({ filePath, deal })
+  }
+  for (const [id, nextEnvelope] of Object.entries(bundle.summarySettlements || {})) {
+    const filePath = path.join(OPS_SUMMARIES_DIR, `${id}.json`)
+    const summary = JSON.parse(await fs.readFile(filePath, 'utf8'))
+    if (summary.id !== id) throw new Error(`轮换包运营支撑总结编码不匹配：${id}`)
+    validateRewrappedEnvelope(summary.settlement, nextEnvelope, bundle.targetDevice.kid)
+    summary.settlement = nextEnvelope
+    updates.push({ filePath, deal: summary })
   }
 
   const existing = registry.devices.find((item) => item.kid === bundle.targetDevice.kid)

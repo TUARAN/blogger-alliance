@@ -8,6 +8,7 @@ import AuthNetworkBanner from '../../components/AuthNetworkBanner.vue'
 import AccountSupportHint from '../../components/AccountSupportHint.vue'
 import EmailProviderHint from '../../components/EmailProviderHint.vue'
 import OAuthButtons from '../../components/OAuthButtons.vue'
+import AuthModeSwitch from '../../components/AuthModeSwitch.vue'
 
 const router = useRouter()
 const { signIn, resendVerificationEmail, isSupabaseConfigured, initialized, loading: authLoading } = useAuth()
@@ -88,7 +89,7 @@ async function handleSubmit() {
 
   isSubmitting.value = true
 
-  const { error } = await signIn({
+  const { error, verificationPending } = await signIn({
     email: email.value.trim(),
     password: password.value
   })
@@ -100,7 +101,12 @@ async function handleSubmit() {
     return
   }
 
-  showToast('登录成功', { type: 'success' })
+  showToast(
+    verificationPending
+      ? '登录成功，请在注册后 24 小时内完成邮箱验证。'
+      : '登录成功',
+    { type: verificationPending ? 'warning' : 'success' }
+  )
 
   const redirect = typeof router.currentRoute.value.query.redirect === 'string'
     ? router.currentRoute.value.query.redirect
@@ -120,6 +126,7 @@ async function handleSubmit() {
         <p class="mt-2 text-sm text-slate-600">
           使用邮箱登录联盟入口，管理你的账号与资料。
         </p>
+        <AuthModeSwitch class="mt-6" active="login" />
 
         <div
           v-if="initialized && !isSupabaseConfigured"

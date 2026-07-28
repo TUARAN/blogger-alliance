@@ -87,34 +87,22 @@ async function handleSignOut() {
   <template v-else>
     <div
       v-if="variant === 'desktop'"
-      class="flex items-center gap-2"
+      class="flex items-center"
     >
       <router-link
         to="/auth/login"
-        class="inline-flex h-9 items-center rounded-lg px-3 text-sm font-medium text-slate-600 transition-colors hover:text-slate-900"
+        class="inline-flex h-9 items-center rounded-lg bg-indigo-600 px-4 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
       >
         登录
-      </router-link>
-      <router-link
-        to="/auth/register"
-        class="inline-flex h-9 items-center rounded-lg bg-indigo-600 px-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-700"
-      >
-        注册
       </router-link>
     </div>
 
-    <div v-else class="grid grid-cols-2 gap-2 px-1">
+    <div v-else class="px-1">
       <router-link
         to="/auth/login"
-        class="flex min-h-11 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm font-medium text-slate-700"
-      >
-        登录
-      </router-link>
-      <router-link
-        to="/auth/register"
         class="flex min-h-11 items-center justify-center rounded-lg bg-indigo-600 text-sm font-semibold text-white"
       >
-        注册
+        登录
       </router-link>
     </div>
   </template>
