@@ -20,7 +20,7 @@ export const WORKSPACE_SECTIONS = [
       {
         id: 'services',
         title: '服务介绍',
-        description: '推文、引流、社群与 AI Access 等推广服务概览。',
+        description: '推文、引流、社群三项付费合作的报价与选型。',
         tag: '品牌合作',
         icon: '🔥',
         to: '/tob/services',

@@ -3,14 +3,14 @@
     <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
       <div>
         <div class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">服务总览</div>
-        <h2 class="mt-2 text-2xl font-bold text-gray-900">6 类合作 & 报价对比</h2>
+        <h2 class="mt-2 text-2xl font-bold text-gray-900">三项付费合作 & 报价</h2>
       </div>
-      <div class="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-4 py-2 text-xs md:text-sm font-medium text-amber-800">
-        报价口径混合（单篇 / 单价 / 项目费 / 分佣），起步预算见各行
+      <div class="inline-flex items-center rounded-full bg-indigo-50 border border-indigo-200 px-4 py-2 text-xs md:text-sm font-medium text-indigo-800">
+        按单篇 / 有效点击 / 项目费报价，起步见各行
       </div>
     </div>
     <p class="mt-4 max-w-4xl text-sm leading-7 text-gray-600">
-      推文、引流、社群三类<strong class="font-medium text-gray-800">推广合作</strong>；AI Access、出海云访问两类<strong class="font-medium text-gray-800">专题联运</strong>；大厂云服务单独一类<strong class="font-medium text-gray-800">渠道服务</strong>——联盟本身就是云厂商认证渠道，提供官方充值与按量返利。按目标选型：要曝光走推文，要点击走引流，要私域走社群；要云采购渠道价走大厂云服务。
+      主推<strong class="font-medium text-gray-800">推文、引流、社群</strong>三项付费合作：有明确报价，也有交付责任。要曝光走推文，要点击走引流，要私域走社群。没有保底、按成交或消费分成的，见下方分成服务。
     </p>
 
     <div class="mt-6 grid gap-4 lg:grid-cols-3">
@@ -44,12 +44,12 @@
         <div class="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-amber-800">方案 03</div>
         <h3 class="mt-3 text-lg font-bold text-gray-900">长期资产包</h3>
         <p class="mt-2 text-sm leading-6 text-gray-700">
-          适合高 LTV、订阅、分佣或出海场景。把内容、站点、社群和搜索占位做成长期可复用的转化资产。
+          适合要长期私域和稳定开发者关系的产品。把社群运营、内容触达和搜索占位做成可复用的用户资产。
         </p>
         <div class="mt-4 space-y-2 text-sm text-gray-700">
-          <div><span class="font-semibold text-gray-900">组合：</span>专题内容站 + 社群承接 + GEO / SEO + 分佣联运</div>
-          <div><span class="font-semibold text-gray-900">指标：</span>自然流量、咨询、成交归因、复购线索</div>
-          <div><span class="font-semibold text-gray-900">适合周期：</span>3 个月以上长期协同</div>
+          <div><span class="font-semibold text-gray-900">组合：</span>社群服务 + 内容承接 + GEO / SEO</div>
+          <div><span class="font-semibold text-gray-900">指标：</span>入群人数、活跃度、咨询、长期触达</div>
+          <div><span class="font-semibold text-gray-900">适合周期：</span>按项目排期，建群一般 2–6 周，可长期维护</div>
         </div>
       </article>
     </div>
@@ -166,105 +166,6 @@
             </td>
           </tr>
 
-          <!-- 分组分隔行：长期联运专题 -->
-          <tr class="bg-amber-50/40">
-            <td colspan="5" class="px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-amber-800">
-              <span class="inline-flex items-center gap-2">
-                <span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-500"></span>
-                以下为长期联运专题 · 由联盟方搭建内容 / 站点 / 仓库 / 社群资产，按成交分佣
-              </span>
-            </td>
-          </tr>
-
-          <!-- AI Access -->
-          <tr class="hover:bg-slate-50/60">
-            <td class="px-4 py-4 align-top">
-              <div class="inline-flex items-center gap-2 font-semibold text-gray-900">
-                <span>🤖</span><span>AI Access</span>
-              </div>
-              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-amber-100 border border-amber-200 px-2.5 py-0.5 text-[11px] font-medium text-amber-800">联运分佣</span></div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700">
-              <div>境外大模型 / AI SaaS 订阅承接</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">聚焦 ChatGPT / Claude 等订阅类工具</div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700">
-              <div class="font-semibold text-gray-900">零硬投入 · 按成交分佣</div>
-              <div class="mt-1.5">参考 30%–60% / 笔</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">按品类、客单价、复购周期浮动</div>
-              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>建议 ≥ 3 个月</div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700">
-              <div>高 LTV 长期转化</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">沉淀：AI 站点矩阵 + 仓库 SEO + 社群</div>
-            </td>
-            <td class="px-4 py-4 align-top">
-              <div class="flex flex-col gap-1.5 text-sm">
-                <router-link to="/tob/services/ai-access" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍 →</router-link>
-                <router-link to="/cases/ai-access" class="font-medium text-slate-600 hover:text-indigo-700 hover:underline whitespace-nowrap">查看案例 →</router-link>
-              </div>
-            </td>
-          </tr>
-
-          <!-- 出海云访问 -->
-          <tr class="hover:bg-slate-50/60">
-            <td class="px-4 py-4 align-top">
-              <div class="inline-flex items-center gap-2 font-semibold text-gray-900">
-                <span>🌐</span><span>出海云访问</span>
-              </div>
-              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-amber-100 border border-amber-200 px-2.5 py-0.5 text-[11px] font-medium text-amber-800">联运分佣</span></div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700">
-              <div>云服务 / 节点 / 跨境办公出海推广</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">聚焦真实节点测速 + 出海团队场景教程</div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700">
-              <div class="font-semibold text-gray-900">零硬投入 · 按成交分佣</div>
-              <div class="mt-1.5">参考 30%–60% / 笔</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">仅承接合规面向出海 / 跨境场景</div>
-              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>建议 ≥ 3 个月</div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700">
-              <div>高 LTV 长期转化</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">沉淀：教程站 + 对比导航 + 出海社群</div>
-            </td>
-            <td class="px-4 py-4 align-top">
-              <div class="flex flex-col gap-1.5 text-sm">
-                <router-link to="/tob/services/oversea-cloud" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">专项介绍 →</router-link>
-                <router-link to="/cases/oversea-cloud" class="font-medium text-slate-600 hover:text-indigo-700 hover:underline whitespace-nowrap">查看案例 →</router-link>
-              </div>
-            </td>
-          </tr>
-
-          <!-- 大厂云服务 -->
-          <tr class="hover:bg-slate-50/60">
-            <td class="px-4 py-4 align-top">
-              <div class="inline-flex items-center gap-2 font-semibold text-gray-900">
-                <span>☁️</span><span>大厂云服务</span>
-              </div>
-              <div class="mt-1.5"><span class="inline-flex items-center rounded-full bg-emerald-100 border border-emerald-200 px-2.5 py-0.5 text-[11px] font-medium text-emerald-800">渠道服务</span></div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700">
-              <div>个人 / 小团队 / 企业 · 联盟即云厂商官方渠道</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">专属充值链接 + 按量返利 + 账单体检</div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700">
-              <div class="font-semibold text-gray-900">官方充值 · 按量返利</div>
-              <div class="mt-1.5">用多少返多少 · 用量越大阶梯越高</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">面向有真实云采购 / 续费需求的团队</div>
-              <div class="mt-2.5 pt-2 border-t border-dashed border-slate-200 text-xs text-slate-500"><span class="text-slate-400 mr-0.5">⏱</span>长期有效</div>
-            </td>
-            <td class="px-4 py-4 align-top text-gray-700">
-              <div>云消费归因 + 返利阶梯</div>
-              <div class="mt-1.5 text-xs text-gray-500 leading-5">沉淀：官方充值链接 + 渠道返利政策</div>
-            </td>
-            <td class="px-4 py-4 align-top">
-              <div class="flex flex-col gap-1.5 text-sm">
-                <router-link to="/tob/services/cloud-cost" class="font-medium text-indigo-700 hover:underline whitespace-nowrap">渠道说明 →</router-link>
-                <router-link to="/cases/enterprise-cloud" class="font-medium text-slate-600 hover:text-indigo-700 hover:underline whitespace-nowrap">查看案例 →</router-link>
-              </div>
-            </td>
-          </tr>
         </tbody>
       </table>
     </div>
@@ -333,15 +234,37 @@
     <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-gray-600">
       <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-3 py-2.5">
         <div class="font-semibold text-slate-700 mb-1">按目标选</div>
-        一次性发声 → 推文；持续要点击 / 线索 → 引流；长期沉淀 → 社群；云采购官方渠道 → 大厂云服务；长期高提成 → AI Access / 出海云。
+        一次性发声 → 推文；持续要点击 / 线索 → 引流；长期私域 → 社群。
       </div>
       <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-3 py-2.5">
         <div class="font-semibold text-slate-700 mb-1">按预算选</div>
-        零硬投入 → 专题联运分佣；云采购走官方渠道 → 大厂云服务；项目预算可控 → 社群；效果结算 → CPC；单次预算 → 推文。
+        单次预算 → 推文；按效果结算 → 引流；项目预算 → 社群。
       </div>
       <div class="rounded-lg border border-slate-200 bg-slate-50/60 px-3 py-2.5">
         <div class="font-semibold text-slate-700 mb-1">按周期选</div>
-        单篇 / 排期 → 推文；2 周到几个月 → 引流 / 社群；3 个月以上长期协同 → 专题联运；云采购渠道 → 大厂云服务（长期有效）。
+        单篇 / 排期 → 推文；建议 2 周起 → 引流；按项目排期，建群一般 2–6 周 → 社群。
+      </div>
+    </div>
+
+    <div class="mt-4 rounded-xl border border-amber-200/80 bg-amber-50/50 p-4">
+      <div class="text-sm font-semibold text-amber-950">分成服务</div>
+      <p class="mt-1 max-w-3xl text-sm leading-6 text-amber-950/75">
+        没有保底，不按项目报价。商家不用先付推广费，成交或消费后再分成；用户拿到更低的接入价格。
+      </p>
+      <div class="mt-3 grid gap-2 sm:grid-cols-3">
+        <router-link
+          v-for="item in shareServices"
+          :key="item.title"
+          :to="item.to"
+          class="group flex items-center gap-3 rounded-lg border border-amber-200/80 bg-white px-3.5 py-3 transition-colors hover:border-amber-300 hover:bg-amber-50/70"
+        >
+          <span class="text-lg leading-none" aria-hidden="true">{{ item.icon }}</span>
+          <span class="min-w-0 flex-1">
+            <span class="block truncate text-sm font-medium text-gray-900">{{ item.title }}</span>
+            <span class="mt-0.5 block text-xs text-amber-800">{{ item.tag }}</span>
+          </span>
+          <span class="text-sm text-amber-700 transition-transform group-hover:translate-x-0.5" aria-hidden="true">→</span>
+        </router-link>
       </div>
     </div>
 
@@ -369,11 +292,16 @@ defineProps({
   }
 })
 
+const shareServices = [
+  { icon: '🤖', title: 'AI Access', tag: '按成交抽成', to: '/tob/services/ai-access' },
+  { icon: '🌐', title: '出海云访问', tag: '按成交抽成', to: '/tob/services/oversea-cloud' },
+  { icon: '☁️', title: '大厂云服务', tag: '按量返利', to: '/tob/services/cloud-cost' }
+]
+
 const modeClassMap = {
   regular: 'bg-slate-100 text-slate-700',
   effect: 'bg-emerald-50 border border-emerald-200 text-emerald-700',
-  project: 'bg-blue-50 border border-blue-200 text-blue-700',
-  affiliate: 'bg-amber-100 border border-amber-200 text-amber-800'
+  project: 'bg-blue-50 border border-blue-200 text-blue-700'
 }
 
 const mobileRows = [
@@ -433,58 +361,6 @@ const mobileRows = [
     asset: '专属社群 / 私域用户池',
     detailTo: '/tob/services/community',
     caseTo: '/cases/community'
-  },
-  {
-    icon: '🤖',
-    title: 'AI Access',
-    mode: '联运分佣',
-    modeClass: modeClassMap.affiliate,
-    theme: 'special',
-    scene: '境外大模型 / AI SaaS 订阅承接',
-    sceneNote: '聚焦 ChatGPT / Claude 等订阅类工具',
-    startsAt: '零硬投入',
-    cycle: '建议 ≥ 3 个月',
-    priceLines: ['分佣 30%–60% / 笔', '按成交结算'],
-    priceNote: '按品类、客单价、复购周期浮动',
-    metrics: '高 LTV 长期转化',
-    asset: 'AI 站点矩阵 + 仓库 SEO + 社群',
-    detailTo: '/tob/services/ai-access',
-    caseTo: '/cases/ai-access'
-  },
-  {
-    icon: '🌐',
-    title: '出海云访问',
-    mode: '联运分佣',
-    modeClass: modeClassMap.affiliate,
-    theme: 'special',
-    scene: '云服务 / 节点 / 跨境办公出海推广',
-    sceneNote: '聚焦真实节点测速 + 出海团队场景教程',
-    startsAt: '零硬投入',
-    cycle: '建议 ≥ 3 个月',
-    priceLines: ['分佣 30%–60% / 笔', '按成交结算'],
-    priceNote: '仅承接合规面向出海 / 跨境场景',
-    metrics: '高 LTV 长期转化',
-    asset: '教程站 + 对比导航 + 出海社群',
-    detailTo: '/tob/services/oversea-cloud',
-    caseTo: '/cases/oversea-cloud'
-  },
-  {
-    icon: '☁️',
-    title: '大厂云服务',
-    mode: '渠道服务',
-    modeClass: 'bg-emerald-100 border border-emerald-200 text-emerald-800',
-    theme: 'channel',
-    scene: '个人 / 小团队 / 企业 · 联盟即云厂商官方渠道',
-    sceneNote: '专属充值链接 + 按量返利 + 账单体检',
-    startsAt: '官方渠道价',
-    cycle: '长期有效',
-    priceLines: ['用多少消费 · 返多少', '用量越大 · 返利阶梯越高'],
-    priceNote: '面向有真实云采购 / 续费需求',
-    metrics: '云消费归因 + 返利阶梯',
-    asset: '官方充值链接 + 渠道返利政策',
-    detailTo: '/tob/services/cloud-cost',
-    detailLabel: '渠道说明 →',
-    caseTo: '/cases/enterprise-cloud'
   }
 ]
 </script>

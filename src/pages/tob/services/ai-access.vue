@@ -4,7 +4,7 @@
       <header class="mb-8">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900">AI Access 推广</h1>
         <p class="mt-3 text-lg text-gray-600">
-          聚焦境外大模型与 AI SaaS（ChatGPT、Claude、Midjourney 等订阅类工具）的国内承接：以现有 AI 站点矩阵 + GitHub 仓库 SEO + 小红书 / 社群 三位一体做长期分佣联运，按高 LTV 成交结果合作。
+          按成交抽成，没有保底费用。联盟用现有 AI 站点、仓库和社群承接 ChatGPT、Claude 等订阅；商家不付推广预算，用户拿到更低的接入价格。需要明确报价和交付的，请看推文、引流、社群。
         </p>
         <div class="mt-3 flex flex-wrap gap-2 text-xs">
           <span class="inline-flex items-center rounded-full bg-orange-50 border border-orange-200 px-2.5 py-1 text-orange-700">订阅类 SaaS · 高复购</span>
@@ -144,7 +144,7 @@
       </section>
 
       <section class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-sm p-6">
-        <h2 class="text-lg font-semibold text-gray-900">合作方式</h2>
+        <h2 class="text-lg font-semibold text-gray-900">结算方式</h2>
         <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
             <div class="text-sm font-semibold text-gray-900">内容与分发承接</div>
@@ -155,12 +155,12 @@
             <p class="mt-2 text-sm text-gray-600 leading-relaxed">可以同步搭建门户站点、文档页、导航页、GitHub 仓库和专题页，把内容流量沉淀成长期资产。</p>
           </div>
           <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
-            <div class="text-sm font-semibold text-gray-900">高提成合作</div>
-            <p class="mt-2 text-sm text-gray-600 leading-relaxed">这类项目要求提成空间足够高，只有收益空间够大，才值得持续投入内容、人力和整套转化链路建设。</p>
+            <div class="text-sm font-semibold text-gray-900">没有保底，只抽成</div>
+            <p class="mt-2 text-sm text-gray-600 leading-relaxed">商家不付推广预算。成交后按比例分成，提成空间不够就不做。</p>
           </div>
         </div>
         <p class="mt-4 text-sm leading-7 text-gray-600">
-          我们更看重能不能把内容、站点、文档、仓库、社区和转化链路一起做起来，因此这类合作默认按长期结果协同推进，且要求提成足够高。
+          这不是付费合作。内容、站点和社群由联盟现有资产承接，商家零预算，用户拿到更低的接入价格。
         </p>
       </section>
 

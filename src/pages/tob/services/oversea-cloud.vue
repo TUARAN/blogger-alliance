@@ -4,7 +4,7 @@
       <header class="mb-8">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900">出海云访问 推广</h1>
         <p class="mt-3 text-lg text-gray-600">
-          聚焦云服务、节点稳定性、客户端体验与跨境办公场景：以真实节点测速、对比测评、踩坑解读形成可信教程站，结合出海团队与跨境开发者社群承接长期分佣联运，按合规出海场景的高 LTV 成交合作。
+          按成交抽成，没有保底费用。联盟用节点测速、教程站和出海社群承接合规跨境场景；商家不付推广预算，用户拿到更低的接入价格。需要明确报价和交付的，请看推文、引流、社群。
         </p>
         <div class="mt-3 flex flex-wrap gap-2 text-xs">
           <span class="inline-flex items-center rounded-full bg-cyan-50 border border-cyan-200 px-2.5 py-1 text-cyan-700">出海工具 · 真实节点测速</span>
@@ -66,7 +66,7 @@
       </section>
 
       <section class="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 shadow-sm p-6">
-        <h2 class="text-lg font-semibold text-gray-900">合作方式</h2>
+        <h2 class="text-lg font-semibold text-gray-900">结算方式</h2>
         <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
             <div class="text-sm font-semibold text-gray-900">内容与分发承接</div>
@@ -77,8 +77,8 @@
             <p class="mt-2 text-sm text-gray-600 leading-relaxed">同步搭建教程站点、对比导航页、文档资源库和 GitHub 仓库，把内容流量沉淀成长期可复用的转化资产。</p>
           </div>
           <div class="rounded-xl border border-gray-200 bg-white/70 p-4">
-            <div class="text-sm font-semibold text-gray-900">高提成合作</div>
-            <p class="mt-2 text-sm text-gray-600 leading-relaxed">这类项目要求提成空间足够高，只有收益空间够大，才值得持续投入内容、人力和整套转化链路建设。</p>
+            <div class="text-sm font-semibold text-gray-900">没有保底，只抽成</div>
+            <p class="mt-2 text-sm text-gray-600 leading-relaxed">商家不付推广预算。成交后按比例分成，提成空间不够就不做。仅承接合规出海 / 跨境场景。</p>
           </div>
         </div>
         <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50/60 p-4 text-sm leading-7 text-amber-900">

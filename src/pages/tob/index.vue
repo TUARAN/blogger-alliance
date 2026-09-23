@@ -29,7 +29,7 @@
             <span class="text-slate-300">/</span>
             <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>多平台同步分发</span>
             <span class="text-slate-300">/</span>
-            <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-violet-500"></span>推文 / CPC / 社群 / 联运可组合</span>
+            <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-violet-500"></span>推文 / 引流 / 社群可组合</span>
             <span class="text-slate-300">/</span>
             <span class="inline-flex items-center gap-1.5"><span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>1 工作日响应</span>
           </div>
@@ -355,7 +355,7 @@
             </div>
             <div class="mt-2 text-xl font-semibold text-slate-900">我是品牌方</div>
             <p class="mt-3 text-sm leading-7 text-slate-600">
-              想要推文 / 引流 / 社群 / AI 联运。看完表格后想直接询价，加微信 <span class="font-mono text-indigo-700">atar24</span>，备注预算 / 品类 / 目标，1 个工作日内给方案。
+              想要推文 / 引流 / 社群。看完报价后想直接询价，加微信 <span class="font-mono text-indigo-700">atar24</span>，备注预算 / 品类 / 目标，1 个工作日内给方案。
             </p>
             <div class="mt-6 flex flex-wrap items-center gap-3">
               <a

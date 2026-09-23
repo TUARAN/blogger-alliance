@@ -14,10 +14,10 @@
       </header>
 
       <section class="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-6">
-        <h2 class="text-lg font-semibold text-gray-900">和其他 5 类服务的区别</h2>
+        <h2 class="text-lg font-semibold text-gray-900">和付费推广的区别</h2>
         <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
           <div class="rounded-xl border border-white/80 bg-white/90 p-4">
-            <div class="text-sm font-semibold text-slate-700">推广合作（推文 / 引流 / 社群等）</div>
+            <div class="text-sm font-semibold text-slate-700">付费推广（推文 / 引流 / 社群）</div>
             <p class="mt-2 text-sm leading-6 text-gray-600">
               联盟帮品牌做内容分发、点击获客或社群运营，按篇、按点击或按项目交付，核心是「帮别人传播」。
             </p>
