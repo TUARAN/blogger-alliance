@@ -91,6 +91,73 @@
       </div>
     </section>
 
+    <!-- 博主团队展示 -->
+    <section id="blogger-team" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 scroll-mt-24">
+      <div class="text-center mb-12">
+        <div class="text-xs font-medium uppercase tracking-[0.24em] text-slate-500">Our Bloggers</div>
+        <h2 class="mt-3 text-3xl md:text-4xl font-light text-slate-900 tracking-tight">技术博主矩阵</h2>
+        <p class="mt-4 text-base text-slate-500 max-w-2xl mx-auto leading-relaxed">
+          覆盖前端、后端、AI、移动开发等技术领域。
+          <a href="#join-cta" class="ml-1 inline-flex items-center gap-0.5 text-slate-700 underline underline-offset-4 decoration-slate-300 hover:text-slate-900 hover:decoration-slate-500">
+            持续招募中
+            <span aria-hidden="true">↘</span>
+          </a>
+        </p>
+      </div>
+
+      <BloggerControls
+        v-model:viewMode="viewMode"
+        v-model:selectedPlatform="selectedPlatform"
+        v-model:sortField="sortField"
+        v-model:sortOrder="sortOrder"
+        :available-platforms="availablePlatforms"
+        :roster-file="bloggerRosterFile"
+        @copy-table="copyTableToClipboard"
+      />
+
+      <div v-if="viewMode === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+        <BloggerCard
+          v-for="blogger in bloggersShownInGrid"
+          :key="blogger.id"
+          :blogger="blogger"
+          :expanded="expandedBloggers.includes(blogger.id)"
+          :is-kol="isKOL(blogger.followers)"
+          :is-koc="isKOC(blogger.followers)"
+          :has-only-one-platform="hasOnlyOnePlatform(blogger)"
+          :fallback-avatar="getFallbackAvatar(blogger.name)"
+          @toggle-expanded="toggleExpanded"
+          @link-click="handleLinkEvent"
+          @request-platforms="openMoreDataModal"
+          @avatar-error="handleAvatarError"
+        />
+      </div>
+
+      <div v-if="showGridExpandToggle" class="mt-10 flex justify-center">
+        <button
+          type="button"
+          class="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:border-slate-400 hover:text-slate-900"
+          @click="bloggersGridExpanded = !bloggersGridExpanded"
+        >
+          <span v-if="!bloggersGridExpanded">展开全部 {{ filteredAndSortedBloggers.length }} 位博主</span>
+          <span v-else>收起为精选（前 {{ BLOGGER_GRID_PREVIEW }} 位）</span>
+          <span aria-hidden="true" class="text-slate-400">{{ bloggersGridExpanded ? '↑' : '↓' }}</span>
+        </button>
+      </div>
+
+      <BloggerTable
+        v-if="viewMode !== 'grid'"
+        class="hidden md:block"
+        :bloggers="filteredAndSortedBloggers"
+        :available-platforms="availablePlatforms"
+        :fallback-avatar-for="getFallbackAvatar"
+        :has-only-one-platform="hasOnlyOnePlatform"
+        :get-account-by-platform="getAccountByPlatform"
+        @link-click="handleLinkEvent"
+        @request-platforms="openMoreDataModal"
+        @avatar-error="handleAvatarError"
+      />
+    </section>
+
     <!-- 定位 & 优势 -->
     <section id="positioning" class="relative scroll-mt-24">
       <div class="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-indigo-50/30 to-white pointer-events-none"></div>
@@ -265,73 +332,6 @@
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- 博主团队展示 -->
-    <section id="blogger-team" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 scroll-mt-24">
-      <div class="text-center mb-12">
-        <div class="text-xs font-medium uppercase tracking-[0.24em] text-slate-500">Our Bloggers</div>
-        <h2 class="mt-3 text-3xl md:text-4xl font-light text-slate-900 tracking-tight">技术博主矩阵</h2>
-        <p class="mt-4 text-base text-slate-500 max-w-2xl mx-auto leading-relaxed">
-          覆盖前端、后端、AI、移动开发等技术领域。
-          <a href="#join-cta" class="ml-1 inline-flex items-center gap-0.5 text-slate-700 underline underline-offset-4 decoration-slate-300 hover:text-slate-900 hover:decoration-slate-500">
-            持续招募中
-            <span aria-hidden="true">↘</span>
-          </a>
-        </p>
-      </div>
-
-      <BloggerControls
-        v-model:viewMode="viewMode"
-        v-model:selectedPlatform="selectedPlatform"
-        v-model:sortField="sortField"
-        v-model:sortOrder="sortOrder"
-        :available-platforms="availablePlatforms"
-        :roster-file="bloggerRosterFile"
-        @copy-table="copyTableToClipboard"
-      />
-
-      <div v-if="viewMode === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-        <BloggerCard
-          v-for="blogger in bloggersShownInGrid"
-          :key="blogger.id"
-          :blogger="blogger"
-          :expanded="expandedBloggers.includes(blogger.id)"
-          :is-kol="isKOL(blogger.followers)"
-          :is-koc="isKOC(blogger.followers)"
-          :has-only-one-platform="hasOnlyOnePlatform(blogger)"
-          :fallback-avatar="getFallbackAvatar(blogger.name)"
-          @toggle-expanded="toggleExpanded"
-          @link-click="handleLinkEvent"
-          @request-platforms="openMoreDataModal"
-          @avatar-error="handleAvatarError"
-        />
-      </div>
-
-      <div v-if="showGridExpandToggle" class="mt-10 flex justify-center">
-        <button
-          type="button"
-          class="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:border-slate-400 hover:text-slate-900"
-          @click="bloggersGridExpanded = !bloggersGridExpanded"
-        >
-          <span v-if="!bloggersGridExpanded">展开全部 {{ filteredAndSortedBloggers.length }} 位博主</span>
-          <span v-else>收起为精选（前 {{ BLOGGER_GRID_PREVIEW }} 位）</span>
-          <span aria-hidden="true" class="text-slate-400">{{ bloggersGridExpanded ? '↑' : '↓' }}</span>
-        </button>
-      </div>
-
-      <BloggerTable
-        v-if="viewMode !== 'grid'"
-        class="hidden md:block"
-        :bloggers="filteredAndSortedBloggers"
-        :available-platforms="availablePlatforms"
-        :fallback-avatar-for="getFallbackAvatar"
-        :has-only-one-platform="hasOnlyOnePlatform"
-        :get-account-by-platform="getAccountByPlatform"
-        @link-click="handleLinkEvent"
-        @request-platforms="openMoreDataModal"
-        @avatar-error="handleAvatarError"
-      />
     </section>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-2">
