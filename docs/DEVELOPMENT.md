@@ -83,7 +83,7 @@ npm run supabase:migrate
 当前生产配置（2026-10-14）：
 
 - Supabase 项目 `tuaran`，ref 为 `pmgpykadirszazskjdhr`；邮箱和 GitHub 提供商已启用。
-- Google Cloud 独立项目 `blogger-alliance` 已创建 Web OAuth 客户端；Supabase Google 提供商已启用。Google 应用已切换为**正式版**；真实账号授权回跳与最终会话仍待验收。
+- Google Cloud 独立项目 `blogger-alliance` 已创建 Web OAuth 客户端；Supabase Google 提供商已启用。Google 应用已切换为**正式版**；从线上登录页点击 Google 登录、选择站长账号后已回到 `/workspace`，账号中心显示同一邮箱和管理员角色，刷新后会话仍有效。
 - Supabase Site URL 为 `https://blogger-alliance.cn`，生产 Redirect URLs 包含 `https://blogger-alliance.cn/workspace`。Google 客户端的 Authorized JavaScript origin 为 `https://blogger-alliance.cn`，Authorized redirect URI 为 `https://pmgpykadirszazskjdhr.supabase.co/auth/v1/callback`。
 - Google OAuth 品牌首页和隐私说明链接分别为 `https://blogger-alliance.cn` 与 `https://blogger-alliance.cn/privacy`。客户端密钥只保存在平台控制台，不能提交到仓库。
 
