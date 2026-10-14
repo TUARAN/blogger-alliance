@@ -63,6 +63,33 @@
 
       <!-- Unified ledger -->
       <template v-else-if="isUnlocked">
+        <section v-if="isAdmin" class="mb-5 rounded-2xl border border-amber-200 bg-white p-5 shadow-sm" aria-labelledby="ledger-guide-title">
+          <h2 id="ledger-guide-title" class="text-base font-bold text-slate-900">站长说明 · 合作台账如何更新</h2>
+          <p class="mt-2 text-sm leading-6 text-slate-700">
+            Git 跟踪的 <code class="rounded bg-slate-100 px-1">data/ledger/deals/&lt;id&gt;.json</code> 是合作记录的权威源。
+            修改文件后先运行 <code class="rounded bg-slate-100 px-1">npm run ledger:validate</code>，再运行
+            <code class="rounded bg-slate-100 px-1">npm run ledger:sync</code> 全量同步到 Supabase；网站只读展示。
+            请勿直接在网页或数据库里修改合作记录。
+          </p>
+          <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+            <li>每条合作一个 JSON 文件。普通字段可供内部查看；成交金额和结算详情保存在 <code class="rounded bg-slate-100 px-1">settlement</code> 密文中。</li>
+            <li>普通内部成员和经理看不到结算密文；<code class="rounded bg-slate-100 px-1">ownerOnly</code> 私有合作对他们隐藏整条记录。</li>
+            <li>热力图按合作记录的 <code class="rounded bg-slate-100 px-1">updatedAt</code> 和数据报告的发布日期计数，每条合作只按记录日期贡献一次动态。</li>
+          </ul>
+          <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950">
+            <p class="font-semibold">站长登录后，仍需当前浏览器持有对应的设备私钥才能看到金额和私有详情。</p>
+            <p v-if="!settlementDevice" class="mt-1">
+              当前浏览器没有设备私钥。点击下方「启用本设备」会生成新密钥并下载公钥；还需登记公钥，并将已知结算重新加密或由仍可解密的旧设备授权，才能查看旧记录。GitHub 登录本身不能恢复丢失的私钥。
+            </p>
+            <p v-else-if="unauthorizedSettlementCount" class="mt-1">
+              当前浏览器有设备私钥，但 {{ unauthorizedSettlementCount }} 条密文尚未授权给本设备。请导出下方的设备公钥，完成设备授权或用原始结算资料重新加密并同步。
+            </p>
+            <p v-else class="mt-1">
+              当前浏览器已有设备私钥；已授权的详情会在下方自动解密。请保留此浏览器的站点数据，避免私钥丢失。
+            </p>
+          </div>
+        </section>
+
         <div class="mb-5 inline-flex rounded-xl border border-indigo-100 bg-white p-1 shadow-sm" aria-label="台账查看模式">
           <button
             type="button"
@@ -284,7 +311,7 @@
                             {{ settlementMap.get(deal.id).detail }}
                           </p>
                         </template>
-                        <p v-else>🔒 当前设备未解密私有合作详情</p>
+                        <p v-else>🔒 当前浏览器尚未解密此条详情，请查看页面顶部的站长说明。</p>
                       </div>
                     </td>
                     <td class="px-3 py-3 align-top text-slate-600 whitespace-nowrap">{{ deal.referrer || '—' }}</td>
@@ -770,7 +797,7 @@ async function setupSettlementDevice() {
     )
     downloadSettlementPublicKey()
     await decryptSettlementForCurrentDevice()
-    setToolbarMessage('本设备私钥已生成。请登记刚下载的公钥后，再迁移旧结算。')
+    setToolbarMessage('本设备私钥已生成。请登记刚下载的公钥，再为已有密文授权或用原始结算资料重新加密。')
   } catch {
     setToolbarMessage('设备密钥生成失败，请使用最新版浏览器重试。', true)
   } finally {
