@@ -73,7 +73,8 @@
           </p>
           <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
             <li>每条合作一个 JSON 文件。普通字段可供内部查看；成交金额和结算详情保存在 <code class="rounded bg-slate-100 px-1">settlement</code> 密文中。</li>
-            <li>普通内部成员和经理看不到结算密文；<code class="rounded bg-slate-100 px-1">ownerOnly</code> 私有合作对他们隐藏整条记录。</li>
+            <li>普通成员无权进入台账；内部成员和普通管理员可看非私有合作、报告及热力图，但看不到金额或运营支撑。普通管理员目前在本页的可见范围与内部成员相同。</li>
+            <li>只有站长可进入「运营支撑」并取得结算密文；<code class="rounded bg-slate-100 px-1">ownerOnly</code> 私有合作对其他角色隐藏整条记录。站长还需本浏览器持有对应私钥才能解密。</li>
             <li>热力图按合作记录的 <code class="rounded bg-slate-100 px-1">updatedAt</code> 和数据报告的发布日期计数，每条合作只按记录日期贡献一次动态。</li>
           </ul>
           <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950">

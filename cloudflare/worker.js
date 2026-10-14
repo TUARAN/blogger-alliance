@@ -253,22 +253,6 @@ function emptyString(value) {
   return value == null ? '' : String(value)
 }
 
-function normalizeDealRecord(record) {
-  return {
-    id: emptyString(record?.id).trim(),
-    brand: emptyString(record?.brand).trim(),
-    service: emptyString(record?.service).trim(),
-    progress: emptyString(record?.progress).trim(),
-    remark: emptyString(record?.remark).trim(),
-    category: emptyString(record?.category).trim(),
-    referrer: emptyString(record?.referrer).trim(),
-    owner: emptyString(record?.owner).trim(),
-    updatedAt: emptyString(record?.updatedAt).trim(),
-    muted: record?.muted === true,
-    reportCooperationId: emptyString(record?.reportCooperationId).trim()
-  }
-}
-
 function normalizeReportRecord(record) {
   return {
     id: emptyString(record?.id).trim(),
@@ -285,28 +269,6 @@ function normalizeReportRecord(record) {
     authorSections: Array.isArray(record?.authorSections) ? record.authorSections : [],
     content: emptyString(record?.content)
   }
-}
-
-function validateDeals(records) {
-  if (!Array.isArray(records)) {
-    throw new Error('DEALS_PAYLOAD_MUST_BE_ARRAY')
-  }
-
-  const ids = new Set()
-  return records.map((record) => {
-    const next = normalizeDealRecord(record)
-
-    if (!next.id || !next.brand || !next.service || !next.progress) {
-      throw new Error('DEAL_REQUIRED_FIELDS_MISSING')
-    }
-
-    if (ids.has(next.id)) {
-      throw new Error('DEAL_ID_DUPLICATED')
-    }
-
-    ids.add(next.id)
-    return next
-  })
 }
 
 function mapAnnualRow(row) {
@@ -587,13 +549,6 @@ async function handleAnnualReportsAdminList(request, env) {
   })
 }
 
-async function replaceDeals(env, deals) {
-  return supabaseDataRequest(env, '/rpc/replace_commercial_deals', {
-    method: 'POST',
-    body: { records: deals }
-  })
-}
-
 async function replaceReports(env, reports) {
   return supabaseDataRequest(env, '/rpc/replace_promotion_reports', {
     method: 'POST',
@@ -624,25 +579,6 @@ async function handleAdminAnnualReportsUpdate(request, env) {
   } catch (error) {
     if (error.status) return dataErrorResponse(error)
     return json({ error: error.message || 'INVALID_ANNUAL_REPORTS_PAYLOAD' }, { status: 400 })
-  }
-}
-
-async function handleAdminDealsUpdate(request, env) {
-  const session = await requireSession(request, env, 'admin')
-
-  if (!session.ok) {
-    return authFailureResponse(session)
-  }
-
-  const body = await request.json().catch(() => null)
-
-  try {
-    const deals = validateDeals(body?.deals)
-    const count = await replaceDeals(env, deals)
-    return json({ ok: true, count: Number(count || deals.length) })
-  } catch (error) {
-    if (error.status) return dataErrorResponse(error)
-    return json({ error: error.message || 'INVALID_DEALS_PAYLOAD' }, { status: 400 })
   }
 }
 
@@ -777,10 +713,6 @@ async function handleApi(request, env) {
     } catch (error) {
       return dataErrorResponse(error)
     }
-  }
-
-  if (request.method === 'PUT' && url.pathname === '/api/internal/admin/deals') {
-    return handleAdminDealsUpdate(request, env)
   }
 
   if (request.method === 'PUT' && url.pathname === '/api/internal/admin/reports') {

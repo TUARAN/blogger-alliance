@@ -16,7 +16,8 @@
         "n": "0ahMEQe6WQ4kik_mWwRio7jjnrnPUeZeUDGaaeijKT3iD7ch9YFuGpxt4x6ncaQ8ckE1NS9qQ4YfUmDE25M-Sw7oXS89fyowbHGk4ofB52B4TUKWXH56rnlV6YiMlFd-GEkouCw3gGlrmoJba8M2IrnuKiKTcPEPaJRSVA92K-jwZxsJjvt8zNVrRA_BulSDtAUcriwbmfoEE0G9Z4rJh2ZJ-ckGgdKFT2JMV7lwl9WWousrc9VJSrhqtztoRY-WRMQSfOZCmsFCoLuqnREbgen1w42NnuDj2_bt_eWfIweGgaJd3fLdSHGi_lPHA1bgUqd7mGyxoGrY5dO0d50m3RvMPFR-_XkWEcDId5s1s0Ky5m_1rj_Xgf_Lm-ujyRkmKQ02qPjLbJ_G8ParVeP-fSYcIrsaYID-Q8ws_bt9guaFEjAZ8URl9rLmFUUtiMK_VL4JWbLlUoZYAP5rb5RUUreObGdsh8ak3-TBOjGK8_iMveNMfbp6ebWWrg6-2Sxj"
       },
       "createdAt": "2026-07-10T06:27:06.827Z",
-      "revoked": false
+      "revoked": true,
+      "revokedAt": "2026-10-14T07:04:23.794Z"
     },
     {
       "kid": "sha256:L4PZWGp3CLtN79OuZfZwv6MgLffA-DMmo9c4hHAM4nI",
@@ -33,23 +34,7 @@
         "n": "pqcrHNWCiNteDa2ZaRn-xb7YeshBSThaQtUoq5Ha2YL8MN0fK-mcm48c79xlcN6L9PIp1AxpXiGf0uQ2aqJiwAdGqOlCIqAy7hc1LKj469_XVUIjgUNUPQVVpzlsvMiD_6ABpwGStBGOTsdzi_Pmfo3lREXm5lNiMYLPy9zonmb_gWks4WBf_aJ0uEsYX_hQ5bjdgcZwoiSqubbVK7IDvKga-4tcwAUgyyDAUwVhO5rvtPZPqjJHCBceMvpi9XLHZOpqUnfiVLP8COJgOfAurnLpnXXK_WYwIml--9tZFHJm6VFnHmypI2-S818Ei22BXV2i5mXLMAdXmvRyKi-uYV1b0dGcS09rv68g3c4tu8eTIGVhmUCdIoHOmsFX5FUAzHfsjdIytKCDAI5I76t_4hCN3tWfoEef0Zsk5SafjDVLRsOZc_yP0tD1_jkrAuvbTONAdiO5WV2LJxaciTcEouVIrS6ZNbdZ_N-bdaLKOMAQ3fZtRsDLMZ_hiEIfxUhl"
       },
       "createdAt": "2026-10-14T06:33:41.519Z",
-      "revoked": false,
-      "pendingRecoveryIds": [
-        "2026-h1",
-        "chtsec-article",
-        "finclip-cpc-1",
-        "finclip-cpc-2",
-        "finclip-finclaw-direct-article-p1",
-        "moltbook-xhs",
-        "moxt-material-article-p1",
-        "rollcode-ai-article",
-        "rollcode-cpc-1",
-        "sunflower-ai-article-p1",
-        "sunflower-ai-article-p2",
-        "tokaify-article-p1",
-        "volcengine-ai-article-p1",
-        "wandabao-buildsom"
-      ]
+      "revoked": false
     }
   ]
 }
