@@ -52,7 +52,7 @@
 5. 提交 PR（见第 6 节）。
 
 站长私有合作可设 `ownerOnly: true`。这类记录的明文字段只写泛化信息，合作对象、内容与款项写入 `settlement` 设备密钥信封；未加密时校验不通过。线上需先应用 `008_owner_only_deals.sql`，再部署 Worker 并同步台账。Worker 和数据库行权限均会对非 admin 隐藏整条记录，因此其热力图动态也只在站长视图出现。
-如需在合作记录中标注成交金额，可在加密 payload 中加入 `dealAmount`；站长设备解密后，金额与 `detail` 会显示在合作记录列表。
+站长私有合作的活动描述可放在加密 payload 的 `activity` 字段，只在站长的合作记录中展示。`dealAmount`、`forward`、`backward`、`opsSupport`、`financeNote` 和历史 `detail` 只在站长「运营支撑」结算明细中展示；不要把金额混入 `activity` 或公开 `remark`。热力图只按合作日期计数，不统计金额。
 
 ---
 

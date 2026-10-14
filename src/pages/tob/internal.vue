@@ -72,13 +72,13 @@
             请勿直接在网页或数据库里修改合作记录。
           </p>
           <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
-            <li>每条合作一个 JSON 文件。普通字段可供内部查看；成交金额和结算详情保存在 <code class="rounded bg-slate-100 px-1">settlement</code> 密文中。</li>
+            <li>合作记录和热力图只记录合作活动；成交、支出和运营支撑金额在站长的「运营支撑」中单独查看。金额保存在 <code class="rounded bg-slate-100 px-1">settlement</code> 密文中。</li>
             <li>普通成员无权进入台账；内部成员和普通管理员可看非私有合作、报告及热力图，但看不到金额或运营支撑。普通管理员目前在本页的可见范围与内部成员相同。</li>
             <li>只有站长可进入「运营支撑」并取得结算密文；<code class="rounded bg-slate-100 px-1">ownerOnly</code> 私有合作对其他角色隐藏整条记录。站长还需本浏览器持有对应私钥才能解密。</li>
             <li>热力图按合作记录的 <code class="rounded bg-slate-100 px-1">updatedAt</code> 和数据报告的发布日期计数，每条合作只按记录日期贡献一次动态。</li>
           </ul>
           <p v-if="isAdmin" class="mt-3 text-xs leading-5 text-slate-500">
-            台账版本 2026-10-14 · 已于 2026-10-14 15:15（北京时间）同步：22 条合作，其中 16 条结算密文；旧设备已撤销，无法恢复的旧半年汇总已移除。合作记录以 Git 台账为准，结算明文仅在站长设备解密。
+            台账版本 2026-10-14 · 已于 2026-10-14 16:07（北京时间）同步：22 条合作，其中 16 条结算密文；旧设备已撤销，无法恢复的旧半年汇总已移除。活动与金额分开展示：合作记录和热力图只反映活动，站长「运营支撑」查看金额。
           </p>
           <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950">
             <p class="font-semibold">站长登录后，仍需当前浏览器持有对应的设备私钥才能看到金额和私有详情。</p>
@@ -307,14 +307,9 @@
                       </span>
                       <p v-if="deal.remark" class="mt-1 text-xs text-slate-500 leading-5">{{ deal.remark }}</p>
                       <div v-if="isAdmin && deal.ownerOnly" class="mt-2 text-xs leading-5 text-amber-900">
-                        <template v-if="settlementMap.has(deal.id)">
-                          <p v-if="settlementMap.get(deal.id).dealAmount" class="font-semibold">
-                            成交金额 {{ formatPrivateMoney(settlementMap.get(deal.id).dealAmount) }}
-                          </p>
-                          <p v-if="settlementMap.get(deal.id).detail" class="whitespace-pre-line">
-                            {{ settlementMap.get(deal.id).detail }}
-                          </p>
-                        </template>
+                        <p v-if="settlementMap.has(deal.id) && settlementMap.get(deal.id).activity" class="whitespace-pre-line">
+                          {{ settlementMap.get(deal.id).activity }}
+                        </p>
                         <p v-else>🔒 当前浏览器尚未解密此条详情，请查看页面顶部的站长说明。</p>
                       </div>
                     </td>
@@ -1053,11 +1048,6 @@ function toggleExpanded(id) {
 }
 
 // Formatting helpers
-function formatPrivateMoney(value) {
-  const amount = Number(value)
-  return Number.isFinite(amount) ? `¥${amount.toLocaleString('zh-CN')}` : '—'
-}
-
 function formatNumber(value) {
   const n = Number(value)
   if (!Number.isFinite(n) || n < 0) return '0'

@@ -147,6 +147,7 @@
               <td class="px-4 py-3">
                 <p class="font-medium text-slate-900">{{ deal.brand }}</p>
                 <p class="mt-1 font-mono text-[11px] text-slate-400">{{ deal.id }}</p>
+                <p v-if="settlementMap.get(deal.id)?.activity" class="mt-1 max-w-xs text-xs leading-5 text-slate-500">{{ settlementMap.get(deal.id).activity }}</p>
               </td>
               <td class="px-4 py-3 text-slate-600">
                 <p>{{ deal.service }}</p>
@@ -160,6 +161,9 @@
                   <p v-if="settlementMap.get(deal.id).forward">前向 {{ formatSettlementValue(settlementMap.get(deal.id).forward) }}</p>
                   <p v-if="settlementMap.get(deal.id).backward">后向 {{ formatSettlementValue(settlementMap.get(deal.id).backward) }}</p>
                   <p v-if="settlementMap.get(deal.id).opsSupport">运营支撑 {{ formatSettlementValue(settlementMap.get(deal.id).opsSupport) }}</p>
+                  <p v-if="settlementMap.get(deal.id).financeNote" class="max-w-md whitespace-pre-line leading-5 text-slate-500">
+                    {{ settlementMap.get(deal.id).financeNote }}
+                  </p>
                   <p v-if="settlementMap.get(deal.id).detail" class="max-w-md whitespace-pre-line leading-5 text-slate-500">
                     {{ settlementMap.get(deal.id).detail }}
                   </p>
