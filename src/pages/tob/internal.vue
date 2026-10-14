@@ -73,9 +73,13 @@
           </p>
           <ul class="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
             <li>每条合作一个 JSON 文件。普通字段可供内部查看；成交金额和结算详情保存在 <code class="rounded bg-slate-100 px-1">settlement</code> 密文中。</li>
-            <li>普通内部成员和经理看不到结算密文；<code class="rounded bg-slate-100 px-1">ownerOnly</code> 私有合作对他们隐藏整条记录。</li>
+            <li>普通成员无权进入台账；内部成员和普通管理员可看非私有合作、报告及热力图，但看不到金额或运营支撑。普通管理员目前在本页的可见范围与内部成员相同。</li>
+            <li>只有站长可进入「运营支撑」并取得结算密文；<code class="rounded bg-slate-100 px-1">ownerOnly</code> 私有合作对其他角色隐藏整条记录。站长还需本浏览器持有对应私钥才能解密。</li>
             <li>热力图按合作记录的 <code class="rounded bg-slate-100 px-1">updatedAt</code> 和数据报告的发布日期计数，每条合作只按记录日期贡献一次动态。</li>
           </ul>
+          <p v-if="isAdmin" class="mt-3 text-xs leading-5 text-slate-500">
+            台账版本 2026-10-14 · 已于 2026-10-14 15:15（北京时间）同步：22 条合作，其中 16 条结算密文；旧设备已撤销，无法恢复的旧半年汇总已移除。合作记录以 Git 台账为准，结算明文仅在站长设备解密。
+          </p>
           <div class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-950">
             <p class="font-semibold">站长登录后，仍需当前浏览器持有对应的设备私钥才能看到金额和私有详情。</p>
             <p v-if="!settlementDevice" class="mt-1">

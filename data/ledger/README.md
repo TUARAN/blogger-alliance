@@ -118,15 +118,15 @@ npm run ledger:validate
 
 ---
 
-## 5. 同步到线上（owner / manager）
+## 5. 同步到线上（持有数据库同步凭据的维护者）
 
 ```bash
 npm run ledger:validate        # 先校验
-npm run ledger:sync            # 生成含 settlement_cipher 的 seed SQL 到 tmp/
-npm run supabase:migrate       # 执行 SQL，覆盖线上台账
+npm run ledger:sync -- --dry-run # 核对待同步数量，不写数据库
+npm run ledger:sync            # 直接全量替换线上合作台账和运营支撑总结
 ```
 
-线上权限：`internal` 只读进度等公开字段；`manager` 同样看不到金额；只有 `admin`(owner) 能取得密文，且只有持有匹配设备私钥的站长浏览器能自动解密。Worker、Supabase 与 Git 均不能解密。
+线上权限：`member` 无权访问台账；`internal` 与 `manager` 可看非私有合作、数据报告及热力图，不能取得结算密文或运营支撑总结。`admin`(owner) 可看全部合作和运营支撑并取得密文，但只有持有匹配设备私钥的站长浏览器能解密。`ownerOnly` 合作对其他角色隐藏整条记录。Worker、Supabase 与 Git 均不能解密。登录用户只可改自己的昵称、头像和资料更新时间，不能改角色；合作数据的直接表写入权限已撤销，`/api/internal/admin/deals` 写接口已移除。
 
 ---
 
