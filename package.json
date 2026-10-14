@@ -15,6 +15,7 @@
     "ledger:device": "node scripts/ledger-device.mjs",
     "ledger:migrate-device": "node scripts/ledger-migrate-device.mjs",
     "test:ledger-crypto": "node scripts/test-settlement-envelope.mjs",
+    "test:ops-report": "node scripts/test-ops-half-year-report.mjs",
     "ledger:validate": "node scripts/ledger-validate.mjs",
     "ledger:sync": "node scripts/ledger-sync.mjs",
     "ledger:migrate-excel": "node scripts/migrate-excel-to-ledger.mjs",
