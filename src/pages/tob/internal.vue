@@ -275,6 +275,17 @@
                         {{ deal.progress || '—' }}
                       </span>
                       <p v-if="deal.remark" class="mt-1 text-xs text-slate-500 leading-5">{{ deal.remark }}</p>
+                      <div v-if="isAdmin && deal.ownerOnly" class="mt-2 text-xs leading-5 text-amber-900">
+                        <template v-if="settlementMap.has(deal.id)">
+                          <p v-if="settlementMap.get(deal.id).dealAmount" class="font-semibold">
+                            成交金额 {{ formatPrivateMoney(settlementMap.get(deal.id).dealAmount) }}
+                          </p>
+                          <p v-if="settlementMap.get(deal.id).detail" class="whitespace-pre-line">
+                            {{ settlementMap.get(deal.id).detail }}
+                          </p>
+                        </template>
+                        <p v-else>🔒 当前设备未解密私有合作详情</p>
+                      </div>
                     </td>
                     <td class="px-3 py-3 align-top text-slate-600 whitespace-nowrap">{{ deal.referrer || '—' }}</td>
                     <td class="px-3 py-3 align-top text-slate-600">{{ deal.owner || '—' }}</td>
@@ -1011,6 +1022,11 @@ function toggleExpanded(id) {
 }
 
 // Formatting helpers
+function formatPrivateMoney(value) {
+  const amount = Number(value)
+  return Number.isFinite(amount) ? `¥${amount.toLocaleString('zh-CN')}` : '—'
+}
+
 function formatNumber(value) {
   const n = Number(value)
   if (!Number.isFinite(n) || n < 0) return '0'

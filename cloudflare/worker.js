@@ -195,6 +195,7 @@ function mapDealRow(row) {
     owner: row.owner || '',
     updatedAt: row.updatedAt || row.updated_at || '',
     muted: row.muted === true || Number(row.muted) === 1,
+    ownerOnly: row.owner_only === true || Number(row.owner_only) === 1,
     reportCooperationId: row.reportCooperationId || row.report_cooperation_id || ''
   }
 
@@ -408,9 +409,10 @@ async function handleDeals(request, env) {
 
   // 仅 admin(owner) 的查询才包含结算密文列；internal/manager 连密文都拿不到。
   const settlementColumn = session.role === 'admin' ? ',settlement_cipher' : ''
+  const ownerOnlyFilter = session.role === 'admin' ? '' : '&owner_only=eq.false'
   const rows = await supabaseDataRequest(
     env,
-    `/commercial_deals?select=id,brand,service,progress,remark,category,referrer,owner,updated_at,muted,report_cooperation_id${settlementColumn}&order=sort_order.asc,updated_at.desc,id.asc`
+    `/commercial_deals?select=id,brand,service,progress,remark,category,referrer,owner,updated_at,muted,owner_only,report_cooperation_id${settlementColumn}${ownerOnlyFilter}&order=sort_order.asc,updated_at.desc,id.asc`
   )
 
   return json({

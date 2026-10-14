@@ -156,6 +156,7 @@
               <td class="px-4 py-3">
                 <span v-if="!settlementMap.has(deal.id)" class="text-xs text-amber-700">🔒 当前设备未解密</span>
                 <div v-else class="space-y-1 text-xs text-slate-700">
+                  <p v-if="settlementMap.get(deal.id).dealAmount">成交金额 {{ formatSettlementValue(settlementMap.get(deal.id).dealAmount) }}</p>
                   <p v-if="settlementMap.get(deal.id).forward">前向 {{ formatSettlementValue(settlementMap.get(deal.id).forward) }}</p>
                   <p v-if="settlementMap.get(deal.id).backward">后向 {{ formatSettlementValue(settlementMap.get(deal.id).backward) }}</p>
                   <p v-if="settlementMap.get(deal.id).opsSupport">运营支撑 {{ formatSettlementValue(settlementMap.get(deal.id).opsSupport) }}</p>

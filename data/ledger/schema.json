@@ -14,6 +14,7 @@
     "updatedAt": { "type": "string", "required": false, "public": true, "desc": "最近沟通时间，格式 YYYY.M.D，如 2026.3.20。" },
     "reportCooperationId": { "type": "string", "required": false, "public": true, "desc": "若报告挂在另一编码下，填那个编码；默认留空表示用 id 本身。" },
     "muted": { "type": "boolean", "required": false, "public": true, "desc": "是否暂不推进/归档，true 时台账弱化展示。" },
+    "ownerOnly": { "type": "boolean", "required": false, "public": true, "desc": "是否仅站长可见；true 时 Worker 和数据库行权限都应对非 admin 隐藏整条合作。敏感内容仍须放入 settlement 密文。" },
     "settlement": { "type": "envelope-or-null", "required": false, "sensitive": true, "desc": "结算敏感信息（前向/后向/运营支撑金额 + 结算详情）。新数据必须是 ledger:encrypt 产出的设备公钥 v2 密文信封；迁移期间兼容历史 v1 口令信封；也可以为 null。明文金额绝不允许出现在此字段或文件任何位置。" }
   },
   "progressKeywordHints": {

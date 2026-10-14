@@ -1,0 +1,15 @@
+{
+  "id": "private-review-20260922-1",
+  "brand": "站长私有合作",
+  "service": "内容合作",
+  "progress": "已完成",
+  "remark": "详情仅站长可见",
+  "category": "",
+  "referrer": "",
+  "owner": "站长",
+  "updatedAt": "2026.9.22",
+  "reportCooperationId": "",
+  "muted": false,
+  "ownerOnly": true,
+  "settlement": "{\"v\":2,\"alg\":\"AES-256-GCM\",\"iv\":\"qpcVbGX3Sp3htE2t\",\"ct\":\"zRCvcW8BQZ4QaQ+I6uV1yNl7XtAXRuglMsWGIZR4xKsSPWg1FGQtQWnGzpc4y4UmJHp6pjOmJ/KVkHIqqNLDplu7SKr898MhhFVq22ilTNHSt7JtdpNPacHj/021FpiLEJ3gsZeXsVQee3duf5QTtWlslSboWQ8/BsBYYV/jJQ2KvuPdArLzZaPKHYT0WOkyxCq2V4YRTRQtiOD+fc44uLkoMAz4Lbl+ln18wuNaois=\",\"tag\":\"MQnwShFFOKHvOJjQ/Tg6sQ==\",\"recipients\":[{\"kid\":\"sha256:dJPO_smzExgUYXFkPVifmnYHwlPhEYUNkQEtXjEOkEg\",\"userId\":\"7b5f5924-339d-4223-9e9d-a8ba804ae0ef\",\"label\":\"macOS · 2026/7/10\",\"alg\":\"RSA-OAEP-256\",\"ek\":\"Veb0CePIcS4HEvLSRSpBPRHNAqWSNNlHZsDdUny72mZegEG+XKC3D5k6MhprwSMcC52f8cBANihaCBE0wPGosZnb/j90tHmtD7v2rReq+HBLseZQKNUTPosFvfKl69e6VVHUjGEjicOrpxnx1lwCUSWt7lU23Kl0Nz62h7qF6S4roYLUAiO4LRydeHnyArVgmOY3LrwpT7KCvpvQZIwr7LJKEuL/jsNXgFc0NWZHgEhTOOK6wQrcYeR1NyXv+yPqcsgNx0gtEB7CoTWmAXA9iu4I+rw65DzFscZRP2NJgsbkjfNaL2o8mTDcHdG1hkGJGIXbO6CHgkmSBpyuFEPswRr8ywW2YlqDk9seyuDsin55S9mywUgpYu/SwbuA9zr5yW0c7/HdwdMKpzxFuDfLiv1YCRgWRJrhpkvjCPWrMCyvoD+OVCBst263zrBUK65sbbnmxwpbsQfnb5JDDHfpRA5m2cw3UA5UjECyLhLc6FDo9sxL1w/YRdmVhhHpP6Ue\"}]}"
+}
