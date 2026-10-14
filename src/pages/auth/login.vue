@@ -124,7 +124,7 @@ async function handleSubmit() {
       <div class="rounded-2xl border border-indigo-100 bg-white p-6 shadow-sm sm:p-8">
         <h1 class="text-2xl font-bold text-slate-900">登录账号</h1>
         <p class="mt-2 text-sm text-slate-600">
-          使用邮箱登录联盟入口，管理你的账号与资料。
+          使用邮箱登录联盟中心，管理你的账号与资料。
         </p>
         <AuthModeSwitch class="mt-6" active="login" />
 

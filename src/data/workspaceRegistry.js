@@ -1,5 +1,5 @@
 /**
- * 联盟入口命名约定：
+ * 联盟中心命名约定：
  * - 分区：公开资源 / 成员入口 / 管理工具
  * - 卡片 title：功能名（2–6 字）
  * - 卡片 tag：功能类型（四字短语）
@@ -76,7 +76,7 @@ export const WORKSPACE_SECTIONS = [
       {
         id: 'changelog',
         title: '更新日志',
-        description: '按版本与周维度回看联盟入口、服务页、案例与数据底座演进。',
+        description: '按版本与周维度回看联盟中心、服务页、案例与数据底座演进。',
         tag: '产品动态',
         icon: '📝',
         to: '/workspace/changelog',
