@@ -88,6 +88,12 @@ export function validateDealFiles(files) {
     if (record.muted !== undefined && typeof record.muted !== 'boolean') {
       errors.push(`${name}: muted 必须是布尔值`)
     }
+    if (record.ownerOnly !== undefined && typeof record.ownerOnly !== 'boolean') {
+      errors.push(`${name}: ownerOnly 必须是布尔值`)
+    }
+    if (record.ownerOnly === true && !isValidEnvelope(record.settlement)) {
+      errors.push(`${name}: OWNER_ONLY_SETTLEMENT_REQUIRED（站长私有合作必须先加密敏感内容）`)
+    }
 
     // 结算字段：只能是 null 或合法密文信封。任何明文都会在这里被挡下。
     const settlement = record.settlement

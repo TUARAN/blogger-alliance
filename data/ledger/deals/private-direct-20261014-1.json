@@ -1,0 +1,15 @@
+{
+  "id": "private-direct-20261014-1",
+  "brand": "站长私有合作",
+  "service": "直发内容",
+  "progress": "已完成",
+  "remark": "详情仅站长可见",
+  "category": "",
+  "referrer": "",
+  "owner": "站长",
+  "updatedAt": "2026.10.14",
+  "reportCooperationId": "",
+  "muted": false,
+  "ownerOnly": true,
+  "settlement": "{\"v\":2,\"alg\":\"AES-256-GCM\",\"iv\":\"N3v+TWVn0iHgxHdw\",\"ct\":\"xVimYxppvfZiGdv7kKgKDkIu3rs9j7nEFsiYcwmsebQU6Gxil4/NseXDJh8naHYlLZIr142Qx+s+fiyRCOHeUndfI92gYx2Oc3We6t8rLQw5KfgBSW5jQyp+scnXkDEYnBQgkiDWebHJBu0zN9wSbcAnL0usTq3cEQ==\",\"tag\":\"wtRC8hBwvFamfVLB4qKnhQ==\",\"recipients\":[{\"kid\":\"sha256:dJPO_smzExgUYXFkPVifmnYHwlPhEYUNkQEtXjEOkEg\",\"userId\":\"7b5f5924-339d-4223-9e9d-a8ba804ae0ef\",\"label\":\"macOS · 2026/7/10\",\"alg\":\"RSA-OAEP-256\",\"ek\":\"NA8+HRQ96ehCqzrJRHLK7MDf07pm0hN926J1MTfFtL5ooGj47q7mIS8DxpNkWERvf6joCdyfvDwWA3bMH6Jtjs4sBR4/D162XmzePzzES0GoMf142v1rxxZXwxnq3pjwlM+itZbjmGOWSOf91ulMVy0uKGK4QIg+5GHD0zjqeqhi9DFDsYEVHAoHNooR6rlt2y+XTZ0yiXkpgOWLnSlZSIn3kIBK5ZemsZZ0Mpz7nvjmCkiTXJ/vn/dXGn6RO5pMSyWK+dBq7vuUKrAPgOhWDIGZcJIRCooM1x+IHc76GP9ipWwDib7JoLIzh/nAP24sZNLiDyqjsZkJuzqx5qVCy7S4i+E3d319ioPuKENu8uQ5CQDZUYZZ1pp/2B2BQJbcoAp+Cp8gpRZ57Lsoe+3izkLjZcHcdl8A8rxqKF2JEhvvSaEtvE/2rhp/ndz8HvFJ5Xsa44u4fi2JPa9b+Re7C11mcH17gKCoSTgCtEA0PVGYjubBpWvCo9mBsnQDfpJJ\"}]}"
+}

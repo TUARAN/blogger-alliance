@@ -13,7 +13,7 @@
 
 字段契约见 [`../schema.json`](../schema.json)。分两类：
 
-- **公开/内部字段**（明文，团队内可见）：`id, brand, service, progress, remark, category, referrer, owner, updatedAt, reportCooperationId, muted`
+- **公开/内部字段**（明文，普通合作团队内可见）：`id, brand, service, progress, remark, category, referrer, owner, updatedAt, reportCooperationId, muted, ownerOnly`
 - **敏感字段**（加密，仅 owner 可解）：`settlement`
 
 `settlement` 只能是两种值之一：
@@ -50,6 +50,9 @@
 
 4. 本地校验：`npm run ledger:validate`
 5. 提交 PR（见第 6 节）。
+
+站长私有合作可设 `ownerOnly: true`。这类记录的明文字段只写泛化信息，合作对象、内容与款项写入 `settlement` 设备密钥信封；未加密时校验不通过。线上需先应用 `008_owner_only_deals.sql`，再部署 Worker 并同步台账。Worker 和数据库行权限均会对非 admin 隐藏整条记录，因此其热力图动态也只在站长视图出现。
+如需在合作记录中标注成交金额，可在加密 payload 中加入 `dealAmount`；站长设备解密后，金额与 `detail` 会显示在合作记录列表。
 
 ---
 
