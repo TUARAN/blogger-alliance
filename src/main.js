@@ -81,6 +81,7 @@ const routes = [
   { path: '/auth/login', component: () => import('./pages/auth/login.vue'), meta: { guestOnly: true } },
   { path: '/auth/register', component: () => import('./pages/auth/register.vue'), meta: { guestOnly: true } },
   { path: '/auth/confirm', component: () => import('./pages/auth/confirm.vue') },
+  { path: '/privacy', component: () => import('./pages/privacy/index.vue') },
   {
     path: '/account',
     component: () => import('./pages/account/index.vue'),

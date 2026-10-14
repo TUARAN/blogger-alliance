@@ -195,6 +195,9 @@ async function handleSubmit() {
         <OAuthButtons class="mt-6" :disabled="authLoading || !isSupabaseConfigured" />
 
         <AccountSupportHint class="mt-5" />
+        <p class="mt-4 text-center text-xs text-slate-500">
+          查看 <router-link to="/privacy" class="text-indigo-700 underline underline-offset-2">隐私说明</router-link>。
+        </p>
 
         <p class="mt-6 text-center text-sm text-slate-600">
           还没有账号？

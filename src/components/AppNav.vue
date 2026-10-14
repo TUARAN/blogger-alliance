@@ -5,7 +5,8 @@ import { useRoute } from 'vue-router'
 const navLinks = [
   { label: '介绍', to: '/tob/services', matchPrefix: '/tob/services' },
   { label: '案例', to: '/cases', matchPrefix: '/cases' },
-  { label: '联盟入口', to: '/workspace', matchPrefix: '/workspace' }
+  { label: '联盟入口', to: '/workspace', matchPrefix: '/workspace' },
+  { label: '隐私说明', to: '/privacy', matchPrefix: '/privacy' }
 ]
 
 defineProps({
