@@ -76,22 +76,24 @@ npm run supabase:migrate
 - `annual_reports`：年度总览
 - `replace_*` RPC：后台整表替换写入，保持事务一致性
 
-### 1.1) 开启 GitHub / Google OAuth 登录
+### 1.1) 邮箱、GitHub 与 Google 登录
 
-登录、注册页已内置「GitHub 登录 / Google 登录」按钮（`src/components/OAuthButtons.vue`），走 Supabase 内置 OAuth（`signInWithOAuth`），与邮箱注册共用 `profiles` 触发器和角色体系。启用步骤：
+登录、注册页共用 Supabase Auth；`src/components/OAuthButtons.vue` 调用 `signInWithOAuth`，登录后回到 `/workspace`。`profiles` 保存昵称、头像和业务角色；角色不能从用户可修改的 `user_metadata` 直接推断。
 
-1. **GitHub**：GitHub → Settings → Developer settings → OAuth Apps → New OAuth App
-   - Authorization callback URL 填 `https://<project-ref>.supabase.co/auth/v1/callback`
-   - 把 Client ID / Client Secret 填到 Supabase Dashboard → Authentication → Providers → GitHub
-2. **Google**：Google Cloud Console → APIs & Services → Credentials → OAuth client ID（Web application）
-   - Authorized redirect URI 同样填 `https://<project-ref>.supabase.co/auth/v1/callback`
-   - 把 Client ID / Client Secret 填到 Supabase Dashboard → Authentication → Providers → Google
-3. **Redirect URLs**：Supabase Dashboard → Authentication → URL Configuration，把
-   `https://blogger-alliance.cn/workspace`（以及本地 `http://localhost:5173/workspace`）加入 Redirect URLs，
-   或运行 `npm run supabase:auth-urls` 同步
-4. 执行 `npm run supabase:migrate` 应用 `005_oauth_profiles.sql`（OAuth 注册时自动取昵称、头像）
+当前生产配置（2026-10-14）：
 
-> 注意：同一邮箱在 Supabase 默认会自动合并身份（GitHub / Google / 邮箱密码视为同一账号），管理员邮箱用 OAuth 登录同样会被 `003/005` 迁移引导为 admin。
+- Supabase 项目 `tuaran`，ref 为 `pmgpykadirszazskjdhr`；邮箱和 GitHub 提供商已启用。
+- Google Cloud 独立项目 `blogger-alliance` 已创建 Web OAuth 客户端；Supabase Google 提供商已启用。Google 应用仍处于 **Testing**，尚未对所有用户发布，公开登录需要完成 Google 的发布操作及真实账号回跳测试。
+- Supabase Site URL 为 `https://blogger-alliance.cn`，生产 Redirect URLs 包含 `https://blogger-alliance.cn/workspace`。Google 客户端的 Authorized JavaScript origin 为 `https://blogger-alliance.cn`，Authorized redirect URI 为 `https://pmgpykadirszazskjdhr.supabase.co/auth/v1/callback`。
+- Google OAuth 品牌首页和隐私说明链接分别为 `https://blogger-alliance.cn` 与 `https://blogger-alliance.cn/privacy`。客户端密钥只保存在平台控制台，不能提交到仓库。
+
+新站点按以下顺序接入：
+
+1. 创建独立 Supabase 项目，配置 Site URL、明确的 Redirect URLs、邮箱确认与自定义 SMTP；用真实邮箱验证收信和登录。
+2. GitHub OAuth App 的 Authorization callback URL 填该项目的 `https://<project-ref>.supabase.co/auth/v1/callback`，把 Client ID 和 Secret 填入 Supabase GitHub 提供商。
+3. Google Cloud 创建项目与外部 OAuth 应用，先准备可访问的首页和隐私说明。Web 客户端的 Authorized JavaScript origin 填站点源地址，Authorized redirect URI 填同一项目的 Supabase 回调，再将凭据写入 Supabase Google 提供商。核对 Google 应用的发布状态。
+4. 在 Supabase Redirect URLs 中逐项允许代码传给 `redirectTo` 的站内地址。本地开发环境单独加入其实际端口与回跳 URL；不要假定 `npm run supabase:auth-urls` 会覆盖 Google 客户端配置。
+5. 确认 `005_oauth_profiles.sql` 已在新项目执行，依次实测邮箱确认、GitHub 和 Google 登录、回跳、资料查询、角色与退出。用同一邮箱测试多提供商时，检查最终的 Supabase 用户 ID 和 `profiles` 记录，不能仅凭邮箱相同推断身份已合并。
 
 ### 1.2) 配置邮箱确认模板
 
