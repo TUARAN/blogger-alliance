@@ -18,24 +18,27 @@ import { casesHubItems } from '../../data/casesRegistry.js'
       <section class="grid gap-4 md:grid-cols-3">
         <div class="rounded-2xl border border-indigo-100 bg-white p-5 shadow-sm">
           <div class="text-sm font-semibold text-indigo-700">市场信号</div>
-          <div class="mt-2 text-3xl font-bold text-gray-900 tabular-nums">84%</div>
+          <div class="mt-2 text-3xl font-bold text-gray-900 tabular-nums">83%</div>
           <p class="mt-2 text-sm leading-6 text-gray-600">
-            Stack Overflow 2025 显示，开发者已在使用或计划使用 AI 工具。AI 产品获客已经进入技术人群的真实工作流。
+            2026 年 Stack Overflow 开发者调查中，83% 的受访者表示在工作中使用至少一种 AI 工具。技术人群已在实际工作中接触 AI 产品。
           </p>
+          <a class="mt-3 inline-block text-xs font-medium text-indigo-700 hover:underline" href="https://survey.stackoverflow.co/2026/ai/data" target="_blank" rel="noopener noreferrer">数据来源：Stack Overflow 开发者调查（2026 年 10 月）↗</a>
         </div>
         <div class="rounded-2xl border border-rose-100 bg-white p-5 shadow-sm">
           <div class="text-sm font-semibold text-rose-700">信任阻力</div>
-          <div class="mt-2 text-3xl font-bold text-gray-900 tabular-nums">46%</div>
+          <div class="mt-2 text-3xl font-bold text-gray-900 tabular-nums">48%</div>
           <p class="mt-2 text-sm leading-6 text-gray-600">
-            同一调研中，46% 开发者明确不信任 AI 输出准确性。真实测评、接入示例和技术语境会直接影响试用意愿。
+            同一调查中，48% 的受访者表示，只有在容易验证输出时才信任 AI。展示可复现的接入过程和验证依据，有助于回应这种顾虑。
           </p>
+          <a class="mt-3 inline-block text-xs font-medium text-rose-700 hover:underline" href="https://survey.stackoverflow.co/2026/ai/data" target="_blank" rel="noopener noreferrer">数据来源：Stack Overflow 开发者调查（2026 年 10 月）↗</a>
         </div>
         <div class="rounded-2xl border border-emerald-100 bg-white p-5 shadow-sm">
           <div class="text-sm font-semibold text-emerald-700">企业采用</div>
-          <div class="mt-2 text-3xl font-bold text-gray-900 tabular-nums">88%</div>
+          <div class="mt-2 text-3xl font-bold text-gray-900 tabular-nums">44%</div>
           <p class="mt-2 text-sm leading-6 text-gray-600">
-            McKinsey State of AI 2025 显示，88% 组织已在至少一个业务功能使用 AI。内容渠道需要服务搜索、口碑和线索的长期争夺。
+            McKinsey 2026 年全球调查中，44% 的受访者表示所在组织正在全企业范围规模化应用 AI。品牌内容应提供清晰的产品能力与落地证据。
           </p>
+          <a class="mt-3 inline-block text-xs font-medium text-emerald-700 hover:underline" href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" target="_blank" rel="noopener noreferrer">数据来源：McKinsey 全球 AI 调查（2026 年 8 月）↗</a>
         </div>
       </section>
 
