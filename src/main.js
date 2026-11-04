@@ -143,6 +143,12 @@ router.beforeEach(async (to) => {
     }
   }
 
+  // Public pages do not need a session. Waiting for Supabase here keeps the
+  // router-view empty until auth-config, session refresh and profile load finish.
+  if (!to.meta.requires && !to.meta.guestOnly) {
+    return true
+  }
+
   const { initAuth, isAuthenticated, isSupabaseConfigured } = useAuth()
   await initAuth()
 
@@ -174,6 +180,8 @@ app.component('AppNav', AppNav)
 app.component('AuthNavActions', AuthNavActions)
 
 const { initAuth } = useAuth()
-initAuth().finally(() => {
-  app.mount('#app')
+app.mount('#app')
+// Populate the navigation's account state without blocking the first paint.
+void initAuth().catch((error) => {
+  console.error('Authentication initialization failed', error)
 })
