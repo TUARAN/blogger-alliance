@@ -1,0 +1,14 @@
+{
+  "id": "wandabao-direct-article-p1",
+  "brand": "万达宝",
+  "service": "直发推文",
+  "progress": "已结算",
+  "remark": "1期；9–10 月三次直发；承接：中杯可乐、陈随易、erpan",
+  "category": "",
+  "referrer": "",
+  "owner": "中杯可乐、陈随易、erpan",
+  "updatedAt": "2026.11.12",
+  "reportCooperationId": "",
+  "muted": false,
+  "settlement": "{\"v\":2,\"alg\":\"AES-256-GCM\",\"iv\":\"rLZpbefxQLZPZg0x\",\"ct\":\"2X226yAuD4udLzNArr9gOhP8nSp6gcmK+Imd0JjO2AZkqFNMbkKP+S+eag5AsWioI7ksOz4mUycMWg6E1omFaugSj4a8ZG5+ILlieCsgg3V0Jyf9L4dVLbw53SlvwQR0VR2EvnN258Ue+Cr2wsUI/K6x+dtQejcc6KcuvElxd85uzenExNqr9K7EBmUwwqKDyX8PBmrxY/yCxg+9f1NBRNN5Fd+CdpgyUx3lf5ikJhIy5FCr/xPVLmF1tr3v4jMTC6WuyCFYLv/KnVIQ0t4+7Ejn\",\"tag\":\"w6fmzcUqUZ3YgMmdHxYjIQ==\",\"recipients\":[{\"kid\":\"sha256:L4PZWGp3CLtN79OuZfZwv6MgLffA-DMmo9c4hHAM4nI\",\"userId\":\"7b5f5924-339d-4223-9e9d-a8ba804ae0ef\",\"label\":\"macOS · 2026/10/14\",\"alg\":\"RSA-OAEP-256\",\"ek\":\"G9bzrm6KeUiT+WOfVJYLB02bnrqU/Cy3Kh8iI4zdV9zrktUNvDmo1A4QYp/ELIcqhCLv+UFbCfLgAjMGJNKjTEAkM6IygPzox/wyxnxml2fQUp/W/uUvV7iWyZxzdymiiUaEfCNzK1+m9DFtowcnki97AOUuz915uziQDRkjrv73YEQtsrpgzTmjuy1dH8wnLahUr5e2cZHwtMmYC0WK5qDJavAre3mpr/KEmp13HPnByoObiCu/xiwIuFmsbDJNZO7Ea7yV/wtoTiRxyt6h8s0e6XWVHi/8gjAb+5ncMES3VG91A+LTAlt2Lucl1DLQ9krCGLY/rAOjlTTlKRQBY4eFKNoChlWE5NkSnKRH8PloZYLfJ2OOJsSEy0VtAa43mfsfyuMzsRcl9Vd7is+JazNAdgjhV6X+tw1Gs4mNwSNsI2F0UJNUNhMsxeWy2LhWdJ7okBT5qvgUHr11MwdRVDuyJ+wcmoOpSx2c1zMSutPmf2qdDZFgOCNfaBgT20Hb\"}]}"
+}
