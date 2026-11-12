@@ -1,24 +1,40 @@
 import process from 'node:process'
 import { loadAndValidateDeals } from './lib/ledgerDeals.mjs'
 import { loadAndValidateOpsSummaries } from './lib/ledgerOpsSummaries.mjs'
+import { loadAndValidateReports } from './lib/ledgerReports.mjs'
+import { loadAndValidateAnnualReports } from './lib/ledgerAnnualReports.mjs'
 import { loadDeviceRegistry } from './lib/settlementDevices.mjs'
 import { isDeviceEnvelope, isLegacyEnvelope } from './lib/settlementEnvelope.mjs'
 
 /**
- * 校验 data/ledger/deals/*.json。本地与 CI 都用它做提交前门禁。
- * 有 error 时退出码非 0（阻断 CI）；warning 不阻断。
+ * 校验 data/ledger 下的合作台账、推广报告、年度总览与运营支撑总结。
+ * 本地与 CI 都用它做提交前门禁。有 error 时退出码非 0（阻断 CI）；warning 不阻断。
  *
  * 用法：npm run ledger:validate
  */
 
 async function main() {
-  const { files, records, errors: dealErrors, warnings } = await loadAndValidateDeals()
+  const { files, records, errors: dealErrors, warnings: dealWarnings } = await loadAndValidateDeals()
   const {
     files: summaryFiles,
     records: summaryRecords,
     errors: summaryErrors
   } = await loadAndValidateOpsSummaries()
-  const errors = [...dealErrors, ...summaryErrors]
+  const dealIds = new Set(records.map((record) => record.id))
+  const {
+    files: reportFiles,
+    records: reportRecords,
+    errors: reportErrors,
+    warnings: reportWarnings
+  } = await loadAndValidateReports({ dealIds })
+  const {
+    files: annualFiles,
+    records: annualRecords,
+    errors: annualErrors,
+    warnings: annualWarnings
+  } = await loadAndValidateAnnualReports()
+  const errors = [...dealErrors, ...summaryErrors, ...reportErrors, ...annualErrors]
+  const warnings = [...dealWarnings, ...reportWarnings, ...annualWarnings]
   let devices = []
   try {
     devices = (await loadDeviceRegistry()).devices
@@ -92,7 +108,7 @@ async function main() {
   if (legacy + legacySummaries > 0) console.warn(`⚠ ${legacy + legacySummaries} 条结算仍是 v1 口令信封，需一次性迁移为设备密钥 v2。`)
   if (activeDevices.length === 0) console.warn('⚠ 尚未登记站长设备公钥，新结算暂时无法加密。')
   if (pendingCount > 0) console.warn(`⚠ ${pendingCount} 条历史密文仍待新设备授权；仅在设备清单中逐条登记了待恢复编码。`)
-  console.log(`✓ 校验通过：${records.length} 条合作，${encrypted} 条含加密结算（v1=${legacy}, v2=${deviceEncrypted}）；${summaryFiles.length} 份运营支撑总结，${encryptedSummaries} 份含密文（v1=${legacySummaries}, v2=${deviceEncryptedSummaries}）；受信任设备 ${activeDevices.length} 台，${warnings.length} 个字段告警。`)
+  console.log(`✓ 校验通过：${records.length} 条合作，${encrypted} 条含加密结算（v1=${legacy}, v2=${deviceEncrypted}）；${reportFiles.length} 份推广报告；${annualFiles.length} 份年度总览；${summaryFiles.length} 份运营支撑总结，${encryptedSummaries} 份含密文（v1=${legacySummaries}, v2=${deviceEncryptedSummaries}）；受信任设备 ${activeDevices.length} 台，${warnings.length} 个字段告警。`)
 }
 
 main().catch((error) => {

@@ -1,0 +1,40 @@
+{
+  "year": 2025,
+  "intro": "围绕技术内容分发、平台种草、社群扩散和数据复盘，持续帮助品牌建立开发者认知。",
+  "partners": [
+    "秒哒",
+    "FinClip",
+    "亚马逊云科技",
+    "火山引擎",
+    "明基",
+    "秦托邦"
+  ],
+  "summaryCards": [
+    {
+      "label": "合作品牌",
+      "value": "8+",
+      "accent": "from-indigo-500 to-blue-500"
+    },
+    {
+      "label": "累计投放",
+      "value": "376 篇",
+      "accent": "from-fuchsia-500 to-violet-500"
+    },
+    {
+      "label": "覆盖平台",
+      "value": "11+",
+      "accent": "from-emerald-500 to-cyan-500"
+    },
+    {
+      "label": "社群辐射",
+      "value": "20+",
+      "accent": "from-amber-500 to-orange-500"
+    }
+  ],
+  "highlights": [
+    "以技术内容分发为核心，持续帮助品牌建立开发者认知",
+    "合作内容覆盖掘金、CSDN、知乎、公众号、头条、博客园等平台",
+    "配合社群扩散与矩阵号联动，形成更稳定的传播放大效果"
+  ],
+  "updatedAt": "2026-04-27"
+}

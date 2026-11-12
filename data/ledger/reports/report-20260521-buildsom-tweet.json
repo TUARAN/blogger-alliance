@@ -1,0 +1,121 @@
+{
+  "id": "report-20260521-buildsom-tweet",
+  "cooperationId": "wandabao-buildsom",
+  "title": "数据报告",
+  "articleTitle": "BuildSOM 5 月多平台推文传播效果汇总",
+  "project": "万达宝-BuildSOM 推文",
+  "author": "掘金安东尼、浪里行舟、erpan",
+  "period": "2026-05-18 - 2026-05-21 09:24（Asia/Shanghai，发布后约 3 天）",
+  "publishedAt": "2026-05-18T00:00:00+08:00",
+  "platforms": [
+    "掘金",
+    "CSDN",
+    "头条",
+    "知乎",
+    "公众号",
+    "小红书",
+    "博客园",
+    "SegmentFault"
+  ],
+  "stats": {
+    "reads": 2633,
+    "likes": 30,
+    "favorites": 22,
+    "comments": 1,
+    "shares": 3
+  },
+  "platformStats": {
+    "掘金": {
+      "reads": 300,
+      "likes": 0,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    },
+    "CSDN": {
+      "reads": 1019,
+      "likes": 17,
+      "favorites": 21,
+      "comments": 0,
+      "shares": 0
+    },
+    "头条": {
+      "reads": 3,
+      "likes": 0,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    },
+    "知乎": {
+      "reads": 1,
+      "likes": 1,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    },
+    "公众号": {
+      "reads": 12,
+      "likes": 1,
+      "favorites": 0,
+      "comments": 1,
+      "shares": 3
+    },
+    "小红书": {
+      "reads": 1020,
+      "likes": 11,
+      "favorites": 1,
+      "comments": 0,
+      "shares": 0
+    },
+    "博客园": {
+      "reads": 11,
+      "likes": 0,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    },
+    "SegmentFault": {
+      "reads": 267,
+      "likes": 0,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    }
+  },
+  "authorSections": [
+    {
+      "author": "掘金安东尼",
+      "stats": {
+        "reads": 1456,
+        "likes": 15,
+        "favorites": 5,
+        "comments": 1,
+        "shares": 3
+      },
+      "content": "掘金安东尼本轮覆盖掘金、CSDN、头条、知乎、公众号、小红书、博客园等平台。已知公开数据合计 1456 阅读、15 点赞/赞同/爱心、5 收藏、1 条留言、3 分享；其中小红书 1020 阅读、11 爱心、1 收藏，CSDN 334 阅读、2 点赞、4 收藏，公众号 12 阅读、1 点赞、3 分享，知乎 1 赞同。"
+    },
+    {
+      "author": "浪里行舟",
+      "stats": {
+        "reads": 516,
+        "likes": 7,
+        "favorites": 9,
+        "comments": 0,
+        "shares": 0
+      },
+      "content": "浪里行舟本轮覆盖掘金、CSDN、SegmentFault。已知公开数据合计 516 阅读、7 点赞、9 收藏；CSDN 328 阅读、7 点赞、9 收藏，SegmentFault 136 阅读，掘金 52 阅读。"
+    },
+    {
+      "author": "erpan",
+      "stats": {
+        "reads": 661,
+        "likes": 8,
+        "favorites": 8,
+        "comments": 0,
+        "shares": 0
+      },
+      "content": "erpan 本轮覆盖掘金、CSDN、知乎、博客园、SegmentFault。已知公开数据合计 661 阅读、8 点赞、8 收藏；其中 CSDN 357 阅读、8 点赞、8 收藏，并被 AtomGit 开源社区专题收录，具备额外社区背书。"
+    }
+  ],
+  "content": "本次 BuildSOM 推文发布后约 3 天，已在多平台形成基础曝光与初步互动反馈。当前累计阅读 2633，点赞/赞同/爱心 30，收藏 22，评论 1，分享 3。整体来看，传播效果处于早期可观察阶段，核心亮点主要集中在 CSDN 技术社区侧：三篇合计 1019 阅读、17 点赞、21 收藏，其中第三篇被 AtomGit 开源社区专题收录，说明内容不只获得阅读，也开始形成收藏与社区背书。\n\n从平台结构看，CSDN 承担技术内容沉淀，小红书、掘金、SegmentFault、博客园、知乎、头条和公众号则完成补充分发，帮助内容覆盖更多搜索与社区入口。由于统计窗口只有 3 天，当前数据更适合作为早期传播表现判断，不宜直接视为最终效果。后续建议重点观察 CSDN、SegmentFault、博客园等技术社区的搜索长尾增长，以及公众号分享后是否带来二次扩散。如果 7 天和 14 天后阅读仍持续增长，说明内容具备一定长尾价值；如果收藏、分享继续增加，则说明 BuildSOM 这类 GEO / AI 可见度话题对目标用户有进一步研究和转化潜力。\n\n本次 BuildSOM 5 月多平台推文合作共统计第 4-6 行的 3 篇内容、15 个发布链接，已排除第 3 行样例数据。发文时间为 2026-05-18，统计截至 2026-05-21 09:24（Asia/Shanghai），已知公开阅读量合计 2633，点赞/赞同/爱心 30，收藏 22，评论 1，分享 3。数据来源分为自动抓取、快照、人工复核三类，统一按当前可复核口径汇总。\n\n从平台表现来看，CSDN 是本轮技术社区里的核心渠道，三篇合计 1019 阅读、17 点赞、21 收藏，占已知阅读量的 38.7%，也是当前形成明确收藏反馈的平台。其中第三篇《从搜索排名到 AI 回答？介绍一下 AI 可见度工具 BuildSOM！》被 AtomGit 开源社区专题收录，除阅读互动外，还带来社区专题背书与后续长尾曝光机会。\n\n小红书当前 1020 阅读、11 爱心、1 收藏，作为补充分发渠道提供了额外曝光；公众号当前 12 阅读、1 点赞、3 分享，并形成 1 条留言。知乎渠道形成 1 阅读、1 赞同。\n\n掘金三篇合计 300 阅读，点赞与评论均为 0，承担基础技术社区分发与内容沉淀作用。SegmentFault 两篇合计 267 阅读，博客园两篇合计 11 阅读，头条 3 阅读。\n\n从单篇表现看，erpan 的 CSDN 文章当前 357 阅读、8 点赞、8 收藏，且被 AtomGit 开源社区专题收录，是本轮技术社区表现最突出的单篇内容；掘金安东尼的 CSDN 文章 334 阅读、2 点赞、4 收藏；浪里行舟的 CSDN 文章 328 阅读、7 点赞、9 收藏。\n\n综合来看，本轮 BuildSOM 内容已经在 CSDN 形成相对明确的技术社区阅读与收藏反馈，其他平台提供多入口覆盖补充。"
+}
