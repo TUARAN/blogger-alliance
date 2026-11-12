@@ -1,0 +1,43 @@
+{
+  "$comment": "data/ledger/annual-reports/<year>.json 的字段契约。被 scripts/ledger-validate.mjs 读取做机器校验。年度总览的权威源是这些 Git 文件，不要再改 private/annualReports.source.json 或网页。",
+  "version": 1,
+  "filePattern": "^\\d{4}\\.json$",
+  "fields": {
+    "year": {
+      "type": "integer",
+      "required": true,
+      "public": true,
+      "desc": "年份，须与文件名一致，范围 2000–9999。"
+    },
+    "intro": {
+      "type": "string",
+      "required": false,
+      "public": true,
+      "desc": "介绍语，接在「我们与 …… 等品牌完成合作，」之后。"
+    },
+    "partners": {
+      "type": "string[]",
+      "required": false,
+      "public": true,
+      "desc": "合作品牌名数组。"
+    },
+    "summaryCards": {
+      "type": "array",
+      "required": false,
+      "public": true,
+      "desc": "核心指标卡片，每项含 label / value / accent。"
+    },
+    "highlights": {
+      "type": "string[]",
+      "required": false,
+      "public": true,
+      "desc": "年度重点。"
+    },
+    "updatedAt": {
+      "type": "string",
+      "required": true,
+      "public": true,
+      "desc": "维护日期，如 2026-04-27。"
+    }
+  }
+}

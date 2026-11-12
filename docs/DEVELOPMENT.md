@@ -57,9 +57,10 @@ npm run metrics:collect -- --input ./links.tsv
 - Worker API：`cloudflare/worker.js`
 - Wrangler 配置：`wrangler.jsonc`
 - 本地开发变量示例：`.dev.vars.example`
-- JSON 导出 Supabase SQL：`scripts/export-supabase-seed.mjs`
-- 台账权威源与录入规范：`data/ledger/`（详见 `data/ledger/README.md`）
-- 台账同步 / 校验 / 加密脚本：`scripts/ledger-sync.mjs`、`scripts/ledger-validate.mjs`、`scripts/ledger-encrypt.mjs`
+- 从 Git 台账导出灾备 SQL：`scripts/export-supabase-seed.mjs`
+- 台账、报告与年报权威源：`data/ledger/`（详见 `data/ledger/README.md`）
+- 同步 / 校验 / 加密脚本：`scripts/ledger-sync.mjs`、`scripts/ledger-validate.mjs`、`scripts/ledger-encrypt.mjs`
+- 提交门禁：`.github/workflows/ledger-validate.yml`（PR 与 `main` 会跑 `npm run ledger:validate`）
 - 台账只读展示页：`src/pages/tob/internal.vue`
 
 ### 1) 初始化 Supabase 表结构
@@ -130,7 +131,7 @@ npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
 
 ### 3) 一次性初始化 / 灾备导入
 
-生产数据以 Supabase 为唯一真实来源。`private/*.json` 只用于新环境初始化或灾备恢复，不作为日常维护入口，也不要把私密业务数据提交到仓库。
+生产展示数据以 Git 台账同步后的 Supabase 为准。日常维护只改 `data/ledger/` 下的文件并运行 `ledger:sync`。`private/*.json` 只是历史备份，不要再用它恢复合作台账、报告或年报，也不要把结算明文提交到仓库。
 
 如需从本地灾备文件重建 Supabase 业务表，可使用：
 
@@ -205,7 +206,7 @@ npm run ledger:sync
 - 角色：`member`（公开站点）/ `internal`（只读台账）/ `manager`（普通管理员，维护台账但看不到金额）/ `admin`（owner，可解密金额并管理全部）
 - 实现：`GET /api/internal/admin/users`、`PUT /api/internal/admin/users/:id/role`（Worker 校验 admin 后用 service role 写 `profiles`）
 
-> 报告（`promotion_reports`）与年度总览（`annual_reports`）暂仍由 `private/*.source.json` + `supabase:export-seed` 维护。
+> 推广报告与年度总览的权威源分别是 `data/ledger/reports/*.json` 与 `data/ledger/annual-reports/<year>.json`，校验和同步走同一套 `ledger:validate` / `ledger:sync`；`private/*.source.json` 只保留作历史备份，不再作为日常维护入口。
 
 ### 6) 一次性把旧 Excel 落成 `data/ledger`
 
@@ -255,7 +256,7 @@ npm run ledger:validate && npm run ledger:sync
 - `updated_at`：维护时间
 
 页面 `/annual-report-2025` 在 Supabase 内部成员登录态有效时读取年度总览。
-年度总览仍通过 `private/annualReports.source.json` + `supabase:export-seed` 维护（`/tob/internal` 已改为只读，不再内嵌编辑器）。
+年度总览的权威源是 `data/ledger/annual-reports/<year>.json`，`/tob/internal` 为只读展示，不再内嵌编辑器。
 
 报告表 `promotion_reports` 主要字段：
 

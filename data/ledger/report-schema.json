@@ -1,0 +1,97 @@
+{
+  "$comment": "data/ledger/reports/<id>.json 的字段契约。被 scripts/ledger-validate.mjs 读取做机器校验。推广报告的权威源是这些 Git 文件，不要再改 private/promotionReports.source.json 或网页。",
+  "version": 1,
+  "idPattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+  "fields": {
+    "id": {
+      "type": "string",
+      "required": true,
+      "public": true,
+      "desc": "报告唯一编码，须与文件名一致。"
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "public": true,
+      "desc": "报告标题，通常为「数据报告」。"
+    },
+    "project": {
+      "type": "string",
+      "required": true,
+      "public": true,
+      "desc": "合作项目名。"
+    },
+    "author": {
+      "type": "string",
+      "required": true,
+      "public": true,
+      "desc": "执行人。"
+    },
+    "content": {
+      "type": "string",
+      "required": true,
+      "public": true,
+      "desc": "报告正文。"
+    },
+    "articleTitle": {
+      "type": "string",
+      "required": false,
+      "public": true,
+      "desc": "推广图文标题，可空。"
+    },
+    "period": {
+      "type": "string",
+      "required": false,
+      "public": true,
+      "desc": "统计周期文案。"
+    },
+    "publishedAt": {
+      "type": "string",
+      "required": false,
+      "public": true,
+      "desc": "发布时间，建议 ISO 8601，如 2026-03-12T10:00:00+08:00。"
+    },
+    "cooperationId": {
+      "type": "string",
+      "required": false,
+      "public": true,
+      "desc": "关联合作编码，必须与 data/ledger/deals 中某条 id 完全一致（全小写）。留空表示尚未挂接。"
+    },
+    "platforms": {
+      "type": "string[]",
+      "required": false,
+      "public": true,
+      "desc": "覆盖平台名称数组。"
+    },
+    "stats": {
+      "type": "object",
+      "required": false,
+      "public": true,
+      "desc": "合计互动数据，如 reads/likes/favorites/comments/shares。"
+    },
+    "platformStats": {
+      "type": "object",
+      "required": false,
+      "public": true,
+      "desc": "按平台拆分的互动数据。"
+    },
+    "authorSections": {
+      "type": "array",
+      "required": false,
+      "public": true,
+      "desc": "按博主拆分的分项。"
+    },
+    "reportCode": {
+      "type": "string",
+      "required": false,
+      "public": true,
+      "desc": "对外报告编号，可空。"
+    },
+    "authorSplitNote": {
+      "type": "boolean-or-string",
+      "required": false,
+      "public": true,
+      "desc": "是否或如何说明作者分项，可空。"
+    }
+  }
+}

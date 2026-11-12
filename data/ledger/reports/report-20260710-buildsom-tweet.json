@@ -1,0 +1,121 @@
+{
+  "id": "report-20260710-buildsom-tweet",
+  "cooperationId": "wandabao-buildsom",
+  "title": "数据报告",
+  "articleTitle": "BuildSOM 5 月多平台推文传播效果汇总（260710 版）",
+  "project": "万达宝-BuildSOM 推文",
+  "author": "掘金安东尼、浪里行舟、erpan",
+  "period": "2026-05-18 - 2026-07-10（Asia/Shanghai，发布后约 53 天）",
+  "publishedAt": "2026-07-10T11:10:00+08:00",
+  "platforms": [
+    "掘金",
+    "CSDN",
+    "头条",
+    "知乎",
+    "公众号",
+    "小红书",
+    "博客园",
+    "SegmentFault"
+  ],
+  "stats": {
+    "reads": 5456,
+    "likes": 69,
+    "favorites": 35,
+    "comments": 5,
+    "shares": 8
+  },
+  "platformStats": {
+    "掘金": {
+      "reads": 846,
+      "likes": 3,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    },
+    "CSDN": {
+      "reads": 1372,
+      "likes": 19,
+      "favorites": 22,
+      "comments": 1,
+      "shares": 1
+    },
+    "头条": {
+      "reads": 8,
+      "likes": 0,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    },
+    "知乎": {
+      "reads": 11,
+      "likes": 2,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    },
+    "公众号": {
+      "reads": 42,
+      "likes": 1,
+      "favorites": 0,
+      "comments": 3,
+      "shares": 5
+    },
+    "小红书": {
+      "reads": 1220,
+      "likes": 44,
+      "favorites": 13,
+      "comments": 1,
+      "shares": 2
+    },
+    "博客园": {
+      "reads": 88,
+      "likes": 0,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    },
+    "SegmentFault": {
+      "reads": 1869,
+      "likes": 0,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    }
+  },
+  "authorSections": [
+    {
+      "author": "掘金安东尼",
+      "stats": {
+        "reads": 2041,
+        "likes": 51,
+        "favorites": 18,
+        "comments": 4,
+        "shares": 7
+      },
+      "content": "掘金安东尼本轮覆盖掘金、CSDN、头条、知乎、公众号、小红书、博客园等平台。7 月 10 日可确认口径下合计 2041 阅读、51 点赞/赞同/爱心、18 收藏、4 条留言、7 分享；其中小红书延续 1220 阅读、44 爱心、13 收藏、1 条评论、2 分享口径，CSDN 第一篇源码可见 463 阅读、3 点赞、5 收藏，掘金自动抓取为 255 阅读，博客园 47 阅读，公众号 1 点赞、5 转发、3 条留言，知乎 1 赞同。"
+    },
+    {
+      "author": "浪里行舟",
+      "stats": {
+        "reads": 1467,
+        "likes": 7,
+        "favorites": 9,
+        "comments": 0,
+        "shares": 0
+      },
+      "content": "浪里行舟本轮覆盖掘金、CSDN、SegmentFault。7 月 10 日可确认口径下合计 1467 阅读、7 点赞、9 收藏；其中 SegmentFault 自动抓取已增长至 903 阅读，掘金自动抓取为 148 阅读，CSDN 因访问触发 WAF，本版沿用 416 阅读、7 点赞、9 收藏的最新可确认口径。"
+    },
+    {
+      "author": "erpan",
+      "stats": {
+        "reads": 1948,
+        "likes": 11,
+        "favorites": 8,
+        "comments": 1,
+        "shares": 1
+      },
+      "content": "erpan 本轮覆盖掘金、CSDN、知乎、博客园、SegmentFault。7 月 10 日可确认口径下合计 1948 阅读、11 点赞/赞同、8 收藏、1 条评论、1 分享；其中 SegmentFault 自动抓取已增长至 966 阅读，掘金 443 阅读、1 点赞，博客园 41 阅读，CSDN 本次访问部分触发 WAF，短暂可见源码读到 493 阅读、9 点赞、8 收藏、1 条评论、1 分享，并保留 AtomGit 开源社区专题收录这一社区背书；知乎沿用 1 赞同口径。"
+    }
+  ],
+  "content": "本次 BuildSOM 第三版报告统计截至 2026-07-10（Asia/Shanghai），距离 2026-05-18 发文约 53 天。本版与 2026-05-21 的 3 天版、2026-05-27 的 9 天版独立记录，采用当前可确认口径汇总：自动抓取平台使用 7 月 10 日重新访问数据，受登录、WAF 或页面结构限制的平台使用最新可确认快照、源码可见值或人工复核口径。当前累计阅读 5456，点赞/赞同/爱心 69，收藏 35，评论 5，分享 8。\n\n和 9 天版相比，整体阅读从 3178 增至 5456，增加 2278；点赞/赞同/爱心从 68 增至 69，增加 1；收藏保持 35，评论从 1 增至 5，增加 4，分享从 3 增至 8，增加 5。增长主要来自技术社区长尾：SegmentFault 从 539 增至 1869，增加 1330；掘金从 468 增至 846，增加 378；博客园从 17 增至 88，增加 71；CSDN 当前可确认口径从 1118 增至 1372，增加 254。\n\n从平台表现来看，SegmentFault 是本阶段最明显的长尾增长来源，两篇合计 1869 阅读，已经超过 CSDN 的 1372 阅读，说明内容在开发者社区的自然检索和站内分发仍在继续释放。CSDN 仍保留 1372 阅读、19 点赞、22 收藏的技术沉淀价值，其中 erpan 的 CSDN 文章继续保留 AtomGit 开源社区专题收录背书。掘金三篇合计 846 阅读，其中 erpan 单篇从 271 增至 443，浪里行舟单篇从 61 增至 148，仍有小幅自然增长。\n\n小红书、公众号、知乎等平台本次无法通过自动访问获得更新后台数据，因此不额外强调增量，仍按最新可确认口径保留：小红书 1220 阅读、44 爱心、13 收藏、1 条评论、2 分享，公众号 1 点赞、5 转发和 3 条留言，知乎两条各 1 赞同，CSDN 新增 1 条评论、1 分享。头条保持 8 阅读，博客园两篇合计 88 阅读。\n\n整体判断：53 天版已经不再是发布初期扩散，而是长尾沉淀阶段。当前最有价值的变化是 SegmentFault、掘金、博客园等技术社区仍有新增阅读，说明 BuildSOM 这类 GEO / AI 可见度话题具备持续被检索和阅读的空间；同时 CSDN 的收藏与 AtomGit 专题收录继续提供技术社区背书。结合此前 GEO 效果截图，BuildSOM 已经在 AI 回答引用内容中形成品牌露出，本轮内容对“搜索长尾 + AI 回答可见度”的双重沉淀已经成立。\n\n后续建议按月度或关键 GEO 结果变化再观察一个版本：重点看 SegmentFault 是否继续放大、CSDN 收藏是否继续累积，以及 AI 回答中的 BuildSOM 露出是否保持。如果后续仍能看到技术社区阅读增长或新的 AI 引用结果，说明这批内容可以继续作为 BuildSOM 面向搜索与 AI 回答场景的长期内容资产。"
+}

@@ -1,0 +1,62 @@
+{
+  "id": "report-xiaoyu-sunflower-202603",
+  "cooperationId": "sunflower-ai-article-p2",
+  "title": "数据报告",
+  "articleTitle": "那个搞远程的向日葵也出 AI 了？！不用买设备，不用复杂配置，还支持多平台",
+  "project": "向日葵 AI 合作",
+  "author": "晓雨",
+  "period": "约 5 天（自发布起计）",
+  "publishedAt": "2026-03-18T14:00:00+08:00",
+  "platforms": [
+    "CSDN",
+    "知乎",
+    "博客园",
+    "掘金",
+    "公众号"
+  ],
+  "stats": {
+    "reads": 8900,
+    "likes": 158,
+    "favorites": 163,
+    "comments": 148,
+    "shares": 0
+  },
+  "platformStats": {
+    "CSDN": {
+      "reads": 8604,
+      "likes": 156,
+      "favorites": 162,
+      "comments": 148,
+      "shares": 0
+    },
+    "知乎": {
+      "reads": 100,
+      "likes": 1,
+      "favorites": 1,
+      "comments": 0,
+      "shares": 0
+    },
+    "博客园": {
+      "reads": 100,
+      "likes": 0,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    },
+    "掘金": {
+      "reads": 48,
+      "likes": 0,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    },
+    "公众号": {
+      "reads": 48,
+      "likes": 1,
+      "favorites": 0,
+      "comments": 0,
+      "shares": 0
+    }
+  },
+  "content": "本轮向日葵 AI 合作内容发布约 5 天，整体形成约 8,900+ 次阅读，累计 158 次点赞、163 次收藏、148 条评论。CSDN 是本轮传播的绝对主力渠道，贡献了 8,604 次阅读，且互动数据表现突出——156 点赞、162 收藏、148 评论，互动率远高于同类技术文章平均水平。知乎与博客园各约 100 阅读，作为补充分发渠道形成了基础曝光。掘金与公众号端阅读量较少，受限于账号粉丝基数，但也分别形成了少量点赞与收藏互动，更多起到内容沉淀作用。综合来看，本轮合作在 CSDN 端形成了较强的曝光与互动效果，整体内容在技术社区已具备一定传播基础。考虑到 CSDN 与知乎的搜索收录特性，后续仍有继续积累自然流量的空间。"
+}

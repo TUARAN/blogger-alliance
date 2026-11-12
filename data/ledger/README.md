@@ -1,7 +1,13 @@
 # 数据台账录入规范（codex / claude code 共用）
 
-这是「合作台账」的**唯一权威源**。每条合作 = 一个文件 `data/ledger/deals/<id>.json`。
-线上 Supabase 里的台账由这里**同步生成**，不要再去网页或数据库手改。
+这是内部业务数据的**Git 权威源**：
+
+- 合作台账：`data/ledger/deals/<id>.json`（每合作一文件）
+- 推广报告：`data/ledger/reports/<id>.json`（每份报告一文件）
+- 年度总览：`data/ledger/annual-reports/<year>.json`（每年一份）
+- 运营支撑半年总结：`data/ledger/ops-summaries/<period>.json`
+
+线上 Supabase 由这里**同步生成**，不要再去网页或数据库手改，也不要把 `private/*.source.json` 当作日常维护入口。
 
 > 为什么是每合作一文件：多人改不同合作时不会产生 git 合并冲突；评审 PR 时 diff 清晰。
 
@@ -150,3 +156,23 @@ npm run ledger:sync            # 直接全量替换线上合作台账和运营�
 - `SETTLEMENT_DEVICE_PUBLIC_KEY_REQUIRED`：尚未登记有效设备公钥。
 - 页面提示「旧密文待一次性迁移」：按第 4 节执行 `ledger:migrate-device`。
 - 页面提示「未授权给本设备」：该设备登记晚于密文生成，需要对历史密文执行设备密钥轮换，不能只改角色绕过。
+
+---
+
+## 8. 推广报告与年度总览
+
+字段契约见 [`report-schema.json`](./report-schema.json) 与 [`annual-schema.json`](./annual-schema.json)。
+
+推广报告 `data/ledger/reports/<id>.json`：
+
+- 文件名即编码，`id` 须与文件名一致，格式与合作编码相同（小写字母、数字、连字符）。
+- `cooperationId` 必须与 `data/ledger/deals` 中某条合作的 `id` **完全一致**（全小写）。写错大小写会被校验拒绝，例如不能把 `finclip-finclaw-direct-article-p1` 写成全大写。
+- 尚未挂接合作时可暂时留空，校验会给出告警但不会失败。
+
+年度总览 `data/ledger/annual-reports/<year>.json`：
+
+- 文件名必须是四位年份，并与文件内 `year` 一致，例如 `2025.json`。
+- `summaryCards` 每项需同时有 `label` 和 `value`。
+
+日常流程与合作台账相同：改文件 → `npm run ledger:validate` → 提交 PR（CI 会跑同一校验）→ 合并后 `npm run ledger:sync`。同步时会按发布时间排序报告、按年份排序年报，然后与合作台账、运营支撑总结一起全量覆盖线上数据。
+

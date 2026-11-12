@@ -6,12 +6,12 @@
 
 ## 数据台账录入（重要）
 
-合作台账的**唯一权威源**是 Git 跟踪的 `data/ledger/deals/<id>.json`（每合作一文件）。
-**录入 / 修改台账前必须先读 [`data/ledger/README.md`](data/ledger/README.md)**，严格按其字段契约与流程操作。
+合作台账、推广报告和年度总览的**唯一权威源**是 Git 跟踪的 `data/ledger/`（每合作/每份报告/每年一文件）。
+**录入或修改前必须先读 [`data/ledger/README.md`](data/ledger/README.md)**，严格按其字段契约与流程操作。
 
 铁律：
 
-- 不要在网页或数据库里手改台账；改 `data/ledger/deals/*.json` 后用 `npm run ledger:sync` 同步。
+- 不要在网页或数据库里手改台账、报告或年报；改 `data/ledger/deals`、`data/ledger/reports` 或 `data/ledger/annual-reports` 后用 `npm run ledger:sync` 同步。
 - `settlement` 字段只能是 `null` 或 `ledger:encrypt` 产出的**密文信封**。
   **绝对禁止**把前向/后向/运营支撑金额或结算详情的**明文**写进任何 `.json`、提交记录或日志。
 - 改完跑 `npm run ledger:validate`，必须通过（CI 也会跑）。

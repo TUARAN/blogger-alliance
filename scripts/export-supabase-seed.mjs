@@ -1,8 +1,11 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { loadAndValidateDeals } from './lib/ledgerDeals.mjs'
+import { loadAndValidateReports, sortReportsForSync } from './lib/ledgerReports.mjs'
+import { loadAndValidateAnnualReports, sortAnnualReportsForSync } from './lib/ledgerAnnualReports.mjs'
 
 /**
- * Export private JSON backups to Supabase seed SQL.
+ * 从 Git 台账权威源导出 Supabase 灾备 SQL。
  *
  * Usage:
  *   npm run supabase:export-seed
@@ -10,9 +13,6 @@ import path from 'node:path'
  */
 
 const cwd = process.cwd()
-const DEFAULT_DEALS_PATH = path.resolve(cwd, 'private/commercialDeals.source.json')
-const DEFAULT_REPORTS_PATH = path.resolve(cwd, 'private/promotionReports.source.json')
-const DEFAULT_ANNUAL_PATH = path.resolve(cwd, 'private/annualReports.source.json')
 const DEFAULT_OUTPUT_PATH = path.resolve(cwd, 'tmp/supabase-seed.sql')
 
 function getArg(flag, fallback = '') {
@@ -46,11 +46,6 @@ function sqlJson(value, fallback) {
 
 function sqlBool(value) {
   return value === true ? 'true' : 'false'
-}
-
-async function readJson(filePath) {
-  const raw = await fs.readFile(filePath, 'utf8')
-  return JSON.parse(raw)
 }
 
 function buildDealsInsertRows(deals) {
@@ -106,37 +101,23 @@ function buildAnnualReportsInsertRows(reports) {
   })
 }
 
-async function readJsonOrEmpty(filePath) {
-  try {
-    return await readJson(filePath)
-  } catch (error) {
-    if (error?.code === 'ENOENT') {
-      return []
-    }
-    throw error
-  }
-}
-
 async function main() {
-  const dealsPath = path.resolve(cwd, getArg('--deals', DEFAULT_DEALS_PATH))
-  const reportsPath = path.resolve(cwd, getArg('--reports', DEFAULT_REPORTS_PATH))
-  const annualPath = path.resolve(cwd, getArg('--annual', DEFAULT_ANNUAL_PATH))
   const outputPath = path.resolve(cwd, getArg('--output', getArg('--out', DEFAULT_OUTPUT_PATH)))
 
-  const deals = await readJson(dealsPath)
-  const reports = await readJson(reportsPath)
-  const annualReports = await readJsonOrEmpty(annualPath)
-
-  if (!Array.isArray(deals)) {
-    throw new Error('commercialDeals.source.json 必须是数组')
+  const { records: deals, errors: dealErrors, warnings: dealWarnings } = await loadAndValidateDeals()
+  const dealIds = new Set(deals.map((deal) => deal.id))
+  const { records: reports, errors: reportErrors, warnings: reportWarnings } = await loadAndValidateReports({ dealIds })
+  const { records: annualReports, errors: annualErrors, warnings: annualWarnings } = await loadAndValidateAnnualReports()
+  const errors = [...dealErrors, ...reportErrors, ...annualErrors]
+  for (const warning of [...dealWarnings, ...reportWarnings, ...annualWarnings]) {
+    console.warn(`⚠ ${warning}`)
   }
-
-  if (!Array.isArray(reports)) {
-    throw new Error('promotionReports.source.json 必须是数组')
+  if (errors.length > 0) {
+    for (const error of errors) console.error(`✗ ${error}`)
+    throw new Error(`校验未通过（${errors.length} 个错误），已中止导出。先运行 npm run ledger:validate。`)
   }
-
-  if (!Array.isArray(annualReports)) {
-    throw new Error('annualReports.source.json 必须是数组')
+  if (deals.length === 0) {
+    throw new Error('data/ledger/deals/ 下没有任何合作文件。')
   }
 
   const annualSection = annualReports.length === 0
@@ -151,7 +132,7 @@ INSERT INTO public.annual_reports (
   intro,
   updated_at
 ) VALUES
-${buildAnnualReportsInsertRows(annualReports).join(',\n')};
+${buildAnnualReportsInsertRows(sortAnnualReportsForSync(annualReports)).join(',\n')};
 `
 
   const sql = `BEGIN;
@@ -190,7 +171,7 @@ INSERT INTO public.promotion_reports (
   content,
   sort_order
 ) VALUES
-${buildReportsInsertRows(reports).join(',\n')};
+${buildReportsInsertRows(sortReportsForSync(reports)).join(',\n')};
 
 ${annualSection}
 
