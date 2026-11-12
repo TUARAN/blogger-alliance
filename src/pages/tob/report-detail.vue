@@ -16,6 +16,11 @@ const messageIsError = ref(false)
 const accessError = ref('')
 
 const reportEvidenceImages = {
+  'report-20261112-wandabao-direct': {
+    src: '/report-assets/wandabao-direct-channel-reads-20261112.png',
+    alt: '万达宝直发推广重点渠道阅读图',
+    caption: '重点渠道阅读：仅列出阅读或浏览达到 100 及以上的渠道；中杯可乐 CSDN 的「1w 阅读」因口径不同未放入同尺度对比。'
+  },
   'report-20260527-buildsom-tweet': {
     src: '/report-assets/buildsom-geo-effect-20260527.png',
     alt: 'BuildSOM GEO 效果截图',
