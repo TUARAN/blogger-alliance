@@ -37,40 +37,19 @@ function loadEnvLocal() {
 }
 
 function createClients(projectRef, password) {
+  const ssl = { rejectUnauthorized: false }
+  const poolerUsers = { user: `postgres.${projectRef}`, password, database: 'postgres', ssl }
+  const poolerHosts = ['aws-1-ap-northeast-1.pooler.supabase.com', 'aws-0-ap-northeast-1.pooler.supabase.com']
+
   return [
     {
       label: 'direct',
-      config: {
-        host: `db.${projectRef}.supabase.co`,
-        port: 5432,
-        user: 'postgres',
-        password,
-        database: 'postgres',
-        ssl: { rejectUnauthorized: false }
-      }
+      config: { host: `db.${projectRef}.supabase.co`, port: 5432, user: 'postgres', password, database: 'postgres', ssl }
     },
-    {
-      label: 'pooler-session',
-      config: {
-        host: 'aws-0-ap-northeast-1.pooler.supabase.com',
-        port: 5432,
-        user: `postgres.${projectRef}`,
-        password,
-        database: 'postgres',
-        ssl: { rejectUnauthorized: false }
-      }
-    },
-    {
-      label: 'pooler-transaction',
-      config: {
-        host: 'aws-0-ap-northeast-1.pooler.supabase.com',
-        port: 6543,
-        user: `postgres.${projectRef}`,
-        password,
-        database: 'postgres',
-        ssl: { rejectUnauthorized: false }
-      }
-    }
+    ...poolerHosts.flatMap((host) => [
+      { label: `pooler-session:${host}`, config: { ...poolerUsers, host, port: 5432 } },
+      { label: `pooler-transaction:${host}`, config: { ...poolerUsers, host, port: 6543 } }
+    ])
   ]
 }
 
