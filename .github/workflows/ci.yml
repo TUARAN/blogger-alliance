@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# 并发：同分支后续 push 取消前一次未完成的 run
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-validate:
+    name: Build & Validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        # 用 ci 而非 install，强制按 lockfile 精确还原，避免漂移
+        run: npm ci
+
+      - name: Validate deals, reports and annual reports
+        run: npm run ledger:validate
+
+      - name: Run ledger unit tests
+        run: |
+          npm run test:ledger-crypto
+          npm run test:ops-report
+
+      - name: Build
+        run: npm run build

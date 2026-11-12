@@ -14,7 +14,7 @@
 - 不要在网页或数据库里手改台账、报告或年报；改 `data/ledger/deals`、`data/ledger/reports` 或 `data/ledger/annual-reports` 后用 `npm run ledger:sync` 同步。
 - `settlement` 字段只能是 `null` 或 `ledger:encrypt` 产出的**密文信封**。
   **绝对禁止**把前向/后向/运营支撑金额或结算详情的**明文**写进任何 `.json`、提交记录或日志。
-- 改完跑 `npm run ledger:validate`，必须通过（CI 也会跑）。
+- 改完跑 `npm run ledger:validate`，必须通过（CI 还会跑校验、单测和 build）。
 - 新结算使用站长设备公钥加密；历史 v1 迁移时才临时使用旧密码短语。普通维护只填公开字段，`settlement` 留 `null`。
 
 ## 常用命令

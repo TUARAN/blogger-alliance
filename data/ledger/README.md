@@ -141,7 +141,7 @@ npm run ledger:sync            # 直接全量替换线上合作台账和运营�
 ## 6. 协作流程（PR）
 
 1. 从 `main` 拉分支，改 / 加 `data/ledger/deals/*.json`（每人尽量只动自己的合作文件）。
-2. `npm run ledger:validate` 通过后提交 PR（CI 也会跑 validate）。
+2. `npm run ledger:validate` 通过后提交 PR（CI 还会跑 validate、单测和 build）。
 3. 金额与设备公钥相关改动由 owner 负责或 owner review。
 4. 合并后由 owner / manager 跑同步。
 
@@ -174,5 +174,5 @@ npm run ledger:sync            # 直接全量替换线上合作台账和运营�
 - 文件名必须是四位年份，并与文件内 `year` 一致，例如 `2025.json`。
 - `summaryCards` 每项需同时有 `label` 和 `value`。
 
-日常流程与合作台账相同：改文件 → `npm run ledger:validate` → 提交 PR（CI 会跑同一校验）→ 合并后 `npm run ledger:sync`。同步时会按发布时间排序报告、按年份排序年报，然后与合作台账、运营支撑总结一起全量覆盖线上数据。
+日常流程与合作台账相同：改文件 → `npm run ledger:validate` → 提交 PR（CI 会跑校验、单测和 build）→ 合并后 `npm run ledger:sync`。同步时会按发布时间排序报告、按年份排序年报，然后与合作台账、运营支撑总结一起全量覆盖线上数据。
 

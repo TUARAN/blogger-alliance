@@ -60,7 +60,7 @@ npm run metrics:collect -- --input ./links.tsv
 - 从 Git 台账导出灾备 SQL：`scripts/export-supabase-seed.mjs`
 - 台账、报告与年报权威源：`data/ledger/`（详见 `data/ledger/README.md`）
 - 同步 / 校验 / 加密脚本：`scripts/ledger-sync.mjs`、`scripts/ledger-validate.mjs`、`scripts/ledger-encrypt.mjs`
-- 提交门禁：`.github/workflows/ledger-validate.yml`（PR 与 `main` 会跑 `npm run ledger:validate`）
+- 提交门禁：`.github/workflows/ci.yml`（PR 与 `main` 会跑 `npm ci`、`ledger:validate`、相关单测和 `npm run build`）
 - 台账只读展示页：`src/pages/tob/internal.vue`
 
 ### 1) 初始化 Supabase 表结构
@@ -166,12 +166,15 @@ npm run cf:dev
 npm run cf:deploy
 ```
 
-> **生产部署默认走 Cloudflare Workers Builds（Git → 自动部署）**：
+> **预览和部署只走 Cloudflare Workers Builds**（不要再给这个仓库接 Cloudflare Pages）：
 > - 仓库：`TUARAN/blogger-alliance`
 > - 构建命令：`npm install && npm run build`（必须设置，否则 `dist/` 不会生成）
 > - 部署命令：`npx wrangler deploy`
 > - 生产分支：`main`
+> - PR 预览由 Workers Builds 提供 `*.tuaran666.workers.dev` 地址；先看这条预览再说合，合并用 squash
+> - 预览连的是生产 Supabase。Git 里新增的台账或报告，要等合并后执行 `ledger:sync` 才会出现在预览和线上
 > - Secrets 仍通过 `npx wrangler secret put` 一次性写入，无需在 Builds 面板再配
+> - GitHub Actions（`.github/workflows/ci.yml`）只做门禁：`npm ci`、台账校验、相关单测和 build，不负责部署
 
 ### 5) 台账权威源：`data/ledger`（Git 协作）
 
